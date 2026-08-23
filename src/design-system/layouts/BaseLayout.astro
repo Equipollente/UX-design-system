@@ -1,0 +1,41 @@
+---
+// Coquille HTML du système : styles de base et polices, rien d'autre. Aucune
+// chrome de site ici — pas de header, pas de pied de page. C'est ce qui permet à
+// un site consommateur de monter sa propre chrome par-dessus sans avoir à défaire
+// celle du système, et à la doc d'utiliser ce même layout sans rien hériter.
+//
+// tokens.css avant global.css : global.css consomme les variables du premier.
+import { withBase } from '../lib/url';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+
+    {/* Poppins et Inter, les deux familles déclarées par font.family.*.
+        L'auto-hébergement est un sujet de perf à traiter plus tard. */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

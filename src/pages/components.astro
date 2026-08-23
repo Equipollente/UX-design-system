@@ -1,0 +1,719 @@
+---
+// Doc des composants du système. Chaque section montre le composant en vrai —
+// jamais une copie de son markup : si le composant change, la page change.
+import { withBase } from '../design-system/lib/url';
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import Button from '../design-system/components/Button.astro';
+import Tag from '../design-system/components/Tag.astro';
+import Nav from '../design-system/components/Nav.astro';
+import Carousel from '../design-system/components/Carousel.astro';
+import CaseStudyHeader from '../design-system/components/CaseStudyHeader.astro';
+import CaseStudyCard from '../design-system/components/CaseStudyCard.astro';
+import tokens from '../design-system/data/tokens.json';
+
+const buttonTokens = tokens.filter((t) => t.group === 'button');
+const buttonSizes = ['sm', 'md', 'lg'] as const;
+
+// Liens de démonstration : des ancres, pour qu'une démo ne fasse pas quitter la
+// page. Les libellés sont ceux d'un site réel — un Nav se juge sur des mots de
+// vraie longueur, pas sur des « Item 1 ».
+const demoLinks = [
+  { href: '#projets', label: 'Projets', icon: withBase('/icons/box-plus.svg') },
+  { href: '#how-i-work', label: 'How I work', icon: withBase('/icons/route.svg') },
+  { href: '#about', label: 'About me', icon: withBase('/icons/circle-face.svg') },
+  { href: '#cv', label: 'CV', icon: withBase('/icons/file-text.svg') },
+];
+
+const demoAction = { label: "Let's chat", icon: withBase('/icons/mail-edit.svg') };
+
+// Les props sont recopiées des interface Props des composants. Une seule
+// définition existe dans le projet : celle du composant.
+const buttonProps = [
+  ['variant', `'primary' | 'secondary'`, 'primary', 'Primary porte l’action principale ; une seule par vue.'],
+  ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
+  ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
+  ['icon', 'string', '—', 'Chemin dans public/icons/. Posée avant le label.'],
+  ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const navProps = [
+  ['links', '{ href, label, icon? }[]', '—', 'Les items. Le composant ne les connaît pas d’avance.'],
+  ['current', 'string', '—', 'Chemin courant. Aucun item actif s’il ne correspond à aucun href.'],
+  ['home', '{ href, src, alt }', '—', 'Le bouton avatar. Absent ⇒ non rendu : c’est l’état d’accueil.'],
+  ['action', '{ label, icon?, href? }', '—', 'Le sixième bouton. Sans href ⇒ <button> inerte.'],
+  ['label', 'string', 'Navigation principale', 'aria-label du <nav>.'],
+];
+
+const tagProps = [
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const caseStudyCardProps = [
+  ['eyebrow', 'string', '—', 'L’année et le client. Mis en capitales par le CSS.'],
+  ['title', 'string', '—', 'Le titre de l’étude de cas.'],
+  ['impact', 'string', '—', 'La phrase d’impact, sous le titre.'],
+  ['tags', 'string[]', '[]', 'Les méthodes. Vide ⇒ la rangée n’est pas rendue.'],
+  ['action', '{ label, href? }', '—', 'Le lien vers l’étude. Sans href ⇒ <button> inerte.'],
+  ['images', '{ src, alt, width, height }[]', '[]', 'Les vignettes. Vide ⇒ pas de carrousel.'],
+  ['imagesLabel', 'string', 'Images — {title}', 'Nom accessible de la piste.'],
+  [
+    'headingLevel',
+    '2 | 3 | 4 | 5',
+    '2',
+    'Le rang du titre, sous ce que la page porte déjà. Il ne change pas le dessin : la taille vient du composant.',
+  ],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const carouselProps = [
+  [
+    'items',
+    '{ src, alt, width, height }[]',
+    '—',
+    'width et height donnent le rapport de la boîte, pas la taille du fichier : c’est le cadrage voulu, l’image le remplit en cover.',
+  ],
+  ['label', 'string', 'Images du projet', 'Nom accessible de la piste.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+// Le contenu de l'exemple Figma 176:1248, images comprises. La démo montre donc
+// la carte telle qu'elle sera en vrai, avec trois vignettes de largeurs
+// différentes — c'est ce qui prouve que la piste les tient.
+const caseStudyImages = [
+  {
+    src: withBase('/images/case-study/rubika-percevoir.jpg'),
+    alt: 'Guide « Percevoir sans lutter » : la page d’ouverture et ses deux principes perceptibles.',
+    width: 822,
+    height: 382,
+  },
+  {
+    src: withBase('/images/case-study/rubika-agir.jpg'),
+    alt: 'Guide « Agir sans difficultés » : les hypothèses de départ et leur vérification.',
+    width: 271,
+    height: 382,
+  },
+  {
+    src: withBase('/images/case-study/rubika-roadmap.jpg'),
+    alt: 'La feuille de route de l’atelier et la liste des participants.',
+    width: 600,
+    height: 382,
+  },
+];
+
+const caseStudyDemo = {
+  eyebrow: '2025 - Rubika',
+  title: 'The 4 guides for designing for accessibility',
+  impact: 'Faster deployments — Shared UX language — Roadmap alignment • User trust and satisfaction',
+  tags: ['Hypothesis Testing', 'Co-design Facilitation', 'Journey Prototyping'],
+  action: { label: 'Read the story', href: '#projets' },
+};
+---
+
+<DocsLayout
+  title="Composants — UX design system"
+  description="Les composants du système : Button, Tag, Nav et la carte d'étude de cas, avec leur doctrine, leurs états et leurs props."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Composants</h1>
+    <p class="lead">
+      Deux primitives — Button et Tag — et deux objets qui les composent : le Nav, et la carte d'étude
+      de cas avec son en-tête et son carrousel. Tous construits uniquement à partir des tokens. Ce qui
+      est montré ici est rendu par les composants eux-mêmes — pas par une copie de leur markup. La
+      doctrine d'usage vient des descriptions Figma : c'est elle qui porte les interdits.
+    </p>
+  </header>
+
+  <main>
+    <!-- ── Button ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Button</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> La chose sur laquelle on clique. Dans une maquette, un vrai contrôle
+        ; dans un document ou sur une slide, la représentation d'une action.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni une étiquette — une pilule qui ne fait rien est un
+        <em>Tag</em> — ni un objet qu'on répète : deux boutons primaires dans une vue, et aucun des deux
+        n'est principal. Pour naviguer à l'intérieur du Nav, c'est un lien qu'il faut, pas un bouton.
+        <br />
+        <span class="source">Description du composant Figma <code>21:47</code>.</span>
+      </p>
+
+      <div class="demo">
+        <div class="btn-row">
+          {
+            buttonSizes.map((size) => (
+              <Button size={size} icon={withBase('/icons/mail-edit.svg')}>
+                Bouton {size}
+              </Button>
+            ))
+          }
+        </div>
+
+        <div class="btn-row last">
+          {buttonSizes.map((size) => <Button variant="secondary" size={size}>Secondaire {size}</Button>)}
+        </div>
+      </div>
+
+      <p class="section-note">
+        L'écart entre deux boutons est <code>--button-target-spacing</code> (WCAG 2.5.8). Tabulez pour
+        voir l'anneau de focus, et survolez pour voir le fond changer en
+        <code>--motion-duration-quick</code>.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              buttonProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="section-note">
+        Chaque taille pose ses variables locales (<code>--btn-h</code>, <code>--btn-px</code>,
+        <code>--btn-gap</code>, <code>--btn-icon</code>, <code>--btn-min-w</code>) et chaque variante
+        ses trois fonds (<code>--btn-bg</code>, <code>--btn-bg-hover</code>,
+        <code>--btn-bg-active</code>) : un appelant peut en surcharger un ponctuellement via
+        <code>style</code> plutôt que d'inventer une taille ou une variante de plus. C'est ce que fait
+        le Nav pour son bouton d'action, que Figma compose en hauteur lg avec le padding horizontal md
+        — et le Carousel pour ses flèches, que Figma pose sur <code>color.bg.default</code> et non sur
+        la surface lavande du secondaire.
+      </p>
+
+      <p class="section-note">
+        <strong>Les icônes sont des <code>&lt;img&gt;</code></strong> : elles portent leur couleur, elles
+        n'héritent pas de <code>currentColor</code>. D'où deux fichiers pour la même flèche dans
+        <code>public/icons/</code> — <code>arrow-right.svg</code> pour un fond clair,
+        <code>arrow-right-on-accent.svg</code> pour l'accent.
+      </p>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> Les trois familles <code>height</code>,
+        <code>padding-y</code> et <code>icon-size</code> sont sur-déterminées et ne s'accordent pas : en
+        taille md, <code>16 + 24 + 16 = 56 px</code> alors que <code>--button-height-md</code> vaut 48.
+        Seule la taille sm est cohérente. Ici la hauteur prime — c'est la dimension que les descriptions
+        rattachent à WCAG 2.5.5 — et le padding vertical n'est pas appliqué.
+      </p>
+
+      <p class="flag">
+        <strong>Ce que Figma déclare et que le code n'a pas.</strong> Le composant Figma porte quatre
+        variantes (<code>Primary</code>, <code>Secondary</code>, <code>Ghost</code>, <code>CTA</code>) et
+        quatre états (<code>Default</code>, <code>Hover</code>, <code>Pressed</code>,
+        <code>Disabled</code>). Le code implémente deux variantes et les quatre états : ni
+        <code>Ghost</code> ni <code>CTA</code>. À intégrer le jour où une vue en a besoin — pas avant.
+        L'état désactivé, lui, est arrivé avec les flèches du carrousel : Figma ne change ni le fond ni
+        la bordure, il baisse l'opacité de tout le bouton à 45 % (<code>21:11</code>,
+        <code>21:26</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3 exempte les contrôles
+        inactifs.
+      </p>
+
+      <h3>Tokens</h3>
+      <p class="section-note">
+        Les {buttonTokens.length} tokens <code>button.*</code> : hauteur, padding, gap, taille d'icône,
+        largeur minimale, rayon, anneau de focus. Ils décrivent cet objet et pas le système — c'est pour
+        ça qu'ils sont ici plutôt que dans <a href={withBase('/foundations')}>Fondations</a>.
+      </p>
+      <ul class="plain token-list">
+        {
+          buttonTokens.map((t) => (
+            <li>
+              <code class="name">
+                {t.name} — {t.resolved}
+                {t.alias && <em class="alias"> ← {t.alias}</em>}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Tag ──────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Tag</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Une étiquette courte qui classe la chose posée à côté d'elle :
+        une méthode sur une carte d'étude de cas, une catégorie dans un document.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un bouton — il n'a aucun état interactif, et une pilule
+        sur laquelle on clique est un <em>Button</em> — ni une phrase, ni le seul porteur d'un sens :
+        c'est le texte qui doit dire ce qu'il veut dire, pas la couleur.
+        <br />
+        <span class="source">Description du composant Figma <code>19:12</code>.</span>
+      </p>
+
+      <div class="demo">
+        <div class="tag-row">
+          <Tag>Hypothesis Testing</Tag>
+          <Tag>Co-design Facilitation</Tag>
+          <Tag>Journey Prototyping</Tag>
+        </div>
+      </div>
+
+      <h3>Props</h3>
+      <p class="section-note">Le texte passe par le slot par défaut.</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              tagProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Ce que Figma déclare et que le code n'a pas.</strong> Le composant Figma porte aussi des
+        variantes remplies, qui suivent toutes la même règle : fond au cran 100 d'une rampe, encre au
+        cran 800 de la même rampe — chaque paire dépasse 8:1. Le code n'implémente que l'outline, la
+        seule qu'une vue utilise aujourd'hui. Même politique que <code>Ghost</code> et <code>CTA</code>
+        sur Button.
+      </p>
+    </section>
+
+    <!-- ── Nav ──────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Nav</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> La barre en haut d'une page : six boutons — l'avatar de retour à
+        l'accueil, les quatre items, et l'action.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un en-tête de section à l'intérieur d'une page — ça,
+        c'est un titre — ni un menu : au-delà de cinq liens environ, une navigation devient autre chose
+        et demande un autre dessin.
+        <br />
+        <strong>Pas de filet sous la barre :</strong> ce système sépare ses sections par du blanc.
+      </p>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> La description du composant (<code>24:5</code>)
+        décrit encore l'ancienne barre — « a wordmark on the left » — et affirme que le survol et la page
+        courante partagent la même couleur (<code>color.text.accent</code>). Ni l'un ni l'autre n'est
+        vrai du composant actuel : il porte un avatar, et l'état courant est une pastille
+        <code>color.bg.default</code>. Le texte ci-dessus ne reprend donc que ce qui vaut encore. La
+        description est à réécrire dans Figma.
+      </p>
+
+      <h3>Ses deux comportements</h3>
+      <p class="section-note">
+        Ils ne sont pas une variante à déclarer : ils tombent des props. Sans <code>home</code>, pas
+        d'avatar ; si <code>current</code> ne correspond à aucun lien, aucun item n'est actif.
+      </p>
+
+      <div class="family">
+        <h4>Sur l'accueil <span class="ref">Figma 60:992</span></h4>
+        <div class="demo demo-nav">
+          <Nav links={demoLinks} action={demoAction} label="Démonstration — état d'accueil" />
+        </div>
+        <p class="desc">
+          Pas d'avatar : on n'offre pas un retour vers la page où l'on est. Aucun item courant : l'accueil
+          n'est pas un des quatre.
+        </p>
+      </div>
+
+      <div class="family">
+        <h4>Sur les autres pages <span class="ref">Figma 166:475</span></h4>
+        <div class="demo demo-nav">
+          <Nav
+            links={demoLinks}
+            current="#projets"
+            home={{ href: '#accueil', src: withBase('/images/avatar-judith.png'), alt: 'Accueil' }}
+            action={demoAction}
+            label="Démonstration — état page courante"
+          />
+        </div>
+        <p class="desc">
+          L'avatar ramène à l'accueil, l'item de la page porte la pastille. Survolez un autre onglet :
+          elle s'y rend en <code>--motion-duration-default</code>, puis revient.
+        </p>
+      </div>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              navProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ce que la maquette ne dit pas</h3>
+      <ul class="plain token-list">
+        <li>
+          <p class="desc">
+            <strong>La pastille est du JavaScript.</strong> Le script mesure l'onglet visé et écrit sa
+            géométrie en variables CSS ; le mouvement, lui, reste au CSS. Elle suit le survol
+            <em>et</em> le focus clavier.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Elle a un repli.</strong> Sans JavaScript, l'onglet courant garde son fond blanc et
+            le survol son aplat lavande — le comportement d'avant la pastille. C'est le script qui pose
+            <code>data-slider-ready</code> et neutralise ces deux aplats.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Sous 768px</strong>, les icônes et le bouton d'action s'effacent, l'avatar reste — il
+            est le chemin de retour — et la pilule défile si les onglets ne tiennent plus.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Sous <code>prefers-reduced-motion</code></strong>, la pastille se repositionne d'un
+            coup : ce sont les durées des tokens qui tombent à zéro, le composant n'a rien à savoir de la
+            préférence.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Case Study Card ──────────────────────────────────────────────── -->
+    <section>
+      <h2>Case Study Card</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Une étude de cas présentée en pleine largeur : l'année et le
+        client, le titre, la phrase d'impact, les méthodes, le lien vers l'étude — puis les images du
+        projet, qui défilent.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni une vignette dans une grille — les coins bas carrés
+        et l'ombre projetée vers le haut disent une feuille qui monte depuis le bas de la page, pas une
+        boîte posée au milieu — ni une galerie : le carrousel montre le travail, il ne le remplace pas.
+        La carte ne connaît ni les études de cas ni leurs URLs ; tout tombe des props.
+        <br />
+        <span class="source">Figma <code>88:131</code>, en situation <code>176:1248</code>.</span>
+      </p>
+
+      <div class="demo demo-card">
+        <CaseStudyCard
+          eyebrow={caseStudyDemo.eyebrow}
+          title={caseStudyDemo.title}
+          impact={caseStudyDemo.impact}
+          tags={caseStudyDemo.tags}
+          action={caseStudyDemo.action}
+          images={caseStudyImages}
+          headingLevel={3}
+        />
+      </div>
+
+      <p class="section-note">
+        La carte prend la largeur de son conteneur : c'est la page qui décide si elle est pleine
+        largeur, la carte ne le sait pas. Ici elle est bornée par le cadre de démonstration.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              caseStudyCardProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ses deux moitiés, utilisables seules</h3>
+
+      <div class="family">
+        <h4>L'en-tête <span class="ref">Figma 88:74</span></h4>
+        <div class="demo demo-header">
+          <CaseStudyHeader
+            eyebrow={caseStudyDemo.eyebrow}
+            title={caseStudyDemo.title}
+            impact={caseStudyDemo.impact}
+            tags={caseStudyDemo.tags}
+            action={caseStudyDemo.action}
+            headingLevel={5}
+          />
+        </div>
+        <p class="desc">
+          Le titre et le bouton partagent une ligne et s'alignent sur leur bas. Rétrécissez la fenêtre :
+          sous 320px de titre, le bouton passe dessous plutôt que d'écraser le titre. Ses props sont
+          celles de la carte, moins <code>images</code> et <code>imagesLabel</code> — la carte ne fait
+          que les lui passer.
+        </p>
+      </div>
+
+      <div class="family">
+        <h4>Le carrousel <span class="ref">Figma 88:85</span></h4>
+        <div class="demo demo-carousel">
+          <Carousel items={caseStudyImages} label="Démonstration — images du projet" />
+        </div>
+        <p class="desc">
+          Les flèches avancent d'une vignette et se désactivent en bout de piste. La piste défile aussi
+          au doigt, au trackpad et au clavier — tabulez jusqu'à elle, puis flèches gauche et droite.
+        </p>
+      </div>
+
+      <h3>Props du carrousel</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              carouselProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ce que la maquette ne dit pas</h3>
+      <ul class="plain token-list">
+        <li>
+          <p class="desc">
+            <strong>Les flèches sont une commodité.</strong> Elles sont masquées dans le HTML et c'est
+            le script qui les révèle — puis les masque à nouveau si tout tient dans la largeur. Sans
+            JavaScript la piste défile déjà, et sa barre de défilement reste visible : c'est alors la
+            seule chose qui dit que ça défile.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Le focus ne se perd pas.</strong> Quand une flèche se désactive sous le focus, le
+            script le déplace sur l'autre plutôt que de le laisser retomber sur le
+            <code>&lt;body&gt;</code>.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>C'est le seul composant qui lit <code>prefers-reduced-motion</code>.</strong> Le
+            <code>behavior: 'smooth'</code> du défilement n'est pas une durée : <code>tokens.css</code>
+            ne peut pas le remettre à zéro comme il le fait des <code>motion.duration.*</code>. Le
+            script bascule donc lui-même sur <code>'auto'</code>.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Sous 768px</strong>, les marges de 48px tomberaient à la moitié d'un écran de 390 :
+            elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et les
+            vignettes à 240px de haut. Figma ne dessine pas cette carte en mobile — c'est une décision
+            du code.
+          </p>
+        </li>
+      </ul>
+
+      <p class="flag">
+        <strong>Aucun token ne porte les ombres.</strong> Figma déclare deux styles d'effet,
+        <code>shadow/lg</code> sur les vignettes et <code>shadow/lg-invert</code> sur la carte, que la
+        collection <em>Design tokens</em> n'expose pas en variables. Les deux valeurs vivent donc en dur
+        dans les composants, hissées en <code>--card-shadow</code> et
+        <code>--carousel-item-shadow</code> — comme <code>--nav-home-size</code> dans le Nav. Le jour où
+        Figma les porte en variables, elles rejoignent <code>tokens/</code> et les composants n'ont
+        qu'une ligne à changer.
+      </p>
+
+      <p class="flag">
+        <strong>Les deux ombres de la carte divergent.</strong> Le composant <code>88:131</code> déclare
+        <code>0 -30px 30px -14px</code> ; l'instance d'exemple <code>176:1248</code> déclare
+        <code>0 -22px 48px -12px</code>. Le code suit le composant — c'est lui la spécification, l'autre
+        est une surcharge locale. À réaligner côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>L'eyebrow contredit le système.</strong> Figma le dessine en Inter semibold ;
+        <code>global.css</code> réserve cette forme — 13px, capitales, interlettrage large — au
+        <code>h6</code>, en Poppins bold. Le code suit Figma et ne rend donc pas un <code>h6</code> :
+        ce n'est de toute façon pas un titre mais une ligne de contexte au-dessus du titre. À trancher
+        côté Figma : ou l'eyebrow rentre dans le rang, ou le système reconnaît deux eyebrows.
+      </p>
+
+      <p class="flag">
+        <strong>Deux écarts d'espacement.</strong> Figma pose <code>33px</code> entre les vignettes et
+        <code>10px</code> entre les tags. Aucun token ne porte ces deux valeurs : la première devient
+        <code>--space-2xl</code> (32), la seconde <code>--space-md</code> (12) — on n'a jamais intérêt à
+        resserrer l'écart entre deux cibles voisines (WCAG 2.5.8).
+      </p>
+
+      <p class="flag">
+        <strong>Le Slot Figma accepte tout, le carrousel n'accepte que des images.</strong> La piste
+        prend un tableau <code>items</code> plutôt qu'un slot : la hauteur, le rayon et l'ombre des
+        vignettes sont l'affaire du carrousel, et les styles scopés d'Astro n'atteignent pas un contenu
+        slotté. Même coupure que le Nav, qui prend un tableau <code>links</code>. Le jour où une
+        vignette n'est plus une image, c'est le composant qu'il faut rouvrir.
+      </p>
+
+      <p class="flag">
+        <strong>Trois coquilles dans le texte de la maquette.</strong> L'exemple Figma écrit
+        « deployements », « langages » et « Raoadmap ». La démo ci-dessus les corrige ; Figma reste à
+        corriger.
+      </p>
+    </section>
+  </main>
+</DocsLayout>
+
+<style>
+  /* Le cadre neutre dans lequel un composant se montre : il donne au composant
+     la largeur qu'il aurait dans une page, sans laisser croire qu'il fait
+     partie de la doc. */
+  .demo {
+    padding: var(--space-xl);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Le Nav se centre et déborde en largeur sur petit écran : il défile dans son
+     cadre plutôt que d'élargir la page. */
+  .demo-nav {
+    padding: var(--space-md) 0;
+    overflow-x: auto;
+  }
+
+  /* La carte porte ses propres marges et vient buter en bas de son cadre : ses
+     coins bas sont carrés parce qu'elle monte depuis le bord. Reste un peu d'air
+     en haut, sans quoi son ombre — projetée vers le haut — ne se verrait pas. */
+  .demo-card {
+    padding: var(--space-2xl) 0 0;
+    /* Le cadre perd ses coins bas arrondis pour épouser ceux de la carte, qui
+       sont carrés. Pas d'overflow: hidden ici — il rognerait l'ombre. */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* L'en-tête et le carrousel portent eux aussi leurs marges latérales. */
+  .demo-header,
+  .demo-carousel {
+    padding: var(--space-xl) 0;
+  }
+
+  /* La carte et le carrousel s'attendent à la surface lavande ; le carrousel
+     seul est montré sur elle pour que ses flèches, blanches, se détachent. */
+  .demo-carousel {
+    background: var(--color-bg-surface);
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  /* Les boutons eux-mêmes vivent dans Button.astro — il n'y a qu'une seule
+     définition dans le projet. Ici, seulement leur mise en ligne, dont l'écart
+     imposé par WCAG 2.5.8. */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--button-target-spacing);
+    margin-bottom: var(--space-xl);
+  }
+
+  .btn-row.last {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: var(--font-size-subheading);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  h4 {
+    font-size: var(--font-size-subheading);
+    margin-bottom: var(--space-md);
+  }
+
+  .ref,
+  .source {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: var(--font-size-body-sm);
+    text-align: left;
+  }
+
+  th {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-label);
+    letter-spacing: var(--font-letter-spacing-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  th,
+  td {
+    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border-default);
+    vertical-align: top;
+  }
+
+  td {
+    color: var(--color-text-muted);
+  }
+
+  td:first-child {
+    color: var(--color-text-default);
+    white-space: nowrap;
+  }
+</style>

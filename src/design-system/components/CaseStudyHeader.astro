@@ -1,0 +1,157 @@
+---
+// L'en-tête d'une étude de cas : l'année et le client, le titre, la phrase
+// d'impact, les méthodes en tags, et le lien vers l'étude.
+//
+// Figma l'appelle « Section Header » (88:74), mais tout ce qu'il contient est
+// propre à une étude de cas — un eyebrow année-client, une phrase d'impact, un
+// bouton « Read the story ». Le nom promet un en-tête générique que l'objet ne
+// tient pas ; il est donc nommé ici pour ce qu'il fait. Le renommage se discute
+// côté Figma.
+//
+// Le composant ignore tout du site qui l'emploie : ni les études de cas, ni leurs
+// URLs, ni la page courante ne vivent ici. Tout tombe des props.
+
+import { withBase } from '../lib/url';
+import Button from './Button.astro';
+import Tag from './Tag.astro';
+
+interface Props {
+  /** L'année et le client : « 2025 - Rubika ». Mis en capitales par le CSS. */
+  eyebrow: string;
+  title: string;
+  /** La phrase d'impact, sous le titre. */
+  impact?: string;
+  /** Les méthodes. Tableau vide ou absent ⇒ la rangée n'est pas rendue. */
+  tags?: string[];
+  /** Le lien vers l'étude. Sans href ⇒ <button> inerte, à câbler par l'appelant. */
+  action?: { label: string; href?: string };
+  /** Le niveau du titre : il se range sous ce que la page porte déjà. Le rang ne
+   *  change pas le dessin — la taille du titre vient du composant, pas du tag. */
+  headingLevel?: 2 | 3 | 4 | 5;
+  class?: string;
+}
+
+const { eyebrow, title, impact, tags = [], action, headingLevel = 2, class: className } = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5';
+const classes = ['case-study-header', className].filter(Boolean).join(' ');
+---
+
+<header class={classes}>
+  <p class="eyebrow">{eyebrow}</p>
+
+  <div class="read">
+    <div class="title-impact">
+      <Heading class="title">{title}</Heading>
+      {impact && <p class="impact">{impact}</p>}
+    </div>
+
+    {
+      action && (
+        <Button
+          size="lg"
+          href={action.href}
+          iconEnd={withBase('/icons/arrow-right-on-accent.svg')}
+          style="--btn-px: var(--button-padding-x-md); --btn-icon: var(--button-icon-size-md)"
+        >
+          {action.label}
+        </Button>
+      )
+    }
+  </div>
+
+  {
+    tags.length > 0 && (
+      <ul class="tags">
+        {tags.map((t) => (
+          <li>
+            <Tag>{t}</Tag>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</header>
+
+<style>
+  .case-study-header {
+    /* La largeur minimale du bloc titre avant que le bouton passe à la ligne.
+       L'export Figma la donne en dur : aucun token ne la porte. */
+    --header-title-min: 320px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-inline: var(--space-layout-48);
+  }
+
+  /* Même dessin que le h6 du système — 13px, capitales, interlettrage large —
+     mais en Inter semibold, comme Figma le pose. Le système réserve cette forme
+     au h6, en Poppins bold : l'écart est signalé sur /design-system/components
+     et se tranche côté Figma. En attendant, ce n'est pas un titre, donc pas un
+     h6 : c'est une ligne de contexte au-dessus du titre. */
+  .eyebrow {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-wider);
+    text-transform: uppercase;
+    color: var(--color-text-accent);
+  }
+
+  /* Le titre et le bouton partagent une ligne et s'alignent sur leur bas. Trop
+     à l'étroit, le bouton passe dessous plutôt que d'écraser le titre. */
+  .read {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-md);
+  }
+
+  .title-impact {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-width: min(var(--header-title-min), 100%);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-title);
+    color: var(--color-text-default);
+  }
+
+  .impact {
+    margin: 0;
+    font-size: var(--font-size-body);
+    line-height: var(--font-line-height-body);
+    color: var(--color-text-muted);
+  }
+
+  /* Figma pose 8px entre les rangées et 10px entre les tags. Aucun token ne
+     porte 10 : on prend space.md (12) plutôt que space.sm (8) — on n'a jamais
+     intérêt à resserrer l'écart entre deux cibles voisines (WCAG 2.5.8). */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Sous 768px, la marge de 48px mange la moitié d'un écran de 390. Figma ne
+     dessine pas cette carte en mobile : c'est une décision du code. */
+  @media (max-width: 767px) {
+    .case-study-header {
+      padding-inline: var(--space-xl);
+    }
+
+    .title {
+      font-size: var(--font-size-subtitle);
+    }
+  }
+</style>

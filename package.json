@@ -1,0 +1,25 @@
+{
+  "name": "ux-design-system",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Le design system de Judith Heckmann : 115 tokens exportés de Figma et les composants qui en sont faits.",
+  "homepage": "https://equipollente.github.io/UX-design-system/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Equipollente/UX-design-system.git"
+  },
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run tokens && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "tokens": "node scripts/build-tokens.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.2.1"
+  }
+}

@@ -1,0 +1,39 @@
+---
+// Tag — une étiquette courte qui classe la chose posée à côté d'elle : un mot-clé
+// de méthode sur une carte d'étude de cas, une catégorie dans un document.
+//
+// Ce n'est pas un bouton : aucun état interactif, aucun href, jamais de clic.
+// Une pilule sur laquelle on clique est un Button. Et le texte doit dire ce
+// qu'il veut dire — la couleur ne porte pas de sens à elle seule.
+//
+// Figma 19:12. Le composant Figma décrit aussi des variantes remplies (fond
+// ramp 100, encre ramp 800, chaque paire au-delà de 8:1). Le code n'implémente
+// que l'outline, la seule qu'une vue utilise aujourd'hui — même politique que
+// Ghost et CTA sur Button.
+
+interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+const classes = ['tag', className].filter(Boolean).join(' ');
+---
+
+<span class={classes} {...rest}><slot /></span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-accent-500);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-ui);
+    line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-wide);
+    color: var(--color-text-accent);
+  }
+</style>

@@ -1,0 +1,334 @@
+---
+// Nav — la barre de navigation du système : six boutons, l'avatar de retour à
+// l'accueil, les quatre items, et l'action. Deux nœuds Figma la spécifient, qui
+// sont la même instance dans deux états :
+//   60:992  — sur la page d'accueil : avatar masqué, aucun item actif
+//   166:475 — sur les autres pages : avatar visible, item de la page en blanc
+//
+// Le composant ignore tout du site qui l'utilise : ni la liste des liens, ni la
+// page courante, ni la destination de l'avatar ne vivent ici. Les deux états ne
+// sont donc pas une variante à déclarer — ils tombent des props qu'on reçoit.
+//
+// Pas de filet sous la barre : la description Figma du composant l'interdit
+// explicitement — « There is NO rule beneath the bar: this system parts
+// sections with whitespace. »
+
+import Button from './Button.astro';
+
+interface Props {
+  links: { href: string; label: string; icon?: string }[];
+  /** Chemin courant. Aucun item n'est actif s'il ne correspond à aucun href. */
+  current?: string;
+  /** Le bouton avatar. Absent ⇒ non rendu, c'est l'état d'accueil. */
+  home?: { href: string; src: string; alt: string };
+  /** Le sixième bouton. Sans href ⇒ <button> inerte, à câbler par l'appelant. */
+  action?: { label: string; icon?: string; href?: string };
+  /** aria-label du <nav>. */
+  label?: string;
+}
+
+const { links, current, home, action, label = 'Navigation principale' } = Astro.props;
+---
+
+{/* L'avatar est un lien de navigation : il entre dans le landmark. Le bouton
+    d'action, lui, reste dehors — il déclenche une action, il ne navigue pas. */}
+<div class="nav-bar">
+  <nav aria-label={label}>
+    {
+      home && (
+        <a class="home" href={home.href}>
+          <img src={home.src} alt={home.alt} width="64" height="64" />
+        </a>
+      )
+    }
+
+    {/* data-nav-tabs est le point d'accroche du script : les classes servent au
+        style, les attributs data- au comportement. */}
+    <ul class="tabs" data-nav-tabs>
+      {
+        links.map(({ href, label: text, icon }) => (
+          <li>
+            <a class="tab" href={href} aria-current={href === current ? 'page' : undefined}>
+              {icon && <img class="tab-icon" src={icon} alt="" aria-hidden="true" />}
+              <span>{text}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  {
+    action && (
+      /* Figma compose ce bouton avec la hauteur lg et le padding horizontal md.
+         On passe donc size="lg" en surchargeant --btn-px plutôt que d'inventer
+         une quatrième taille pour un seul appel.
+         Le wrapper existe pour que le masquage mobile ne dépende pas de l'ordre
+         des feuilles scopées entre ce fichier et Button.astro. */
+      <div class="nav-action">
+        <Button
+          size="lg"
+          href={action.href}
+          icon={action.icon}
+          style="--btn-px: var(--button-padding-x-md); --btn-min-w: 0"
+        >
+          {action.label}
+        </Button>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    /* Sans min-width: 0, le min-width: auto par défaut des éléments flex
+       empêche la pilule de se contraindre, donc de défiler (cf. mobile). */
+    min-width: 0;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    min-width: 0;
+  }
+
+  /* L'export Figma donne cette dimension en dur : aucun token ne la porte.
+     À remonter côté Figma plutôt qu'à inventer un token ici. */
+  .home {
+    --nav-home-size: 64px;
+
+    flex: none;
+    width: var(--nav-home-size);
+    height: var(--nav-home-size);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .home img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* La pilule lavande */
+  .tabs {
+    position: relative; /* repère de la pastille */
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin: 0;
+    padding: var(--space-sm);
+    list-style: none;
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  /* La pastille qui glisse d'un onglet à l'autre. Un pseudo-élément plutôt
+     qu'une balise : rien à ajouter au markup, donc rien à masquer aux lecteurs
+     d'écran. Sa géométrie est celle de l'onglet visé, écrite par le script.
+     Enfant de la pilule, elle défile avec elle sur mobile. */
+  .tabs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--slider-w, 0);
+    height: var(--slider-h, 0);
+    transform: translate(var(--slider-x, 0), var(--slider-y, 0));
+    background: var(--color-bg-default);
+    border-radius: var(--radius-lg);
+    opacity: 0;
+    pointer-events: none;
+    /* Un déplacement prend duration.default, un fondu duration.quick. Sous
+       prefers-reduced-motion, tokens.css remet ces durées à zéro : rien à
+       prévoir ici. */
+    transition:
+      transform var(--motion-duration-default) var(--motion-easing-standard),
+      width var(--motion-duration-default) var(--motion-easing-standard),
+      height var(--motion-duration-default) var(--motion-easing-standard),
+      opacity var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  .tabs[data-slider-on]::before {
+    opacity: 1;
+  }
+
+  /* Deux moments sans transition : le placement initial, et l'apparition depuis
+     rien (sur l'accueil, où la pastille n'a pas d'onglet d'origine) — sans quoi
+     elle glisserait depuis une position qu'elle n'occupait pas visiblement. */
+  .tabs[data-slider-jump]::before {
+    transition: opacity var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* Au chargement, la pastille est déjà en place : rien ne bouge, rien n'apparaît. */
+  .tabs[data-slider-init]::before {
+    transition: none;
+  }
+
+  .tab {
+    position: relative; /* le libellé passe au-dessus de la pastille */
+    display: flex;
+    flex: none; /* Figma déclare les onglets shrink-0 : ils ne se compriment pas. */
+    align-items: center;
+    justify-content: center;
+    height: var(--button-height-md);
+    padding: var(--space-md);
+    gap: var(--button-gap-sm);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-on-highlight);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body);
+    line-height: var(--font-line-height-snug);
+    text-decoration: none;
+    white-space: nowrap;
+    /* Un changement de couleur prend duration.quick. Sert au repli sans
+       JavaScript, où c'est l'onglet lui-même qui porte le fond. */
+    transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* L'état courant est stylé sur l'attribut ARIA, pas sur une classe : l'état
+     visuel et l'état annoncé ne peuvent donc pas diverger. */
+  .tab[aria-current='page'] {
+    background: var(--color-bg-default);
+  }
+
+  .tab:hover:not([aria-current='page']) {
+    background: var(--color-accent-100);
+  }
+
+  /* Ces deux aplats sont le plancher : sans JavaScript, la barre se comporte
+     comme avant. Le script pose data-slider-ready et c'est la pastille qui
+     prend le relais — un seul objet se déplace, rien ne clignote sous lui. */
+  .tabs[data-slider-ready] .tab[aria-current='page'],
+  .tabs[data-slider-ready] .tab:hover {
+    background: transparent;
+  }
+
+  .tab-icon {
+    flex: none;
+    width: var(--button-icon-size-md);
+    height: var(--button-icon-size-md);
+    object-fit: contain;
+  }
+
+  .nav-action {
+    display: flex;
+  }
+
+  /* Sous 768px — le layout.Device Width que l'export Figma déclare pour la
+     tablette — il ne reste que l'essentiel : l'avatar, qui est le chemin de
+     retour, et les libellés. Les icônes et l'action s'effacent. */
+  @media (max-width: 767px) {
+    .nav-bar {
+      gap: var(--space-sm);
+      padding: var(--space-xs);
+    }
+
+    .tab-icon,
+    .nav-action {
+      display: none;
+    }
+
+    /* Le design s'arrête à 390px. Plus bas, et dès que l'avatar occupe sa
+       place, les onglets ne tiennent plus : la pilule défile au lieu de rogner
+       le dernier, qui deviendrait inatteignable avec l'overflow: hidden que
+       déclare Figma. */
+    .tabs {
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // La pastille du Nav. Le script ne fait que mesurer l'onglet visé et écrire sa
+  // géométrie en variables CSS ; tout le rendu et le mouvement restent au CSS.
+  for (const tabs of document.querySelectorAll<HTMLElement>('[data-nav-tabs]')) {
+    const active = () => tabs.querySelector<HTMLElement>('.tab[aria-current="page"]');
+
+    /** L'onglet actuellement visé. null = pastille éteinte. */
+    let target: HTMLElement | null = null;
+
+    /** Pose la pastille sur un onglet. Sans cible, elle s'éteint (cas accueil). */
+    function place(tab: HTMLElement | null, jump = false) {
+      target = tab;
+
+      if (!tab) {
+        tabs.removeAttribute('data-slider-on');
+        return;
+      }
+
+      // Réapparaître après extinction doit être un fondu sur place, pas un
+      // glissement depuis la dernière position occupée.
+      const appears = !tabs.hasAttribute('data-slider-on');
+      if (jump || appears) tabs.setAttribute('data-slider-jump', '');
+
+      tabs.style.setProperty('--slider-x', `${tab.offsetLeft}px`);
+      tabs.style.setProperty('--slider-y', `${tab.offsetTop}px`);
+      tabs.style.setProperty('--slider-w', `${tab.offsetWidth}px`);
+      tabs.style.setProperty('--slider-h', `${tab.offsetHeight}px`);
+      tabs.setAttribute('data-slider-on', '');
+
+      if (jump || appears) {
+        void tabs.offsetWidth; // force le reflow avant de rendre la transition
+        tabs.removeAttribute('data-slider-jump');
+      }
+    }
+
+    const rest = () => place(active());
+
+    // Un tap déclenche pointerover juste avant de quitter la page : on écarte
+    // le tactile au niveau de l'événement plutôt qu'avec une media query lue au
+    // chargement, qui se tromperait sur un portable à écran tactile.
+    tabs.addEventListener('pointerover', (event) => {
+      if (event.pointerType === 'touch') return;
+      const tab = (event.target as Element).closest<HTMLElement>('.tab');
+      if (tab) place(tab);
+    });
+    tabs.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'touch') return;
+      rest();
+    });
+
+    tabs.addEventListener('focusin', (event) => {
+      const tab = (event.target as Element).closest<HTMLElement>('.tab');
+      if (tab) place(tab);
+    });
+    tabs.addEventListener('focusout', (event) => {
+      if (!tabs.contains(event.relatedTarget as Node)) rest();
+    });
+
+    // Placement initial sans la moindre transition — pas même le fondu.
+    tabs.setAttribute('data-slider-init', '');
+    tabs.setAttribute('data-slider-ready', '');
+    place(active(), true);
+    requestAnimationFrame(() => tabs.removeAttribute('data-slider-init'));
+
+    // Une mesure ne vaut que pour la mise en page du moment. Elle change au
+    // redimensionnement, quand Poppins et Inter remplacent les polices de repli,
+    // et — en dev, où Astro injecte les styles par JavaScript — après ce script
+    // lui-même. Observer la pilule couvre les trois d'un coup, plutôt que de
+    // courir après chacun. Le rAF évite de forcer un reflow dans le callback.
+    new ResizeObserver(() => {
+      requestAnimationFrame(() => place(target, true));
+    }).observe(tabs);
+
+    // La pilule peut garder la même largeur pendant que celle des onglets change
+    // (mobile : max-width 100% et défilement). Un dernier recalage au cas où.
+    document.fonts?.ready.then(() => place(target, true));
+  }
+</script>

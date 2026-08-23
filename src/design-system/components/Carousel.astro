@@ -1,0 +1,218 @@
+---
+// Carousel — une piste d'images qui défile horizontalement, et deux flèches
+// pour l'avancer d'une image. Figma 88:85.
+//
+// Figma modélise le contenu par un Slot, qui accepterait n'importe quoi. Ici il
+// n'accepte que des images, passées en tableau : la hauteur, le rayon et
+// l'ombre des vignettes sont l'affaire du carrousel, et les styles scopés
+// d'Astro n'atteignent pas un contenu slotté. C'est la même coupure que le Nav,
+// qui prend un tableau `links` plutôt que des slots.
+//
+// La piste défile nativement — au doigt, au trackpad, à la molette et au
+// clavier. Les flèches sont une commodité par-dessus : elles sont masquées dans
+// le HTML et c'est le script qui les révèle. Deux flèches inertes seraient un
+// mensonge, alors que la piste, elle, marche sans JavaScript.
+
+import { withBase } from '../lib/url';
+import Button from './Button.astro';
+
+interface Props {
+  /** Les vignettes. `width` et `height` donnent le rapport de la boîte, pas la
+   *  taille de l'image : c'est le cadrage voulu, l'image le remplit en cover. */
+  items: { src: string; alt: string; width: number; height: number }[];
+  /** Nom accessible de la piste. */
+  label?: string;
+  class?: string;
+}
+
+const { items, label = 'Images du projet', class: className } = Astro.props;
+const classes = ['carousel', className].filter(Boolean).join(' ');
+---
+
+<div class={classes} data-carousel>
+  <!-- `tabindex` sur la piste : une zone qui défile doit pouvoir défiler au
+       clavier, et les vignettes ne prennent pas le focus. -->
+  <ul class="track" data-carousel-track tabindex="0" aria-label={label}>
+    {
+      items.map((item) => (
+        <li class="item" style={`--item-ratio: ${item.width} / ${item.height}`}>
+          <img
+            src={item.src}
+            alt={item.alt}
+            width={item.width}
+            height={item.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="nav" data-carousel-nav hidden>
+    <Button
+      variant="secondary"
+      icon={withBase('/icons/arrow-left.svg')}
+      aria-label="Image précédente"
+      data-carousel-prev
+      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
+    />
+    <Button
+      variant="secondary"
+      icon={withBase('/icons/arrow-right.svg')}
+      aria-label="Image suivante"
+      data-carousel-next
+      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
+    />
+  </div>
+</div>
+
+<style>
+  .carousel {
+    /* Deux valeurs que l'export Figma donne en dur : aucun token ne les porte.
+       La hauteur des vignettes, et leur ombre — la collection Design tokens
+       n'expose aucune variable d'ombre, seulement un style d'effet shadow/lg.
+       Signalé sur /design-system/components. */
+    --carousel-item-height: 382px;
+    --carousel-item-shadow: 0 22px 9px -14px rgb(47 45 46 / 0.1), 0 2px 4px rgb(47 45 46 / 0.04);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  /* `position: relative` n'est pas décoratif : il fait de la piste l'offsetParent
+     de ses vignettes, donc leur `offsetLeft` se mesure depuis le début de la
+     piste. C'est ce que le script compare au `scrollLeft`.
+     Le padding vertical vient de Figma et sert à quelque chose : sans lui,
+     l'ombre des vignettes serait rognée par le défilement. */
+  .track {
+    position: relative;
+    display: flex;
+    gap: var(--space-2xl);
+    margin: 0;
+    padding: var(--space-lg) 0;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    /* `proximity`, pas `mandatory` : les vignettes n'ont pas toutes la même
+       largeur, et la dernière peut commencer au-delà du défilement maximal. En
+       mandatory son point d'accroche serait inatteignable et la piste
+       reviendrait en arrière. */
+    scroll-snap-type: x proximity;
+  }
+
+  /* Tant que le script n'a pas pris la main, la barre de défilement reste : sans
+     JavaScript, elle est la seule chose qui dit que ça défile. */
+  [data-carousel-ready] .track {
+    scrollbar-width: none;
+  }
+
+  [data-carousel-ready] .track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    flex: none;
+    height: var(--carousel-item-height);
+    aspect-ratio: var(--item-ratio);
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--carousel-item-shadow);
+    scroll-snap-align: start;
+  }
+
+  /* `width`/`height` donnent le cadrage voulu, pas le format du fichier : l'image
+     remplit la boîte et déborde. Elle est alors rognée par la droite, jamais par
+     la gauche — une capture d'écran se lit depuis son bord gauche, et c'est là
+     que Figma cale la sienne. */
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
+  }
+
+  .nav {
+    display: flex;
+    gap: var(--space-lg);
+    padding-inline: var(--space-layout-48);
+  }
+
+  .nav[hidden] {
+    display: none;
+  }
+
+  /* Figma ne dessine pas ce composant en mobile : ce qui suit est une décision
+     du code. Les vignettes rapetissent et la marge des flèches s'aligne sur
+     celle de l'en-tête de la carte. */
+  @media (max-width: 767px) {
+    .carousel {
+      --carousel-item-height: 240px;
+    }
+
+    .track {
+      gap: var(--space-lg);
+    }
+
+    .nav {
+      padding-inline: var(--space-xl);
+    }
+  }
+</style>
+
+<script>
+  // Les classes servent au style, les attributs `data-` au comportement.
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-carousel-track]');
+    const nav = carousel.querySelector<HTMLElement>('[data-carousel-nav]');
+    const prev = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+    const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]');
+    if (!track || !nav || !prev || !next) return;
+
+    // Le défilement fluide n'est pas une durée : `tokens.css` ne peut pas le
+    // remettre à zéro comme il le fait des motion.duration.*. C'est le seul
+    // endroit du système où un composant lit lui-même la préférence.
+    const calme = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const behavior = (): ScrollBehavior => (calme.matches ? 'auto' : 'smooth');
+
+    const items = () => Array.from(track.children) as HTMLElement[];
+    const fin = () => track.scrollWidth - track.clientWidth;
+
+    const sync = () => {
+      // Relevé avant de désactiver quoi que ce soit : le navigateur retire le
+      // focus d'un bouton à l'instant où il devient `disabled`, et il serait
+      // déjà retombé sur le <body> quand on regarderait.
+      const actif = document.activeElement;
+
+      nav.hidden = fin() <= 1;
+      prev.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= fin() - 1;
+
+      // Le focus passe alors à l'autre flèche plutôt que de se perdre :
+      // l'utilisateur clavier ne repart pas du début de la page.
+      if (actif === prev && prev.disabled && !next.disabled) next.focus();
+      else if (actif === next && next.disabled && !prev.disabled) prev.focus();
+    };
+
+    const aller = (sens: 1 | -1) => {
+      const depart = track.scrollLeft;
+      const cible =
+        sens === 1
+          ? items().find((el) => el.offsetLeft > depart + 1)
+          : items().filter((el) => el.offsetLeft < depart - 1).pop();
+      track.scrollTo({
+        left: cible ? cible.offsetLeft : sens === 1 ? fin() : 0,
+        behavior: behavior(),
+      });
+    };
+
+    prev.addEventListener('click', () => aller(-1));
+    next.addEventListener('click', () => aller(1));
+    track.addEventListener('scroll', sync, { passive: true });
+    new ResizeObserver(sync).observe(track);
+
+    carousel.dataset.carouselReady = '';
+    sync();
+  });
+</script>

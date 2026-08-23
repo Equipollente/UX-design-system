@@ -1,0 +1,118 @@
+/* Chrome des pages de documentation du système : le cadre, les titres de
+ * section, les listes de tokens. Rien de spécifique à une page — ce qui ne sert
+ * qu'à une démonstration reste scopé dans la page qui la porte.
+ *
+ * Importé par DocsLayout, donc jamais chargé par le site.
+ * Aucune valeur en dur : tout passe par var(--*).
+ */
+
+.page-head,
+main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+}
+
+.page-head {
+  padding-top: var(--space-layout-64);
+  padding-bottom: var(--space-layout-48);
+}
+
+.page-head h6 {
+  color: var(--color-text-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.lead {
+  max-width: 60ch;
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text-muted);
+}
+
+section {
+  padding: var(--space-layout-48) 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+section > h2 {
+  margin-bottom: var(--space-lg);
+}
+
+.section-note {
+  max-width: 66ch;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xl);
+}
+
+/* Ce qui reste à trancher côté design. Le système préfère l'écrire que le taire. */
+.flag {
+  max-width: 66ch;
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-default);
+  font-size: var(--font-size-body-sm);
+}
+
+.family {
+  margin-bottom: var(--space-2xl);
+}
+
+.family h3 {
+  font-size: var(--font-size-heading);
+  margin-bottom: var(--space-md);
+}
+
+code {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-xs);
+}
+
+.name {
+  display: block;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  background: none;
+  padding: 0;
+}
+
+.value {
+  display: block;
+  font-size: var(--font-size-label);
+  color: var(--color-text-default);
+  font-variant-numeric: tabular-nums;
+}
+
+.alias {
+  color: var(--color-text-accent);
+  font-style: normal;
+}
+
+.desc {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--font-size-label);
+  line-height: var(--font-line-height-body);
+  color: var(--color-text-muted);
+  max-width: 42ch;
+}
+
+/* — listes génériques — */
+.plain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plain > li + li {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.token-list > li + li {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+}

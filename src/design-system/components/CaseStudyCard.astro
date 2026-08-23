@@ -1,0 +1,85 @@
+---
+// Case Study Card — une étude de cas présentée en pleine largeur : son en-tête,
+// puis le carrousel de ses images. Figma 88:131, en situation 176:1248.
+//
+// La carte ne dessine que le contenant ; l'en-tête et le carrousel sont deux
+// composants à part, utilisables seuls.
+//
+// Les coins bas carrés et l'ombre projetée vers le haut ne sont pas un détail :
+// cette carte est une feuille qui monte depuis le bas de la page, pas une boîte
+// posée au milieu. Elle prend la largeur de son conteneur — c'est la page qui
+// décide si elle est pleine largeur, le composant ne le sait pas.
+
+import CaseStudyHeader from './CaseStudyHeader.astro';
+import Carousel from './Carousel.astro';
+
+interface Props {
+  /** L'année et le client : « 2025 - Rubika ». */
+  eyebrow: string;
+  title: string;
+  impact?: string;
+  tags?: string[];
+  action?: { label: string; href?: string };
+  /** Les vignettes du carrousel. Tableau vide ⇒ pas de carrousel. */
+  images?: { src: string; alt: string; width: number; height: number }[];
+  /** Nom accessible de la piste d'images. */
+  imagesLabel?: string;
+  headingLevel?: 2 | 3 | 4 | 5;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  impact,
+  tags,
+  action,
+  images = [],
+  imagesLabel,
+  headingLevel = 2,
+  class: className,
+} = Astro.props;
+
+const classes = ['case-study-card', className].filter(Boolean).join(' ');
+---
+
+<article class={classes}>
+  <CaseStudyHeader
+    eyebrow={eyebrow}
+    title={title}
+    impact={impact}
+    tags={tags}
+    action={action}
+    headingLevel={headingLevel}
+  />
+
+  {images.length > 0 && <Carousel items={images} label={imagesLabel ?? `Images — ${title}`} />}
+</article>
+
+<style>
+  .case-study-card {
+    /* L'ombre du composant Figma (88:131), portée vers le haut : la feuille se
+       détache de ce qui la précède, pas de ce qui la suit. Aucun token ne la
+       porte — la collection Design tokens n'expose pas les styles d'effet
+       shadow/lg-invert. Signalé sur /design-system/components. */
+    --card-shadow: 0 -30px 30px -14px rgb(47 45 46 / 0.16), 0 2px 4px rgb(47 45 46 / 0.04);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    width: 100%;
+    padding-block: var(--space-layout-64);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  /* Figma ne dessine pas cette carte en mobile : ce qui suit est une décision du
+     code. Les marges intérieures des enfants suivent la même bascule, chacune
+     chez elle. */
+  @media (max-width: 767px) {
+    .case-study-card {
+      padding-block: var(--space-layout-48);
+    }
+  }
+</style>

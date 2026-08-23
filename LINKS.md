@@ -1,0 +1,68 @@
+# Liens du design system
+
+Tout ce vers quoi il faut pouvoir retourner. Tenu à la main — les identifiants de nœuds Figma sont
+stables, seul le nom du fichier dans l'URL est cosmétique.
+
+Les liens propres au portfolio (prototypes des pages, maquettes du site) sont partis avec lui, dans
+le `LINKS.md` du dossier `portfolio`.
+
+## Figma
+
+**Fichier** — `uQ5j90wu2MJSvzsN3Oc0pT`
+<https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system>
+
+| Page | Ce qu'on y trouve | Lien |
+| --- | --- | --- |
+| Foundations | Couleurs, typo, espacements, rayons, ombres — la source des tokens | [`5-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=5-2) |
+| Components | Les composants et leurs variantes | [`19-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-2) |
+| Icons | Les icônes sources | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
+| Templates | Les maquettes de page — hors périmètre de ce dépôt | [`9-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=9-2) |
+
+### Composants
+
+| Composant | Nœud | Code |
+| --- | --- | --- |
+| Button (jeu de variantes) | [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) | [Button.astro](src/design-system/components/Button.astro) |
+| Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
+| Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
+| Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |
+| Case Study Card | [`88-131`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-131) | [CaseStudyCard.astro](src/design-system/components/CaseStudyCard.astro) |
+| Section Header (en-tête de la carte) | [`88-74`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-74) | [CaseStudyHeader.astro](src/design-system/components/CaseStudyHeader.astro) |
+| Carousel | [`88-85`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-85) | [Carousel.astro](src/design-system/components/Carousel.astro) |
+| Case Study Card en situation | [`176-1248`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1248) | — |
+
+La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
+
+Le composant Figma s'appelle « Section Header » mais tout ce qu'il contient est propre à une étude
+de cas : le code le nomme `CaseStudyHeader`. Renommage à trancher côté Figma.
+
+Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
+`Cards/User Quote`, `Research Finding`, `Role`, `Section.Intro` — tous sur la page Components.
+
+### Variables
+
+Les 115 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
+ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
+
+## Le dépôt et le site
+
+| Quoi | Où |
+| --- | --- |
+| Dépôt | <https://github.com/Equipollente/UX-design-system> |
+| Doc en ligne | <https://equipollente.github.io/UX-design-system/> |
+| Serveur de dev | `npm run dev` → <http://localhost:4321/UX-design-system/> |
+
+| Page | URL |
+| --- | --- |
+| Sommaire | `/` |
+| Fondations | `/foundations` |
+| Composants | `/components` |
+
+## Construire un lien Figma à la main
+
+- **Design** : `https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=<id>`
+- **Prototype** : `https://www.figma.com/proto/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=<id>&starting-point-node-id=<id-encodé>`
+
+Dans une URL, l'identifiant de nœud s'écrit avec un tiret (`45-388`) ; l'API et les outils l'écrivent
+avec deux-points (`45:388`). C'est le même nœud.

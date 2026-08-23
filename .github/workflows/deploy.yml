@@ -1,0 +1,38 @@
+# Publie la doc du design system sur GitHub Pages à chaque push sur main.
+# Le build tourne sur un clone frais : il échoue si un fichier nécessaire au site
+# est resté hors du dépôt — c'est le vrai contrôle de ce qui est versionné.
+name: Déployer la doc
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un déploiement à la fois, sans annuler celui qui est en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: withastro/action@v3
+        with:
+          node-version: 22
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

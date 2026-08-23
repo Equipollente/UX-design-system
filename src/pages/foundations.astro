@@ -1,0 +1,410 @@
+---
+import { withBase } from '../design-system/lib/url';
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import tokens from '../design-system/data/tokens.json';
+
+const byPrefix = (prefix: string) => tokens.filter((t) => t.path.startsWith(prefix));
+const byGroup = (group: string) => tokens.filter((t) => t.group === group);
+
+// Les couleurs, dans l'ordre du fichier Figma : rôles sémantiques d'abord,
+// rampes ensuite.
+const colorFamilies = [
+  { key: 'color.bg.', label: 'Fonds' },
+  { key: 'color.border.', label: 'Bordures' },
+  { key: 'color.feedback.', label: 'Feedback' },
+  { key: 'color.text.', label: 'Texte' },
+  { key: 'color.neutral.', label: 'Rampe neutre' },
+  { key: 'color.accent.', label: 'Rampe accent — indigo' },
+  { key: 'color.highlight.', label: 'Rampe highlight — lime' },
+];
+
+const fontSizes = byPrefix('font.size.');
+const lineHeights = byPrefix('font.line-height.');
+const letterSpacings = byPrefix('font.letter-spacing.');
+const weights = byPrefix('font.weight.');
+const families = byPrefix('font.family.');
+const spaces = byGroup('space');
+const radii = byGroup('radius');
+const durations = byPrefix('motion.duration.');
+const easings = byPrefix('motion.easing.');
+const layout = byGroup('layout');
+
+// Les 21 tokens button.* ne sont pas ici : ils décrivent un objet, pas le
+// vocabulaire du système. Ils sont documentés avec leur composant.
+const vocabulaire = tokens.length - byGroup('button').length;
+
+const specimen = 'Concevoir, tester, décider — puis recommencer.';
+---
+
+<DocsLayout
+  title="Fondations — UX design system"
+  description="Le vocabulaire du système : couleur, typographie, espacement, rayon, mouvement."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Fondations</h1>
+    <p class="lead">
+      Le vocabulaire du système — <strong>{vocabulaire} tokens</strong> sur {tokens.length}, générés
+      depuis <code>tokens/Desktop.tokens.json</code> par <code>npm run tokens</code>. Les 21 autres
+      décrivent un objet plutôt que le système : ils sont documentés dans
+      <a href={withBase('/components')}>Composants</a>. Rien sur cette page n'est écrit en dur :
+      chaque valeur affichée est lue dans la variable CSS correspondante.
+    </p>
+  </header>
+
+  <main>
+    <!-- ── Couleurs ─────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Couleurs</h2>
+      <p class="section-note">
+        Les descriptions viennent de Figma. Elles portent les ratios de contraste mesurés — c'est la
+        doctrine d'usage du système, pas de la décoration.
+      </p>
+
+      {
+        colorFamilies.map(({ key, label }) => (
+          <div class="family">
+            <h3>{label}</h3>
+            <ul class="swatches">
+              {byPrefix(key).map((t) => (
+                <li class="swatch">
+                  <div class="chip" style={`background: var(${t.name})`} />
+                  <code class="name">{t.name}</code>
+                  <span class="value">
+                    {t.resolved}
+                    {t.alias && <em class="alias"> ← {t.alias}</em>}
+                  </span>
+                  {t.description && <p class="desc">{t.description}</p>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- ── Typographie ──────────────────────────────────────────────────── -->
+    <section>
+      <h2>Typographie</h2>
+
+      <div class="family">
+        <h3>Familles</h3>
+        <ul class="plain">
+          {
+            families.map((t) => (
+              <li>
+                <span style={`font-family: var(${t.name}); font-size: var(--font-size-heading)`}>
+                  {t.resolved}
+                </span>
+                <code class="name">{t.name}</code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Graisses</h3>
+        <ul class="plain">
+          {
+            weights.map((t) => (
+              <li>
+                <span
+                  style={`font-family: var(--font-family-heading); font-weight: var(${t.name}); font-size: var(--font-size-heading)`}
+                >
+                  {specimen}
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Échelle de tailles</h3>
+        <ul class="plain">
+          {
+            fontSizes.map((t) => (
+              <li>
+                <span style={`font-size: var(${t.name}); line-height: var(--font-line-height-snug)`}>
+                  {specimen}
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Interlignes</h3>
+        <ul class="plain">
+          {
+            lineHeights.map((t) => (
+              <li>
+                <p style={`line-height: var(${t.name}); margin: 0; max-width: 46ch`}>
+                  {specimen} Un système de design ne vaut que par ce qu'il rend évident au moment de
+                  décider. {specimen}
+                </p>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Interlettrages</h3>
+        <ul class="plain">
+          {
+            letterSpacings.map((t) => (
+              <li>
+                <span
+                  style={`letter-spacing: var(${t.name}); font-size: var(--font-size-heading); text-transform: uppercase`}
+                >
+                  Interlettrage
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Espacements ──────────────────────────────────────────────────── -->
+    <section>
+      <h2>Espacements</h2>
+      <ul class="plain">
+        {
+          spaces.map((t) => (
+            <li class="ruler">
+              <div class="bar" style={`width: var(${t.name})`} />
+              <code class="name">
+                {t.name} — {t.resolved}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Rayons ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Rayons</h2>
+      <ul class="radii">
+        {
+          radii.map((t) => (
+            <li>
+              <div class="radius-box" style={`border-radius: var(${t.name})`} />
+              <code class="name">
+                {t.name} — {t.resolved}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Mouvement ────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Mouvement</h2>
+      <p class="section-note">
+        Trois durées et trois courbes. La règle tient en une ligne :
+        <strong>un changement de couleur prend <code>quick</code></strong>, <strong
+          >un déplacement prend <code>default</code></strong
+        >, <strong>une entrée ou une sortie prend <code>slow</code></strong>. Survolez une piste pour
+        rejouer le mouvement — la pastille voyage avec le token de sa ligne, pas avec une valeur
+        écrite ici.
+      </p>
+
+      <div class="family">
+        <h3>Durées</h3>
+        <p class="section-note">À courbe constante — <code>easing.standard</code>.</p>
+        <ul class="plain">
+          {
+            durations.map((t) => (
+              <li>
+                <div
+                  class="track"
+                  style={`--demo-duration: var(${t.name}); --demo-easing: var(--motion-easing-standard)`}
+                >
+                  <span class="puck" />
+                </div>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Courbes</h3>
+        <p class="section-note">
+          À durée constante — <code>duration.slow</code>, assez longue pour qu'on lise la différence.
+        </p>
+        <ul class="plain">
+          {
+            easings.map((t) => (
+              <li>
+                <div
+                  class="track"
+                  style={`--demo-duration: var(--motion-duration-slow); --demo-easing: var(${t.name})`}
+                >
+                  <span class="puck" />
+                </div>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="flag">
+        <strong>Mouvement réduit.</strong> Sous <code>prefers-reduced-motion: reduce</code>, ce sont
+        les trois durées qui tombent à <code>0ms</code>, dans <code>tokens.css</code>. Aucun
+        composant n'a à connaître la préférence, et les pistes ci-dessus s'arrêtent aussi. Le système
+        ne supprime pas les états — un onglet courant reste signalé, un bouton survolé reste
+        survolé : il supprime le trajet.
+      </p>
+    </section>
+
+
+    <!-- ── Layout ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Layout</h2>
+      <p class="section-note">
+        Métadonnées des 4 modes Figma. Ce sont les seuls tokens qui varient d'un mode à l'autre —
+        redimensionnez la fenêtre pour les voir changer. Ils sont informatifs : rien ne les consomme
+        pour l'instant.
+      </p>
+      <ul class="plain token-list">
+        {
+          layout.map((t) => (
+            <li>
+              <code class="name">{t.name}</code>
+              <span class="value live" data-var={t.name} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Les tokens layout.* changent selon la media query : on lit la valeur
+    // calculée plutôt que la valeur desktop figée dans le JSON.
+    const paint = () => {
+      const styles = getComputedStyle(document.documentElement);
+      document.querySelectorAll<HTMLElement>('.live').forEach((el) => {
+        el.textContent = styles.getPropertyValue(el.dataset.var!).trim();
+      });
+    };
+    paint();
+    window.addEventListener('resize', paint);
+  </script>
+</DocsLayout>
+
+<style>
+  /* Uniquement ce qui sert aux démonstrations de cette page. Le chrome commun
+     aux pages de doc — sections, listes de tokens, encarts — vit dans
+     src/design-system/styles/docs.css, importé par DocsLayout. */
+
+  /* — couleurs — */
+  .swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .chip {
+    height: 4rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-default);
+  }
+
+  /* — espacements — */
+  .ruler .bar {
+    height: var(--space-md);
+    background: var(--color-accent-500);
+    border-radius: var(--radius-sm);
+  }
+
+  /* — mouvement —
+     La pastille se déplace en transform, comme le fera tout mouvement du
+     système : la démonstration dit donc la vérité sur la façon dont c'est
+     animé, pas seulement sur la durée. Les dimensions sortent des tokens, d'où
+     le calc — la piste doit connaître sa propre longueur pour que la pastille
+     s'arrête au bord. */
+  .track {
+    --piste: calc(var(--space-layout-128) * 3);
+
+    position: relative;
+    width: var(--piste);
+    max-width: 100%;
+    height: calc(var(--space-2xl) + var(--space-xs) * 2);
+    padding: var(--space-xs);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+  }
+
+  .puck {
+    display: block;
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    background: var(--color-accent-500);
+    border-radius: var(--radius-pill);
+    transition: transform var(--demo-duration) var(--demo-easing);
+  }
+
+  .track:hover .puck {
+    transform: translateX(calc(var(--piste) - var(--space-2xl) - var(--space-xs) * 2));
+  }
+
+  /* Sous 768px la piste ne tiendrait pas : elle raccourcit, la pastille suit. */
+  @media (max-width: 767px) {
+    .track {
+      --piste: calc(var(--space-layout-128) * 2);
+    }
+  }
+
+  /* — rayons — */
+  .radii {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+  }
+
+  .radius-box {
+    width: 7rem;
+    height: 7rem;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-strong);
+  }
+</style>

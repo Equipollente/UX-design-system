@@ -1,0 +1,108 @@
+/* Base du système : reset minimal et éléments HTML câblés sur les tokens.
+ * Aucune valeur en dur — tout passe par var(--*). Si un élément paraît faux,
+ * la correction va dans Figma puis dans tokens/, jamais ici.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg-default);
+  color: var(--color-text-default);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-body);
+  letter-spacing: var(--font-letter-spacing-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Niveaux de titre : le mapping vient des $description des tokens font.size.*
+ * (« H1, and the headline on a title slide », « H2, and a section divider
+ * slide », etc.). Toutes les têtes sont en bold — le système ne descend pas
+ * plus bas, cf. la description de font.weight.bold. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  letter-spacing: var(--font-letter-spacing-tight);
+}
+
+h1 { font-size: var(--font-size-display); }
+h2 { font-size: var(--font-size-title); }
+h3 { font-size: var(--font-size-subtitle); }
+h4 { font-size: var(--font-size-heading); }
+h5 { font-size: var(--font-size-subheading); }
+
+/* H6 est l'eyebrow : même taille que le petit corps de texte, mais capitales et
+ * interlettrage large. « H6 and small body share this size — that is
+ * intentional » (font.size.body-sm). */
+h6 {
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--font-letter-spacing-wider);
+  line-height: var(--font-line-height-snug);
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0 0 var(--space-md);
+}
+
+a {
+  color: var(--color-text-accent);
+  text-underline-offset: 3px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+hr {
+  height: 1px;
+  margin: var(--space-lg) 0;
+  border: 0;
+  background: var(--color-border-default);
+}
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: var(--font-size-caption);
+}
+
+/* Focus visible : les trois tokens button.focus-* et color.border.focus
+ * existent précisément pour ça (WCAG 2.4.13 — anneau de 3px, décalé de 3px). */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--button-focus-ring-width) solid var(--color-border-focus);
+  outline-offset: var(--button-focus-offset);
+}
+
+::selection {
+  background: var(--color-accent-100);
+  color: var(--color-text-default);
+}

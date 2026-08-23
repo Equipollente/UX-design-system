@@ -1,0 +1,144 @@
+---
+// Bouton du système. Toutes les dimensions viennent des tokens button.*.
+//
+// Les tokens height, padding-y et icon-size sont sur-déterminés dans l'export
+// Figma (md : 16 + 24 + 16 = 56 ≠ 48). C'est la hauteur qui prime — la
+// dimension que les $description rattachent à WCAG 2.5.5 — et le padding
+// vertical n'est pas appliqué. Voir la note sur /foundations.
+//
+// Chaque taille pose ses variables locales (--btn-h, --btn-px, --btn-gap,
+// --btn-icon, --btn-min-w) et chaque variante ses trois fonds (--btn-bg,
+// --btn-bg-hover, --btn-bg-active). Un appelant peut en surcharger une
+// ponctuellement via `style` sans avoir à inventer une taille ni une variante
+// supplémentaire. C'est ce que font le Nav pour son bouton d'action et le
+// Carousel pour ses flèches, que Figma pose sur color.bg.default.
+//
+// Les icônes sont des <img> : elles portent leur couleur, elles n'héritent pas
+// de currentColor. D'où deux fichiers pour la même flèche dans public/icons/ —
+// arrow-right.svg pour un fond clair, arrow-right-on-accent.svg pour l'accent.
+
+interface Props {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  /** Chemin d'une icône dans public/icons/. Posée avant le label. */
+  icon?: string;
+  /** Idem, mais posée après le label. */
+  iconEnd?: string;
+  type?: 'button' | 'submit';
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  icon,
+  iconEnd,
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boolean).join(' ');
+---
+
+<Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
+  {icon && <img class="btn-icon" src={icon} alt="" aria-hidden="true" />}
+  <slot />
+  {iconEnd && <img class="btn-icon" src={iconEnd} alt="" aria-hidden="true" />}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--btn-h);
+    min-width: var(--btn-min-w);
+    padding: 0 var(--btn-px);
+    gap: var(--btn-gap);
+    background: var(--btn-bg);
+    border: 1px solid transparent;
+    border-radius: var(--button-radius);
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-ui);
+    line-height: var(--font-line-height-snug);
+    text-decoration: none;
+    cursor: pointer;
+    /* Seul le fond change entre le repos, le survol et l'appui — la bordure du
+       secondaire, elle, ne bouge pas. Un changement de couleur prend
+       duration.quick ; tokens.css le remet à zéro sous prefers-reduced-motion. */
+    transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* — tailles — */
+  .btn-sm {
+    --btn-h: var(--button-height-sm);
+    --btn-px: var(--button-padding-x-sm);
+    --btn-gap: var(--button-gap-sm);
+    --btn-icon: var(--button-icon-size-sm);
+    --btn-min-w: var(--button-min-width-sm);
+  }
+
+  .btn-md {
+    --btn-h: var(--button-height-md);
+    --btn-px: var(--button-padding-x-md);
+    --btn-gap: var(--button-gap-md);
+    --btn-icon: var(--button-icon-size-md);
+    --btn-min-w: var(--button-min-width-md);
+  }
+
+  .btn-lg {
+    --btn-h: var(--button-height-lg);
+    --btn-px: var(--button-padding-x-lg);
+    --btn-gap: var(--button-gap-md);
+    --btn-icon: var(--button-icon-size-lg);
+    --btn-min-w: var(--button-min-width-lg);
+  }
+
+  /* — variantes — */
+  .btn-primary {
+    --btn-bg: var(--color-accent-500);
+    --btn-bg-hover: var(--color-accent-600);
+    --btn-bg-active: var(--color-accent-700);
+    color: var(--color-text-on-accent);
+  }
+
+  .btn-secondary {
+    --btn-bg: var(--color-bg-surface);
+    --btn-bg-hover: var(--color-accent-100);
+    --btn-bg-active: var(--color-accent-200);
+    color: var(--color-text-accent);
+    border-color: var(--color-border-default);
+  }
+
+  .btn:hover:not(:disabled) {
+    background: var(--btn-bg-hover);
+  }
+
+  .btn:active:not(:disabled) {
+    background: var(--btn-bg-active);
+  }
+
+  /* Désactivé : Figma ne change ni le fond ni la bordure, il baisse l'opacité de
+     tout le bouton à 45 % (états Disabled, 21:11 et 21:26). Le contraste tombe
+     alors sous le seuil — c'est admis, WCAG 1.4.3 exempte les contrôles
+     inactifs. Le Carousel s'en sert pour ses flèches en bout de piste. */
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Les SVG exportés de Figma portent leur taille naturelle (~22px) et un
+     débord de contour. On les centre dans une boîte à la taille du token
+     plutôt que de les étirer. */
+  .btn-icon {
+    flex: none;
+    width: var(--btn-icon);
+    height: var(--btn-icon);
+    object-fit: contain;
+  }
+</style>

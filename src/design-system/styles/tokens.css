@@ -1,0 +1,184 @@
+/* GÉNÉRÉ — ne pas éditer à la main.
+ * Source : tokens/Desktop.tokens.json (export de variables Figma, format W3C DTCG).
+ * Régénérer avec `npm run tokens`.
+ */
+
+:root {
+
+  /* ── Couleurs ──────────────────────────────────────────────────────────────── */
+  --color-bg-default:            #FFFFFF;
+  --color-bg-surface:            #F3F0FF;
+  --color-bg-section:            #ECE1FF;
+  --color-bg-feature:            var(--color-accent-500);
+  --color-bg-celebrate:          var(--color-highlight-200);
+
+  --color-border-default:        #E6E1F5;
+  --color-border-strong:         var(--color-neutral-300);
+  --color-border-focus:          var(--color-accent-500);
+
+  --color-feedback-success:      #48A66B;
+  --color-feedback-danger:       #D94A4A;
+
+  --color-neutral-100:           #F3F2F5;
+  --color-neutral-200:           #EDECEF;
+  --color-neutral-300:           #E4E1E8;
+  --color-neutral-400:           #C9C5D0;
+  --color-neutral-500:           #A9A5B0;
+  --color-neutral-600:           #6A676D;
+  --color-neutral-700:           #4A4750;
+  --color-neutral-800:           #3D393E;
+  --color-neutral-900:           #2F2D2E;
+
+  --color-accent-100:            #D8D2FF;
+  --color-accent-200:            #B2A8FF;
+  --color-accent-300:            #8C7DFF;
+  --color-accent-400:            #665BFF;
+  --color-accent-500:            #3F2BFF;
+  --color-accent-600:            #3525E5;
+  --color-accent-700:            #2C1ECC;
+  --color-accent-800:            #1C0991;
+  --color-accent-900:            #0D0759;
+
+  --color-highlight-100:         #F3FFD7;
+  --color-highlight-200:         #E1FF91;
+  --color-highlight-300:         #CFED7B;
+  --color-highlight-400:         #B6D558;
+  --color-highlight-500:         #9EBA41;
+  --color-highlight-600:         #7E972A;
+  --color-highlight-700:         #60741A;
+  --color-highlight-800:         #44530E;
+  --color-highlight-900:         #2B3505;
+
+  --color-text-default:          var(--color-neutral-900);
+  --color-text-muted:            var(--color-neutral-600);
+  --color-text-accent:           var(--color-accent-500);
+  --color-text-on-accent:        var(--color-bg-default);
+  --color-text-on-accent-soft:   var(--color-accent-100);
+  --color-text-on-highlight:     var(--color-neutral-900);
+
+  /* ── Espacements ───────────────────────────────────────────────────────────── */
+  --space-xs:                    4px;
+  --space-sm:                    8px;
+  --space-md:                    12px;
+  --space-lg:                    16px;
+  --space-xl:                    24px;
+  --space-2xl:                   32px;
+
+  --space-layout-48:             48px;
+  --space-layout-64:             64px;
+  --space-layout-96:             96px;
+  --space-layout-128:            128px;
+
+  /* ── Rayons ────────────────────────────────────────────────────────────────── */
+  --radius-sm:                   6px;
+  --radius-md:                   14px;
+  --radius-lg:                   28px;
+  --radius-pill:                 999px;
+
+  /* ── Typographie ───────────────────────────────────────────────────────────── */
+  --font-family-heading:         "Poppins", system-ui, sans-serif;
+  --font-family-body:            "Inter", system-ui, -apple-system, sans-serif;
+
+  --font-weight-regular:         400;
+  --font-weight-medium:          500;
+  --font-weight-semibold:        600;
+  --font-weight-bold:            700;
+
+  --font-size-display:           2.625rem;
+  --font-size-title:             2rem;
+  --font-size-subtitle:          1.5625rem;
+  --font-size-heading:           1.25rem;
+  --font-size-brand:             1.125rem;
+  --font-size-body-lg:           1.0625rem;
+  --font-size-subheading:        1rem;
+  --font-size-body:              0.9375rem;
+  --font-size-ui:                0.875rem;
+  --font-size-body-sm:           0.8125rem;
+  --font-size-caption:           0.75rem;
+  --font-size-label:             0.6875rem;
+  --font-size-micro:             0.625rem;
+
+  --font-line-height-tight:      1.12;
+  --font-line-height-snug:       1.2;
+  --font-line-height-body:       1.55;
+
+  --font-letter-spacing-tight:   -0.015em;
+  --font-letter-spacing-normal:  0em;
+  --font-letter-spacing-wide:    0.02em;
+  --font-letter-spacing-wider:   0.08em;
+  --font-letter-spacing-widest:  0.1em;
+
+  /* ── Mouvement — durées et courbes ─────────────────────────────────────────── */
+  --motion-duration-quick:       140ms;
+  --motion-duration-default:     200ms;
+  --motion-duration-slow:        320ms;
+
+  --motion-easing-standard:      cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-easing-enter:         cubic-bezier(0, 0, 0.2, 1);
+  --motion-easing-exit:          cubic-bezier(0.4, 0, 1, 1);
+
+  /* ── Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13) ─── */
+  --button-radius:               var(--radius-pill);
+  --button-focus-offset:         3px;
+  --button-focus-ring-width:     3px;
+  --button-target-spacing:       var(--space-xl);
+
+  --button-height-sm:            44px;
+  --button-height-md:            48px;
+  --button-height-lg:            56px;
+
+  --button-padding-x-sm:         var(--space-lg);
+  --button-padding-x-md:         var(--space-xl);
+  --button-padding-x-lg:         var(--space-2xl);
+
+  --button-padding-y-sm:         var(--space-md);
+  --button-padding-y-md:         var(--space-lg);
+  --button-padding-y-lg:         var(--space-xl);
+
+  --button-gap-sm:               var(--space-sm);
+  --button-gap-md:               var(--space-md);
+
+  --button-icon-size-sm:         20px;
+  --button-icon-size-md:         24px;
+  --button-icon-size-lg:         28px;
+
+  --button-min-width-sm:         44px;
+  --button-min-width-md:         96px;
+  --button-min-width-lg:         140px;
+
+  /* ── Layout — métadonnées de mode Figma, informatives ──────────────────────── */
+  --layout-device:               desktop;
+  --layout-device-width:         1200;
+  --layout-root-font-size:       16px;
+  --layout-scale:                1;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  :root {
+    --layout-device:               tablet;
+    --layout-device-width:         768;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --layout-device:               mobile;
+    --layout-device-width:         390;
+    --layout-scale:                1.25;
+  }
+}
+
+@media print {
+  :root {
+    --layout-device:               Paper;
+    --layout-device-width:         1060;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-quick:       0ms;
+    --motion-duration-default:     0ms;
+    --motion-duration-slow:        0ms;
+  }
+}

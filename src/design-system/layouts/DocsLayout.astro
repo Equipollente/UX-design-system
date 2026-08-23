@@ -1,0 +1,92 @@
+---
+// Layout des pages de documentation du système. Il enveloppe BaseLayout et
+// n'ajoute qu'une barre de circulation.
+//
+// La barre est volontairement modeste : ce n'est pas le composant Nav. Documenter
+// le Nav et s'en servir pour se déplacer dans sa propre doc seraient deux usages
+// contradictoires — on ne saurait plus si l'on regarde le composant ou le site.
+
+import { withBase } from '../lib/url';
+import BaseLayout from './BaseLayout.astro';
+import '../styles/docs.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const pages = [
+  { href: withBase('/foundations'), label: 'Fondations' },
+  { href: withBase('/components'), label: 'Composants' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="docs-bar">
+    <a class="docs-home" href={withBase('/')}>Design system</a>
+    <nav aria-label="Pages du design system">
+      <ul>
+        {
+          pages.map(({ href, label }) => (
+            <li>
+              <a href={href} aria-current={href === path ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <slot />
+</BaseLayout>
+
+<style>
+  .docs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-xl) 0;
+  }
+
+  .docs-home {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-ui);
+    color: var(--color-text-default);
+    text-decoration: none;
+  }
+
+  ul {
+    display: flex;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  /* Comme dans Nav : l'état courant tient à l'attribut ARIA, pas à une classe. */
+  nav a[aria-current='page'] {
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-medium);
+  }
+
+  nav a:hover {
+    color: var(--color-text-accent);
+  }
+</style>
