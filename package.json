@@ -35,7 +35,8 @@
     "astro": "astro",
     "tokens": "node scripts/build-tokens.mjs"
   },
-  "dependencies": {
+  "// devDependencies": "Astro est en devDependencies, pas en dependencies : un site qui installe le système ne doit pas se retrouver avec un second Astro dans son node_modules. La version attendue est déclarée en peerDependencies.",
+  "devDependencies": {
     "astro": "^7.2.1"
   }
 }
