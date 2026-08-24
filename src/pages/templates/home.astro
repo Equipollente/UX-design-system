@@ -1,0 +1,225 @@
+---
+// Gabarit : la page d'accueil, en vraie grandeur. Figma 222:1168 (page HP).
+//
+// Cette page n'est pas un site. C'est la démonstration qu'on ne peut pas faire
+// dans /components : une pile d'études de cas se juge sur un écran entier, et une
+// section de doc n'en donne pas un. Elle sert deux fois — à régler le
+// comportement, et à être copiée par le site qui montera sa propre page d'accueil.
+//
+// Elle utilise BaseLayout et non DocsLayout : la barre de doc mangerait le
+// premier écran et fausserait toutes les mesures.
+//
+// Tout ce que cette page apporte au système est dans le bloc <style> ci-dessous,
+// sous le titre « Le contrat du premier écran » — et aucune de ces lignes n'est
+// du JavaScript. Aucun des trois composants n'apprend l'existence des deux
+// autres : le bouton de l'intro et l'onglet du Nav pointent une ancre, la liste
+// la porte, et le navigateur fait le reste.
+
+import { withBase } from '../../design-system/lib/url';
+import BaseLayout from '../../design-system/layouts/BaseLayout.astro';
+import Nav from '../../design-system/components/Nav.astro';
+import Intro from '../../design-system/components/Intro.astro';
+import CaseStudyList from '../../design-system/components/CaseStudyList.astro';
+import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '../_demo';
+---
+
+<BaseLayout
+  title="Gabarit — page d'accueil"
+  description="La page d'accueil du système en vraie grandeur : Nav, Intro et la pile d'études de cas."
+>
+  <div class="home">
+    {/* La pile, et ce qui la porte. Ce bloc borne le collage : c'est lui qui dit
+        où le premier écran cesse de tenir sa place. Sans lui, l'intro resterait
+        collée jusqu'au bas de la page et se peindrait par-dessus tout ce qui
+        suit la pile — un élément positionné passe devant un élément qui ne
+        l'est pas, quel que soit l'ordre du DOM. */}
+    <div class="home-deck">
+      {/* Le premier écran : la nav et l'intro. C'est la couche du dessous de la
+          pile — il tient sa place et les cartes lui passent dessus. Sa hauteur
+          est ce qui fait affleurer la première carte de 50px, et rien d'autre. */}
+      <div class="home-first" id="accueil">
+        <div class="nav-slot">
+          <Nav links={demoLinks} action={demoAction} label="Navigation principale" />
+        </div>
+
+        <div class="intro-slot">
+          <Intro
+            avatar={introDemo.avatar}
+            greeting={introDemo.greeting}
+            headline={introDemo.headline}
+            description={introDemo.description}
+            action={introDemo.action}
+          />
+        </div>
+      </div>
+
+      <CaseStudyList
+        id={projectsAnchor}
+        covers="accueil"
+        items={caseStudies}
+        label="Études de cas"
+      />
+    </div>
+
+    {/* La section qui suit n'est pas décorative : c'est elle qui donne sa butée à
+        la dernière carte. Sans rien après elle, une pile collée en haut laisse sa
+        dernière couche traverser l'écran sans s'arrêter. */}
+    <section class="after" id="how-i-work">
+      <h2>La suite de la page</h2>
+      <p>
+        Le gabarit s'arrête ici. Les autres onglets du Nav — <em>About me</em>, <em>CV</em> — ne
+        mènent nulle part sur cette page : ce sont des ancres de démonstration, comme dans la doc
+        des composants.
+      </p>
+    </section>
+  </div>
+
+  <a class="back" href={withBase('/')}>← Design system</a>
+</BaseLayout>
+
+<style>
+  /* ── Le contrat du premier écran ─────────────────────────────────────────
+     C'est tout ce qu'une page doit savoir de CaseStudyList. Il vit ici et non
+     dans le composant parce que la liste ne peut pas mesurer ce qui la précède —
+     et que le mesurer en JavaScript ferait sauter la carte au chargement. */
+
+  .home {
+    /* Déclaré une seule fois : le premier écran et la pile lisent le même nombre.
+       Figma le pose en itemSpacing (209:2383) ; aucun token ne le porte. */
+    --fold-peek: 50px;
+  }
+
+  /* .home-deck n'a volontairement aucune déclaration, et ce n'est pas un oubli :
+     tout son rôle est d'exister comme bloc, pour servir de repère au collage du
+     premier écran et des cartes. C'est lui qui dit où ce collage s'arrête — au
+     bas de la pile, et non au bas de la page. Lui donner un style le rendrait
+     visible ; il ne doit pas l'être. */
+
+  /* Le premier écran est la couche du dessous : il reste en place, et les cartes
+     lui passent dessus. Comme les couches de cartes sont peintes après lui dans
+     l'ordre du DOM, elles le recouvrent sans qu'aucun z-index soit écrit.
+     Collé à .home-deck et non à .home : son collage doit cesser avec la pile,
+     sinon il se peindrait par-dessus tout ce qui suit — la section de clôture
+     comprise.
+     Une hauteur, et non un plancher : c'est elle qui garantit le liseré de 50px
+     à toute hauteur d'écran. Avec min-height, un contenu un peu grand poussait
+     le bloc et mangeait le liseré. */
+  .home-first {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--fold-peek));
+    height: calc(100svh - var(--fold-peek));
+  }
+
+  /* La nav tient toujours le haut de l'écran, à toutes les largeurs — mais pas
+     de la même manière, et l'écart est voulu.
+     En desktop et en tablette, c'est le bloc entier qui la porte et cette règle
+     ne fait rien : les cartes lui passent dessus, et CaseStudyList la rend inerte
+     avec le reste du premier écran — sans quoi ses onglets resteraient
+     atteignables au clavier derrière une carte opaque (WCAG 2.4.11, Focus Not
+     Obscured).
+     En mobile, où le bloc s'efface, c'est elle qui prend le relais et se colle
+     seule ; et comme les cartes y sont hors de tout positionnement, elle leur
+     passe devant. Sur un téléphone, un en-tête recouvert ne serait plus
+     atteignable qu'en remontant toute la page. */
+  .nav-slot {
+    position: sticky;
+    top: 0;
+  }
+
+  /* L'intro prend l'air qui reste, centrée : le mou se répartit au-dessus et
+     au-dessous d'elle. Figma pose 50px sous elle (209:2383), mais Figma ne
+     dessine aucun mou — son premier écran fait exactement la taille de son
+     contenu. Ajouter ce padding en plus du centrage ne ferait que décaler le
+     bloc vers le haut, et il ne tiendrait pas sur une fenêtre basse : l'écart
+     est donc celui du centrage, et rien d'autre.
+     min-height: 0 lève la taille minimale automatique des boîtes flexibles, sans
+     quoi l'intro refuserait de se resserrer sur une fenêtre courte. */
+  .intro-slot {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    /* `safe` : sous ~650px de fenêtre, l'intro ne tient plus dans son écran moins
+       le liseré. Centrée, elle déborderait des deux côtés et remonterait sur la
+       nav. En alignement sûr, le centrage cède au profit du haut dès que ça
+       déborde : l'intro reste sous la nav et ne dépasse que par le bas, où la
+       carte la recouvre de toute façon. Là où le mot-clé n'est pas connu, on
+       retombe sur le centrage — le comportement d'avant. */
+    justify-content: safe center;
+  }
+
+  /* ── Le reste est la chrome de cette page de doc, pas du système ────────── */
+
+  .after {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - var(--fold-peek));
+    min-height: calc(100svh - var(--fold-peek));
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-layout-64) var(--space-layout-48);
+  }
+
+  .after p {
+    max-width: 46rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Fixe, donc toujours atteignable : la pile passe dessous. Elle est peinte
+     après .home dans l'ordre du DOM, ce qui suffit à la garder devant. */
+  .back {
+    position: fixed;
+    bottom: var(--space-lg);
+    left: var(--space-lg);
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-body-sm);
+    text-decoration: none;
+  }
+
+  /* Sous ~650px de fenêtre, l'intro (601px avec la nav) ne tient plus dans son
+     écran moins le liseré. C'est le liseré qui gagne — la consigne est qu'il
+     tienne à toute hauteur — donc c'est l'intro qui se resserre : son grand
+     écart interne retombe à space.xl, ce qui lui rend 40px et la fait tenir
+     jusqu'à ~610px de fenêtre. En dessous, elle dépasse par le bas, où la carte
+     la recouvre. */
+  @media (max-height: 650px) {
+    .intro-slot {
+      --intro-gap: var(--space-xl);
+    }
+  }
+
+  /* Sous 768px, la pile redevient une liste : le premier écran cesse d'être une
+     couche et reprend sa place dans le flux, l'intro entière, puis les cartes à
+     la suite. C'est le même point de rupture que celui de CaseStudyList — les
+     deux décrivent la même bascule, chacun de son côté. */
+  @media (max-width: 767px) {
+    /* Le bloc s'efface, au sens propre : `display: contents` le retire de la
+       mise en page sans toucher au DOM, et la nav comme l'intro deviennent des
+       enfants directs de .home-deck. C'est ce qui donne à la nav un repère qui
+       couvre toute la pile, donc un collage qui tient jusqu'au bout — dans le
+       bloc, elle se serait décollée à la fin de l'intro.
+       C'est aussi ce qui laisse l'intro reprendre sa place dans le flux : en
+       mobile elle défile, seule la nav reste. */
+    .home-first {
+      display: contents;
+    }
+
+    .intro-slot {
+      /* Le liseré n'a plus de sens quand rien ne s'empile, mais l'écart que
+         Figma pose entre l'intro et la liste (209:2383), lui, en garde : c'est
+         le même nombre, et sans lui la première carte vient coller au bouton de
+         l'intro. */
+      padding-bottom: var(--fold-peek);
+    }
+
+    .after {
+      padding: var(--space-layout-48) var(--space-xl);
+    }
+  }
+</style>
