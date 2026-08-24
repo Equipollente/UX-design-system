@@ -29,12 +29,17 @@ main {
   color: var(--color-text-muted);
 }
 
-section {
+/* Les sections de la doc, et elles seules : `main >` n'est pas une précaution de
+ * style mais de justesse. Plusieurs composants du système rendent eux-mêmes un
+ * <section> — Intro, CaseStudyList — et un sélecteur d'élément nu leur collait
+ * la bordure et les marges de la page qui les montre. Un composant démontré doit
+ * se voir tel qu'il est ailleurs. */
+main > section {
   padding: var(--space-layout-48) 0;
   border-top: 1px solid var(--color-border-default);
 }
 
-section > h2 {
+main > section > h2 {
   margin-bottom: var(--space-lg);
 }
 
