@@ -1,0 +1,83 @@
+---
+// Icon — une icône du système, inlinée dans le document.
+//
+// Ce n'est pas une image. Une icône ne se charge pas, elle ne peut pas manquer, et
+// surtout elle prend la couleur de ce qui l'entoure : les SVG générés ne portent que
+// `currentColor`. C'est ce qui a supprimé arrow-right-on-accent.svg — le même dessin
+// en double, parce qu'un <img> ne sait pas changer de couleur.
+//
+// Ce n'est pas non plus un chemin de fichier. `name` est un nom du registre
+// (lib/icons.ts, généré depuis Figma) : il se vérifie à la compilation, et il ne
+// passe pas par withBase() puisqu'aucune URL n'est écrite.
+//
+// Composants Figma de la page Icons, 45:395.
+
+import { icons, iconNames, type IconName } from '../lib/icons';
+
+interface Props {
+  name: IconName;
+  /** Les trois tailles des tokens button.icon-size.*. Sinon : --icon-size hérité du contexte. */
+  size?: 'sm' | 'md' | 'lg';
+  /**
+   * Nom accessible. Absent — le cas ordinaire — l'icône est décorative et masquée aux
+   * lecteurs d'écran : elle double un mot déjà écrit à côté d'elle. À ne remplir que
+   * lorsqu'elle est seule à porter le sens, et alors le texte doit dire l'action, pas
+   * le dessin : « Image suivante », pas « flèche droite ».
+   */
+  label?: string;
+  class?: string;
+}
+
+const { name, size, label, class: className, ...rest } = Astro.props;
+
+const Glyph = icons[name];
+
+// Le type suffit dans un éditeur, pas à la ligne de commande : `astro build` ne
+// vérifie pas les types, et un nom faux ne se manifesterait que par un « Glyph is
+// undefined » sans dire lequel ni où. On préfère le dire.
+if (!Glyph) {
+  throw new Error(
+    `Icon : « ${name} » n'existe pas. Les icônes disponibles sont ${iconNames.join(', ')}. ` +
+      `Pour en ajouter une, déposer son export Figma dans icons/ et lancer \`npm run icons\`.`,
+  );
+}
+
+const classes = ['icon', size && `icon-${size}`, className].filter(Boolean).join(' ');
+---
+
+<Glyph
+  class={classes}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  {...rest}
+/>
+
+<style>
+  /* Le glyphe est dessiné sur la grille 24 de Figma. La boîte vaut la taille du token :
+     à 24 il est à l'échelle 1, en dessous il est réduit, jamais étiré. */
+  .icon {
+    flex: none;
+    width: var(--icon-size, var(--button-icon-size-md));
+    height: var(--icon-size, var(--button-icon-size-md));
+    /* Par défaut l'icône suit le texte. --icon-color existe pour les cas où Figma
+       lie l'icône à une variable propre plutôt qu'à la couleur du libellé : c'est
+       ce que fait Button, dont les deux variantes nomment leur teinte d'icône. */
+    color: var(--icon-color, currentColor);
+  }
+
+  /* Sans `size`, --icon-size vient du conteneur : c'est ce que posent .btn et .tab, qui
+     tiennent déjà leur taille d'icône de leur propre taille. Une propriété personnalisée
+     hérite, elle atteint le <svg> sans que l'appelant ait à viser l'icône. */
+  .icon-sm {
+    --icon-size: var(--button-icon-size-sm);
+  }
+
+  .icon-md {
+    --icon-size: var(--button-icon-size-md);
+  }
+
+  .icon-lg {
+    --icon-size: var(--button-icon-size-lg);
+  }
+</style>

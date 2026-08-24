@@ -1,0 +1,37 @@
+// Généré par scripts/build-icons.mjs depuis icons/. Ne pas éditer à la main.
+//
+// Le registre est ce qui fait d'une icône un objet nommé du système plutôt qu'un
+// chemin de fichier : `icon="mail-edit"` se vérifie à la compilation, `icon="/icons/mail-edit.svg"`
+// ne se vérifiait qu'en production, sur un 404.
+
+import arrowNarrowDown from '../icons/arrow-narrow-down.svg';
+import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
+import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
+import bookOpen from '../icons/book-open.svg';
+import boxPlus from '../icons/box-plus.svg';
+import circleFaceContent from '../icons/circle-face-content.svg';
+import cornerRightDown from '../icons/corner-right-down.svg';
+import fileText from '../icons/file-text.svg';
+import mailEdit from '../icons/mail-edit.svg';
+import quoteDown from '../icons/quote-down.svg';
+import route from '../icons/route.svg';
+
+export const icons = {
+  'arrow-narrow-down': arrowNarrowDown,
+  'arrow-narrow-left': arrowNarrowLeft,
+  'arrow-narrow-right': arrowNarrowRight,
+  'book-open': bookOpen,
+  'box-plus': boxPlus,
+  'circle-face-content': circleFaceContent,
+  'corner-right-down': cornerRightDown,
+  'file-text': fileText,
+  'mail-edit': mailEdit,
+  'quote-down': quoteDown,
+  'route': route,
+} as const;
+
+/** Les noms qu'un appelant a le droit d'écrire. */
+export type IconName = keyof typeof icons;
+
+/** L'ordre du registre, pour la planche de /icons : aucune liste tenue en double. */
+export const iconNames = Object.keys(icons) as IconName[];

@@ -1,0 +1,488 @@
+---
+// Doc des icônes du système. Comme les autres pages, elle montre les objets en vrai :
+// la planche est bâtie sur `iconNames`, l'ordre même du registre. Aucune liste n'est
+// tenue ici — déposer un export dans icons/ et relancer `npm run icons` suffit à faire
+// apparaître une icône sur cette page.
+import { withBase } from '../design-system/lib/url';
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import Icon from '../design-system/components/Icon.astro';
+import Button from '../design-system/components/Button.astro';
+import { iconNames } from '../design-system/lib/icons';
+import tokens from '../design-system/data/tokens.json';
+
+const sizeTokens = tokens.filter((t) => t.path.startsWith('button.icon-size.'));
+const sizes = ['sm', 'md', 'lg'] as const;
+
+const iconProps = [
+  ['name', 'IconName', '—', 'Un des noms du registre. Un nom inconnu ne compile pas.'],
+  ['size', `'sm' | 'md' | 'lg'`, '—', 'Les trois tokens button.icon-size.*. Absent : la taille vient du contexte.'],
+  ['label', 'string', '—', 'Nom accessible. Absent : l’icône est décorative et masquée.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+// Les noms Figma qui ne se retrouvent pas tels quels dans le slug. Écrit ici plutôt
+// que deviné : c'est la trace de l'écart signalé plus bas.
+const figmaNames: Record<string, string> = {
+  'book-open': 'Book - Open',
+  'circle-face-content': 'Circle-face-content',
+  'file-text': 'File - Text',
+  'mail-edit': 'Mail-Edit',
+  route: 'Route',
+};
+---
+
+<DocsLayout
+  title="Icônes — UX design system"
+  description="Les icônes du système : inlinées, nommées, et de la couleur de ce qui les entoure."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Icônes</h1>
+    <p class="lead">
+      <strong>{iconNames.length} icônes</strong>, générées depuis la page Figma <code>Icons</code> par
+      <code>npm run icons</code>. Elles sont inlinées dans le document : elles n'ont pas d'URL, elles ne
+      peuvent pas manquer, et elles prennent la couleur de ce qui les entoure.
+    </p>
+  </header>
+
+  <main>
+    <!-- ── Ce qu'elles sont ─────────────────────────────────────────────── -->
+    <section>
+      <h2>Icon</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Un signe qui double un mot pour le rendre reconnaissable plus
+        vite — dans un onglet, sur un bouton, en tête d'un bloc.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni un remplacement du mot — une icône seule n'est lisible
+        que de qui la connaît déjà — ni une illustration : ce qui raconte est une image, et passe par
+        <code>&lt;img&gt;</code>. Ni un bouton : une icône sur laquelle on clique est un
+        <em>Button</em> qui porte une icône.
+        <br />
+        <span class="source">Composants Figma de la page <code>Icons</code>, <code>45:395</code>.</span>
+      </p>
+
+      <div class="demo">
+        <ul class="plate">
+          {
+            iconNames.map((name) => (
+              <li>
+                <Icon name={name} size="lg" />
+                <code>{name}</code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="section-note">
+        Le nom est celui du composant Figma, en minuscules et tirets. Il se vérifie à la compilation :
+        <code>icon="mail-edt"</code> arrête le build, là où un chemin de fichier faux ne se voyait qu'en
+        production, sur un 404.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              iconProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Couleur ──────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Couleur</h2>
+
+      <p class="section-note">
+        Une icône n'a pas de couleur à elle : les fichiers générés ne portent que
+        <code>currentColor</code>. Elle prend donc celle du texte à côté duquel elle est posée, et suit
+        son contexte sans qu'on ait à le lui dire. C'est le même fichier dans les trois cadres
+        ci-dessous.
+      </p>
+
+      <div class="demo">
+        <ul class="contexts">
+          <li class="ctx ctx-default"><Icon name="mail-edit" size="lg" /> <span>Texte courant</span></li>
+          <li class="ctx ctx-muted"><Icon name="mail-edit" size="lg" /> <span>Texte secondaire</span></li>
+          <li class="ctx ctx-accent"><Icon name="mail-edit" size="lg" /> <span>Sur l'accent</span></li>
+        </ul>
+      </div>
+
+      <p class="section-note">
+        C'est ce qui a fait disparaître <code>arrow-right-on-accent.svg</code> : le même dessin existait
+        en double, une fois sombre pour les fonds clairs, une fois clair pour l'accent. Un
+        <code>&lt;img&gt;</code> ne pouvait pas faire autrement. Les deux boutons ci-dessous montrent le
+        même fichier.
+      </p>
+
+      <div class="demo">
+        <div class="btn-row last">
+          <Button iconEnd="arrow-narrow-right">Sur l'accent</Button>
+          <Button variant="secondary" iconEnd="arrow-narrow-right">Sur fond clair</Button>
+        </div>
+      </div>
+
+      <p class="section-note">
+        Un composant peut nommer la teinte de ses icônes plutôt que de la laisser suivre le texte, par
+        <code>--icon-color</code>. <em>Button</em> ne s'en sert que pour le primaire, où Figma lie
+        l'icône à <code>color/neutral/100</code> et le libellé à <code>color/text/on-accent</code> —
+        quatre valeurs d'écart. Sur le secondaire, les deux sont la même encre : rien à nommer,
+        <code>currentColor</code> suffit.
+      </p>
+
+      <p class="section-note">
+        <strong>Au passage, une erreur trouvée par les icônes.</strong> Le libellé du bouton secondaire
+        était écrit en <code>--color-text-accent</code> là où Figma dit <code>color/text/default</code>.
+        Il fait 14 px : le seuil WCAG applicable est 4,5:1, et l'indigo tombait à <strong>3,31:1</strong>
+        sur le fond d'appui — l'état pressé n'est pas exempté, contrairement à l'état désactivé. La
+        description du token le disait déjà : « safe at body size (7.00:1 <em>on the ground</em>) », or
+        le secondaire n'est pas sur le blanc mais sur la brume lavande. À l'encre, les trois états
+        donnent 12,19:1, 9,50:1 et 6,47:1. L'écart préexistait ; il est devenu visible le jour où
+        l'icône a cessé de porter sa couleur en dur.
+      </p>
+    </section>
+
+    <!-- ── Taille ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Taille</h2>
+
+      <p class="section-note">
+        Trois tailles, celles des tokens <code>button.icon-size.*</code>. Le glyphe est dessiné sur la
+        grille 24 de Figma : à <code>lg</code> il est à l'échelle 1, en dessous il est réduit — jamais
+        étiré.
+      </p>
+
+      <div class="demo">
+        <ul class="sizes">
+          {
+            sizes.map((size) => (
+              <li>
+                <Icon name="route" size={size} />
+                <code>{size}</code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="section-note">
+        Sans <code>size</code>, la taille vient du conteneur par la variable <code>--icon-size</code>.
+        C'est ce que font <em>Button</em> et <em>Nav</em>, qui tiennent déjà leur taille d'icône de leur
+        propre taille : l'icône s'accorde au bouton sans que l'appelant ait à la viser.
+      </p>
+
+      <h3>Tokens</h3>
+      <ul class="plain token-list">
+        {
+          sizeTokens.map((t) => (
+            <li>
+              <code class="name">
+                {t.name} — {t.resolved}
+                {t.alias && <em class="alias"> ← {t.alias}</em>}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> Aucun token ne décrit la taille d'une icône en
+        général : <em>Icon</em> emprunte <code>button.icon-size.*</code>, des variables qui décrivent le
+        bouton. Tant qu'une icône ne vit qu'à l'intérieur d'un bouton ou d'un onglet, l'emprunt est
+        exact ; il cessera de l'être à la première icône posée ailleurs. Une collection
+        <code>icon.size.*</code> manque dans la source.
+      </p>
+    </section>
+
+    <!-- ── Accessibilité ────────────────────────────────────────────────── -->
+    <section>
+      <h2>Accessibilité</h2>
+
+      <p class="section-note">
+        <strong>Décorative par défaut.</strong> Sans <code>label</code>, l'icône est
+        <code>aria-hidden</code> : elle double un mot déjà écrit à côté d'elle, et l'annoncer deux fois
+        ne renseigne personne.
+      </p>
+
+      <p class="section-note">
+        <strong><code>label</code> quand elle est seule à porter le sens</strong>, et le texte dit alors
+        l'action, pas le dessin : « Image suivante », pas « flèche droite ». Un bouton sans libellé — les
+        flèches du carrousel — porte cette étiquette sur le bouton plutôt que sur l'icône : c'est le
+        contrôle qu'on annonce, pas son décor.
+      </p>
+
+      <div class="demo">
+        <div class="btn-row last">
+          <Button variant="secondary" icon="arrow-narrow-left" aria-label="Image précédente" style="--btn-min-w: 0" />
+          <Button variant="secondary" icon="arrow-narrow-right" aria-label="Image suivante" style="--btn-min-w: 0" />
+        </div>
+      </div>
+
+      <p class="section-note">
+        Le cas de <code>label</code> lui-même est plus rare : une icône que rien n'accompagne, et dont
+        l'absence retirerait une information. Le signe de citation ci-dessous en est un — il dit qu'on
+        entre dans la parole de quelqu'un d'autre, et aucun mot alentour ne le dit à sa place.
+      </p>
+
+      <div class="demo">
+        <figure class="quote">
+          <Icon name="quote-down" size="lg" label="Citation" />
+          <blockquote>Je ne savais pas que je pouvais changer d'avis en cours de route.</blockquote>
+          <figcaption>Participante 4, test d'utilisabilité</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── La chaîne ────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Ajouter une icône</h2>
+
+      <p class="section-note">
+        La source est Figma, comme pour les tokens. Exporter le <strong>composant</strong> — pas le
+        vecteur qu'il contient — dans <code>icons/</code> sous son nom Figma, puis
+        <code>npm run icons</code>. Le script vérifie la <code>viewBox</code> et le tracé, remplace les
+        couleurs par <code>currentColor</code>, écrit le SVG nettoyé et la ligne du registre. L'icône
+        apparaît alors ici, et son nom devient disponible partout.
+      </p>
+
+      <p class="section-note">
+        On ne retouche pas un fichier de <code>src/design-system/icons/</code> : il est régénéré. Une
+        valeur qui paraît fausse se corrige dans Figma.
+      </p>
+
+      <h3>Correspondance avec Figma</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Nom dans le code</th><th>Composant Figma</th></tr>
+          </thead>
+          <tbody>
+            {
+              iconNames.map((name) => (
+                <tr>
+                  <td><code>{name}</code></td>
+                  <td>{figmaNames[name] ? <code>{figmaNames[name]}</code> : <span class="same">identique</span>}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> Le nommage de la page <code>Icons</code> mélange
+        quatre conventions pour onze objets — <code>File - Text</code>, <code>Circle-face-content</code>,
+        <code>Mail-Edit</code>, <code>box-plus</code>. Le code en hérite : d'où
+        <code>circle-face-content</code>, qui dit une chose de trop. Renommer dans Figma ferait converger
+        les deux noms, et le registre suivrait tout seul.
+      </p>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> Trois icônes — <code>file-text</code>,
+        <code>box-plus</code>, <code>mail-edit</code> — s'exportent en aplat et non en tracé, parce que
+        leur jointure de contour est mixte dans Figma. Leur tracé pèse alors dix à soixante fois celui
+        des autres : 5 672 caractères pour <code>mail-edit</code>, contre 25 pour
+        <code>arrow-narrow-right</code>. Uniformiser la jointure les ramènerait à un trait.
+      </p>
+
+      <p class="section-note">
+        Le jeu complet vit sur <a href={withBase('/components')}>Composants</a> à travers les objets qui
+        s'en servent : le <em>Nav</em>, le <em>Button</em>, le carrousel.
+      </p>
+    </section>
+  </main>
+</DocsLayout>
+
+<style>
+  /* Même cadre neutre que sur /components : il donne aux icônes une surface de page
+     sans laisser croire qu'elles font partie de la doc. */
+  .demo {
+    padding: var(--space-xl);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* La planche. Des colonnes qui se posent d'elles-mêmes : ajouter une icône ne
+     demande pas de retoucher la grille. */
+  .plate {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--space-xl) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .plate li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .plate code {
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+    /* Les noms sont longs et à tirets : on les laisse se couper plutôt qu'élargir
+       la colonne. */
+    overflow-wrap: anywhere;
+  }
+
+  .contexts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ctx {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-ui);
+  }
+
+  .ctx-default {
+    color: var(--color-text-default);
+    border: 1px solid var(--color-border-default);
+  }
+
+  .ctx-muted {
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-default);
+  }
+
+  .ctx-accent {
+    color: var(--color-text-on-accent);
+    background: var(--color-accent-500);
+  }
+
+  .sizes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-2xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sizes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .sizes code {
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--button-target-spacing);
+  }
+
+  .btn-row.last {
+    margin-bottom: 0;
+  }
+
+  /* Le signe de citation reste aligné sur la première ligne, comme un guillemet
+     ouvrant : il introduit la parole, il ne la centre pas. */
+  .quote {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md) var(--space-lg);
+    margin: 0;
+    color: var(--color-text-accent);
+  }
+
+  .quote blockquote {
+    margin: 0;
+    font-size: var(--font-size-body-lg);
+    color: var(--color-text-default);
+  }
+
+  .quote figcaption {
+    grid-column: 2;
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .same {
+    color: var(--color-text-muted);
+  }
+
+  h3 {
+    font-size: var(--font-size-subheading);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .source {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: var(--font-size-body-sm);
+    text-align: left;
+  }
+
+  th {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-label);
+    letter-spacing: var(--font-letter-spacing-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  th,
+  td {
+    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border-default);
+    vertical-align: top;
+  }
+
+  td {
+    color: var(--color-text-muted);
+  }
+
+  td:first-child {
+    color: var(--color-text-default);
+    white-space: nowrap;
+  }
+</style>
