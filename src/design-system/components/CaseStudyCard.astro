@@ -68,6 +68,15 @@ const classes = ['case-study-card', className].filter(Boolean).join(' ');
     flex-direction: column;
     gap: var(--space-xl);
     width: 100%;
+    /* Point de surcharge public, comme --btn-px sur Button : la carte ne décide
+       pas de sa hauteur, mais elle accepte qu'on la lui impose. CaseStudyList
+       s'en sert pour qu'une carte remplisse l'écran, donc qu'elle en recouvre
+       vraiment une autre. Sans consigne, la carte fait la taille de son contenu.
+       Une hauteur et non un plancher : un plancher laisserait la carte grandir
+       au-delà de l'écran dès que son contenu dépasse, et son bas — les flèches
+       du carrousel comprises — resterait hors d'atteinte une fois la carte
+       collée en haut. Bornée, elle demande au carrousel de se resserrer. */
+    height: var(--card-height, auto);
     padding-block: var(--space-layout-64);
     background: var(--color-bg-surface);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;

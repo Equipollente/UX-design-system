@@ -78,6 +78,19 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
+
+    /* Rétrécir, jamais grandir. Dans une carte dont la hauteur est imposée — le
+       cas de CaseStudyList, où une carte fait exactement l'écran — le carrousel
+       est la seule chose qui puisse céder de la place : l'en-tête, lui, est
+       protégé par la taille minimale automatique des boîtes flexibles. C'est
+       `min-height: 0` qui lève cette même protection ici, et rien d'autre.
+       Avec flex-grow, sur un écran haut, la piste s'étirerait et laisserait un
+       vide entre les vignettes et les flèches ; en rétrécissement seul, le
+       surplus retombe en bas de la carte, là où il tombe déjà.
+       Hors d'un contexte flexible — le carrousel montré seul — ces deux
+       déclarations ne font rien. */
+    flex: 0 1 auto;
+    min-height: 0;
   }
 
   /* `position: relative` n'est pas décoratif : il fait de la piste l'offsetParent
@@ -88,6 +101,9 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
   .track {
     position: relative;
     display: flex;
+    /* Le carrousel ne peut céder de la place que si sa piste en cède aussi. */
+    flex: 0 1 auto;
+    min-height: 0;
     gap: var(--space-2xl);
     margin: 0;
     padding: var(--space-lg) 0;
@@ -114,6 +130,12 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
   .item {
     flex: none;
     height: var(--carousel-item-height);
+    /* La vignette garde la hauteur que Figma lui donne tant qu'il y a la place,
+       et ne la dépasse jamais. Quand la piste se resserre, la vignette suit et
+       l'aspect-ratio en déduit sa largeur : l'image maigrit, elle n'est pas
+       rognée. `max-height` et non `height: 100%`, sans quoi elle grandirait
+       au-delà des 382px dessinés dès qu'un écran serait plus haut. */
+    max-height: 100%;
     aspect-ratio: var(--item-ratio);
     overflow: hidden;
     border-radius: var(--radius-lg);
