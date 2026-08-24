@@ -30,6 +30,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Case Study Card | [`88-131`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-131) | [CaseStudyCard.astro](src/design-system/components/CaseStudyCard.astro) |
 | Section Header (en-tête de la carte) | [`88-74`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-74) | [CaseStudyHeader.astro](src/design-system/components/CaseStudyHeader.astro) |
 | Carousel | [`88-85`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-85) | [Carousel.astro](src/design-system/components/Carousel.astro) |
+| Section.Intro | [`209-2348`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=209-2348) | [Intro.astro](src/design-system/components/Intro.astro) |
 | Case Study Card en situation | [`176-1248`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1248) | — |
 
 La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
@@ -37,8 +38,11 @@ La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.c
 Le composant Figma s'appelle « Section Header » mais tout ce qu'il contient est propre à une étude
 de cas : le code le nomme `CaseStudyHeader`. Renommage à trancher côté Figma.
 
+Même décalage sur `Section.Intro`, pour une autre raison : le préfixe `Section.` est une convention
+de rangement du fichier Figma, pas une partie du nom de l'objet. Le code le nomme `Intro`.
+
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
-`Cards/User Quote`, `Research Finding`, `Role`, `Section.Intro` — tous sur la page Components.
+`Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components.
 
 ### Variables
 

@@ -1,0 +1,139 @@
+---
+// L'intro d'une page d'accueil : un visage, une salutation, la phrase qui dit ce
+// qu'on fait, et le bouton qui mène à la suite.
+//
+// Figma l'appelle « Section.Intro » (209:2348). Le préfixe `Section.` est une
+// convention de rangement du fichier, pas une partie du nom de l'objet : le code
+// le nomme `Intro`.
+//
+// Le composant ignore tout du site qui l'emploie : ni le visage, ni les textes,
+// ni la destination du bouton ne vivent ici. Tout tombe des props — le chemin de
+// l'avatar y compris, puisque c'est le site qui le sert et donc lui qui sait le
+// préfixer.
+
+import Button from './Button.astro';
+
+interface Props {
+  /** Le visage. `src` passe par le withBase() du site : c'est son asset, pas le nôtre. */
+  avatar: { src: string; alt: string };
+  /** La salutation, au-dessus du titre. */
+  greeting: string;
+  headline: string;
+  /** La phrase sous le titre. */
+  description?: string;
+  /** La suite. Sans href ⇒ <button> inerte, à câbler par l'appelant. */
+  action?: { label: string; href?: string };
+  /** 1 sur une page qui n'a pas d'autre titre — le cas d'une page d'accueil. Le
+   *  rang ne change pas le dessin : la taille du titre vient du composant. */
+  headingLevel?: 1 | 2;
+  class?: string;
+}
+
+const {
+  avatar,
+  greeting,
+  headline,
+  description,
+  action,
+  headingLevel = 1,
+  class: className,
+} = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h1' | 'h2';
+const classes = ['intro', className].filter(Boolean).join(' ');
+---
+
+<section class={classes}>
+  <div class="block">
+    <img class="avatar" src={avatar.src} alt={avatar.alt} width="64" height="64" />
+    <p class="greeting">{greeting}</p>
+    <Heading class="headline">{headline}</Heading>
+    {description && <p class="description">{description}</p>}
+  </div>
+
+  {
+    action && (
+      <Button
+        size="lg"
+        href={action.href}
+        iconEnd="corner-right-down"
+        style="--btn-px: var(--button-padding-x-md); --btn-icon: var(--button-icon-size-md)"
+      >
+        {action.label}
+      </Button>
+    )
+  }
+</section>
+
+<style>
+  /* Le bloc est calé à gauche sur sa propre mesure, le bouton est centré sous
+     lui : c'est ce que dessine Figma, en desktop comme en mobile (142:1193). */
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-layout-64);
+  }
+
+  .block {
+    /* La mesure du bloc de texte. L'export Figma la donne en dur : aucun token
+       ne la porte, comme la largeur minimale du titre d'étude de cas. */
+    --intro-measure: 929px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    width: 100%;
+    max-width: var(--intro-measure);
+    padding: var(--space-xl);
+  }
+
+  /* Même traitement que l'avatar du Nav — c'est le même visage, à la même
+     taille, dans le même rond. */
+  .avatar {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-pill);
+    object-fit: cover;
+  }
+
+  /* Les marges de global.css ne servent à rien ici : c'est le gap qui espace. */
+  .greeting,
+  .headline,
+  .description {
+    margin: 0;
+  }
+
+  .greeting {
+    font-size: var(--font-size-body-lg);
+    color: var(--color-text-default);
+  }
+
+  /* Figma pose l'interligne à 1.2 sur ce titre-là, quand global.css met `tight`
+     (1.12) sur toutes les têtes. On suit le nœud : à 42px sur trois lignes,
+     l'écart se voit. Signalé sur /components, à trancher côté Figma. */
+  .headline {
+    font-size: var(--font-size-display);
+    line-height: var(--font-line-height-snug);
+    color: var(--color-text-default);
+  }
+
+  .description {
+    font-size: var(--font-size-body-lg);
+    line-height: var(--font-line-height-body);
+    color: var(--color-text-muted);
+  }
+
+  /* Figma garde le titre à 42px en mobile (142:1193, cadre de 393px) : à cette
+     largeur-là il passe, tout juste. Mais le système déclare son plancher à
+     320px (layout/mobile), et 42px n'y tient plus — le mot le plus long,
+     « collaborative », mesure 289px pour 272px disponibles. On descend donc d'un
+     cran, au seul point de rupture que le système connaisse. Écart signalé sur
+     /components. */
+  @media (max-width: 767px) {
+    .headline {
+      font-size: var(--font-size-title);
+    }
+  }
+</style>

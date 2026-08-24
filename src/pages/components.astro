@@ -9,6 +9,7 @@ import Nav from '../design-system/components/Nav.astro';
 import Carousel from '../design-system/components/Carousel.astro';
 import CaseStudyHeader from '../design-system/components/CaseStudyHeader.astro';
 import CaseStudyCard from '../design-system/components/CaseStudyCard.astro';
+import Intro from '../design-system/components/Intro.astro';
 import tokens from '../design-system/data/tokens.json';
 
 const buttonTokens = tokens.filter((t) => t.group === 'button');
@@ -108,6 +109,31 @@ const caseStudyDemo = {
   tags: ['Hypothesis Testing', 'Co-design Facilitation', 'Journey Prototyping'],
   action: { label: 'Read the story', href: '#projets' },
 };
+const introProps = [
+  ['avatar', '{ src, alt }', '—', 'Le visage. src passe par le withBase() du site : c’est son asset.'],
+  ['greeting', 'string', '—', 'La salutation, au-dessus du titre.'],
+  ['headline', 'string', '—', 'La phrase qui dit ce qu’on fait.'],
+  ['description', 'string', '—', 'La phrase sous le titre. Absente ⇒ non rendue.'],
+  ['action', '{ label, href? }', '—', 'La suite. Sans href ⇒ <button> inerte.'],
+  [
+    'headingLevel',
+    '1 | 2',
+    '1',
+    'Le rang du titre. 1 sur une page qui n’a pas d’autre titre. Il ne change pas le dessin : la taille vient du composant.',
+  ],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+// Le contenu du nœud 209:2348, mot pour mot.
+const introDemo = {
+  avatar: { src: withBase('/images/avatar-judith.png'), alt: 'Judith Heckmann' },
+  greeting: "Hello, I'm Judith",
+  headline:
+    'I design inclusive digital product experiences in a collaborative continuous discovery loop',
+  description: 'From user insights to business impact. Outcomes are what I design for',
+  action: { label: 'Some projects I worked on', href: '#projets' },
+};
+
 ---
 
 <DocsLayout
@@ -118,8 +144,9 @@ const caseStudyDemo = {
     <h6>Design system</h6>
     <h1>Composants</h1>
     <p class="lead">
-      Deux primitives — Button et Tag — et deux objets qui les composent : le Nav, et la carte d'étude
-      de cas avec son en-tête et son carrousel. Tous construits uniquement à partir des tokens. Ce qui
+      Deux primitives — Button et Tag — et trois objets qui les composent : le Nav, la carte d'étude
+      de cas avec son en-tête et son carrousel, et l'intro d'une page d'accueil. Tous construits
+      uniquement à partir des tokens. Ce qui
       est montré ici est rendu par les composants eux-mêmes — pas par une copie de leur markup. La
       doctrine d'usage vient des descriptions Figma : c'est elle qui porte les interdits.
     </p>
@@ -597,6 +624,89 @@ const caseStudyDemo = {
         corriger.
       </p>
     </section>
+    <!-- ── Intro ────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Intro</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> L'ouverture d'une page d'accueil : un visage, une salutation, la
+        phrase qui dit ce qu'on fait, et le bouton qui mène à la suite. Un seul par page — c'est lui qui
+        porte le <code>h1</code>.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un en-tête de section — ça, c'est
+        <em>CaseStudyHeader</em>, qui ouvre une carte et non une page — ni un porteur de contenu : le
+        visage, les textes et la destination du bouton tombent tous des props, parce qu'ils
+        appartiennent au site et pas au système.
+        <br />
+        <span class="source">Nœud Figma <code>209:2348</code>, « Section.Intro ».</span>
+      </p>
+
+      <div class="demo demo-intro">
+        <Intro
+          avatar={introDemo.avatar}
+          greeting={introDemo.greeting}
+          headline={introDemo.headline}
+          description={introDemo.description}
+          action={introDemo.action}
+          headingLevel={2}
+        />
+      </div>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              introProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Les trois textes ne sont liés à aucune variable dans Figma.</strong> Le nœud pose
+        17px en noir pur, 42px en <code>#2f2d2e</code> et 16px en <code>#666</code> — écrits en dur,
+        quand le bouton du même nœud est entièrement tokenisé. Le code prend les tokens les plus
+        proches : <code>font.size.body-lg</code> (17) pour la salutation et la description,
+        <code>font.size.display</code> (42) pour le titre, <code>color.text.default</code> et
+        <code>color.text.muted</code> pour les encres. La description y gagne un pixel — deux lignes de
+        corps voisines à 1px d'écart sont de la dérive, pas une intention, et aucun token de corps ne
+        porte 16. À lier côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>L'interligne du titre contredit le système.</strong> Figma pose <code>1.2</code> sur ce
+        titre-là, quand <code>global.css</code> met <code>tight</code> (1.12) sur toutes les têtes. Le
+        code suit le nœud : à 42px sur trois lignes, l'écart se voit. À trancher côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>Le titre ne tient pas en mobile à la taille que Figma lui donne.</strong> La maquette
+        mobile <code>142:1193</code> garde <code>42px</code> dans un cadre de 393px, où il passe tout
+        juste. Mais le système déclare son plancher à 320px (<code>layout/mobile</code>), et là le mot
+        le plus long du titre — « collaborative » — mesure 289px pour 272px disponibles. Le composant
+        descend donc d'un cran, à <code>font.size.title</code>, sous 767px : le seul point de rupture
+        que le système connaisse. Deux façons de refermer l'écart côté Figma : dessiner le cas 320, ou
+        renoncer au plancher.
+      </p>
+
+      <p class="flag">
+        <strong>La mesure du bloc n'a pas de token.</strong> Figma la donne en dur —
+        <code>929px</code>, minimum <code>280px</code>. Le composant la pose en variable locale
+        <code>--intro-measure</code>, comme la carte d'étude de cas pose <code>--header-title-min</code>.
+        Le jour où le système nomme ses mesures de texte, ces deux-là rentrent dans le rang.
+      </p>
+    </section>
   </main>
 </DocsLayout>
 
@@ -640,6 +750,12 @@ const caseStudyDemo = {
      seul est montré sur elle pour que ses flèches, blanches, se détachent. */
   .demo-carousel {
     background: var(--color-bg-surface);
+  }
+
+  /* L'intro se centre sur sa propre mesure et porte déjà son padding : le cadre
+     n'en remet pas. */
+  .demo-intro {
+    padding: var(--space-xl) 0;
   }
 
   .tag-row {
