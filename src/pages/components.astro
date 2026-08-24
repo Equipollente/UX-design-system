@@ -685,9 +685,12 @@ const introDemo = {
       </p>
 
       <p class="flag">
-        <strong>L'interligne du titre contredit le système.</strong> Figma pose <code>1.2</code> sur ce
-        titre-là, quand <code>global.css</code> met <code>tight</code> (1.12) sur toutes les têtes. Le
-        code suit le nœud : à 42px sur trois lignes, l'écart se voit. À trancher côté Figma.
+        <strong>Le titre refuse deux réglages que le système pose sur toutes les têtes.</strong>
+        <code>global.css</code> met <code>tight</code> partout, en interligne (1.12) comme en
+        interlettrage (-0.015em) ; le nœud pose <code>1.2</code> et aucun interlettrage. Le code suit
+        le nœud, et le second réglage n'est pas cosmétique : à <code>-0.015em</code> le titre gagne
+        une vingtaine de pixels par ligne et ne casse plus au même mot que la maquette. À trancher
+        côté Figma — ou les têtes ne sont pas toutes <code>tight</code>, ou ce titre-là a tort.
       </p>
 
       <p class="flag">

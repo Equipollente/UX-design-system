@@ -110,12 +110,15 @@ const classes = ['intro', className].filter(Boolean).join(' ');
     color: var(--color-text-default);
   }
 
-  /* Figma pose l'interligne à 1.2 sur ce titre-là, quand global.css met `tight`
-     (1.12) sur toutes les têtes. On suit le nœud : à 42px sur trois lignes,
-     l'écart se voit. Signalé sur /components, à trancher côté Figma. */
+  /* Deux réglages que global.css pose sur toutes les têtes et que le nœud ne
+     veut pas ici : l'interligne (tight, 1.12) et l'interlettrage (tight,
+     -0.015em). Figma dit 1.2 et rien. On suit le nœud — à 42px sur trois
+     lignes, les deux se voient, et le second décide où le titre casse.
+     Signalé sur /components, à trancher côté Figma. */
   .headline {
     font-size: var(--font-size-display);
     line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-normal);
     color: var(--color-text-default);
   }
 
