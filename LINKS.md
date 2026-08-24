@@ -32,6 +32,8 @@ le `LINKS.md` du dossier `portfolio`.
 | Carousel | [`88-85`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-85) | [Carousel.astro](src/design-system/components/Carousel.astro) |
 | Section.Intro | [`209-2348`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=209-2348) | [Intro.astro](src/design-system/components/Intro.astro) |
 | Case Study Card en situation | [`176-1248`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1248) | — |
+| Case Study List | [`222-814`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-814) | [CaseStudyList.astro](src/design-system/components/CaseStudyList.astro) |
+| Page HP (la pile en situation, 3 états) | [`222-1168`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-1168) | [templates/home.astro](src/pages/templates/home.astro) |
 
 La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
 
@@ -40,6 +42,11 @@ de cas : le code le nomme `CaseStudyHeader`. Renommage à trancher côté Figma.
 
 Même décalage sur `Section.Intro`, pour une autre raison : le préfixe `Section.` est une convention
 de rangement du fichier Figma, pas une partie du nom de l'objet. Le code le nomme `Intro`.
+
+La page **HP** porte trois frames de 1280 × 834 qui sont trois états de défilement, pas trois
+écrans : `45-388` au repos, `222-907` la première carte montée, `222-1042` la seconde par-dessus.
+Aucune réaction de prototypage n'y est posée — le mouvement vient de la consigne, et il est
+écrit sur `/components`.
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
 `Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components.

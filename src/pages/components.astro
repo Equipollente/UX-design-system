@@ -10,14 +10,15 @@ import Carousel from '../design-system/components/Carousel.astro';
 import CaseStudyHeader from '../design-system/components/CaseStudyHeader.astro';
 import CaseStudyCard from '../design-system/components/CaseStudyCard.astro';
 import Intro from '../design-system/components/Intro.astro';
+import CaseStudyList from '../design-system/components/CaseStudyList.astro';
 import tokens from '../design-system/data/tokens.json';
-// Les données de démonstration vivent à part : la doc et le gabarit montrent
-// les mêmes.
+// Les données de démonstration vivent à part : /templates/home montre les mêmes.
 import {
   demoLinks,
   demoAction,
   caseStudyImages,
   caseStudyDemo,
+  caseStudies,
   introDemo,
 } from './_demo';
 
@@ -90,21 +91,60 @@ const introProps = [
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
+const caseStudyListProps = [
+  [
+    'items',
+    '{ eyebrow, title, impact?, tags?, action?, images?, imagesLabel? }[]',
+    '—',
+    'Les études de cas. Ajouter une carte, c’est ajouter un objet.',
+  ],
+  ['id', 'string', '—', 'La cible d’ancre : c’est par elle qu’arrivent « Projets » et le bouton de l’intro.'],
+  ['label', 'string', 'Études de cas', 'Nom accessible de la section.'],
+  [
+    'covers',
+    'string',
+    '—',
+    'L’id du bloc que la première carte recouvre — le premier écran de la page. Il devient inert quand elle est en place.',
+  ],
+  [
+    'headingLevel',
+    '2 | 3 | 4 | 5',
+    '2',
+    'Le rang des titres de carte, sous ce que la page porte déjà. Il ne change pas le dessin.',
+  ],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+// Les deux variables CSS que la pile lit sans les déclarer : c'est par elles que
+// la page règle sa géométrie, et c'est tout ce qu'elle a à savoir.
+const caseStudyListVars = [
+  [
+    '--fold-peek',
+    '50px',
+    'Le liseré de carte qui dépasse sous le bas de l’écran, et le chevauchement entre deux cartes — c’est le même nombre. À déclarer une fois sur la page.',
+  ],
+  [
+    '--layer-height',
+    '100svh',
+    'La hauteur d’une couche. Ne se change que pour montrer la pile en réduction, comme ci-dessus.',
+  ],
+];
+
 ---
 
 <DocsLayout
   title="Composants — UX design system"
-  description="Les composants du système : Button, Tag, Nav et la carte d'étude de cas, avec leur doctrine, leurs états et leurs props."
+  description="Les composants du système : Button, Tag, Nav, la carte d'étude de cas et leur pile, avec leur doctrine, leurs états et leurs props."
 >
   <header class="page-head">
     <h6>Design system</h6>
     <h1>Composants</h1>
     <p class="lead">
-      Deux primitives — Button et Tag — et trois objets qui les composent : le Nav, la carte d'étude
-      de cas avec son en-tête et son carrousel, et l'intro d'une page d'accueil. Tous construits
-      uniquement à partir des tokens. Ce qui
-      est montré ici est rendu par les composants eux-mêmes — pas par une copie de leur markup. La
-      doctrine d'usage vient des descriptions Figma : c'est elle qui porte les interdits.
+      Deux primitives — Button et Tag — et les objets qui les composent : le Nav, la carte d'étude
+      de cas avec son en-tête et son carrousel, l'intro d'une page d'accueil, et la pile qui empile
+      les études de cas. Tous construits uniquement à partir des tokens. Ce qui est montré ici est
+      rendu par les composants eux-mêmes — pas par une copie de leur markup. La doctrine d'usage
+      vient des descriptions Figma : c'est elle qui porte les interdits.
     </p>
   </header>
 
@@ -535,6 +575,16 @@ const introProps = [
       </ul>
 
       <p class="flag">
+        <strong>La carte accepte qu'on lui impose sa hauteur.</strong> Par défaut elle fait la taille
+        de son contenu — 779 px à 1280 px de large. <code>--card-height</code>, posée depuis
+        l'extérieur, la borne : c'est ainsi que <em>Case Study List</em> lui fait remplir un écran
+        entier, donc en recouvrir vraiment une autre. Une hauteur et non un plancher, sans quoi la
+        carte grandirait au-delà de l'écran dès que son contenu dépasse, et son bas resterait hors
+        d'atteinte une fois la carte collée en haut. Bornée, elle demande au carrousel de se
+        resserrer — c'est lui qui cède, jamais l'en-tête.
+      </p>
+
+      <p class="flag">
         <strong>Aucun token ne porte les ombres.</strong> Figma déclare deux styles d'effet,
         <code>shadow/lg</code> sur les vignettes et <code>shadow/lg-invert</code> sur la carte, que la
         collection <em>Design tokens</em> n'expose pas en variables. Les deux valeurs vivent donc en dur
@@ -572,6 +622,17 @@ const introProps = [
         vignettes sont l'affaire du carrousel, et les styles scopés d'Astro n'atteignent pas un contenu
         slotté. Même coupure que le Nav, qui prend un tableau <code>links</code>. Le jour où une
         vignette n'est plus une image, c'est le composant qu'il faut rouvrir.
+      </p>
+
+      <p class="flag">
+        <strong>La hauteur des vignettes cède avant la carte.</strong> Figma la fige à
+        <code>382px</code> et le carrousel la garde — mais seulement tant qu'il y a la place. Dans une
+        carte dont la hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait
+        exactement un écran, le carrousel est la seule chose qui puisse céder : l'en-tête est protégé
+        par la taille minimale automatique des boîtes flexibles, et le carrousel lève cette protection
+        sur lui-même. Il rétrécit, il ne grandit jamais — avec <code>flex-grow</code>, un écran haut
+        laisserait un vide entre les vignettes et les flèches, alors que le surplus doit retomber en
+        bas de la carte. Montré seul, le carrousel garde ses 382px en toute circonstance.
       </p>
 
       <p class="flag">
@@ -630,6 +691,17 @@ const introProps = [
       </div>
 
       <p class="flag">
+        <strong>L'écart sous le bloc de texte se laisse resserrer.</strong> Figma pose
+        <code>space.layout.64</code> entre le bloc et le bouton, et c'est ce que l'intro garde partout
+        — mais la valeur est <em>lue</em> dans <code>--intro-gap</code>, jamais déclarée sur
+        <code>.intro</code>, pour qu'une valeur posée sur un ancêtre passe au travers. C'est le seul
+        endroit de l'intro où il y a de l'air à reprendre, et une page qui cale son premier écran sur
+        la hauteur de la fenêtre en a besoin : sous 650 px, le gabarit le ramène à
+        <code>space.xl</code> pour que l'intro tienne dans ce qu'on lui laisse. Déclarer la variable
+        sur <code>.intro</code> battrait l'héritage et le point de surcharge ne servirait à rien.
+      </p>
+
+      <p class="flag">
         <strong>Les tailles sont liées, les couleurs ne le sont pas.</strong> Les trois calques
         portent maintenant un style de texte — <code>body/hero</code>, <code>heading/display</code>,
         <code>body/lead</code> — et deux des trois tailles tombent d'une variable. Les
@@ -666,6 +738,234 @@ const introProps = [
         <code>929px</code>, minimum <code>280px</code>. Le composant la pose en variable locale
         <code>--intro-measure</code>, comme la carte d'étude de cas pose <code>--header-title-min</code>.
         Le jour où le système nomme ses mesures de texte, ces deux-là rentrent dans le rang.
+      </p>
+    </section>
+
+    <!-- ── Case Study List ──────────────────────────────────────────────── -->
+    <section>
+      <h2>Case Study List</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Les études de cas empilées, une par écran. Chaque carte est une
+        couche collée en haut : elle monte par-dessus ce qui la précède, la suivante arrive et la
+        recouvre, et le geste inverse défait exactement la même chose. Tout le mouvement est celui du
+        défilement natif — aucun script ne déplace quoi que ce soit.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni une grille de vignettes — la carte prend la largeur
+        entière et n'a pas de format court — ni un porteur de contenu : les études, leurs URLs et leurs
+        images tombent des props. Et ce n'est pas une animation : rien n'a de durée ici, le mouvement
+        est celui du doigt.
+        <br />
+        <span class="source">
+          Page Figma <code>222:1168</code>, composant <code>222:814</code>, états empilés
+          <code>222:912</code> et <code>222:1043</code>.
+        </span>
+      </p>
+
+      <div class="demo demo-list">
+        <p class="fold-stand-in">Le premier écran de la page — nav et intro</p>
+        <CaseStudyList
+          items={caseStudies.slice(0, 2).map((c) => ({ ...c, images: [] }))}
+          label="Démonstration — études de cas"
+          headingLevel={3}
+        />
+      </div>
+
+      <p class="demo-note">
+        La pile est ici en réduction, dans une boîte qui défile, et les cartes sont montrées sans leur
+        carrousel : c'est ce qu'il faut pour tenir dans une page de doc. En vraie grandeur, une couche
+        fait la hauteur de l'écran — <a href={withBase('/templates/home')}>voir le gabarit</a>.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              caseStudyListProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ce que la page doit porter</h3>
+      <p>
+        Le premier écran — la nav et l'intro — est la <strong>couche du dessous</strong> de la pile :
+        il tient sa place, et les cartes lui passent dessus. C'est à la page de le poser, parce que la
+        liste ne peut pas mesurer ce qui est au-dessus d'elle, et que le mesurer en JavaScript ferait
+        sauter la carte au chargement. Trois règles suffisent :
+      </p>
+      <pre><code>{`.home       { --fold-peek: 50px; }
+.home-deck  { }   /* le premier écran + la pile, et rien d'autre */
+.home-first { position: sticky; top: 0;
+              height: calc(100svh - var(--fold-peek)); }
+.nav-slot   { position: sticky; top: 0; }
+
+@media (max-width: 767px) {
+  .home-first { display: contents; }
+}`}</code></pre>
+      <p>
+        Une <em>hauteur</em>, et non un plancher : c'est elle qui garantit le liseré de 50 px à toute
+        hauteur d'écran. Avec <code>min-height</code>, un contenu un peu grand pousse le bloc et mange
+        le liseré. Reste à donner à la liste l'id de ce bloc, par <code>covers</code>, pour qu'elle le
+        rende inerte une fois recouvert.
+      </p>
+      <p>
+        <code>.home-deck</code> n'a aucun style et n'est pas décoratif : c'est lui qui <strong>borne
+        le collage</strong>. Un élément positionné se peint devant un élément qui ne l'est pas, quel
+        que soit l'ordre du DOM — sans ce bloc, le premier écran resterait collé jusqu'au bas de la
+        page et se peindrait par-dessus tout ce qui suit la pile. Il faut donc dire où son collage
+        cesse, et c'est là où la pile s'arrête.
+      </p>
+      <p>
+        En mobile, <code>display: contents</code> efface ce bloc de la mise en page sans toucher au
+        DOM : la nav et l'intro deviennent enfants de <code>.home-deck</code>. L'intro reprend alors
+        sa place dans le flux et défile, tandis que la nav — qui se colle désormais elle-même — tient
+        le haut de l'écran sur toute la hauteur de la pile. Dans le bloc, elle se serait décollée à
+        la fin de l'intro.
+      </p>
+      <p>
+        Le reste tombe tout seul. Le bouton de l'intro et l'onglet du Nav pointent
+        <code>#projets</code>, la liste porte cette ancre, et le navigateur amène son haut à
+        <code>100svh − 50px</code> — c'est-à-dire exactement la position « première carte collée en
+        haut ». Le clic et le défilement décrivent le même état sans partager une ligne de code.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              caseStudyListVars.map(([nom, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{defaut}</code></td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ce que la maquette ne dit pas</h3>
+
+      <p class="flag">
+        <strong>Le 50px de Figma n'est pas le liseré.</strong> C'est l'écart entre l'intro et la liste
+        au repos (<code>209:2383</code>, <code>itemSpacing: 50</code>) et le chevauchement entre cartes
+        une fois empilées (<code>222:912</code>, <code>itemSpacing: −50</code>). Le liseré, lui, tombe
+        tout seul dans la maquette et n'y est pas constant : <code>166px</code> au repos
+        (834 − 101 − 517 − 50), <code>70px</code> une fois la première carte montée. Le code fait le
+        choix inverse — un liseré <em>garanti</em> de 50px dans tous les états — parce que c'est
+        l'intention. Les deux lectures se rejoignent à une condition, qui est devenue la clé du
+        calcul : une carte au repos occupe la hauteur de l'écran.
+      </p>
+
+      <p class="flag">
+        <strong>Trois mesures de la maquette ne suivent pas.</strong> Le bloc nav + intro est dessiné à
+        668px là où un liseré de 50 en demande 784 sur un écran de 834 — les 116px d'écart sont l'air
+        qui manque autour de l'intro. Et les deux cartes sont dessinées à 814 et 776px là où le
+        comportement en demande 834. À reprendre côté Figma : c'est le fichier qui doit rattraper le
+        code, pas l'inverse.
+      </p>
+
+      <p class="flag">
+        <strong>Le mouvement n'est écrit nulle part.</strong> Aucune réaction de prototypage n'est
+        posée sur la page HP — les trois frames sont des captures d'états, et <code>222:1042</code>
+        mime le recouvrement en <em>réordonnant</em> les cartes dans son auto-layout. C'est un
+        artifice de maquette : en défilement réel rien ne se réordonne, une couche en recouvre
+        simplement une autre. Le comportement ne vient donc pas du fichier mais de la consigne, et
+        c'est ici qu'il est écrit.
+      </p>
+
+      <p class="flag">
+        <strong>Le liseré n'a pas de token.</strong> <code>space.layout.48</code> vaut 48 : ces 2px
+        d'écart déplaceraient le liseré à chaque cran, puisqu'il entre dans le calcul de position. La
+        valeur reste donc en dur, dans <code>--fold-peek</code>, comme <code>--card-shadow</code> et
+        <code>--intro-measure</code> avant elle. Le jour où Figma nomme ce 50, il rentre dans le rang.
+      </p>
+
+      <p class="flag">
+        <strong>La vignette du carrousel n'est plus figée à 382 px.</strong> Une couche fait
+        exactement un écran, et la carte est bornée à cette hauteur : bornée, elle ne peut plus
+        déborder, et c'est son carrousel qui se resserre pour tenir. La vignette garde donc les
+        <code>382px</code> de Figma dès que la fenêtre fait 834 px de haut — le format de la maquette
+        — et rétrécit en dessous : <code>363</code> à 760, <code>303</code> à 700, <code>243</code> à
+        640, soit à trois pixels près la valeur que le code utilise déjà en mobile. L'image maigrit,
+        elle n'est jamais rognée, et rien ne sort de l'écran à aucune hauteur. C'est un écart avec
+        Figma, qui fige cette hauteur : à trancher côté fichier.
+      </p>
+
+      <p class="flag">
+        <strong>Le seul script pose <code>inert</code>, et rien d'autre.</strong> Une carte recouverte
+        garde sa place dans l'écran : elle reste donc atteignable au clavier, et le focus se poserait
+        sur un bouton invisible — l'échec WCAG 2.4.11, <em>Focus Not Obscured</em>. Le cas a été
+        mesuré, pas supposé : sans le script, le bouton « Read the story » de la première carte prend
+        le focus alors que la deuxième le couvre entièrement. Le script constate ce que le CSS a déjà
+        fait et le dit au clavier et aux lecteurs d'écran ; il ne déplace rien et ne dessine rien.
+        Sans lui, la pile marche entièrement et n'est que moins sûre au clavier — le même contrat que
+        les flèches du <em>Carousel</em>.
+      </p>
+
+      <p class="flag">
+        <strong>L'écart de 50 px sous l'intro est absorbé par le centrage.</strong> Figma le pose en
+        <code>itemSpacing</code> sur <code>209:2383</code>, mais Figma ne dessine aucun mou : son
+        premier écran fait exactement la taille de son contenu. Dès qu'on cale ce bloc sur la hauteur
+        de la fenêtre, il y a du mou, et le répartir autour de l'intro vaut mieux que de tout laisser
+        tomber sous elle. Sur une fenêtre basse — moins de 650 px — c'est l'inverse : l'intro se
+        resserre, son grand écart interne retombe à <code>space.xl</code>. Le liseré, lui, ne cède
+        jamais.
+      </p>
+
+      <p class="flag">
+        <strong>La dernière carte a besoin de ce qui la suit.</strong> Le collage s'arrête au bas de la
+        liste : sans rien après elle, la dernière couche traverse l'écran sans jamais s'y arrêter. Sur
+        une page d'accueil, la section suivante fait cette butée — le composant n'invente pas un vide
+        pour la remplacer.
+      </p>
+
+      <p class="flag">
+        <strong>Le premier écran est une couche, pas un décor.</strong> La nav et l'intro restent en
+        place, et la première carte vient <em>par-dessus</em> elles — c'est la maquette
+        <code>222:907</code>, où la nav n'est nulle part en haut de l'écran. Elles gardent donc leur
+        place dans la page tout en étant invisibles, ce qui les laisserait atteignables au clavier :
+        d'où <code>covers</code>, et le <code>inert</code> que le script leur pose au bon moment.
+        Sans cette prop, la pile fonctionne mais le bouton de l'intro reste dans l'ordre de
+        tabulation derrière une carte opaque.
+        <br />
+        <strong>En mobile, la nav ne se laisse pas recouvrir.</strong> L'intro défile avec la page,
+        la nav tient le haut de l'écran — mais les cartes lui passent <em>dessous</em>, pas dessus.
+        C'est l'écart assumé avec le desktop : les couches y sont <code>position: static</code>, donc
+        hors de tout positionnement, et un élément positionné se peint devant un élément qui ne l'est
+        pas. Sur un téléphone, un en-tête recouvert ne serait plus atteignable qu'en remontant toute
+        la page, et c'est le format où l'on en a le plus besoin.
+        <br />
+        C'est aussi la seule chose que la géométrie seule ne saurait pas trancher — elle dit qui est
+        arrivé en haut, jamais qui est peint devant. D'où le garde-fou du script : il ne pose
+        <code>inert</code> que si les cartes se collent réellement.
+      </p>
+
+      <p class="flag">
+        <strong>Le mobile n'est pas dessiné.</strong> Sous 768px, la pile redevient une liste : les
+        cartes se suivent sous l'intro, sans rien qui bouge. Une carte haute comme un écran de
+        téléphone y serait illisible, et le recouvrement n'a pas de sens sur un format où l'on fait
+        déjà défiler d'un pouce. C'est une décision du code, comme celles déjà prises dans
+        <em>CaseStudyCard</em> et <em>Carousel</em>.
+        <br />
+        <strong>Aucun seuil de hauteur, en revanche.</strong> La pile tient à toute hauteur de
+        fenêtre, parce que la carte s'y ajuste au lieu de déborder — voir juste en dessous.
       </p>
     </section>
   </main>
@@ -717,6 +1017,51 @@ const introProps = [
      n'en remet pas. */
   .demo-intro {
     padding: var(--space-xl) 0;
+  }
+
+  /* La pile en réduction. La boîte défile, donc elle devient elle-même le
+     référentiel du collage : les couches s'y calent en haut comme elles le
+     feraient dans la fenêtre. Les deux variables sont celles que le composant lit
+     sans les déclarer — c'est tout ce qu'il faut pour le montrer petit.
+     --layer-height vaut la hauteur de la boîte, et le faux premier écran cette
+     même hauteur moins le liseré : c'est la géométrie de la vraie page, à
+     l'échelle. */
+  .demo-list {
+    --fold-peek: 32px;
+    --layer-height: 420px;
+
+    height: 420px;
+    padding: 0;
+    overflow: auto;
+  }
+
+  .fold-stand-in {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(420px - 32px);
+    margin: 0;
+    padding: var(--space-xl);
+    background: var(--color-bg-section);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+    text-align: center;
+  }
+
+  .demo-note {
+    margin-top: calc(-1 * var(--space-sm));
+    margin-bottom: var(--space-xl);
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* Les trois règles que la page doit porter, montrées telles qu'on les écrit. */
+  pre {
+    margin: 0 0 var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--color-bg-section);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
   }
 
   .tag-row {
