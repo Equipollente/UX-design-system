@@ -117,3 +117,15 @@ pre {
   background: var(--color-accent-100);
   color: var(--color-text-default);
 }
+
+/* Le défilement fluide des ancres. C'est lui qui fait glisser la page quand on
+ * clique « Projects » vers la pile d'études de cas, plutôt que de l'y téléporter.
+ * Sous prefers-reduced-motion, la règle n'est simplement pas écrite : le saut
+ * instantané redevient le comportement natif. C'est la seule façon de le rendre
+ * au calme — scroll-behavior n'est pas une durée, tokens.css ne peut pas le
+ * remettre à zéro comme il le fait des motion.duration.*. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

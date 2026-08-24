@@ -72,7 +72,14 @@ const classes = ['intro', className].filter(Boolean).join(' ');
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-layout-64);
+    /* L'écart entre le bloc de texte et le bouton — le seul endroit de l'intro
+       où il y a de l'air à reprendre. La valeur de Figma est le repli ; elle est
+       seulement *lue*, jamais déclarée ici, pour qu'une valeur posée sur un
+       ancêtre passe au travers. Une déclaration sur .intro battrait l'héritage
+       et le point de surcharge ne servirait à rien.
+       Ce que ça permet : un premier écran calé à la hauteur de la fenêtre, où
+       l'intro doit tenir dans ce qu'on lui laisse. */
+    gap: var(--intro-gap, var(--space-layout-64));
   }
 
   .block {

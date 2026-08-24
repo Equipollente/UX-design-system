@@ -1,0 +1,251 @@
+---
+// Case Study List — les études de cas empilées, une par écran. Figma : la page
+// HP 222:1168, le composant 222:814, et ses deux états empilés 222:912 / 222:1043.
+//
+// Chaque carte est une couche collée en haut de l'écran. Le défilement natif fait
+// tout le reste : la carte monte par-dessus ce qui la précède, la suivante arrive
+// et la recouvre, et le geste inverse défait exactement la même chose. Rien de ce
+// mouvement n'est écrit en JavaScript, ni ici ni dans la page qui l'emploie. Une
+// pile pilotée au script perdrait le clavier, la barre de défilement et le repli
+// sans JS, que tous les autres composants du système tiennent.
+//
+// Une seule chose échappe au CSS, et ce n'est pas le mouvement : une carte
+// recouverte garde sa place dans l'écran, donc elle reste atteignable au clavier.
+// Le focus se poserait sur un bouton invisible — l'échec WCAG 2.4.11, Focus Not
+// Obscured. Le script en bas de fichier ne fait que ça : poser `inert` sur les
+// couches passées dessous. Il ne déplace rien et ne dessine rien. Sans lui, la
+// pile marche entièrement et n'est que moins sûre au clavier : c'est le même
+// contrat que les flèches du Carousel, une commodité par-dessus un plancher qui
+// tient tout seul.
+//
+// Le clic sur « Projects » n'est pas un cas à part : c'est une ancre vers `id`,
+// et elle tombe pile sur la position « première carte collée en haut ». Le clic
+// et le défilement décrivent le même état sans partager une ligne de code — d'où
+// `id`, seule concession faite à l'appelant.
+//
+// Le premier écran d'une page d'accueil — sa nav et son intro — se comporte
+// comme une couche de plus, la couche du dessous : il tient sa place et les
+// cartes lui passent dessus. C'est à la page de le poser en sticky et de lui
+// donner exactement calc(100svh - var(--fold-peek)) de haut ; la liste, elle,
+// n'en apprend que l'id, par `covers`, et seulement pour le rendre inert quand
+// il est recouvert.
+//
+// Le composant ignore donc tout du site : ni les études de cas, ni leurs URLs,
+// ni ce qui le précède ne vivent ici. La liste ne peut pas mesurer ce qui est
+// au-dessus d'elle, et le mesurer en JavaScript ferait sauter la carte au
+// chargement — d'où ce partage.
+
+import CaseStudyCard from './CaseStudyCard.astro';
+
+interface Props {
+  /** Les études de cas. Ajouter une carte, c'est ajouter un objet. */
+  items: {
+    eyebrow: string;
+    title: string;
+    impact?: string;
+    tags?: string[];
+    action?: { label: string; href?: string };
+    images?: { src: string; alt: string; width: number; height: number }[];
+    imagesLabel?: string;
+  }[];
+  /** La cible d'ancre : c'est par elle qu'arrivent « Projects » et le bouton de l'intro. */
+  id?: string;
+  /** Nom accessible de la section. */
+  label?: string;
+  /** L'id du bloc que la première carte recouvre — le premier écran d'une page
+   *  d'accueil. Il devient inert quand elle est en place, et le redevient
+   *  atteignable au retour. Sans lui, rien n'est recouvert au-dessus de la pile. */
+  covers?: string;
+  /** Le rang des titres de carte, sous ce que la page porte déjà. */
+  headingLevel?: 2 | 3 | 4 | 5;
+  class?: string;
+}
+
+const {
+  items,
+  id,
+  label = 'Études de cas',
+  covers,
+  headingLevel = 2,
+  class: className,
+} = Astro.props;
+
+const classes = ['case-study-list', className].filter(Boolean).join(' ');
+---
+
+{/* Les classes servent au style, les attributs data- au comportement. */}
+<section class={classes} id={id} aria-label={label} data-case-study-list data-covers={covers}>
+  <ul class="layers">
+    {
+      items.map((item) => (
+        <li class="layer" data-layer>
+          <CaseStudyCard
+            eyebrow={item.eyebrow}
+            title={item.title}
+            impact={item.impact}
+            tags={item.tags}
+            action={item.action}
+            images={item.images}
+            imagesLabel={item.imagesLabel}
+            headingLevel={headingLevel}
+          />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .case-study-list {
+    /* Le liseré qui dépasse sous le bas de l'écran, et le chevauchement entre
+       deux cartes : c'est le même nombre, vu des deux côtés. Figma le pose en
+       itemSpacing — +50 entre l'intro et la liste (209:2383), −50 entre les
+       cartes une fois empilées (222:912) — mais aucun token ne le porte :
+       space.layout.48 vaut 48, et ces 2 px déplaceraient le liseré à chaque
+       cran. Signalé sur /components.
+       La page déclare --fold-peek une seule fois ; son premier écran et cette
+       pile lisent alors le même nombre. */
+    --peek: var(--fold-peek, 50px);
+  }
+
+  /* Le repère de toutes les couches : c'est ce bloc qui borne leur collage. Une
+     carte reste donc en haut jusqu'au bas de la liste, pas jusqu'au bas de sa
+     propre case.
+     Attention : un overflow (hidden comme auto) sur un ancêtre casse
+     position: sticky, sans erreur et sans trace. Ni global.css ni BaseLayout
+     n'en posent aujourd'hui — c'est à préserver. */
+  .layers {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .layer {
+    position: sticky;
+    top: 0;
+    /* Une couche fait exactement un écran — une hauteur, pas un plancher. C'est
+       ce qui borne la carte : bornée, elle ne peut plus dépasser de l'écran, et
+       c'est son carrousel qui se resserre pour tenir. Un plancher laisserait au
+       contraire son bas hors d'atteinte sur toute fenêtre plus courte que la
+       carte.
+       svh plutôt que vh : la barre d'URL mobile ne compte pas dans la hauteur.
+       --layer-height n'est pas déclarée ici, seulement lue : une valeur posée sur
+       un ancêtre passe donc au travers, ce qui permet de rapetisser la pile pour
+       la montrer dans une page de doc sans que le composant connaisse ce cas. */
+    height: var(--layer-height, 100svh);
+
+    /* La carte remplit la couche, donc elle est opaque du haut jusqu'en bas :
+       c'est ce qui fait qu'elle en recouvre vraiment une autre. La consigne
+       traverse la frontière de scope par une variable — comme --btn-px ou
+       --icon-size — parce qu'un style scopé n'atteint pas la racine d'un
+       composant enfant. */
+    --card-height: 100%;
+  }
+
+  /* Les couches sont positionnées : elles se peignent dans l'ordre du DOM. La
+     carte 2 recouvre la carte 1 sans qu'aucun z-index soit écrit. */
+
+  /* Le chevauchement que Figma pose en itemSpacing: -50 (222:912). Il ne touche
+     pas au liseré — la hauteur de couche l'absorbe — il raccourcit de 50px la
+     course d'un cran. */
+  .layer + .layer {
+    margin-top: calc(-1 * var(--peek));
+  }
+
+  /* La dernière carte ne se cale en haut que s'il reste de la page après elle :
+     le collage s'arrête au bas de .layers. Sur une page d'accueil, la section
+     suivante fait cette butée. Quand la liste finit la page, la dernière carte
+     traverse l'écran sans s'arrêter — c'est à la page d'y répondre, pas au
+     composant d'inventer un vide. */
+
+  /* Sous 768px, la pile redevient une liste : les cartes se suivent, sous
+     l'intro, sans rien qui bouge. Une carte qui fait la hauteur d'un écran de
+     téléphone y serait illisible, et le recouvrement n'a pas de sens sur un
+     format où l'on fait déjà défiler d'un pouce.
+     Aucun garde-fou de hauteur en revanche : la pile tient à toute hauteur de
+     fenêtre, parce que la carte s'y ajuste au lieu de déborder. C'est le point
+     de rupture du système, 767px, et lui seul.
+     Figma ne dessine pas ce cas : c'est une décision du code, comme celles déjà
+     prises dans CaseStudyCard et Carousel. */
+  @media (max-width: 767px) {
+    .layer {
+      /* `static` : la couche cesse d'être un élément positionné, donc elle passe
+         *derrière* la nav de la page, qui reste collée en haut. Sur un téléphone,
+         un en-tête que les cartes recouvriraient ne serait plus atteignable qu'en
+         remontant toute la page — le format où l'on a le plus besoin de lui est
+         aussi celui où il faut le garder devant. */
+      position: static;
+      height: auto;
+      --card-height: auto;
+    }
+
+    .layer + .layer {
+      margin-top: 0;
+    }
+  }
+</style>
+
+<script>
+  // Marquer `inert` les couches recouvertes. Le script ne décide de rien qu'on
+  // voie : il constate ce que le CSS a déjà fait, et le dit au clavier et aux
+  // lecteurs d'écran. Les classes servent au style, les attributs data- au
+  // comportement.
+  for (const liste of document.querySelectorAll<HTMLElement>('[data-case-study-list]')) {
+    // Le bloc que la première carte recouvre — le premier écran de la page — est
+    // la couche du dessous. Il n'appartient pas au composant, mais il se comporte
+    // exactement comme les autres : on le met en tête et la même règle s'applique.
+    const dessous = liste.dataset.covers
+      ? document.getElementById(liste.dataset.covers)
+      : null;
+
+    const couches = [
+      ...(dessous ? [dessous] : []),
+      ...liste.querySelectorAll<HTMLElement>('[data-layer]'),
+    ];
+    if (couches.length < 2) continue;
+
+    const appliquer = () => {
+      // Sous 768px, le CSS décolle les couches : elles défilent alors normalement,
+      // aucune n'en recouvre une autre, et la nav de la page leur passe devant.
+      // Marquer `inert` ce qui est encore visible masquerait la moitié de la page
+      // — c'est le seul cas où la géométrie seule se tromperait, parce qu'elle ne
+      // dit pas qui est peint devant qui. On interroge la dernière couche, qui est
+      // toujours une carte : la première peut être le bloc de la page, dont le
+      // composant ne connaît pas les règles.
+      const empilé = getComputedStyle(couches[couches.length - 1]).position === 'sticky';
+
+      // Toutes les mesures d'abord, les écritures ensuite : écrire entre deux
+      // lectures forcerait un recalcul de mise en page à chaque couche.
+      const hauts = couches.map((couche) => couche.getBoundingClientRect().top);
+
+      // Une couche est recouverte quand la suivante l'a rejointe en haut. On
+      // compare les couches entre elles, jamais à zéro : une couche fait 100svh,
+      // et l'arrondi sous-pixel de cette hauteur décale les suivantes — mesuré à
+      // 0,8px dès la deuxième. Un seuil absolu les manquerait, et l'écart
+      // grandirait avec le nombre de cartes. Les 2px ne sont donc pas une valeur
+      // de dessin, seulement de quoi absorber cet arrondi : entre une couche
+      // collée et la précédente il y a zéro, entre une couche qui affleure et
+      // elle il y a presque un écran.
+      couches.forEach((couche, i) => {
+        const recouverte = empilé && i < couches.length - 1 && hauts[i + 1] - hauts[i] < 2;
+        couche.toggleAttribute('inert', recouverte);
+      });
+    };
+
+    // Le défilement, d'où qu'il vienne : c'est lui seul qui fait passer une couche
+    // par-dessus une autre. En capture sur le document plutôt qu'en écoute sur la
+    // fenêtre, parce qu'un `scroll` ne remonte pas : la page défile presque
+    // toujours, mais la pile peut aussi vivre dans une boîte qui défile — c'est
+    // le cas de sa démonstration sur /components. `passive` : on ne l'empêche
+    // jamais.
+    document.addEventListener('scroll', appliquer, { passive: true, capture: true });
+
+    // Le passage de la pile à la liste ne défile pas : il n'émet donc aucun
+    // événement de défilement. Comme le Nav, on regarde la boîte plutôt que de
+    // courir après chaque cause — redimensionnement, polices, styles injectés
+    // par Astro en développement.
+    new ResizeObserver(appliquer).observe(liste);
+
+    appliquer();
+  }
+</script>
