@@ -38,7 +38,18 @@ h6 {
   letter-spacing: var(--font-letter-spacing-tight);
 }
 
-h1 { font-size: var(--font-size-display); }
+/* Le h1 est le seul à ne pas prendre le `tight` posé juste au-dessus : le style
+ * Figma heading/display, qui est sa spécification, est desserré — interligne
+ * 1.23 et aucun interlettrage, là où heading/title (le h2) reste serré. On
+ * prend snug (1.2) faute de cran à 1.23 : 1,3px par ligne, invisible.
+ * La description du style Figma annonce encore `tight` sur les deux réglages et
+ * se contredit donc elle-même. À corriger côté Figma — c'est la note qui a
+ * tort, pas le style. */
+h1 {
+  font-size: var(--font-size-display);
+  line-height: var(--font-line-height-snug);
+  letter-spacing: var(--font-letter-spacing-normal);
+}
 h2 { font-size: var(--font-size-title); }
 h3 { font-size: var(--font-size-subtitle); }
 h4 { font-size: var(--font-size-heading); }

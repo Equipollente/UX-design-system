@@ -674,33 +674,35 @@ const introDemo = {
       </div>
 
       <p class="flag">
-        <strong>Les trois textes ne sont liés à aucune variable dans Figma.</strong> Le nœud pose
-        17px en noir pur, 42px en <code>#2f2d2e</code> et 16px en <code>#666</code> — écrits en dur,
-        quand le bouton du même nœud est entièrement tokenisé. Le code prend les tokens les plus
-        proches : <code>font.size.body-lg</code> (17) pour la salutation et la description,
-        <code>font.size.display</code> (42) pour le titre, <code>color.text.default</code> et
-        <code>color.text.muted</code> pour les encres. La description y gagne un pixel — deux lignes de
-        corps voisines à 1px d'écart sont de la dérive, pas une intention, et aucun token de corps ne
-        porte 16. À lier côté Figma.
+        <strong>Les tailles sont liées, les couleurs ne le sont pas.</strong> Les trois calques
+        portent maintenant un style de texte — <code>body/hero</code>, <code>heading/display</code>,
+        <code>body/lead</code> — et deux des trois tailles tombent d'une variable. Les
+        <em>couleurs</em>, elles, restent tapées à la main : noir pur, <code>#2f2d2e</code> et
+        <code>#666</code>. Les deux premières valent par chance <code>color.text.default</code> ; la
+        troisième, non — le gris du système est <code>#6a676d</code>. Le code prend le token, donc la
+        description ne s'affiche pas dans le gris de la maquette. À lier côté Figma, c'est le dernier
+        morceau.
       </p>
 
       <p class="flag">
-        <strong>Le titre refuse deux réglages que le système pose sur toutes les têtes.</strong>
-        <code>global.css</code> met <code>tight</code> partout, en interligne (1.12) comme en
-        interlettrage (-0.015em) ; le nœud pose <code>1.2</code> et aucun interlettrage. Le code suit
-        le nœud, et le second réglage n'est pas cosmétique : à <code>-0.015em</code> le titre gagne
-        une vingtaine de pixels par ligne et ne casse plus au même mot que la maquette. À trancher
-        côté Figma — ou les têtes ne sont pas toutes <code>tight</code>, ou ce titre-là a tort.
+        <strong>Le style <code>heading/display</code> se contredit.</strong> Sa description annonce
+        « line-height.tight + letter-spacing.tight » ; ses valeurs disent <code>1.23</code> et
+        <code>0</code>. C'est la note qui a tort, pas le style : <code>heading/title</code>, lui, est
+        bien serré. Le code suit les valeurs — <code>global.css</code> desserre le <code>h1</code>, et
+        le composant ne surcharge plus rien. Deux choses restent à faire côté Figma : réécrire la
+        description, et décider si <code>1.23</code> mérite un cran dans l'échelle. Faute de quoi le
+        code prend <code>line-height.snug</code> (1.2), soit 1,3px de moins par ligne.
       </p>
 
       <p class="flag">
-        <strong>Le titre ne tient pas en mobile à la taille que Figma lui donne.</strong> La maquette
-        mobile <code>142:1193</code> garde <code>42px</code> dans un cadre de 393px, où il passe tout
-        juste. Mais le système déclare son plancher à 320px (<code>layout/mobile</code>), et là le mot
-        le plus long du titre — « collaborative » — mesure 289px pour 272px disponibles. Le composant
-        descend donc d'un cran, à <code>font.size.title</code>, sous 767px : le seul point de rupture
-        que le système connaisse. Deux façons de refermer l'écart côté Figma : dessiner le cas 320, ou
-        renoncer au plancher.
+        <strong>Le titre en mobile tient, mais pas jusqu'au plancher déclaré.</strong> La variante
+        mobile de <code>142:1354</code> garde <code>42px</code> dans un cadre de 390px, et le code la
+        suit : « collaborative », le mot le plus long, mesure 289px et passe jusqu'à 337px de large.
+        En dessous il sort de l'écran, alors que le fichier déclare toujours son plancher à 320px
+        (<code>layout/mobile</code>). Le composant pose donc un filet sous 360px — la largeur du plus
+        étroit des téléphones courants. Ce n'est pas le point de rupture du système (767px) : il ne
+        change pas de mise en page, il empêche un mot de déborder. À trancher côté Figma : ou la
+        variante mobile descend jusqu'à 320, ou le plancher remonte.
       </p>
 
       <p class="flag">

@@ -105,16 +105,20 @@ const classes = ['intro', className].filter(Boolean).join(' ');
     margin: 0;
   }
 
+  /* Style Figma body/hero : font.size.heading sur la famille de corps. */
   .greeting {
-    font-size: var(--font-size-body-lg);
+    font-size: var(--font-size-heading);
+    line-height: var(--font-line-height-body);
     color: var(--color-text-default);
   }
 
-  /* Deux réglages que global.css pose sur toutes les têtes et que le nœud ne
-     veut pas ici : l'interligne (tight, 1.12) et l'interlettrage (tight,
-     -0.015em). Figma dit 1.2 et rien. On suit le nœud — à 42px sur trois
-     lignes, les deux se voient, et le second décide où le titre casse.
-     Signalé sur /components, à trancher côté Figma. */
+  /* Le titre porte son dessin lui-même — taille, interligne, interlettrage —
+     parce que le composant accepte aussi un h2 : le rang se range sous ce que
+     la page porte déjà, il ne change pas l'apparence. Les trois valeurs sont
+     celles du style Figma heading/display, que global.css applique par
+     ailleurs au h1 ; les répéter ici n'est pas un doublon, c'est ce qui rend
+     les deux rangs identiques. Faute d'un cran à 1.23 dans l'échelle,
+     l'interligne prend snug (1.2) — 1,3px de moins par ligne. */
   .headline {
     font-size: var(--font-size-display);
     line-height: var(--font-line-height-snug);
@@ -128,13 +132,15 @@ const classes = ['intro', className].filter(Boolean).join(' ');
     color: var(--color-text-muted);
   }
 
-  /* Figma garde le titre à 42px en mobile (142:1193, cadre de 393px) : à cette
-     largeur-là il passe, tout juste. Mais le système déclare son plancher à
-     320px (layout/mobile), et 42px n'y tient plus — le mot le plus long,
-     « collaborative », mesure 289px pour 272px disponibles. On descend donc d'un
-     cran, au seul point de rupture que le système connaisse. Écart signalé sur
-     /components. */
-  @media (max-width: 767px) {
+  /* Figma dessine le mobile à 42px (variante mobile de 142:1354, cadre de
+     390px) et le titre y passe : « collaborative », le mot le plus long, mesure
+     289px et tient jusqu'à 337px de large environ. En dessous il sort de
+     l'écran. Le filet est donc posé sous 360px — la largeur du plus étroit des
+     téléphones courants — et non à 767px : sur tout appareil réel, la maquette
+     s'affiche telle qu'elle est dessinée. Ce point de rupture n'est pas celui du
+     système (767px) parce qu'il ne répond pas à la même question : il ne change
+     pas de mise en page, il empêche un mot de déborder. */
+  @media (max-width: 359px) {
     .headline {
       font-size: var(--font-size-title);
     }
