@@ -11,7 +11,6 @@
 // Le composant ignore tout du site qui l'emploie : ni les études de cas, ni leurs
 // URLs, ni la page courante ne vivent ici. Tout tombe des props.
 
-import { withBase } from '../lib/url';
 import Button from './Button.astro';
 import Tag from './Tag.astro';
 
@@ -51,7 +50,7 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
         <Button
           size="lg"
           href={action.href}
-          iconEnd={withBase('/icons/arrow-right-on-accent.svg')}
+          iconEnd="arrow-narrow-right"
           style="--btn-px: var(--button-padding-x-md); --btn-icon: var(--button-icon-size-md)"
         >
           {action.label}

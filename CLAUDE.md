@@ -11,9 +11,10 @@ doit connaître un site consommateur**. Ce qui est propre à une page (liste de 
 textes, chemins d'images) se passe en props ; un composant qui connaîtrait les pages d'un site ne
 serait plus un composant.
 
-- `src/design-system/` — le système : `components/`, `layouts/`, `lib/`, et `styles/` + `data/`
-  (générés depuis `tokens/` par `npm run tokens`).
-- `src/pages/` — la doc du système, qui est aussi le site publié : `/`, `/foundations`,
+- `src/design-system/` — le système : `components/`, `layouts/`, `lib/`, `styles/` + `data/`
+  (générés depuis `tokens/` par `npm run tokens`) et `icons/` + `lib/icons.ts` (générés depuis
+  `icons/` par `npm run icons`).
+- `src/pages/` — la doc du système, qui est aussi le site publié : `/`, `/foundations`, `/icons`,
   `/components`. Elle est le premier consommateur du système, et à ce titre la première à trahir
   une régression.
 
@@ -26,13 +27,28 @@ Si une valeur paraît fausse, la correction va **dans Figma**, puis dans l'expor
 un composant. Les deux fichiers générés sont versionnés parce que `npm run dev` ne lance pas
 `npm run tokens` : un clone frais serait cassé sans eux.
 
+## Les icônes ne s'écrivent pas non plus dans le code
+
+Même contrat que les tokens, même raison. Les 11 icônes sont les composants de la page Figma
+`Icons` (`45:395`), exportés dans `icons/` **au niveau du composant et non du vecteur** — sans quoi
+la `viewBox` n'est pas celle de la frame 24 × 24, et le script refuse le fichier. `npm run icons` en
+fait `src/design-system/icons/*.svg` (nettoyés) et `src/design-system/lib/icons.ts` (le registre
+typé). Les deux sont versionnés, pour la même raison que `tokens.css`.
+
+Une icône est alors un nom, pas un chemin : `<Button icon="mail-edit">`. Le nom se vérifie à la
+compilation. Aucun `<img>`, aucune URL, donc aucun `withBase()` — et les fichiers ne portent que
+`currentColor` : c'est le contexte qui décide de la couleur. Ne jamais retoucher un SVG de
+`src/design-system/icons/` : il est régénéré. Ajouter une icône, c'est déposer l'export dans
+`icons/` et relancer.
+
 ## Les URLs absolues passent par withBase()
 
 Le site est publié sur GitHub Pages sous `/UX-design-system/`, pas à la racine d'un domaine. Astro
 applique ce préfixe au routage mais **ne réécrit pas** les URLs écrites à la main. Tout chemin absolu
 — asset de `public/` comme lien vers une page — passe donc par `withBase()`
-(`src/design-system/lib/url.ts`). Un `/icons/x.svg` laissé tel quel marche en local et donne un 404
-en ligne : c'est une erreur qui ne se voit pas en développement.
+(`src/design-system/lib/url.ts`). Un `/images/avatar.png` laissé tel quel marche en local et donne
+un 404 en ligne : c'est une erreur qui ne se voit pas en développement. Les icônes, elles, n'en
+relèvent plus : inlinées, elles n'ont pas d'URL.
 
 ## Development
 
@@ -46,6 +62,9 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 Pour vérifier ce qui sera réellement publié, c'est `npm run build && npm run preview` qu'il faut :
 le préfixe `base` ne s'observe pas autrement.
+
+`npm run check` type les fichiers `.astro`, ce que `npm run build` ne fait pas. C'est lui qui refuse
+un nom d'icône inconnu ou une prop qui n'existe pas — à lancer avant de pousser.
 
 ## Documentation
 

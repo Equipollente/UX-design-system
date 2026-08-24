@@ -15,13 +15,14 @@ le `LINKS.md` du dossier `portfolio`.
 | --- | --- | --- |
 | Foundations | Couleurs, typo, espacements, rayons, ombres — la source des tokens | [`5-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=5-2) |
 | Components | Les composants et leurs variantes | [`19-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-2) |
-| Icons | Les icônes sources | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
+| Icons | Les icônes sources — exportées dans `icons/`, générées par `npm run icons` | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
 | Templates | Les maquettes de page — hors périmètre de ce dépôt | [`9-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=9-2) |
 
 ### Composants
 
 | Composant | Nœud | Code |
 | --- | --- | --- |
+| Icon (les 11 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
 | Button (jeu de variantes) | [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) | [Button.astro](src/design-system/components/Button.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
@@ -57,6 +58,7 @@ ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 | --- | --- |
 | Sommaire | `/` |
 | Fondations | `/foundations` |
+| Icônes | `/icons` |
 | Composants | `/components` |
 
 ## Construire un lien Figma à la main

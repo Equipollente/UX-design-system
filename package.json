@@ -21,7 +21,7 @@
     "./data/tokens.json": "./src/design-system/data/tokens.json",
     "./package.json": "./package.json"
   },
-  "// files": "Ce qui part dans le paquet. public/ en est exclu : les icônes et les images sont le choix du site qui les monte, pas du système — le Nav reçoit ses chemins en props.",
+  "// files": "Ce qui part dans le paquet. Les icônes en font partie : inlinées, elles sont du code et non des assets, et un site consommateur les reçoit avec le système. public/ reste exclu — les images, elles, sont le choix du site qui les monte, et le Nav reçoit ses chemins en props.",
   "files": [
     "src/design-system"
   ],
@@ -30,13 +30,17 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run tokens && astro build",
+    "build": "npm run tokens && npm run icons && astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "astro": "astro",
-    "tokens": "node scripts/build-tokens.mjs"
+    "tokens": "node scripts/build-tokens.mjs",
+    "icons": "node scripts/build-icons.mjs"
   },
   "// devDependencies": "Astro est en devDependencies, pas en dependencies : un site qui installe le système ne doit pas se retrouver avec un second Astro dans son node_modules. La version attendue est déclarée en peerDependencies.",
   "devDependencies": {
-    "astro": "^7.2.1"
+    "@astrojs/check": "^0.9.10",
+    "astro": "^7.2.1",
+    "typescript": "^6.0.3"
   }
 }

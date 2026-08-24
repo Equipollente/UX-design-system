@@ -14,15 +14,17 @@
 // sections with whitespace. »
 
 import Button from './Button.astro';
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
 
 interface Props {
-  links: { href: string; label: string; icon?: string }[];
+  links: { href: string; label: string; icon?: IconName }[];
   /** Chemin courant. Aucun item n'est actif s'il ne correspond à aucun href. */
   current?: string;
   /** Le bouton avatar. Absent ⇒ non rendu, c'est l'état d'accueil. */
   home?: { href: string; src: string; alt: string };
   /** Le sixième bouton. Sans href ⇒ <button> inerte, à câbler par l'appelant. */
-  action?: { label: string; icon?: string; href?: string };
+  action?: { label: string; icon?: IconName; href?: string };
   /** aria-label du <nav>. */
   label?: string;
 }
@@ -49,7 +51,7 @@ const { links, current, home, action, label = 'Navigation principale' } = Astro.
         links.map(({ href, label: text, icon }) => (
           <li>
             <a class="tab" href={href} aria-current={href === current ? 'page' : undefined}>
-              {icon && <img class="tab-icon" src={icon} alt="" aria-hidden="true" />}
+              {icon && <Icon name={icon} class="tab-icon" />}
               <span>{text}</span>
             </a>
           </li>
@@ -213,10 +215,7 @@ const { links, current, home, action, label = 'Navigation principale' } = Astro.
   }
 
   .tab-icon {
-    flex: none;
-    width: var(--button-icon-size-md);
-    height: var(--button-icon-size-md);
-    object-fit: contain;
+    --icon-size: var(--button-icon-size-md);
   }
 
   .nav-action {

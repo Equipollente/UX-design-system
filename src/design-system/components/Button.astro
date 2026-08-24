@@ -13,20 +13,29 @@
 // supplémentaire. C'est ce que font le Nav pour son bouton d'action et le
 // Carousel pour ses flèches, que Figma pose sur color.bg.default.
 //
-// Les icônes sont des <img> : elles portent leur couleur, elles n'héritent pas
-// de currentColor. D'où deux fichiers pour la même flèche dans public/icons/ —
-// arrow-right.svg pour un fond clair, arrow-right-on-accent.svg pour l'accent.
+// Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
+// bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
+// en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
+
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
 
 interface Props {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
-  /** Chemin d'une icône dans public/icons/. Posée avant le label. */
-  icon?: string;
+  /** Nom d'une icône du système. Posée avant le label. */
+  icon?: IconName;
   /** Idem, mais posée après le label. */
-  iconEnd?: string;
+  iconEnd?: IconName;
   type?: 'button' | 'submit';
   class?: string;
+  /**
+   * La surcharge ponctuelle décrite plus haut : --btn-bg, --btn-px, --btn-icon…
+   * Déclarée parce qu'elle fait partie du contrat — le Nav, le Carousel et
+   * l'en-tête d'étude de cas s'en servent tous les trois.
+   */
+  style?: string;
 }
 
 const {
@@ -45,9 +54,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
 ---
 
 <Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
-  {icon && <img class="btn-icon" src={icon} alt="" aria-hidden="true" />}
+  {icon && <Icon name={icon} />}
   <slot />
-  {iconEnd && <img class="btn-icon" src={iconEnd} alt="" aria-hidden="true" />}
+  {iconEnd && <Icon name={iconEnd} />}
 </Tag>
 
 <style>
@@ -59,6 +68,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     min-width: var(--btn-min-w);
     padding: 0 var(--btn-px);
     gap: var(--btn-gap);
+    /* La taille d'icône descend par héritage jusqu'au <svg> : le bouton n'a pas à
+       viser l'icône, et Icon n'a pas à connaître le bouton. */
+    --icon-size: var(--btn-icon);
     background: var(--btn-bg);
     border: 1px solid transparent;
     border-radius: var(--button-radius);
@@ -104,14 +116,20 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-bg: var(--color-accent-500);
     --btn-bg-hover: var(--color-accent-600);
     --btn-bg-active: var(--color-accent-700);
+    --icon-color: var(--color-neutral-100);
     color: var(--color-text-on-accent);
   }
 
+  /* L'encre, pas l'accent — comme Figma. Le libellé fait 14 px : le seuil WCAG est
+     4,5:1, et l'accent tombe à 3,31:1 sur le fond d'appui. La description de
+     color.text.accent le disait déjà, « safe at body size (7.00:1 on the ground) » :
+     sur la brume lavande du secondaire, on n'est plus sur le blanc.
+     L'icône suit le libellé — Figma la lie à color/neutral/900, la même encre. */
   .btn-secondary {
     --btn-bg: var(--color-bg-surface);
     --btn-bg-hover: var(--color-accent-100);
     --btn-bg-active: var(--color-accent-200);
-    color: var(--color-text-accent);
+    color: var(--color-text-default);
     border-color: var(--color-border-default);
   }
 
@@ -130,15 +148,5 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
   .btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;
-  }
-
-  /* Les SVG exportés de Figma portent leur taille naturelle (~22px) et un
-     débord de contour. On les centre dans une boîte à la taille du token
-     plutôt que de les étirer. */
-  .btn-icon {
-    flex: none;
-    width: var(--btn-icon);
-    height: var(--btn-icon);
-    object-fit: contain;
   }
 </style>

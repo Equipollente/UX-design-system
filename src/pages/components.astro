@@ -18,13 +18,13 @@ const buttonSizes = ['sm', 'md', 'lg'] as const;
 // page. Les libellés sont ceux d'un site réel — un Nav se juge sur des mots de
 // vraie longueur, pas sur des « Item 1 ».
 const demoLinks = [
-  { href: '#projets', label: 'Projets', icon: withBase('/icons/box-plus.svg') },
-  { href: '#how-i-work', label: 'How I work', icon: withBase('/icons/route.svg') },
-  { href: '#about', label: 'About me', icon: withBase('/icons/circle-face.svg') },
-  { href: '#cv', label: 'CV', icon: withBase('/icons/file-text.svg') },
+  { href: '#projets', label: 'Projets', icon: 'box-plus' as const },
+  { href: '#how-i-work', label: 'How I work', icon: 'route' as const },
+  { href: '#about', label: 'About me', icon: 'circle-face-content' as const },
+  { href: '#cv', label: 'CV', icon: 'file-text' as const },
 ];
 
-const demoAction = { label: "Let's chat", icon: withBase('/icons/mail-edit.svg') };
+const demoAction = { label: "Let's chat", icon: 'mail-edit' as const };
 
 // Les props sont recopiées des interface Props des composants. Une seule
 // définition existe dans le projet : celle du composant.
@@ -32,7 +32,7 @@ const buttonProps = [
   ['variant', `'primary' | 'secondary'`, 'primary', 'Primary porte l’action principale ; une seule par vue.'],
   ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
   ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
-  ['icon', 'string', '—', 'Chemin dans public/icons/. Posée avant le label.'],
+  ['icon', 'IconName', '—', 'Nom d’une icône du système. Posée avant le label.'],
   ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
@@ -145,7 +145,7 @@ const caseStudyDemo = {
         <div class="btn-row">
           {
             buttonSizes.map((size) => (
-              <Button size={size} icon={withBase('/icons/mail-edit.svg')}>
+              <Button size={size} icon="mail-edit">
                 Bouton {size}
               </Button>
             ))
@@ -195,10 +195,10 @@ const caseStudyDemo = {
       </p>
 
       <p class="section-note">
-        <strong>Les icônes sont des <code>&lt;img&gt;</code></strong> : elles portent leur couleur, elles
-        n'héritent pas de <code>currentColor</code>. D'où deux fichiers pour la même flèche dans
-        <code>public/icons/</code> — <code>arrow-right.svg</code> pour un fond clair,
-        <code>arrow-right-on-accent.svg</code> pour l'accent.
+        <strong>L'icône prend la couleur du bouton</strong>, parce qu'elle est inlinée et ne connaît que
+        <code>currentColor</code>. <code>icon</code> et <code>iconEnd</code> attendent un nom du registre,
+        pas un chemin : la même flèche sert au primaire et au secondaire. Le jeu complet est sur
+        <a href={withBase('/icons')}>Icônes</a>.
       </p>
 
       <p class="flag">

@@ -13,7 +13,6 @@
 // le HTML et c'est le script qui les révèle. Deux flèches inertes seraient un
 // mensonge, alors que la piste, elle, marche sans JavaScript.
 
-import { withBase } from '../lib/url';
 import Button from './Button.astro';
 
 interface Props {
@@ -52,14 +51,14 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
   <div class="nav" data-carousel-nav hidden>
     <Button
       variant="secondary"
-      icon={withBase('/icons/arrow-left.svg')}
+      icon="arrow-narrow-left"
       aria-label="Image précédente"
       data-carousel-prev
       style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
     />
     <Button
       variant="secondary"
-      icon={withBase('/icons/arrow-right.svg')}
+      icon="arrow-narrow-right"
       aria-label="Image suivante"
       data-carousel-next
       style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
