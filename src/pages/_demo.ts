@@ -70,30 +70,17 @@ export const caseStudyDemo = {
   action: { label: 'Read the story', href: `#${projectsAnchor}` },
 };
 
-// La pile. Figma ne dessine qu'une seule étude : sa « Case-Study Card2 » (222:831)
-// est une copie de la première, un emplacement et non un second contenu. Les deux
-// suivantes sont donc des remplissages, titrés autrement pour qu'on voie qu'une
-// carte en recouvre une autre — c'est ce que la démo doit prouver.
+// La pile. Figma ne dessine qu'une seule étude : sa « Case-Study Card2 »
+// (222:831) est une copie de la première — un emplacement, pas un second
+// contenu. Le code fait pareil et répète Rubika.
 //
-// Elles réutilisent les mêmes vignettes, et gardent leurs alt tels quels : un alt
-// décrit l'image, pas la carte qui la porte. Le réécrire pour coller au faux titre
-// serait une description fausse.
+// Il ne faut surtout pas inventer ici des missions au nom d'entreprises réelles.
+// Cette page est publiée, rien à l'écran ne distinguerait un remplissage d'une
+// vraie étude de cas, et « Read the story » invite à cliquer. Trois exemplaires
+// du même projet suffisent à montrer ce que la pile doit montrer : une carte qui
+// en recouvre une autre, et un ajout qui n'est qu'une ligne de données.
 export const caseStudies = [
   { ...caseStudyDemo, images: caseStudyImages },
-  {
-    ...caseStudyDemo,
-    eyebrow: '2024 - Sopra Steria',
-    title: 'Turning a support backlog into a discovery pipeline',
-    impact: 'Fewer duplicate tickets — Faster triage • Support and product finally reading the same signal',
-    tags: ['Diary Study', 'Service Blueprint', 'Opportunity Mapping'],
-    images: caseStudyImages,
-  },
-  {
-    ...caseStudyDemo,
-    eyebrow: '2023 - Orange',
-    title: 'A design system nobody had to be convinced to use',
-    impact: 'Adoption without a mandate — One vocabulary • Accessibility stopped being a late review',
-    tags: ['Component Audit', 'Contribution Model', 'Accessibility Review'],
-    images: caseStudyImages,
-  },
+  { ...caseStudyDemo, images: caseStudyImages },
+  { ...caseStudyDemo, images: caseStudyImages },
 ];
