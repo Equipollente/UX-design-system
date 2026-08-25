@@ -143,11 +143,21 @@ portfolio, pas supposé — et le gabarit portait le même défaut.
 
 ## En mobile, la pile redevient une liste et passe *sous* la nav
 
-Sous 768 px les couches sont `static`, donc hors de tout positionnement : la nav de la page leur
-passe devant et reste atteignable. C'est l'écart assumé avec le desktop — sur un téléphone, un
-en-tête recouvert ne se rattraperait qu'en remontant toute la page.
+Sous 768 px les couches sont `static` : les cartes se suivent dans le flux, et la nav leur passe
+devant. C'est l'écart assumé avec le desktop — sur un téléphone, un en-tête recouvert ne se
+rattraperait qu'en remontant toute la page.
 
-`← b9f0ff8`
+Le mécanisme, lui, a changé depuis : la barre ne passe plus devant *parce que* les couches sont
+`static`, mais parce qu'elle écrit son propre rang — le seul `z-index` du système, qui vaut des deux
+côtés du point de rupture. Déduire l'ordre d'empilement du positionnement des couches était fragile,
+et c'était un effet de bord, pas une règle.
+
+Et la raison du repli n'est plus celle qui avait été écrite ici. Mesurée le 2026-08-25 : ce n'est pas
+qu'une carte pleine hauteur serait illisible, c'est que l'en-tête occupe 55 à 70 % d'un écran de
+téléphone et qu'il ne reste alors plus rien à rendre au carrousel. Le détail est dans le `.flag` de
+/components → Case Study List.
+
+`← b9f0ff8`, puis `← 14f0468`
 
 ## La doc ne style que `main > section`
 

@@ -1012,11 +1012,11 @@ const caseStudyListVars = [
         cesse, et c'est là où la pile s'arrête.
       </p>
       <p>
-        En mobile, <code>display: contents</code> efface ce bloc de la mise en page sans toucher au
-        DOM : la nav et l'intro deviennent enfants de <code>.home-deck</code>. L'intro reprend alors
-        sa place dans le flux et défile, tandis que la nav — qui se colle désormais elle-même — tient
-        le haut de l'écran sur toute la hauteur de la pile. Dans le bloc, elle se serait décollée à
-        la fin de l'intro.
+        En mobile, c'est <code>.home-first</code> qui cesse d'être une couche — <code>static</code>,
+        pas <code>display: contents</code>. Resté collé, il se peindrait par-dessus les cartes, qui
+        sont ici hors de tout positionnement. L'intro reprend donc sa place dans le flux et défile ;
+        la nav, elle, ne relève plus de ce bloc : elle porte son propre collage et son propre rang,
+        les mêmes des deux côtés du point de rupture.
       </p>
       <p>
         Une dernière règle, et elle ne se devine pas : <strong>le bloc qui suit la pile doit être
