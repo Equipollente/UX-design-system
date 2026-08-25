@@ -477,11 +477,7 @@ const caseStudyListVars = [
 .home       { --fold-peek: 90px; }
 .home-first { position: sticky;
               top: var(--nav-height);
-              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }
-
-@media (max-width: 767px) {
-  .home-first { position: static; height: auto; }
-}`}</code></pre>
+              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }`}</code></pre>
       <p>
         <code>top: var(--nav-height)</code> et non <code>0</code> : sinon l'intro glisserait derrière
         une barre qui n'a pas de fond pendant les cent premiers pixels, avant que le masquage ne
@@ -999,11 +995,7 @@ const caseStudyListVars = [
 .home-deck  { }   /* le premier écran + la pile, et rien d'autre */
 .home-first { position: sticky;
               top: var(--nav-height);
-              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }
-
-@media (max-width: 767px) {
-  .home-first { position: static; height: auto; }
-}`}</code></pre>
+              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }`}</code></pre>
       <p>
         Une <em>hauteur</em>, et non un plancher : c'est elle qui garantit le liseré à toute
         hauteur d'écran. Avec <code>min-height</code>, un contenu un peu grand pousse le bloc et mange
@@ -1018,11 +1010,15 @@ const caseStudyListVars = [
         cesse, et c'est là où la pile s'arrête.
       </p>
       <p>
-        En mobile, c'est <code>.home-first</code> qui cesse d'être une couche — <code>static</code>,
-        pas <code>display: contents</code>. Resté collé, il se peindrait par-dessus les cartes, qui
-        sont ici hors de tout positionnement. L'intro reprend donc sa place dans le flux et défile ;
-        la nav, elle, ne relève plus de ce bloc : elle porte son propre collage et son propre rang,
-        les mêmes des deux côtés du point de rupture.
+        <strong>Une seule variante mobile subsiste, et elle n'est pas dans le composant : elle est
+        ici.</strong> Sous 768px, la pile s'empile toujours, mais le premier écran cesse d'être une
+        couche — <code>position: static; height: auto</code>. La raison est mesurée : l'intro réclame
+        <code>701px</code> dans une colonne de 390, où le titre se replie sur sept lignes, quand le
+        premier écran n'en offre que <code>498</code>. En couche, 203px passaient sous la carte — la
+        fin du titre, la description et le bouton n'étaient jamais visibles. Le liseré tenait, l'intro
+        non ; c'est donc le liseré qui cède. L'intro défile entière, puis les cartes s'empilent à la
+        suite, et la première n'affleure plus sous elle. La nav, elle, ne relève pas de ce bloc :
+        elle porte son propre collage et son propre rang, les mêmes à toutes les largeurs.
       </p>
       <p>
         Une dernière règle, et elle ne se devine pas : <strong>le bloc qui suit la pile doit être
@@ -1149,31 +1145,26 @@ const caseStudyListVars = [
         Sans cette prop, la pile fonctionne mais le bouton de l'intro reste dans l'ordre de
         tabulation derrière une carte opaque.
         <br />
-        <strong>En mobile, la nav ne se laisse pas recouvrir.</strong> L'intro défile avec la page,
-        la nav tient le haut de l'écran — mais les cartes lui passent <em>dessous</em>, pas dessus.
-        C'est l'écart assumé avec le desktop : les couches y sont <code>position: static</code>, donc
-        hors de tout positionnement, et un élément positionné se peint devant un élément qui ne l'est
-        pas. Sur un téléphone, un en-tête recouvert ne serait plus atteignable qu'en remontant toute
-        la page, et c'est le format où l'on en a le plus besoin.
-        <br />
-        C'est aussi la seule chose que la géométrie seule ne saurait pas trancher — elle dit qui est
-        arrivé en haut, jamais qui est peint devant. D'où le garde-fou du script : il ne pose
-        <code>inert</code> que si les cartes se collent réellement.
+        <strong>Les cartes s'empilent à toutes les largeurs</strong>, et passent sous la nav, qui
+        écrit son propre rang et le garde des deux côtés. Sur téléphone en revanche, le premier écran
+        n'est pas une couche : l'intro n'y tient pas, et <code>covers</code> n'a alors rien à rendre
+        inerte puisque rien ne la recouvre — elle défile normalement. Voir plus bas.
       </p>
 
       <p class="flag">
-        <strong>Le mobile reste une liste, mais l'obstacle vient de tomber.</strong> Sous 768px, la
-        pile se défait : les cartes se suivent sous l'intro, sans rien qui bouge. Ce n'est pas le
-        recouvrement au pouce qui gêne — c'est que <strong>le contrat de la carte se retournait à
-        cette largeur</strong>. « L'en-tête est le point fixe, le carrousel prend ou rend la place »
-        vaut à 1200px, où l'en-tête est compact ; dans une colonne de 390 il mesurait
-        <code>361px</code>, soit 55% de l'écran, et la carte réclamait <code>753px</code>. Le
-        carrousel payait seul : sa vignette tombait à 147px sur une fenêtre de 660, à 13px sur les
-        553 d'un petit iPhone.
+        <strong>Le mobile n'est pas dessiné, et la pile s'y empile quand même.</strong> Il n'y a plus
+        de cas mobile dans ce composant — une seule règle vaut à toutes les largeurs, et le système a
+        une bascule de moins. Ça n'a pas toujours été vrai, et l'histoire tient en deux mesures.
         <br />
-        <strong>Effacer les tags a rendu 132px.</strong> L'en-tête retombe à <code>229px</code> —
-        30 à 46% de l'écran selon l'appareil — et la carte ne réclame plus que <code>621px</code>,
-        c'est-à-dire moins que la plupart des téléphones :
+        La pile se défaisait sous 768px parce que <strong>le contrat de la carte se retournait à cette
+        largeur</strong>. « L'en-tête est le point fixe, le carrousel prend ou rend la place » vaut à
+        1200px, où l'en-tête est compact ; dans une colonne de 390 il mesurait <code>361px</code>,
+        soit 55% de l'écran, et la carte réclamait <code>753px</code>. Le carrousel payait seul : sa
+        vignette tombait à 147px sur une fenêtre de 660, à 13px sur les 553 d'un petit iPhone.
+        <br />
+        <strong>Effacer les tags a rendu 132px</strong>, et tout a basculé. L'en-tête retombe à
+        <code>229px</code> — 30 à 46% de l'écran selon l'appareil — et la carte ne réclame plus que
+        <code>621px</code>, c'est-à-dire moins que la plupart des téléphones :
       </p>
 
       <div class="table-scroll">
@@ -1198,12 +1189,36 @@ const caseStudyListVars = [
         contrainte du tout. Seul le petit iPhone serre encore, et il serre honnêtement — 144px de
         vignette, pas 13.
         <br />
-        <strong>Le repli tient donc pour l'instant par prudence, non par nécessité.</strong> La
-        question de l'empilement mobile est rouverte, et elle se tranchera sur un appareil réel : la
-        couche est en <code>svh</code>, or la barre d'URL se rétracte au défilement et rend 60 à 90px
-        que la carte ne reprend pas — le liseré vaudrait 90 en haut de page et ~160 en lecture. C'est
-        la seule inconnue qui reste. Ce qui manque encore côté maquette est écrit dans
-        <code>arbitrages.md</code>.
+        <strong>Reste un écart, et c'est le seul du système où une mesure de dessin n'est pas
+        constante.</strong> La couche fait <code>100svh</code>, c'est-à-dire la hauteur d'écran
+        <em>barre d'URL visible</em> — la plus petite des deux que donne un téléphone. Quand la barre
+        se rétracte au défilement, l'écran grandit de 60 à 90px et la carte ne bouge pas : le liseré
+        vaut <code>90px</code> au chargement et <code>~160px</code> en lecture, et il repasse à 90 si
+        l'on remonte. Aucun émulateur ne le montre — cette barre ne se rétracte que sur un appareil
+        réel.
+        <br />
+        <code>100dvh</code> rendrait le liseré constant, au prix d'une couche qui se redimensionne à
+        chaque glissement de la barre : l'en-tête étant le point fixe, c'est le carrousel qui
+        grandirait et rétrécirait de ~70px, à chaque arrêt et à chaque reprise. Une carte qui ne
+        tremble jamais a été jugée préférable à un liseré constant. La bascule reste d'une ligne si
+        l'usage dit le contraire.
+      </p>
+
+      <p class="flag">
+        <strong>Sur téléphone, le premier écran n'est pas une couche — et c'est l'intro qui l'impose.</strong>
+        La pile s'empile partout, mais le bloc qu'elle recouvre reprend sa place dans le flux sous
+        768px. Mesuré : l'intro réclame <code>701px</code> dans une colonne de 390, où le titre se
+        replie sur sept lignes, quand le premier écran n'en offre que <code>498</code>
+        (660 − 90 − 72). En couche, <strong>203px passaient sous la première carte</strong> — la fin
+        du titre, la description et le bouton n'étaient jamais visibles.
+        <br />
+        La consigne « une hauteur et non un plancher » suppose que le contenu tient dans l'écran. Sur
+        téléphone il n'y tient pas, et il faut alors choisir qui cède : c'est le liseré, pas l'intro.
+        Conséquence assumée — la première carte n'affleure plus sous l'intro au chargement, elle
+        arrive quand on descend. Le jour où Figma dessine une intro mobile qui tient dans 498px,
+        cette dernière bascule disparaît et le premier écran redevient une couche partout. C'est le
+        seul cas mobile qui subsiste dans tout le système, et il vit dans la page, pas dans le
+        composant.
       </p>
     </section>
   </main>

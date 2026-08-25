@@ -161,38 +161,25 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
      traverse l'écran sans s'arrêter — c'est à la page d'y répondre, pas au
      composant d'inventer un vide. */
 
-  /* Sous 768px, la pile redevient une liste : les cartes se suivent, sous
-     l'intro, sans rien qui bouge.
-     La raison est mesurée, et elle n'est pas celle qu'on croit : ce n'est pas le
-     recouvrement qui gêne au pouce, c'est que le contrat de la carte se
-     retournait à cette largeur. « L'en-tête est le point fixe, le carrousel
-     prend ou rend la place » tient à 1200px, où l'en-tête est compact ; dans une
-     colonne de 390 il occupait 361px — plus de la moitié de l'écran — et la
-     carte réclamait 753px. Le carrousel payait seul : vignette à 147px sur une
-     fenêtre de 660, 13px sur les 553 d'un petit iPhone.
-     Effacer les tags a rendu 132px. L'en-tête retombe à 229px et la carte à
-     621px, moins que la plupart des téléphones : à 760 le carrousel retrouve
-     même les 411px du desktop. Le repli tient donc pour l'instant par prudence
-     et non par nécessité — la question est rouverte, et la seule inconnue qui
-     reste est la barre d'URL, qui rend 60 à 90px que la carte en svh ne reprend
-     pas. Elle se tranche sur un appareil réel. Tableau complet sur /components.
-     Le point de rupture reste celui du système, 767px, et lui seul. */
-  @media (max-width: 767px) {
-    .layer {
-      /* `static` : la couche cesse d'être un élément positionné et reprend sa
-         place dans le flux. Ce n'est plus elle qui décide de l'ordre
-         d'empilement — une barre collée écrit son rang, et passe devant des deux
-         côtés du point de rupture. C'était l'inverse avant, et c'était fragile :
-         la nav ne passait devant que par effet de bord de ce `static`. */
-      position: static;
-      height: auto;
-      --card-height: auto;
-    }
-
-    .layer + .layer {
-      margin-top: 0;
-    }
-  }
+  /* Il n'y a pas de cas mobile, et c'est récent. La pile se défaisait sous
+     768px : les cartes se suivaient dans le flux, sans rien qui bouge. La raison
+     était que le contrat de la carte se retournait à cette largeur — « l'en-tête
+     est le point fixe, le carrousel prend ou rend la place » tient à 1200px, où
+     l'en-tête est compact, mais dans une colonne de 390 il occupait 361px, plus
+     de la moitié de l'écran. La carte réclamait 753px et le carrousel payait
+     seul : vignette à 13px sur un petit iPhone.
+     Effacer les tags sous 768px a rendu 132px. L'en-tête retombe à 229px, la
+     carte à 621px — moins que la plupart des téléphones — et à 760 le carrousel
+     retrouve même les 411px du desktop. Le repli n'avait plus de raison d'être,
+     donc il n'existe plus : une seule règle vaut à toutes les largeurs, et le
+     système a une bascule de moins.
+     Une réserve, et elle ne se voit que sur un appareil réel : la couche est en
+     svh, donc dimensionnée sur l'écran barre d'URL visible. Quand la barre se
+     rétracte au défilement, l'écran grandit de 60 à 90px et la carte ne bouge
+     pas — le liseré vaut 90 au chargement et ~160 en lecture. C'est le seul
+     endroit du système où une mesure de dessin n'est pas constante. dvh le
+     rendrait constant au prix d'un carrousel qui respire à chaque glissement de
+     la barre ; l'arbitrage est écrit sur /components. */
 </style>
 
 <script>
@@ -215,14 +202,12 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
     if (couches.length < 2) continue;
 
     const appliquer = () => {
-      // Sous 768px, le CSS décolle les couches : elles défilent alors normalement,
-      // et aucune n'en recouvre une autre.
-      // Marquer `inert` ce qui est encore visible masquerait la moitié de la page
-      // — c'est le seul cas où la géométrie seule se tromperait, parce qu'elle ne
-      // dit pas qui est peint devant qui. On interroge la dernière couche, qui est
-      // toujours une carte : la première peut être le bloc de la page, dont le
-      // composant ne connaît pas les règles.
-      const empilé = getComputedStyle(couches[couches.length - 1]).position === 'sticky';
+      // Il n'y a plus de garde ici. Il en existait un — vérifier que les couches
+      // se collent vraiment avant de marquer quoi que ce soit — parce que sous
+      // 768px le CSS les décollait, et que marquer `inert` ce qui reste visible
+      // masquerait la moitié de la page. Les couches sont désormais collées à
+      // toutes les largeurs : la branche n'était plus atteignable, et un garde
+      // qu'on ne peut plus déclencher ment sur ce que le composant fait.
 
       // Toutes les mesures d'abord, les écritures ensuite : écrire entre deux
       // lectures forcerait un recalcul de mise en page à chaque couche.
@@ -237,7 +222,7 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
       // collée et la précédente il y a zéro, entre une couche qui affleure et
       // elle il y a presque un écran.
       couches.forEach((couche, i) => {
-        const recouverte = empilé && i < couches.length - 1 && hauts[i + 1] - hauts[i] < 2;
+        const recouverte = i < couches.length - 1 && hauts[i + 1] - hauts[i] < 2;
         couche.toggleAttribute('inert', recouverte);
       });
     };

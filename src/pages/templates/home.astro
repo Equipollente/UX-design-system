@@ -203,40 +203,53 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
   }
 
   /* Sous ~690px de fenêtre, l'intro ne tient plus dans son écran moins le liseré :
-     il lui faut 513px, plus les 88 de la barre et le liseré. C'est le liseré qui
-     gagne — la consigne est qu'il tienne à toute hauteur — donc c'est l'intro qui
-     se resserre : son grand écart interne retombe à space.xl, ce qui lui rend
-     40px et la fait tenir jusqu'à ~651px. En dessous, elle dépasse par le bas, où
-     la carte la recouvre — et en fin de page, où il n'y a plus de carte, c'est
+     il lui faut 513px, plus --nav-height et le liseré. C'est le liseré qui gagne
+     — la consigne est qu'il tienne à toute hauteur — donc c'est l'intro qui se
+     resserre : son grand écart interne retombe à space.xl, ce qui lui rend 40px
+     et la fait tenir jusqu'à ~651px. En dessous, elle dépasse par le bas, où la
+     carte la recouvre — et en fin de page, où il n'y a plus de carte, c'est
      .after qui la recouvre.
-     Ce seuil est dérivé de --fold-peek : il suit le liseré pixel pour pixel, et
-     doit être recalculé si celui-ci change. */
+     Le nombre 690 est calculé sur les 88px de --nav-height en desktop. En mobile
+     la barre n'en fait que 72, donc le seuil se déclenche une quinzaine de pixels
+     trop tôt : l'intro se resserre avant d'en avoir besoin. C'est le bon côté de
+     l'erreur, et un seuil par largeur coûterait plus qu'il ne rapporte — mais ce
+     seuil, longtemps théorique, est devenu le cas courant depuis que la pile
+     s'empile aussi sur téléphone, où l'écran passe rarement 690.
+     Il est dérivé de --fold-peek : il suit le liseré pixel pour pixel, et doit
+     être recalculé si celui-ci change. */
   @media (max-height: 690px) {
     .intro-slot {
       --intro-gap: var(--space-xl);
     }
   }
 
-  /* Sous 768px, la pile redevient une liste : le premier écran cesse d'être une
-     couche et reprend sa place dans le flux, l'intro entière, puis les cartes à
-     la suite. C'est le même point de rupture que celui de CaseStudyList — les
-     deux décrivent la même bascule, chacun de son côté. */
+  /* Sous 768px, la pile s'empile toujours — mais le premier écran cesse d'être
+     une couche. C'est la seule bascule mobile qui reste, et elle est mesurée :
+     l'intro réclame 701px dans une colonne de 390, où le titre se replie sur
+     sept lignes, alors que le premier écran n'en offre que 498 (660 − 90 − 72).
+     En couche, 203px passaient sous la carte : la fin du titre, la description
+     et le bouton n'étaient jamais visibles. Le liseré tenait, l'intro non.
+     La consigne « une hauteur et non un plancher » vaut donc tant que le contenu
+     tient dans l'écran. Sur téléphone il n'y tient pas, et c'est le liseré qui
+     cède plutôt que l'intro : le bloc reprend sa place dans le flux, l'intro
+     défile entière, puis les cartes s'empilent à la suite. La première n'affleure
+     plus sous l'intro — elle arrive quand on descend.
+     `static` et non `display: contents` : resté collé, le bloc se peindrait
+     par-dessus les cartes. Le rendre au flux est le seul geste.
+     Le jour où Figma dessine une intro mobile qui tient dans 498px, cette
+     bascule disparaît et le premier écran redevient une couche partout. Écrit
+     sur /components. */
   @media (max-width: 767px) {
-    /* La barre étant sortie du bloc, il n'y a plus rien à en libérer : il suffit
-       qu'il cesse d'être une couche. `static` et non `display: contents` — resté
-       collé, il se peindrait par-dessus les cartes, qui sont ici hors de tout
-       positionnement. L'intro reprend donc sa place dans le flux et défile ;
-       seule la nav reste, et elle y reste de la même façon qu'ailleurs. */
     .home-first {
       position: static;
       height: auto;
     }
 
     .intro-slot {
-      /* Le liseré n'a plus de sens quand rien ne s'empile, mais l'écart que
-         Figma pose entre l'intro et la liste (209:2383), lui, en garde : c'est
-         le même nombre, et sans lui la première carte vient coller au bouton de
-         l'intro. */
+      /* Le liseré n'a plus de sens quand le premier écran n'est plus une couche,
+         mais l'écart que Figma pose entre l'intro et la liste (209:2383), lui, en
+         garde : c'est le même nombre, et sans lui la première carte vient coller
+         au bouton de l'intro. */
       padding-bottom: var(--fold-peek);
     }
 
