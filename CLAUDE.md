@@ -9,9 +9,14 @@ composant s'ajoute.
 Il ne détient aucune valeur — il dit où aller et dans quel ordre. Voir
 [atelier/README.md](atelier/README.md).
 
-Une intervention se demande en **brief** — quatre lignes, gabarit dans
-[atelier/brief.md](atelier/brief.md). Un brief s'exécute sans question de retour : la ligne
-`FIGMA` dit s'il faut lire le fichier, attendre un dessin, ou écrire un écart.
+Une intervention se demande en **brief** — gabarit dans [atelier/brief.md](atelier/brief.md).
+Ses sept lignes ne décrivent pas le travail : chacune ferme une vérification qu'il faudrait faire
+de toute façon, plus cher. `OBJET` évite de traduire des mots en fichiers, `POUR QUI` dit s'il faut
+intégrer et sous quelle forme, `FIGMA` dit où est la vérité.
+
+L'ordre de lecture compte autant que le brief : les vérifications bon marché — l'arbre, l'objet, le
+périmètre, la source — passent **avant** toute lecture longue, et la section de doc d'un composant
+se lit avant son fichier.
 
 **Avant d'intervenir sur le système**, lire la procédure correspondante. Si aucune ne correspond,
 faire — et n'en écrire une que si le geste se répétera. Même politique que les variantes.
