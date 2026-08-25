@@ -3,6 +3,22 @@
 Fichier Figma, nœuds des composants, variables : [LINKS.md](LINKS.md). À tenir à jour quand un
 composant s'ajoute.
 
+## L'atelier
+
+`atelier/` tient les gestes : ajouter un composant, en modifier un, ajouter une icône ou un token.
+Il ne détient aucune valeur — il dit où aller et dans quel ordre. Voir
+[atelier/README.md](atelier/README.md).
+
+**Avant d'intervenir sur le système**, lire la procédure correspondante. Si aucune ne correspond,
+faire — et n'en écrire une que si le geste se répétera. Même politique que les variantes.
+
+**Une procédure ne se met pas à jour par précaution.** Elle gagne une ligne quand un détour a été
+payé : quelque chose qu'on aurait voulu savoir avant de commencer. Sinon on n'y touche pas.
+
+Un arbitrage structurant s'ajoute à `atelier/decisions.md` ; un écart qui appelle un geste dans
+Figma, à `atelier/arbitrages.md`. Le reste du récit reste dans les messages de commit, qui le
+portent déjà — **il n'y a pas de journal à tenir.**
+
 ## Ce qu'est ce dépôt
 
 Le design system de Judith Heckmann, et rien d'autre. Les sites qui le consomment — à commencer par
