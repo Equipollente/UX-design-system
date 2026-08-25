@@ -163,22 +163,20 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
 
   /* Sous 768px, la pile redevient une liste : les cartes se suivent, sous
      l'intro, sans rien qui bouge.
-     La raison est mesurée, et elle n'est pas celle qu'on croit. Ce n'est pas le
-     recouvrement qui gêne au pouce : c'est que le contrat de la carte se
-     retourne à cette largeur. « L'en-tête est le point fixe, le carrousel prend
-     ou rend la place » tient à 1200px, où l'en-tête est compact ; dans une
-     colonne de 390 il occupe 361px — titre, impact, bouton, et trois tags qui se
-     replient sur trois lignes — soit plus de la moitié de l'écran. La carte
-     réclame alors 753px et le carrousel paie tout ce qui manque : sa vignette
-     tombe à 147px sur une fenêtre de 660, à 13px sur les 553 d'un petit iPhone,
-     où le bouton sort de l'écran. Il n'y a plus rien à rendre.
-     C'est donc bien la hauteur qui décide, mais un seuil de hauteur tomberait
-     mal : l'équilibre est à 753px, au milieu des téléphones courants — deux
-     appareils voisins divergeraient. Le point de rupture reste celui du système,
-     767px, et lui seul.
-     Figma ne dessine pas ce cas, et il faudrait qu'il le dessine : la
-     composition de l'en-tête sur téléphone est une décision de dessin, pas de
-     code. Écrit dans atelier/arbitrages.md. */
+     La raison est mesurée, et elle n'est pas celle qu'on croit : ce n'est pas le
+     recouvrement qui gêne au pouce, c'est que le contrat de la carte se
+     retournait à cette largeur. « L'en-tête est le point fixe, le carrousel
+     prend ou rend la place » tient à 1200px, où l'en-tête est compact ; dans une
+     colonne de 390 il occupait 361px — plus de la moitié de l'écran — et la
+     carte réclamait 753px. Le carrousel payait seul : vignette à 147px sur une
+     fenêtre de 660, 13px sur les 553 d'un petit iPhone.
+     Effacer les tags a rendu 132px. L'en-tête retombe à 229px et la carte à
+     621px, moins que la plupart des téléphones : à 760 le carrousel retrouve
+     même les 411px du desktop. Le repli tient donc pour l'instant par prudence
+     et non par nécessité — la question est rouverte, et la seule inconnue qui
+     reste est la barre d'URL, qui rend 60 à 90px que la carte en svh ne reprend
+     pas. Elle se tranche sur un appareil réel. Tableau complet sur /components.
+     Le point de rupture reste celui du système, 767px, et lui seul. */
   @media (max-width: 767px) {
     .layer {
       /* `static` : la couche cesse d'être un élément positionné et reprend sa

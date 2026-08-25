@@ -17,10 +17,14 @@ trois familles, et une seule entre :
 | Explique une décision du code | « le premier écran est une couche », « le carrousel n'accepte que des images » | reste dans son `.flag` |
 
 **Une famille n'est pas un sort définitif.** « Le mobile n'est pas dessiné » a longtemps expliqué une
-décision du code, et vient de passer dans le tableau ci-dessous : le jour où la mesure montre que le
-code ne peut plus trancher seul — ici, que l'en-tête mange 55 à 70% d'un écran de téléphone et qu'il
-n'existe aucun seuil honnête — l'absence de dessin cesse d'être un choix assumé et devient un
+décision du code, et vient de passer dans le tableau ci-dessous. Le jour où la mesure montre que le
+code ne peut plus trancher seul, l'absence de dessin cesse d'être un choix assumé et devient un
 manque. C'est le seul chemin d'une famille à l'autre, et il se fait dans ce sens.
+
+Cet écart-là s'est d'ailleurs déplacé deux fois en un jour, ce qui est la meilleure défense de la
+méthode : la mesure a d'abord montré un en-tête à 55 % de l'écran, donc un empilement mobile
+intenable ; puis la maquette a effacé les tags, l'en-tête est retombé à 35 %, et la carte tient. Ce
+qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-même**.
 
 ---
 
@@ -39,7 +43,7 @@ manque. C'est le seul chemin d'une famille à l'autre, et il se fait dans ce sen
 | Style `heading/display` | — | la description annonce « tight », les valeurs disent 1.23 et 0 | /components → Intro | ouvert |
 | Page HP | `222:1168` | bloc nav + intro à 668 là où le liseré en demande 744 | /components → Case Study List | ouvert |
 | Page HP | `222:1168` | cartes à 814 et 776 là où le comportement en demande 834 | /components → Case Study List | ouvert |
-| Case Study List | `222:814` | l'état mobile n'est pas dessiné, et l'en-tête y mange 55 à 70% de l'écran | /components → Case Study List | ouvert |
+| Case Study List | `222:814` | l'état empilé n'est pas dessiné en mobile, alors que la carte y tiendrait | /components → Case Study List | ouvert |
 | Page Icons | `45:395` | le nommage mélange quatre conventions pour onze objets | /icons → Icon | ouvert |
 | Icônes | `45:395` | `file-text`, `box-plus`, `mail-edit` s'exportent en aplat | /icons → Icon | ouvert |
 

@@ -751,7 +751,13 @@ const caseStudyListVars = [
             <strong>Sous 768px</strong>, les marges de 48px tomberaient à la moitié d'un écran de 390 :
             elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et la
             piste à <code>272px</code>, ce qui laisse aux vignettes les 240px qu'elles avaient déjà.
-            Figma ne dessine pas cette carte en mobile — c'est une décision du code.
+            <strong>Et les tags s'effacent</strong>, comme les icônes et l'action du Nav au même point
+            de rupture : c'est ce que la maquette mobile dessine, et ce n'est pas qu'une économie de
+            place. Trois méthodes qui se replient sur trois lignes dans une colonne de 390 pèsent
+            <code>119px</code> — un tiers de l'en-tête — pour une information de second plan, lue
+            après le titre et l'impact. <code>display: none</code> et non un masquage visuel : ces
+            tags ne font pas partie de la vue mobile, ils n'ont donc à rester ni dans l'ordre de
+            tabulation ni dans l'arbre d'accessibilité.
           </p>
         </li>
       </ul>
@@ -1156,40 +1162,48 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>Le mobile n'est pas dessiné, et il devrait l'être.</strong> Sous 768px, la pile
-        redevient une liste : les cartes se suivent sous l'intro, sans rien qui bouge. La raison
-        tient en une phrase, et ce n'est pas celle qu'on suppose — le recouvrement au pouce n'a rien
-        de gênant. C'est que <strong>le contrat de la carte se retourne à cette largeur</strong>.
+        <strong>Le mobile reste une liste, mais l'obstacle vient de tomber.</strong> Sous 768px, la
+        pile se défait : les cartes se suivent sous l'intro, sans rien qui bouge. Ce n'est pas le
+        recouvrement au pouce qui gêne — c'est que <strong>le contrat de la carte se retournait à
+        cette largeur</strong>. « L'en-tête est le point fixe, le carrousel prend ou rend la place »
+        vaut à 1200px, où l'en-tête est compact ; dans une colonne de 390 il mesurait
+        <code>361px</code>, soit 55% de l'écran, et la carte réclamait <code>753px</code>. Le
+        carrousel payait seul : sa vignette tombait à 147px sur une fenêtre de 660, à 13px sur les
+        553 d'un petit iPhone.
         <br />
-        « L'en-tête est le point fixe, le carrousel prend ou rend la place » vaut à 1200px, où
-        l'en-tête est compact. Dans une colonne de 390 il mesure <code>361px</code> — titre, impact,
-        bouton, et trois tags qui se replient sur trois lignes — soit <strong>55% de l'écran</strong>,
-        et jusqu'à 70% sur un mobile étroit. La carte réclame alors <code>753px</code>, et le
-        carrousel paie seul tout ce qui manque :
+        <strong>Effacer les tags a rendu 132px.</strong> L'en-tête retombe à <code>229px</code> —
+        30 à 46% de l'écran selon l'appareil — et la carte ne réclame plus que <code>621px</code>,
+        c'est-à-dire moins que la plupart des téléphones :
       </p>
 
       <div class="table-scroll">
         <table>
           <thead>
-            <tr><th>Fenêtre (<code>svh</code>)</th><th>Carte voulue</th><th>Carrousel</th><th>Vignette</th></tr>
+            <tr>
+              <th>Fenêtre (<code>svh</code>)</th><th>En-tête</th><th>Carte voulue</th>
+              <th>Carrousel</th><th>Vignette</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td>553 — petit iPhone</td><td>781px</td><td>45px</td><td>13 × 28</td></tr>
-            <tr><td>660</td><td>753px</td><td>179px</td><td>147 × 317</td></tr>
-            <tr><td>760 — grand téléphone</td><td>753px</td><td>279px</td><td>247 × 532</td></tr>
+            <tr><td>553 — petit iPhone</td><td>257px (46%)</td><td>649px</td><td>176px</td><td>144 × 310</td></tr>
+            <tr><td>660</td><td>229px (35%)</td><td>621px</td><td>311px</td><td>279 × 600</td></tr>
+            <tr><td>760 — grand téléphone</td><td>229px (30%)</td><td>621px</td><td>411px</td><td>379 × 815</td></tr>
           </tbody>
         </table>
       </div>
 
       <p class="flag">
-        À 553px, le bouton « Read the story » sort de l'écran. Les chiffres sont mesurés sur le
-        gabarit, pas estimés.
+        Les chiffres sont mesurés sur le gabarit, carte collée en haut, pas estimés. À 760 le
+        carrousel retrouve les <code>411px</code> que Figma dessine en desktop : la carte n'est plus
+        contrainte du tout. Seul le petit iPhone serre encore, et il serre honnêtement — 144px de
+        vignette, pas 13.
         <br />
-        <strong>C'est donc la hauteur qui décide — mais le seuil tomberait mal.</strong> L'équilibre
-        est à 753px, c'est-à-dire au milieu des téléphones courants : deux appareils voisins
-        divergeraient, l'un empilant, l'autre non. Le point de rupture reste celui du système, 767px,
-        et lui seul. Ce qu'il faut n'est pas un seuil mais un dessin : la composition de l'en-tête sur
-        téléphone est une décision de maquette, pas de code. Porté dans <code>arbitrages.md</code>.
+        <strong>Le repli tient donc pour l'instant par prudence, non par nécessité.</strong> La
+        question de l'empilement mobile est rouverte, et elle se tranchera sur un appareil réel : la
+        couche est en <code>svh</code>, or la barre d'URL se rétracte au défilement et rend 60 à 90px
+        que la carte ne reprend pas — le liseré vaudrait 90 en haut de page et ~160 en lecture. C'est
+        la seule inconnue qui reste. Ce qui manque encore côté maquette est écrit dans
+        <code>arbitrages.md</code>.
       </p>
     </section>
   </main>
