@@ -31,7 +31,12 @@ const layout = byGroup('layout');
 
 // Les 21 tokens button.* ne sont pas ici : ils décrivent un objet, pas le
 // vocabulaire du système. Ils sont documentés avec leur composant.
-const vocabulaire = tokens.length - byGroup('button').length;
+// Les tokens qui décrivent un objet plutôt que le vocabulaire du système. Ils
+// ne sont pas montrés ici mais dans /components, avec le composant qu'ils
+// dimensionnent. Comptés et non listés en dur : le jour où un troisième groupe
+// d'objet apparaît, cette page n'annoncera pas un chiffre faux.
+const objets = tokens.filter((t) => t.group === 'button' || t.group === 'nav');
+const vocabulaire = tokens.length - objets.length;
 
 const specimen = 'Concevoir, tester, décider — puis recommencer.';
 ---
@@ -45,9 +50,9 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     <h1>Fondations</h1>
     <p class="lead">
       Le vocabulaire du système — <strong>{vocabulaire} tokens</strong> sur {tokens.length}, générés
-      depuis <code>tokens/Desktop.tokens.json</code> par <code>npm run tokens</code>. Les 21 autres
-      décrivent un objet plutôt que le système : ils sont documentés dans
-      <a href={withBase('/components')}>Composants</a>. Rien sur cette page n'est écrit en dur :
+      depuis <code>tokens/Desktop.tokens.json</code> par <code>npm run tokens</code>. Les {objets.length} autres
+      décrivent un objet plutôt que le système : ils sont documentés
+      dans <a href={withBase('/components')}>Composants</a>. Rien sur cette page n'est écrit en dur :
       chaque valeur affichée est lue dans la variable CSS correspondante.
     </p>
   </header>
