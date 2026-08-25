@@ -1156,14 +1156,40 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>Le mobile n'est pas dessiné.</strong> Sous 768px, la pile redevient une liste : les
-        cartes se suivent sous l'intro, sans rien qui bouge. Une carte haute comme un écran de
-        téléphone y serait illisible, et le recouvrement n'a pas de sens sur un format où l'on fait
-        déjà défiler d'un pouce. C'est une décision du code, comme celles déjà prises dans
-        <em>CaseStudyCard</em> et <em>Carousel</em>.
+        <strong>Le mobile n'est pas dessiné, et il devrait l'être.</strong> Sous 768px, la pile
+        redevient une liste : les cartes se suivent sous l'intro, sans rien qui bouge. La raison
+        tient en une phrase, et ce n'est pas celle qu'on suppose — le recouvrement au pouce n'a rien
+        de gênant. C'est que <strong>le contrat de la carte se retourne à cette largeur</strong>.
         <br />
-        <strong>Aucun seuil de hauteur, en revanche.</strong> La pile tient à toute hauteur de
-        fenêtre, parce que la carte s'y ajuste au lieu de déborder — voir juste en dessous.
+        « L'en-tête est le point fixe, le carrousel prend ou rend la place » vaut à 1200px, où
+        l'en-tête est compact. Dans une colonne de 390 il mesure <code>361px</code> — titre, impact,
+        bouton, et trois tags qui se replient sur trois lignes — soit <strong>55% de l'écran</strong>,
+        et jusqu'à 70% sur un mobile étroit. La carte réclame alors <code>753px</code>, et le
+        carrousel paie seul tout ce qui manque :
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Fenêtre (<code>svh</code>)</th><th>Carte voulue</th><th>Carrousel</th><th>Vignette</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>553 — petit iPhone</td><td>781px</td><td>45px</td><td>13 × 28</td></tr>
+            <tr><td>660</td><td>753px</td><td>179px</td><td>147 × 317</td></tr>
+            <tr><td>760 — grand téléphone</td><td>753px</td><td>279px</td><td>247 × 532</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        À 553px, le bouton « Read the story » sort de l'écran. Les chiffres sont mesurés sur le
+        gabarit, pas estimés.
+        <br />
+        <strong>C'est donc la hauteur qui décide — mais le seuil tomberait mal.</strong> L'équilibre
+        est à 753px, c'est-à-dire au milieu des téléphones courants : deux appareils voisins
+        divergeraient, l'un empilant, l'autre non. Le point de rupture reste celui du système, 767px,
+        et lui seul. Ce qu'il faut n'est pas un seuil mais un dessin : la composition de l'en-tête sur
+        téléphone est une décision de maquette, pas de code. Porté dans <code>arbitrages.md</code>.
       </p>
     </section>
   </main>

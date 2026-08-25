@@ -7,14 +7,20 @@ seule chose de ce dossier qui serve au design plutôt qu'au développement.
 > seulement qu'il existe, où il est écrit en toutes lettres, et s'il est réglé. L'étiquette fait
 > quelques mots ; si elle en demande plus, c'est le `.flag` qu'il faut relire.
 
-N'entrent ici que les écarts qui appellent un geste **dans Figma**. Le dépôt porte 31 `.flag`, de
+N'entrent ici que les écarts qui appellent un geste **dans Figma**. Les `.flag` du dépôt sont de
 trois familles, et une seule entre :
 
 | Famille | Exemple | Sort |
 |---|---|---|
 | Appelle un geste dans Figma | une mesure à reprendre, une description périmée, une couleur non liée, un token manquant | **entre ici** |
 | Énonce une politique | « Figma déclare des variantes que le code n'a pas » | reste dans son `.flag` |
-| Explique une décision du code | « le mobile n'est pas dessiné », « le premier écran est une couche » | reste dans son `.flag` |
+| Explique une décision du code | « le premier écran est une couche », « le carrousel n'accepte que des images » | reste dans son `.flag` |
+
+**Une famille n'est pas un sort définitif.** « Le mobile n'est pas dessiné » a longtemps expliqué une
+décision du code, et vient de passer dans le tableau ci-dessous : le jour où la mesure montre que le
+code ne peut plus trancher seul — ici, que l'en-tête mange 55 à 70% d'un écran de téléphone et qu'il
+n'existe aucun seuil honnête — l'absence de dessin cesse d'être un choix assumé et devient un
+manque. C'est le seul chemin d'une famille à l'autre, et il se fait dans ce sens.
 
 ---
 
@@ -33,6 +39,7 @@ trois familles, et une seule entre :
 | Style `heading/display` | — | la description annonce « tight », les valeurs disent 1.23 et 0 | /components → Intro | ouvert |
 | Page HP | `222:1168` | bloc nav + intro à 668 là où le liseré en demande 744 | /components → Case Study List | ouvert |
 | Page HP | `222:1168` | cartes à 814 et 776 là où le comportement en demande 834 | /components → Case Study List | ouvert |
+| Case Study List | `222:814` | l'état mobile n'est pas dessiné, et l'en-tête y mange 55 à 70% de l'écran | /components → Case Study List | ouvert |
 | Page Icons | `45:395` | le nommage mélange quatre conventions pour onze objets | /icons → Icon | ouvert |
 | Icônes | `45:395` | `file-text`, `box-plus`, `mail-edit` s'exportent en aplat | /icons → Icon | ouvert |
 
