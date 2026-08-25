@@ -682,8 +682,10 @@ const caseStudyListVars = [
           <Carousel items={caseStudyImages} label="Démonstration — images du projet" />
         </div>
         <p class="desc">
-          Les flèches avancent d'une vignette et se désactivent en bout de piste. La piste défile aussi
-          au doigt, au trackpad et au clavier — tabulez jusqu'à elle, puis flèches gauche et droite.
+          Les flèches sont posées par-dessus les images, collées aux deux bords et centrées sur la
+          hauteur de la piste. Elles avancent d'une vignette et se désactivent en bout de piste. La
+          piste défile aussi au doigt, au trackpad et au clavier — tabulez jusqu'à elle, puis flèches
+          gauche et droite.
         </p>
       </div>
 
@@ -716,6 +718,17 @@ const caseStudyListVars = [
             le script qui les révèle — puis les masque à nouveau si tout tient dans la largeur. Sans
             JavaScript la piste défile déjà, et sa barre de défilement reste visible : c'est alors la
             seule chose qui dit que ça défile.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Une barre posée par-dessus une zone qui défile doit se laisser traverser.</strong>
+            Figma pose la nav en absolu sur toute la largeur de la piste, mais ne dit rien de ce qu'il
+            advient des gestes : telle quelle, cette bande avalerait le défilement au doigt et à la
+            molette au milieu des images — une panne qu'on ne voit pas en cliquant les flèches. Elle
+            est donc en <code>pointer-events: none</code>, et chaque flèche le reprend pour son compte
+            dans son attribut <code>style</code>, faute qu'un style scopé d'Astro atteigne la racine
+            d'un composant enfant.
           </p>
         </li>
         <li>
@@ -794,14 +807,14 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>La hauteur des vignettes cède avant la carte.</strong> Figma la fige à
-        <code>382px</code> et le carrousel la garde — mais seulement tant qu'il y a la place. Dans une
-        carte dont la hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait
-        exactement un écran, le carrousel est la seule chose qui puisse céder : l'en-tête est protégé
-        par la taille minimale automatique des boîtes flexibles, et le carrousel lève cette protection
-        sur lui-même. Il rétrécit, il ne grandit jamais — avec <code>flex-grow</code>, un écran haut
-        laisserait un vide entre les vignettes et les flèches, alors que le surplus doit retomber en
-        bas de la carte. Montré seul, le carrousel garde ses 382px en toute circonstance.
+        <strong>L'en-tête est le point fixe, le carrousel est ce qui bouge.</strong> Figma fige les
+        vignettes à <code>382px</code>, et c'est la hauteur d'où part la piste. Mais dans une carte
+        dont la hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait exactement
+        un écran, le carrousel prend ou rend tout ce qui reste — et les vignettes le suivent, puisque
+        c'est la piste qui porte la hauteur et l'image qui la remplit. L'en-tête, lui, ne bouge pas :
+        il est protégé par la taille minimale automatique des boîtes flexibles, que le carrousel lève
+        sur lui-même par <code>min-height: 0</code>. Montré seul, hors de toute carte, le carrousel
+        garde ses 382px.
       </p>
 
       <p class="flag">

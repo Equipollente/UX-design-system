@@ -9,9 +9,15 @@
 // qui prend un tableau `links` plutôt que des slots.
 //
 // La piste défile nativement — au doigt, au trackpad, à la molette et au
-// clavier. Les flèches sont une commodité par-dessus : elles sont masquées dans
-// le HTML et c'est le script qui les révèle. Deux flèches inertes seraient un
-// mensonge, alors que la piste, elle, marche sans JavaScript.
+// clavier. Les flèches sont une commodité par-dessus, et depuis Figma 236:2081
+// au sens propre : posées sur les images plutôt qu'en dessous, elles ne prennent
+// plus de hauteur au carrousel. C'est ce qui se gagne, et ça se mesure — dans une
+// carte que la pile borne à 620px, la piste payait leurs 48px et leur gouttière,
+// et les vignettes tombaient à 223px là où elles font maintenant 295px.
+//
+// Elles sont masquées dans le HTML et c'est le script qui les révèle. Deux
+// flèches inertes seraient un mensonge, alors que la piste, elle, marche sans
+// JavaScript.
 
 import Button from './Button.astro';
 
@@ -54,14 +60,14 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
       icon="arrow-narrow-left"
       aria-label="Image précédente"
       data-carousel-prev
-      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
+      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0; pointer-events: auto"
     />
     <Button
       variant="secondary"
       icon="arrow-narrow-right"
       aria-label="Image suivante"
       data-carousel-next
-      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0"
+      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0; pointer-events: auto"
     />
   </div>
 </div>
@@ -75,21 +81,23 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     --carousel-item-height: 382px;
     --carousel-item-shadow: 0 22px 9px -14px rgb(47 45 46 / 0.1), 0 2px 4px rgb(47 45 46 / 0.04);
 
+    /* Le bloc de référence des flèches, qui sont posées par-dessus la piste :
+       c'est sur sa hauteur que Figma les centre. Aucun `gap` en revanche — il ne
+       reste qu'un enfant dans le flux. Figma déclare encore un itemSpacing de 24
+       sur la frame, mais il est inerte du moment que la nav est absolue. */
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
 
-    /* Rétrécir, jamais grandir. Dans une carte dont la hauteur est imposée — le
-       cas de CaseStudyList, où une carte fait exactement l'écran — le carrousel
-       est la seule chose qui puisse céder de la place : l'en-tête, lui, est
-       protégé par la taille minimale automatique des boîtes flexibles. C'est
-       `min-height: 0` qui lève cette même protection ici, et rien d'autre.
-       Avec flex-grow, sur un écran haut, la piste s'étirerait et laisserait un
-       vide entre les vignettes et les flèches ; en rétrécissement seul, le
-       surplus retombe en bas de la carte, là où il tombe déjà.
+    /* Grandir et rétrécir avec la carte. L'en-tête garde sa taille — c'est lui
+       le point fixe — et le carrousel prend ou rend tout ce qui reste : dans une
+       carte dont la hauteur est imposée, le cas de CaseStudyList où une carte
+       fait exactement l'écran, il est la seule chose qui bouge. L'en-tête est
+       protégé par la taille minimale automatique des boîtes flexibles ; c'est
+       `min-height: 0` qui lève cette protection ici, et rien d'autre.
        Hors d'un contexte flexible — le carrousel montré seul — ces deux
-       déclarations ne font rien. */
-    flex: 0 1 auto;
+       déclarations ne font rien, et la piste garde sa hauteur de base. */
+    flex: 1 1 auto;
     min-height: 0;
   }
 
@@ -101,9 +109,13 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
   .track {
     position: relative;
     display: flex;
-    /* Le carrousel ne peut céder de la place que si sa piste en cède aussi. */
-    flex: 0 1 auto;
+    /* Le carrousel ne peut prendre ni céder de la place que si sa piste en fait
+       autant. La hauteur ci-dessous est le point d'où elle part : celle que Figma
+       dessine, marges comprises — `border-box` fait que le padding s'y range
+       plutôt que de s'y ajouter. */
+    flex: 1 1 auto;
     min-height: 0;
+    height: calc(var(--carousel-item-height) + 2 * var(--space-lg));
     gap: var(--space-2xl);
     margin: 0;
     padding: var(--space-lg) 0;
@@ -129,13 +141,11 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
 
   .item {
     flex: none;
-    height: var(--carousel-item-height);
-    /* La vignette garde la hauteur que Figma lui donne tant qu'il y a la place,
-       et ne la dépasse jamais. Quand la piste se resserre, la vignette suit et
-       l'aspect-ratio en déduit sa largeur : l'image maigrit, elle n'est pas
-       rognée. `max-height` et non `height: 100%`, sans quoi elle grandirait
-       au-delà des 382px dessinés dès qu'un écran serait plus haut. */
-    max-height: 100%;
+    /* La vignette fait la hauteur de la piste, quelle qu'elle soit : c'est la
+       piste qui porte la hauteur, l'image la remplit. L'aspect-ratio en déduit
+       sa largeur — l'image maigrit ou grossit avec la carte, elle n'est jamais
+       rognée. */
+    height: 100%;
     aspect-ratio: var(--item-ratio);
     overflow: hidden;
     border-radius: var(--radius-lg);
@@ -154,10 +164,21 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     object-position: left center;
   }
 
+  /* Collées aux deux bords de la piste et centrées sur sa hauteur, à la marge de
+     l'en-tête de la carte. */
   .nav {
+    position: absolute;
+    inset: 0;
     display: flex;
-    gap: var(--space-lg);
+    align-items: center;
+    justify-content: space-between;
     padding-inline: var(--space-layout-48);
+    /* La barre couvre toute la piste : sans ceci, elle avalerait le défilement au
+       doigt et à la molette au milieu des images — une panne qu'on ne voit pas en
+       cliquant les flèches. Chacune le reprend pour son compte, dans son attribut
+       `style` : un style scopé n'atteint pas la racine d'un composant enfant,
+       c'est déjà la raison pour laquelle leur fond y est posé. */
+    pointer-events: none;
   }
 
   .nav[hidden] {
