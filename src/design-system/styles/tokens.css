@@ -146,6 +146,9 @@
   --button-min-width-md:         96px;
   --button-min-width-lg:         140px;
 
+  /* ── Nav — la hauteur de la barre, lue par les pages qui se calent dessous ─── */
+  --nav-height:                  88px;
+
   /* ── Layout — métadonnées de mode Figma, informatives ──────────────────────── */
   --layout-device:               desktop;
   --layout-device-width:         1200;
@@ -162,6 +165,7 @@
 
 @media (max-width: 767px) {
   :root {
+    --nav-height:                  72px;
     --layout-device:               mobile;
     --layout-device-width:         390;
     --layout-scale:                1.25;

@@ -1,6 +1,6 @@
 # UX design system
 
-Le design system de [Judith Heckmann](https://github.com/Equipollente) — 115 tokens exportés de Figma et
+Le design system de [Judith Heckmann](https://github.com/Equipollente) — 116 tokens exportés de Figma et
 les composants qui en sont faits. La documentation est le site lui-même, et elle montre les
 composants en vrai plutôt qu'une copie de leur markup : si un composant change, la page change.
 

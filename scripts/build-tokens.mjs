@@ -38,6 +38,7 @@ const GROUP_TITLES = {
   font: 'Typographie',
   motion: 'Mouvement — durées et courbes',
   button: 'Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13)',
+  nav: 'Nav — la hauteur de la barre, lue par les pages qui se calent dessous',
   layout: 'Layout — métadonnées de mode Figma, informatives',
 };
 
@@ -140,6 +141,21 @@ const lines = [
   ':root {',
 ];
 
+// GROUP_TITLES décide de ce qui est émis, et pas seulement de l'ordre : un
+// groupe qui n'y figure pas serait filtré par la boucle ci-dessous et
+// disparaîtrait de tokens.css sans un mot. Un token ajouté dans Figma serait
+// alors simplement absent du CSS, et on le chercherait dans le composant qui
+// l'utilise. On refuse plutôt de construire.
+const inconnus = [...new Set(resolved.map((t) => t.group))].filter((g) => !(g in GROUP_TITLES));
+
+if (inconnus.length) {
+  throw new Error(
+    `Groupe(s) de tokens inconnu(s) : ${inconnus.join(', ')}.
+` +
+      `Ajoute-les à GROUP_TITLES dans ce script, sinon ils ne sortiront pas dans tokens.css.`,
+  );
+}
+
 for (const [group, title] of Object.entries(GROUP_TITLES)) {
   const tokens = resolved.filter((t) => t.group === group);
   if (!tokens.length) continue;
@@ -157,11 +173,15 @@ for (const [group, title] of Object.entries(GROUP_TITLES)) {
 
 lines.push('}');
 
-// Les blocs par mode ne redéfinissent que le groupe layout : c'est le seul qui
-// varie entre les 4 exports Figma.
+// Les blocs par mode ne redéfinissent que ce qui change réellement d'un export à
+// l'autre — la comparaison plus bas s'en charge, et c'est elle seule qui décide.
+// Aujourd'hui le groupe layout est le seul à varier, mais la règle ne le nomme
+// pas : le jour où une variable Figma porte une valeur par mode — une hauteur de
+// barre, par exemple — elle sort d'ici sans qu'on ait à revenir dans ce script.
+// Nommer le groupe faisait de ce filtre une deuxième décision, muette, qui
+// aurait ignoré la variable sans rien dire.
 for (const { name, query } of MODES) {
   const overrides = flatten(read(name))
-    .filter((t) => t.path.startsWith('layout.'))
     .map((t) => ({ ...t, name: cssName(t.path) }))
     .filter((t) => {
       const baseToken = resolved.find((r) => r.name === t.name);

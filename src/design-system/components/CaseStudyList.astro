@@ -169,11 +169,11 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
      prises dans CaseStudyCard et Carousel. */
   @media (max-width: 767px) {
     .layer {
-      /* `static` : la couche cesse d'être un élément positionné, donc elle passe
-         *derrière* la nav de la page, qui reste collée en haut. Sur un téléphone,
-         un en-tête que les cartes recouvriraient ne serait plus atteignable qu'en
-         remontant toute la page — le format où l'on a le plus besoin de lui est
-         aussi celui où il faut le garder devant. */
+      /* `static` : la couche cesse d'être un élément positionné et reprend sa
+         place dans le flux. Ce n'est plus elle qui décide de l'ordre
+         d'empilement — une barre collée écrit son rang, et passe devant des deux
+         côtés du point de rupture. C'était l'inverse avant, et c'était fragile :
+         la nav ne passait devant que par effet de bord de ce `static`. */
       position: static;
       height: auto;
       --card-height: auto;
@@ -206,7 +206,7 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
 
     const appliquer = () => {
       // Sous 768px, le CSS décolle les couches : elles défilent alors normalement,
-      // aucune n'en recouvre une autre, et la nav de la page leur passe devant.
+      // et aucune n'en recouvre une autre.
       // Marquer `inert` ce qui est encore visible masquerait la moitié de la page
       // — c'est le seul cas où la géométrie seule se tromperait, parce qu'elle ne
       // dit pas qui est peint devant qui. On interroge la dernière couche, qui est

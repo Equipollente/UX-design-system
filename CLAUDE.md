@@ -45,7 +45,7 @@ serait plus un composant.
 
 ## Les tokens ne s'écrivent pas dans le code
 
-La source de vérité est Figma. Les 115 variables sont exportées dans `tokens/*.tokens.json` (4 modes :
+La source de vérité est Figma. Les 116 variables sont exportées dans `tokens/*.tokens.json` (4 modes :
 Desktop, Tablet, Mobile, Paper), puis `npm run tokens` en fait `styles/tokens.css` et `data/tokens.json`.
 
 Si une valeur paraît fausse, la correction va **dans Figma**, puis dans l'export — jamais en dur dans
