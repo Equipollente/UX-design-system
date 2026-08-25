@@ -142,8 +142,7 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
     list-style: none;
   }
 
-  /* Sous 768px, la marge de 48px mange la moitié d'un écran de 390. Figma ne
-     dessine pas cette carte en mobile : c'est une décision du code. */
+  /* Sous 768px, la marge de 48px mange la moitié d'un écran de 390. */
   @media (max-width: 767px) {
     .case-study-header {
       padding-inline: var(--space-xl);
@@ -151,6 +150,21 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
 
     .title {
       font-size: var(--font-size-subtitle);
+    }
+
+    /* Les tags s'effacent, comme les icônes et l'action du Nav s'effacent au
+       même point de rupture. C'est ce que Figma dessine en mobile, et ce n'est
+       pas qu'une économie de place : trois méthodes qui se replient sur trois
+       lignes dans une colonne de 390 pèsent 119px — un tiers de l'en-tête — pour
+       une information de second plan, lue après le titre et l'impact.
+       `display: none` et non un masquage visuel : ces tags ne font pas partie de
+       la vue mobile, ils n'ont donc pas à rester dans l'ordre de tabulation ni
+       dans l'arbre d'accessibilité. Les masquer à l'œil seul les y laisserait, ce
+       qui est le contraire d'un choix honnête.
+       Sans eux, l'en-tête cesse d'occuper plus de la moitié de l'écran — c'est ce
+       qui rouvre la question de l'empilement mobile, écrite sur /components. */
+    .tags {
+      display: none;
     }
   }
 </style>

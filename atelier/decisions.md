@@ -141,13 +141,37 @@ portfolio, pas supposé — et le gabarit portait le même défaut.
 
 `← b9f0ff8`
 
-## En mobile, la pile redevient une liste et passe *sous* la nav
+## La pile s'empile à toutes les largeurs, téléphone compris
 
-Sous 768 px les couches sont `static`, donc hors de tout positionnement : la nav de la page leur
-passe devant et reste atteignable. C'est l'écart assumé avec le desktop — sur un téléphone, un
-en-tête recouvert ne se rattraperait qu'en remontant toute la page.
+Elle se défaisait sous 768 px, et l'entrée qui vivait ici disait pourquoi : une carte pleine hauteur
+serait illisible sur un téléphone. C'était une intuition. Mesurée le 2026-08-25, la vraie raison
+était ailleurs — l'en-tête occupait 55 à 70 % de l'écran, la carte réclamait 753 px, et le carrousel
+payait seul jusqu'à 13 px de vignette.
 
-`← b9f0ff8`
+Puis la maquette mobile a effacé les tags, ce qui a rendu 132 px : en-tête à 229, carte à 621, moins
+que la plupart des téléphones. Le repli n'avait plus d'objet, donc il n'existe plus. Ni le composant
+ni le gabarit ne portent de règle sous 768 px, et le script a perdu le garde qui vérifiait que les
+couches se collaient vraiment — sa branche était devenue inatteignable.
+
+Une bascule mobile subsiste, mais elle a changé de camp : elle vit dans la **page**, pas dans le
+composant. Le premier écran cesse d'être une couche sous 768 px, parce que l'intro réclame 701 px
+dans une colonne de 390 quand ce premier écran n'en offre que 498 — en couche, 203 px passaient sous
+la première carte, dont la description et le bouton. Quand le contenu ne tient pas dans l'écran, il
+faut choisir qui cède : c'est le liseré, pas l'intro.
+
+Trois choses que ce renversement apprend, et qui valent au-delà de ce cas. **Une raison de dessin non
+mesurée se périme sans prévenir** : celle-ci a tenu des mois et était fausse. **Un ordre d'empilement
+ne se déduit pas du positionnement** : la nav passait devant les cartes par effet de bord de leur
+`static`, elle écrit désormais son propre rang, le même des deux côtés — sans quoi tout ceci l'aurait
+cassée. Et **retirer une bascule en révèle une autre** : c'est en empilant sur téléphone qu'on a
+découvert que le premier écran, lui, n'y tenait pas. Le repli en cachait le symptôme.
+
+Reste un écart connu, le seul du système où une mesure de dessin n'est pas constante : la couche est
+en `svh`, donc la barre d'URL du téléphone rend 60 à 90 px que la carte ne reprend pas, et le liseré
+vaut 90 au chargement puis ~160 en lecture. Détail et arbitrage dans le `.flag` de
+/components → Case Study List.
+
+`← b9f0ff8`, puis `← 14f0468`, `2dfea45`
 
 ## La doc ne style que `main > section`
 
