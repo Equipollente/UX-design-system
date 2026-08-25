@@ -42,6 +42,38 @@ const navProps = [
   ['home', '{ href, src, alt }', '—', 'Le bouton avatar. Absent ⇒ non rendu : c’est l’état d’accueil.'],
   ['action', '{ label, icon?, href? }', '—', 'Le sixième bouton. Sans href ⇒ <button> inerte.'],
   ['label', 'string', 'Navigation principale', 'aria-label du <nav>.'],
+  [
+    'sticky',
+    'boolean',
+    'false',
+    'La barre tient le haut de l’écran et s’efface quand on descend. Absente, elle reste posée à plat — l’état montré ici.',
+  ],
+];
+
+// Ce qu'une page a à savoir de la barre collée. Les trois sont lues sans être
+// déclarées sur l'élément, comme --btn-px : la valeur de repli est celle du
+// composant, et un contexte peut la reprendre.
+const navVars = [
+  [
+    '--nav-height',
+    '88px — 72px sous 768',
+    'Le token nav.height, en deux modes. À lire, jamais à écrire : c’est lui qui cale le premier écran d’une page sous la barre.',
+  ],
+  [
+    '--nav-hide-after',
+    '100px',
+    'Le seuil sous lequel la barre ne s’efface jamais, quel que soit le sens du défilement.',
+  ],
+  [
+    '--nav-hide-grain',
+    '6px',
+    'En deçà, un mouvement n’est pas un geste : c’est ce qui empêche le trackpad et l’inertie iOS de faire clignoter la barre.',
+  ],
+  [
+    '--nav-shift',
+    '0',
+    'Le déplacement de la barre. Écrit par l’état, pas à la main — on ne le pose que pour figer la barre à des fins de capture.',
+  ],
 ];
 
 const tagProps = [
@@ -343,6 +375,26 @@ const caseStudyListVars = [
         description est à réécrire dans Figma.
       </p>
 
+      <p class="flag">
+        <strong>Le masquage n'est dessiné nulle part.</strong> La page HP porte trois états de
+        défilement (<code>45:388</code> au repos, <code>222:907</code> et <code>222:1042</code> les
+        cartes montées), et aucun ne montre la barre effacée. Aucune réaction de prototypage n'y est
+        posée non plus. Il manque un quatrième état — barre effacée, première carte par-dessus l'intro
+        — sans quoi ce code est la seule spécification du mouvement.
+      </p>
+
+      <p class="flag">
+        <strong>La barre n'a pas de fond, et une carte a le même que sa pilule.</strong> Rien n'est
+        dessiné sous la barre : ce qui flotte au-dessus du contenu, ce sont trois objets déjà opaques —
+        l'avatar, la pilule et le bouton. Mais la carte d'étude de cas est en
+        <code>color.bg.surface</code>, <em>exactement</em> le lavande de la pilule : quand une carte
+        passe sous la barre révélée, la pilule perd son contour et il ne reste que la pastille blanche
+        de l'onglet courant. Et la carte pose son eyebrow — l'année et le client — à 64px de son haut,
+        sous une barre qui en fait 88 : il passe entièrement derrière elle. Mesuré, pas supposé. À
+        trancher côté Figma : soit le composant reçoit un fond, soit on acte que la barre flotte et
+        que ces deux états sont voulus.
+      </p>
+
       <h3>Ses deux comportements</h3>
       <p class="section-note">
         Ils ne sont pas une variante à déclarer : ils tombent des props. Sans <code>home</code>, pas
@@ -398,8 +450,124 @@ const caseStudyListVars = [
         </table>
       </div>
 
+      <h3>Collée, elle s'efface</h3>
+      <p class="section-note">
+        Avec <code>sticky</code>, la barre tient le haut de l'écran, glisse vers le haut quand on
+        descend et revient quand on remonte. Le comportement est le même à toutes les largeurs : il ne
+        dépend d'aucun point de rupture.
+      </p>
+      <p class="demo-note">
+        Il n'y a pas de démonstration ici, et ce n'est pas un oubli : une barre qui se juge sur le
+        défilement d'une page entière ne se montre pas dans une section de doc, et elle lit
+        <code>scrollY</code> — dans une boîte qui défile, elle ne bougerait pas. Elle est en situation
+        sur le <a href={withBase('/templates/home')}>gabarit</a>.
+      </p>
+
+      <h3>Ce que la page doit porter</h3>
+      <p>
+        La barre doit être <strong>hors</strong> du bloc qu'elle surplombe, et il faut les deux raisons
+        pour comprendre pourquoi. Un élément collé est un contexte d'empilement : rien de ce qu'il
+        contient ne peut se peindre devant ce qui le recouvre, donc une barre restée dedans serait
+        condamnée à passer sous les cartes, quel que soit son <code>z-index</code>. Et
+        <code>Case Study List</code> rend ce bloc inerte quand il est recouvert, ce qui sortirait ses
+        onglets du clavier au moment même où elle est la seule chose encore visible.
+      </p>
+      <pre><code>{`<Nav sticky … />        <!-- hors de .home-first, pas dedans -->
+
+.home       { --fold-peek: 50px; }
+.home-first { position: sticky;
+              top: var(--nav-height);
+              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }
+
+@media (max-width: 767px) {
+  .home-first { position: static; height: auto; }
+}`}</code></pre>
+      <p>
+        <code>top: var(--nav-height)</code> et non <code>0</code> : sinon l'intro glisserait derrière
+        une barre qui n'a pas de fond pendant les cent premiers pixels, avant que le masquage ne
+        s'enclenche. La barre reste dans le flux — un élément collé garde sa place — donc le premier
+        écran fait toujours <code>100svh − 50px</code> en tout, et le liseré ne bouge pas d'un pixel.
+      </p>
+      <p>
+        <strong>La page ne déclare pas <code>--nav-height</code>, elle la lit.</strong> C'est un
+        token comme un autre — <code>nav.height</code>, 88 dans les modes Desktop et Tablet, 72 dans
+        Mobile — donc une décision de dessin qui se prend dans Figma et se ré-exporte, pas un calcul
+        posé dans une page. Une page cale son premier écran sous la barre sans rien savoir de ce qui
+        la compose. La hauteur se lit et ne se mesure pas : la
+        mesurer en JavaScript ferait sauter la carte au chargement, pour la raison déjà écrite sur la
+        pile. Les ancres, elles, peuvent l'être : le composant pose lui-même
+        <code>scroll-padding-top</code> sur la page, parce que ce décalage n'a de conséquence qu'au
+        moment où l'on suit un lien, et que rien ne bouge au chargement.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              navVars.map(([nom, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{defaut}</code></td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
       <h3>Ce que la maquette ne dit pas</h3>
       <ul class="plain token-list">
+        <li>
+          <p class="desc">
+            <strong>Le sens du défilement est du JavaScript, le mouvement non.</strong> Le script
+            compare deux positions de <code>scrollY</code> d'une image à l'autre, jamais un geste. Un
+            <code>wheel</code> dirait la main ; il ne dirait rien d'un saut — touche Origine, clic sur
+            une ancre, <code>scrollTo</code> — qui ramène la page en haut sans que personne n'ait
+            touché la molette. Deux positions comparées disent les deux : remonter, c'est remonter,
+            quelle qu'en soit la cause. C'est aussi ce qui rend le tactile et la souris identiques sans
+            écrire un seul cas particulier.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>La barre masquée reste atteignable au clavier, et le focus l'épingle.</strong> Elle
+            n'est jamais rendue <code>inert</code> : inerte, elle ne pourrait plus recevoir le focus,
+            donc plus jamais se révéler en le recevant, et le seul repère de navigation de la page
+            disparaîtrait des lecteurs d'écran sur un critère de position de défilement. Épinglée plutôt
+            que simplement révélée, parce qu'une barre seulement révélée se remasquerait au défilement
+            suivant, l'anneau de focus avec elle — c'est ce que WCAG 2.4.11 interdit. La pile résout le
+            même problème par l'autre bout : là on retire ce qui est couvert, ici on découvre ce qu'on
+            atteint.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Elle écrit le seul <code>z-index</code> du système.</strong> Partout ailleurs les
+            couches se peignent dans l'ordre du DOM, et c'est ce qu'on veut : la carte écrite après
+            recouvre celle d'avant. La barre est le cas contraire — écrite avant tout le reste, elle
+            doit se peindre après, sans quoi la révéler derrière une carte opaque ne révélerait rien.
+            <code>1</code>, et non <code>10</code> : le plus petit nombre qui suffit, et qui ne laisse
+            pas croire que le système a une échelle d'élévation. Il n'en a pas.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Le seuil et le grain ne sont pas des valeurs de dessin.</strong> Le seuil de 100px
+            vient de la consigne ; le grain de 6px est une tolérance d'appareil, de la même famille que
+            les 2px que la pile accorde à l'arrondi sous-pixel. Aucun token ne les porte, et c'est
+            volontaire : Figma ne dessine pas l'inertie d'un trackpad.
+          </p>
+        </li>
+        <li>
+          <p class="desc">
+            <strong>Elle a un repli.</strong> Sans JavaScript, <code>sticky</code> donne une barre qui
+            colle et ne s'efface jamais. On perd le mouvement, pas la navigation.
+          </p>
+        </li>
         <li>
           <p class="desc">
             <strong>La pastille est du JavaScript.</strong> Le script mesure l'onglet visé et écrit sa
@@ -807,12 +975,12 @@ const caseStudyListVars = [
       </p>
       <pre><code>{`.home       { --fold-peek: 50px; }
 .home-deck  { }   /* le premier écran + la pile, et rien d'autre */
-.home-first { position: sticky; top: 0;
-              height: calc(100svh - var(--fold-peek)); }
-.nav-slot   { position: sticky; top: 0; }
+.home-first { position: sticky;
+              top: var(--nav-height);
+              height: calc(100svh - var(--fold-peek) - var(--nav-height)); }
 
 @media (max-width: 767px) {
-  .home-first { display: contents; }
+  .home-first { position: static; height: auto; }
 }`}</code></pre>
       <p>
         Une <em>hauteur</em>, et non un plancher : c'est elle qui garantit le liseré de 50 px à toute

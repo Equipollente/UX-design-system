@@ -34,14 +34,19 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
         suit la pile — un élément positionné passe devant un élément qui ne
         l'est pas, quel que soit l'ordre du DOM. */}
     <div class="home-deck">
-      {/* Le premier écran : la nav et l'intro. C'est la couche du dessous de la
-          pile — il tient sa place et les cartes lui passent dessus. Sa hauteur
-          est ce qui fait affleurer la première carte de 50px, et rien d'autre. */}
-      <div class="home-first" id="accueil">
-        <div class="nav-slot">
-          <Nav links={demoLinks} action={demoAction} label="Navigation principale" />
-        </div>
+      {/* La barre est hors du premier écran, et il faut les deux raisons pour
+          comprendre pourquoi : un élément collé crée un contexte d'empilement,
+          donc aucun z-index posé à l'intérieur du premier écran ne la ferait
+          passer devant les cartes ; et CaseStudyList rend ce bloc inerte dès
+          qu'une carte le recouvre, ce qui sortirait ses onglets du clavier. Elle
+          reste dans le flux, et sa hauteur est un token — nav.height — que le bloc
+          ci-dessous lit sans avoir à la mesurer. */}
+      <Nav sticky links={demoLinks} action={demoAction} label="Navigation principale" />
 
+      {/* Le premier écran : l'intro. C'est la couche du dessous de la pile — il
+          tient sa place et les cartes lui passent dessus. Sa hauteur est ce qui
+          fait affleurer la première carte de 50px, et rien d'autre. */}
+      <div class="home-first" id="accueil">
         <div class="intro-slot">
           <Intro
             avatar={introDemo.avatar}
@@ -89,6 +94,11 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
     --fold-peek: 50px;
   }
 
+  /* --nav-height n'est pas déclarée ici, seulement lue : c'est le token
+     nav.height, qui vient de Figma en deux valeurs — 88, et 72 en mode Mobile.
+     Une page cale son premier écran sous la barre sans rien savoir de ce qui la
+     compose. */
+
   /* .home-deck n'a volontairement aucune déclaration, et ce n'est pas un oubli :
      tout son rôle est d'exister comme bloc, pour servir de repère au collage du
      premier écran et des cartes. C'est lui qui dit où ce collage s'arrête — au
@@ -106,28 +116,21 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      le bloc et mangeait le liseré. */
   .home-first {
     position: sticky;
-    top: 0;
+    /* Sous la barre, et non sous le haut de la fenêtre : sans quoi l'intro
+       glisserait derrière elle pendant les cent premiers pixels, avant que le
+       masquage ne s'enclenche. */
+    top: var(--nav-height);
     display: flex;
     flex-direction: column;
-    height: calc(100vh - var(--fold-peek));
-    height: calc(100svh - var(--fold-peek));
+    height: calc(100vh - var(--fold-peek) - var(--nav-height));
+    height: calc(100svh - var(--fold-peek) - var(--nav-height));
   }
 
-  /* La nav tient toujours le haut de l'écran, à toutes les largeurs — mais pas
-     de la même manière, et l'écart est voulu.
-     En desktop et en tablette, c'est le bloc entier qui la porte et cette règle
-     ne fait rien : les cartes lui passent dessus, et CaseStudyList la rend inerte
-     avec le reste du premier écran — sans quoi ses onglets resteraient
-     atteignables au clavier derrière une carte opaque (WCAG 2.4.11, Focus Not
-     Obscured).
-     En mobile, où le bloc s'efface, c'est elle qui prend le relais et se colle
-     seule ; et comme les cartes y sont hors de tout positionnement, elle leur
-     passe devant. Sur un téléphone, un en-tête recouvert ne serait plus
-     atteignable qu'en remontant toute la page. */
-  .nav-slot {
-    position: sticky;
-    top: 0;
-  }
+  /* La nav n'a plus de règle ici : elle porte son propre collage, par sa prop
+     sticky, et le même à toutes les largeurs. Il n'y a plus de relais à passer
+     entre desktop et mobile, ni d'ordre d'empilement déduit du positionnement des
+     couches — la barre écrit son rang, une fois, et il vaut des deux côtés du
+     point de rupture. */
 
   /* L'intro prend l'air qui reste, centrée : le mou se répartit au-dessus et
      au-dessous d'elle. Figma pose 50px sous elle (209:2383), mais Figma ne
@@ -199,15 +202,14 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      la suite. C'est le même point de rupture que celui de CaseStudyList — les
      deux décrivent la même bascule, chacun de son côté. */
   @media (max-width: 767px) {
-    /* Le bloc s'efface, au sens propre : `display: contents` le retire de la
-       mise en page sans toucher au DOM, et la nav comme l'intro deviennent des
-       enfants directs de .home-deck. C'est ce qui donne à la nav un repère qui
-       couvre toute la pile, donc un collage qui tient jusqu'au bout — dans le
-       bloc, elle se serait décollée à la fin de l'intro.
-       C'est aussi ce qui laisse l'intro reprendre sa place dans le flux : en
-       mobile elle défile, seule la nav reste. */
+    /* La barre étant sortie du bloc, il n'y a plus rien à en libérer : il suffit
+       qu'il cesse d'être une couche. `static` et non `display: contents` — resté
+       collé, il se peindrait par-dessus les cartes, qui sont ici hors de tout
+       positionnement. L'intro reprend donc sa place dans le flux et défile ;
+       seule la nav reste, et elle y reste de la même façon qu'ailleurs. */
     .home-first {
-      display: contents;
+      position: static;
+      height: auto;
     }
 
     .intro-slot {

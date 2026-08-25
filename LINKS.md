@@ -48,12 +48,36 @@ La page **HP** porte trois frames de 1280 × 834 qui sont trois états de défil
 Aucune réaction de prototypage n'y est posée — le mouvement vient de la consigne, et il est
 écrit sur `/components`.
 
+Il en manque un quatrième : **la barre effacée**, première carte par-dessus l'intro. La prop
+`sticky` du Nav lui donne ce comportement — elle se colle en haut, glisse vers le haut quand on
+descend, revient quand on remonte — et rien dans Figma ne le dessine. Tant que ce frame n'existe
+pas, le code est la seule spécification du mouvement.
+
+### Ce que le code attend de Figma
+
+Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la carte Figma ↔ code.
+
+| Ce qui manque | Où ça se voit | Arbitrage |
+| --- | --- | --- |
+| L'état « barre effacée » de la HP | prop `sticky` de [Nav.astro](src/design-system/components/Nav.astro) | Un quatrième frame sur la page HP |
+| La taille de l'avatar (`64px`, en dur) | `--nav-home-size` dans [Nav.astro](src/design-system/components/Nav.astro) | Une variable. Elle vaut la hauteur d'une pilule d'onglets, et c'est ce qui fait que `nav/height` est le même nombre avec ou sans avatar — une coïncidence que rien ne garde aujourd'hui |
+| Un fond pour la barre, ou l'absence assumée | `.nav-bar` dans [Nav.astro](src/design-system/components/Nav.astro) | À trancher : la pilule lavande sur une carte lavande perd son contour, et l'eyebrow de la carte passe derrière la barre |
+| Une échelle d'empilement | `z-index: 1` dans [Nav.astro](src/design-system/components/Nav.astro) | Exception assumée : le seul z-index du système, à ne transformer en échelle que si un deuxième cas arrive |
+| Les deux ombres | `--carousel-item-shadow`, `--card-shadow` | Des tokens, le jour où une troisième apparaît |
+| Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
+
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
 `Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components.
 
 ### Variables
 
-Les 115 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+`nav/height` ([`234-1222`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system)) porte
+la hauteur de la barre collée : 88 en Desktop, Tablet et Paper, 72 en Mobile. C'est le seul token du
+groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double une valeur qui vit
+aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
+fichiers se renvoient l'un à l'autre en commentaire.
+
+Les 116 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 

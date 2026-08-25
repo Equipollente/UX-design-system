@@ -27,14 +27,31 @@ interface Props {
   action?: { label: string; icon?: IconName; href?: string };
   /** aria-label du <nav>. */
   label?: string;
+  /**
+   * La barre se colle en haut de la fenêtre et s'efface quand on descend. Absente,
+   * elle reste posée à plat : c'est ce que doit rester une barre qu'on documente
+   * plutôt qu'on habite.
+   */
+  sticky?: boolean;
 }
 
-const { links, current, home, action, label = 'Navigation principale' } = Astro.props;
+const {
+  links,
+  current,
+  home,
+  action,
+  label = 'Navigation principale',
+  sticky = false,
+} = Astro.props;
+
+// La classe sert au style, l'attribut data- au comportement : la première porte le
+// collage et le mouvement, le second est le point d'accroche du script.
+const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
 ---
 
 {/* L'avatar est un lien de navigation : il entre dans le landmark. Le bouton
     d'action, lui, reste dehors — il déclenche une action, il ne navigue pas. */}
-<div class="nav-bar">
+<div class={classes} data-nav-sticky={sticky || undefined}>
   <nav aria-label={label}>
     {
       home && (
@@ -87,10 +104,44 @@ const { links, current, home, action, label = 'Navigation principale' } = Astro.
     align-items: center;
     justify-content: center;
     gap: var(--space-lg);
+    /* Ce padding vertical fait partie de ce que mesure le token nav.height, que
+       les pages lisent pour caler leur premier écran sous la barre. Le changer
+       ici sans reprendre la variable dans Figma décalerait ces pages. */
     padding: var(--space-md) var(--space-lg);
     /* Sans min-width: 0, le min-width: auto par défaut des éléments flex
        empêche la pilule de se contraindre, donc de défiler (cf. mobile). */
     min-width: 0;
+  }
+
+  /* Collée, la barre écrit le seul z-index du système, et ce n'est pas un oubli
+     de doctrine : ici l'ordre du DOM ne suffit plus. Les couches de
+     CaseStudyList sont positionnées et viennent après elle dans la page, donc
+     elles la recouvriraient — et révéler une barre derrière une carte opaque ne
+     révélerait rien. Un seul cran, qui est aussi le plancher : rien d'autre dans
+     le système ne se hisse au-dessus de quoi que ce soit.
+     Elle reste dans le flux, et c'est ce qui permet à la page de compter sa
+     hauteur sans la mesurer — un liseré de carte calculé en JavaScript sauterait
+     au chargement. */
+  .nav-bar.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    /* translateY et non top : le déplacement reste au compositeur, sans
+       recalculer la mise en page à chaque frame. */
+    transform: translateY(var(--nav-shift, 0));
+    /* Une entrée ou une sortie prend duration.slow — c'est ce que dit la
+       description du token, et c'est le premier composant à s'en servir. La
+       courbe est celle de l'arrivée ; l'état masqué reprend celle du départ.
+       Sous prefers-reduced-motion, tokens.css remet la durée à zéro : la barre
+       bascule alors sans trajet, et il n'y a rien à prévoir ici. */
+    transition: transform var(--motion-duration-slow) var(--motion-easing-enter);
+  }
+
+  /* L'attribut est posé par le script, jamais par le rendu : sans JavaScript la
+     barre reste collée et visible. On perd le mouvement, pas la navigation. */
+  .nav-bar.sticky[data-nav-hidden] {
+    --nav-shift: -100%;
+    transition-timing-function: var(--motion-easing-exit);
   }
 
   nav {
@@ -228,6 +279,8 @@ const { links, current, home, action, label = 'Navigation principale' } = Astro.
   @media (max-width: 767px) {
     .nav-bar {
       gap: var(--space-sm);
+      /* Même remarque qu'au repos : nav.height porte 72 dans le mode Mobile,
+         que le build sort sous ce même point de rupture. */
       padding: var(--space-xs);
     }
 
@@ -329,5 +382,128 @@ const { links, current, home, action, label = 'Navigation principale' } = Astro.
     // La pilule peut garder la même largeur pendant que celle des onglets change
     // (mobile : max-width 100% et défilement). Un dernier recalage au cas où.
     document.fonts?.ready.then(() => place(target, true));
+  }
+
+  // Le masquage directionnel de la barre collée. Comme la pastille, le script ne
+  // décide de rien qu'on voie : il constate le sens du défilement et pose un
+  // attribut ; tout le mouvement reste au CSS.
+  for (const bar of document.querySelectorAll<HTMLElement>('[data-nav-sticky]')) {
+    // Deux nombres de comportement, pas de dessin — comme le seuil de 2px de
+    // CaseStudyList ou le point de rupture de 767px, aucun des deux n'est un
+    // token. Lus sur la barre avec un repli, pour qu'une page puisse les
+    // reprendre sans toucher au composant.
+    const nombre = (nom: string, repli: number) => {
+      const valeur = Number.parseFloat(getComputedStyle(bar).getPropertyValue(nom));
+      return Number.isFinite(valeur) ? valeur : repli;
+    };
+
+    const seuil = nombre('--nav-hide-after', 100);
+    const grain = nombre('--nav-hide-grain', 6);
+
+    /** La dernière position depuis laquelle on a tranché. */
+    let repère = Math.max(0, window.scrollY);
+
+    /** Le sens du dernier mouvement retenu. On part du haut : rien n'est masqué. */
+    let versLeBas = false;
+
+    /** Le focus est-il dans la barre ? Alors elle reste, quoi qu'il arrive. */
+    let épinglée = false;
+
+    let planifié = false;
+
+    /** L'état est recalculé à partir de ses trois entrées, jamais basculé : quel
+     *  que soit le chemin — défilement, focus, redimensionnement — il ne peut
+     *  donc pas dériver. */
+    const appliquer = () => {
+      const masquer = versLeBas && !épinglée && Math.max(0, window.scrollY) > seuil;
+      bar.toggleAttribute('data-nav-hidden', masquer);
+    };
+
+    const juger = () => {
+      planifié = false;
+      // Le rebond élastique d'iOS et de macOS passe sous zéro : ce n'est pas de
+      // la page, on ne le compte pas.
+      const y = Math.max(0, window.scrollY);
+
+      // Sous le seuil, la barre est là quel que soit le sens : le haut de la page
+      // est l'endroit où l'on a le plus besoin d'elle.
+      if (y <= seuil) {
+        repère = y;
+        versLeBas = false;
+        appliquer();
+        return;
+      }
+
+      const écart = y - repère;
+
+      // Sous le grain, on ne tranche pas — et surtout on ne déplace pas le
+      // repère : c'est ce qui laisse un défilement lent s'accumuler jusqu'à le
+      // franchir, au lieu de n'y arriver jamais. Sans lui, l'inertie d'un
+      // trackpad ou d'iOS fait clignoter la barre sur des allers-retours d'un
+      // pixel.
+      if (Math.abs(écart) < grain) return;
+
+      repère = y;
+      versLeBas = écart > 0;
+      appliquer();
+    };
+
+    // scrollY, et non un geste : c'est la seule mesure qui dise la vérité quand
+    // la page saute sans qu'on ait rien fait défiler — touche Origine, lien
+    // d'ancre, scrollTo. Un `wheel` ne verrait aucun de ces sauts et laisserait
+    // la barre masquée en haut de page.
+    // Sur la fenêtre, et non sur le document en capture comme CaseStudyList :
+    // c'est scrollY qu'on lit, donc c'est la fenêtre qu'on écoute. En capture, le
+    // défilement horizontal de la pilule en mobile nous réveillerait pour rien.
+    // `passive` : on ne l'empêche jamais.
+    // Une mesure par image et non une par évènement : un défilement inertiel en
+    // émet plusieurs pour une seule image, et deux positions lues dans la même
+    // image ne décrivent aucun mouvement. Le rAF n'est donc pas une optimisation,
+    // c'est ce qui donne son sens à la comparaison.
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (planifié) return;
+        planifié = true;
+        requestAnimationFrame(juger);
+      },
+      { passive: true },
+    );
+
+    // Le clavier passe devant la règle, et il épingle plutôt qu'il ne révèle :
+    // révélée seulement, la barre se remasquerait au premier défilement suivant,
+    // l'anneau de focus avec elle — c'est précisément ce que WCAG 2.4.11 interdit.
+    // Épinglée, elle reste tant que le focus est dedans.
+    // C'est le choix inverse de `inert`, et le paradoxe qu'il évite le justifie :
+    // une barre inerte ne peut plus recevoir le focus, donc plus jamais se
+    // révéler en le recevant — et le seul landmark de navigation de la page
+    // disparaîtrait des lecteurs d'écran sur un critère de position de défilement.
+    bar.addEventListener('focusin', () => {
+      épinglée = true;
+      appliquer();
+    });
+
+    // Une fois le focus sorti, on ne remasque pas : on recalcule, avec le sens
+    // qu'on avait retenu.
+    bar.addEventListener('focusout', (event) => {
+      if (bar.contains(event.relatedTarget as Node)) return;
+      épinglée = false;
+      appliquer();
+    });
+
+    // Les ancres, pour que la barre ne mange pas la cible du lien qu'on suit.
+    // Cette hauteur-là peut être mesurée : elle n'a de conséquence qu'au moment
+    // du saut, et rien ne bouge au chargement. Celle dont dépend le liseré d'une
+    // carte, elle, ne le peut pas — c'est pourquoi la page la calcule.
+    const décaler = () => {
+      document.documentElement.style.scrollPaddingTop = `${bar.offsetHeight}px`;
+    };
+
+    // `border-box`, impérativement : entre desktop et mobile, c'est le padding de
+    // la barre qui change, pas son contenu — il reste haut de 64px des deux
+    // côtés. Sur la boîte de contenu, observée par défaut, l'observateur ne
+    // verrait jamais rien et le décalage resterait celui du premier rendu.
+    new ResizeObserver(décaler).observe(bar, { box: 'border-box' });
+    décaler();
   }
 </script>
