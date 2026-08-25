@@ -43,6 +43,7 @@ que de le recopier.
 
 | Fichier | Quand l'ouvrir |
 |---|---|
+| [brief.md](brief.md) | **le point de départ** : les quatre lignes d'un ordre de travail |
 | [conventions.md](conventions.md) | avant d'écrire une ligne de composant |
 | [ajouter-un-composant.md](ajouter-un-composant.md) | un nœud Figma devient un `.astro` |
 | [modifier-un-composant.md](modifier-un-composant.md) | on touche à un composant existant |

@@ -9,6 +9,10 @@ composant s'ajoute.
 Il ne détient aucune valeur — il dit où aller et dans quel ordre. Voir
 [atelier/README.md](atelier/README.md).
 
+Une intervention se demande en **brief** — quatre lignes, gabarit dans
+[atelier/brief.md](atelier/brief.md). Un brief s'exécute sans question de retour : la ligne
+`FIGMA` dit s'il faut lire le fichier, attendre un dessin, ou écrire un écart.
+
 **Avant d'intervenir sur le système**, lire la procédure correspondante. Si aucune ne correspond,
 faire — et n'en écrire une que si le geste se répétera. Même politique que les variantes.
 
