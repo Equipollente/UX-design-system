@@ -223,36 +223,20 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
     }
   }
 
-  /* Sous 768px, la pile s'empile toujours — mais le premier écran cesse d'être
-     une couche. C'est la seule bascule mobile qui reste, et elle est mesurée :
-     l'intro réclame 701px dans une colonne de 390, où le titre se replie sur
-     sept lignes, alors que le premier écran n'en offre que 498 (660 − 90 − 72).
-     En couche, 203px passaient sous la carte : la fin du titre, la description
-     et le bouton n'étaient jamais visibles. Le liseré tenait, l'intro non.
-     La consigne « une hauteur et non un plancher » vaut donc tant que le contenu
-     tient dans l'écran. Sur téléphone il n'y tient pas, et c'est le liseré qui
-     cède plutôt que l'intro : le bloc reprend sa place dans le flux, l'intro
-     défile entière, puis les cartes s'empilent à la suite. La première n'affleure
-     plus sous l'intro — elle arrive quand on descend.
-     `static` et non `display: contents` : resté collé, le bloc se peindrait
-     par-dessus les cartes. Le rendre au flux est le seul geste.
-     Le jour où Figma dessine une intro mobile qui tient dans 498px, cette
-     bascule disparaît et le premier écran redevient une couche partout. Écrit
-     sur /components. */
+  /* Le contrat du premier écran ne connaît pas de point de rupture : il vaut à
+     toutes les largeurs, comme la pile. Le bloc reste une couche sur téléphone,
+     et c'est ce qui garantit le liseré partout — la première carte affleure de
+     --fold-peek sous l'intro, dès le chargement.
+     Ce que ça coûte est assumé, et c'est un arbitrage de dessin, pas un défaut :
+     l'intro de démonstration réclame 741px dans une colonne de 412, où son titre
+     se replie sur sept lignes, quand le premier écran n'en offre que la fenêtre
+     moins le liseré et la barre. Elle déborde donc par le bas, et la carte passe
+     dessus — description et bouton compris. C'est exactement ce que fait déjà une
+     fenêtre de bureau trop courte : le comportement n'est pas propre au mobile,
+     seule sa fréquence l'est. Le liseré prime sur ce qui dépasse, et c'est la
+     consigne. Écrit sur /components.
+     Il ne reste donc ici que la chrome de cette page de doc. */
   @media (max-width: 767px) {
-    .home-first {
-      position: static;
-      height: auto;
-    }
-
-    .intro-slot {
-      /* Le liseré n'a plus de sens quand le premier écran n'est plus une couche,
-         mais l'écart que Figma pose entre l'intro et la liste (209:2383), lui, en
-         garde : c'est le même nombre, et sans lui la première carte vient coller
-         au bouton de l'intro. */
-      padding-bottom: var(--fold-peek);
-    }
-
     .after {
       padding: var(--space-layout-48) var(--space-xl);
     }

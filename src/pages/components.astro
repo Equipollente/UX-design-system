@@ -1010,15 +1010,10 @@ const caseStudyListVars = [
         cesse, et c'est là où la pile s'arrête.
       </p>
       <p>
-        <strong>Une seule variante mobile subsiste, et elle n'est pas dans le composant : elle est
-        ici.</strong> Sous 768px, la pile s'empile toujours, mais le premier écran cesse d'être une
-        couche — <code>position: static; height: auto</code>. La raison est mesurée : l'intro réclame
-        <code>701px</code> dans une colonne de 390, où le titre se replie sur sept lignes, quand le
-        premier écran n'en offre que <code>498</code>. En couche, 203px passaient sous la carte — la
-        fin du titre, la description et le bouton n'étaient jamais visibles. Le liseré tenait, l'intro
-        non ; c'est donc le liseré qui cède. L'intro défile entière, puis les cartes s'empilent à la
-        suite, et la première n'affleure plus sous elle. La nav, elle, ne relève pas de ce bloc :
-        elle porte son propre collage et son propre rang, les mêmes à toutes les largeurs.
+        <strong>Ces règles n'ont pas de variante mobile</strong>, et c'est voulu : le premier écran
+        reste une couche à toutes les largeurs, donc le liseré est garanti partout, dès le
+        chargement. La nav, elle, ne relève pas de ce bloc : elle porte son propre collage et son
+        propre rang, les mêmes des deux côtés.
       </p>
       <p>
         Une dernière règle, et elle ne se devine pas : <strong>le bloc qui suit la pile doit être
@@ -1205,20 +1200,21 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>Sur téléphone, le premier écran n'est pas une couche — et c'est l'intro qui l'impose.</strong>
-        La pile s'empile partout, mais le bloc qu'elle recouvre reprend sa place dans le flux sous
-        768px. Mesuré : l'intro réclame <code>701px</code> dans une colonne de 390, où le titre se
-        replie sur sept lignes, quand le premier écran n'en offre que <code>498</code>
-        (660 − 90 − 72). En couche, <strong>203px passaient sous la première carte</strong> — la fin
-        du titre, la description et le bouton n'étaient jamais visibles.
+        <strong>Sur téléphone, l'intro déborde sous la première carte — et c'est le liseré qui
+        prime.</strong> Le premier écran est une couche à toutes les largeurs : sa hauteur vaut la
+        fenêtre moins le liseré et moins la barre, ce qui garantit l'affleurement partout. Mais
+        l'intro de démonstration réclame <code>741px</code> dans une colonne de 412, où son titre se
+        replie sur sept lignes, quand le premier écran n'en offre qu'environ <code>620</code>. Elle
+        déborde donc par le bas, et la carte passe dessus — description et bouton compris.
         <br />
-        La consigne « une hauteur et non un plancher » suppose que le contenu tient dans l'écran. Sur
-        téléphone il n'y tient pas, et il faut alors choisir qui cède : c'est le liseré, pas l'intro.
-        Conséquence assumée — la première carte n'affleure plus sous l'intro au chargement, elle
-        arrive quand on descend. Le jour où Figma dessine une intro mobile qui tient dans 498px,
-        cette dernière bascule disparaît et le premier écran redevient une couche partout. C'est le
-        seul cas mobile qui subsiste dans tout le système, et il vit dans la page, pas dans le
-        composant.
+        <strong>Ce n'est pas un cas mobile, c'est le cas des fenêtres courtes</strong>, que le système
+        connaît déjà : un écran de bureau trop bas produit exactement le même débordement, et
+        <code>justify-content: safe center</code> le fait tomber du bon côté — l'intro reste sous la
+        nav et ne dépasse que par le bas, là où quelque chose la recouvre toujours. Seule la fréquence
+        change : sur téléphone c'est la règle plutôt que l'exception. L'arbitrage est explicite —
+        <strong>le liseré prime sur ce qui dépasse</strong> — et il se renverse le jour où la maquette
+        dessine une intro mobile plus courte. Le titre, lui, reste celui de Figma : 42px, sept lignes,
+        et personne n'y touche pour faire tenir une géométrie.
       </p>
     </section>
   </main>

@@ -153,18 +153,24 @@ que la plupart des téléphones. Le repli n'avait plus d'objet, donc il n'existe
 ni le gabarit ne portent de règle sous 768 px, et le script a perdu le garde qui vérifiait que les
 couches se collaient vraiment — sa branche était devenue inatteignable.
 
-Une bascule mobile subsiste, mais elle a changé de camp : elle vit dans la **page**, pas dans le
-composant. Le premier écran cesse d'être une couche sous 768 px, parce que l'intro réclame 701 px
-dans une colonne de 390 quand ce premier écran n'en offre que 498 — en couche, 203 px passaient sous
-la première carte, dont la description et le bouton. Quand le contenu ne tient pas dans l'écran, il
-faut choisir qui cède : c'est le liseré, pas l'intro.
+Il ne reste aucune bascule mobile, ni dans le composant ni dans la page : le premier écran est une
+couche à toutes les largeurs, donc le liseré est garanti partout dès le chargement.
+
+Ce que ça coûte est un arbitrage, et il a été tranché explicitement : **le liseré prime sur ce qui
+dépasse**. L'intro réclame 741 px dans une colonne de 412 — son titre se replie sur sept lignes —
+quand le premier écran n'en offre qu'environ 620. Elle déborde donc sous la première carte,
+description et bouton compris. Ce n'est pas un cas mobile mais le cas des fenêtres courtes, que le
+système connaît déjà : un écran de bureau trop bas fait exactement pareil. Seule la fréquence change.
+Réduire le titre pour faire tenir la géométrie a été proposé et **refusé** : le titre est celui de
+Figma, et une consigne de dessin ne se corrige pas pour arranger un calcul.
 
 Trois choses que ce renversement apprend, et qui valent au-delà de ce cas. **Une raison de dessin non
-mesurée se périme sans prévenir** : celle-ci a tenu des mois et était fausse. **Un ordre d'empilement
-ne se déduit pas du positionnement** : la nav passait devant les cartes par effet de bord de leur
-`static`, elle écrit désormais son propre rang, le même des deux côtés — sans quoi tout ceci l'aurait
-cassée. Et **retirer une bascule en révèle une autre** : c'est en empilant sur téléphone qu'on a
-découvert que le premier écran, lui, n'y tenait pas. Le repli en cachait le symptôme.
+mesurée se périme sans prévenir** : celle du repli a tenu des mois et était fausse. **Un ordre
+d'empilement ne se déduit pas du positionnement** : la nav passait devant les cartes par effet de
+bord de leur `static`, elle écrit désormais son propre rang, le même des deux côtés — sans quoi tout
+ceci l'aurait cassée. Et **un arbitrage de dessin ne se tranche pas en écrivant du code** : le
+compromis entre le liseré et l'intro a d'abord été décidé dans le silence, puis corrigé par la
+personne à qui il revenait.
 
 Reste un écart connu, le seul du système où une mesure de dessin n'est pas constante : la couche est
 en `svh`, donc la barre d'URL du téléphone rend 60 à 90 px que la carte ne reprend pas, et le liseré
