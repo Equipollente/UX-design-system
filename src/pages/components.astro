@@ -749,21 +749,22 @@ const caseStudyListVars = [
         <li>
           <p class="desc">
             <strong>Sous 768px</strong>, les marges de 48px tomberaient à la moitié d'un écran de 390 :
-            elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et les
-            vignettes à 240px de haut. Figma ne dessine pas cette carte en mobile — c'est une décision
-            du code.
+            elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et la
+            piste à <code>272px</code>, ce qui laisse aux vignettes les 240px qu'elles avaient déjà.
+            Figma ne dessine pas cette carte en mobile — c'est une décision du code.
           </p>
         </li>
       </ul>
 
       <p class="flag">
         <strong>La carte accepte qu'on lui impose sa hauteur.</strong> Par défaut elle fait la taille
-        de son contenu — 779 px à 1280 px de large. <code>--card-height</code>, posée depuis
-        l'extérieur, la borne : c'est ainsi que <em>Case Study List</em> lui fait remplir un écran
-        entier, donc en recouvrir vraiment une autre. Une hauteur et non un plancher, sans quoi la
-        carte grandirait au-delà de l'écran dès que son contenu dépasse, et son bas resterait hors
-        d'atteinte une fois la carte collée en haut. Bornée, elle demande au carrousel de se
-        resserrer — c'est lui qui cède, jamais l'en-tête.
+        de son contenu — 735 px à 1280 px de large, ce que Figma dessine.
+        <code>--card-height</code>, posée depuis l'extérieur, la borne : c'est ainsi que
+        <em>Case Study List</em> lui fait remplir un écran entier, donc en recouvrir vraiment une
+        autre. Une hauteur et non un plancher, sans quoi la carte grandirait au-delà de l'écran dès
+        que son contenu dépasse, et son bas resterait hors d'atteinte une fois la carte collée en
+        haut. Bornée, elle passe l'écart au carrousel — c'est lui qui prend ou rend la place, jamais
+        l'en-tête.
       </p>
 
       <p class="flag">
@@ -807,14 +808,15 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>L'en-tête est le point fixe, le carrousel est ce qui bouge.</strong> Figma fige les
-        vignettes à <code>382px</code>, et c'est la hauteur d'où part la piste. Mais dans une carte
-        dont la hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait exactement
-        un écran, le carrousel prend ou rend tout ce qui reste — et les vignettes le suivent, puisque
-        c'est la piste qui porte la hauteur et l'image qui la remplit. L'en-tête, lui, ne bouge pas :
-        il est protégé par la taille minimale automatique des boîtes flexibles, que le carrousel lève
-        sur lui-même par <code>min-height: 0</code>. Montré seul, hors de toute carte, le carrousel
-        garde ses 382px.
+        <strong>L'en-tête est le point fixe, le carrousel est ce qui bouge.</strong> Figma fige la
+        piste à <code>442px</code> — le Slot de <code>88:143</code>, marges comprises — dont
+        <code>410</code> pour les images. C'est la hauteur d'où l'on part. Mais dans une carte dont la
+        hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait exactement un
+        écran, le carrousel prend ou rend tout ce qui reste, et les vignettes le suivent : c'est la
+        piste qui porte la hauteur, l'image la remplit. L'en-tête, lui, ne bouge pas — il est protégé
+        par la taille minimale automatique des boîtes flexibles, que le carrousel lève sur lui-même
+        par <code>min-height: 0</code>. Montré seul, hors de toute carte, le carrousel garde ses
+        <code>442</code>.
       </p>
 
       <p class="flag">
@@ -1095,14 +1097,13 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>La vignette du carrousel n'est plus figée à 382 px.</strong> Une couche fait
-        exactement un écran, et la carte est bornée à cette hauteur : bornée, elle ne peut plus
-        déborder, et c'est son carrousel qui se resserre pour tenir. La vignette garde donc les
-        <code>382px</code> de Figma dès que la fenêtre fait 834 px de haut — le format de la maquette
-        — et rétrécit en dessous : <code>363</code> à 760, <code>303</code> à 700, <code>243</code> à
-        640, soit à trois pixels près la valeur que le code utilise déjà en mobile. L'image maigrit,
-        elle n'est jamais rognée, et rien ne sort de l'écran à aucune hauteur. C'est un écart avec
-        Figma, qui fige cette hauteur : à trancher côté fichier.
+        <strong>La vignette du carrousel n'est plus figée à 410 px.</strong> Une couche fait
+        exactement un écran, et la carte est bornée à cette hauteur : l'en-tête ne bouge pas, et c'est
+        le carrousel qui prend ou rend la place. La vignette vaut les <code>410px</code> de Figma quand
+        la fenêtre fait 735 px de haut — la hauteur naturelle de la carte — puis suit dans les deux
+        sens : <code>315</code> à 640, <code>375</code> à 700, <code>509</code> à 834, <code>675</code>
+        à 1000. L'image maigrit ou grossit, elle n'est jamais rognée, et rien ne sort de l'écran à
+        aucune hauteur. C'est un écart avec Figma, qui fige cette hauteur : à trancher côté fichier.
       </p>
 
       <p class="flag">
