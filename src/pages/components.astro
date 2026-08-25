@@ -152,7 +152,7 @@ const caseStudyListProps = [
 const caseStudyListVars = [
   [
     '--fold-peek',
-    '50px',
+    '90px',
     'Le liseré de carte qui dépasse sous le bas de l’écran, et le chevauchement entre deux cartes — c’est le même nombre. À déclarer une fois sur la page.',
   ],
   [
@@ -474,7 +474,7 @@ const caseStudyListVars = [
       </p>
       <pre><code>{`<Nav sticky … />        <!-- hors de .home-first, pas dedans -->
 
-.home       { --fold-peek: 50px; }
+.home       { --fold-peek: 90px; }
 .home-first { position: sticky;
               top: var(--nav-height);
               height: calc(100svh - var(--fold-peek) - var(--nav-height)); }
@@ -486,7 +486,8 @@ const caseStudyListVars = [
         <code>top: var(--nav-height)</code> et non <code>0</code> : sinon l'intro glisserait derrière
         une barre qui n'a pas de fond pendant les cent premiers pixels, avant que le masquage ne
         s'enclenche. La barre reste dans le flux — un élément collé garde sa place — donc le premier
-        écran fait toujours <code>100svh − 50px</code> en tout, et le liseré ne bouge pas d'un pixel.
+        écran fait toujours <code>100svh</code> moins le liseré en tout, et celui-ci ne bouge pas d'un
+        pixel.
       </p>
       <p>
         <strong>La page ne déclare pas <code>--nav-height</code>, elle la lit.</strong> C'est un
@@ -864,7 +865,7 @@ const caseStudyListVars = [
         — mais la valeur est <em>lue</em> dans <code>--intro-gap</code>, jamais déclarée sur
         <code>.intro</code>, pour qu'une valeur posée sur un ancêtre passe au travers. C'est le seul
         endroit de l'intro où il y a de l'air à reprendre, et une page qui cale son premier écran sur
-        la hauteur de la fenêtre en a besoin : sous 650 px, le gabarit le ramène à
+        la hauteur de la fenêtre en a besoin : sous 690 px, le gabarit le ramène à
         <code>space.xl</code> pour que l'intro tienne dans ce qu'on lui laisse. Déclarer la variable
         sur <code>.intro</code> battrait l'héritage et le point de surcharge ne servirait à rien.
       </p>
@@ -973,7 +974,7 @@ const caseStudyListVars = [
         liste ne peut pas mesurer ce qui est au-dessus d'elle, et que le mesurer en JavaScript ferait
         sauter la carte au chargement. Trois règles suffisent :
       </p>
-      <pre><code>{`.home       { --fold-peek: 50px; }
+      <pre><code>{`.home       { --fold-peek: 90px; }
 .home-deck  { }   /* le premier écran + la pile, et rien d'autre */
 .home-first { position: sticky;
               top: var(--nav-height);
@@ -983,7 +984,7 @@ const caseStudyListVars = [
   .home-first { position: static; height: auto; }
 }`}</code></pre>
       <p>
-        Une <em>hauteur</em>, et non un plancher : c'est elle qui garantit le liseré de 50 px à toute
+        Une <em>hauteur</em>, et non un plancher : c'est elle qui garantit le liseré à toute
         hauteur d'écran. Avec <code>min-height</code>, un contenu un peu grand pousse le bloc et mange
         le liseré. Reste à donner à la liste l'id de ce bloc, par <code>covers</code>, pour qu'elle le
         rende inerte une fois recouvert.
@@ -1003,10 +1004,21 @@ const caseStudyListVars = [
         la fin de l'intro.
       </p>
       <p>
+        Une dernière règle, et elle ne se devine pas : <strong>le bloc qui suit la pile doit être
+        positionné</strong> — <code>position: relative</code> suffit, sans décalage. Sur une fenêtre
+        courte l'intro déborde de son écran par le bas ; une carte la recouvre pendant toute la pile,
+        mais en fin de page il n'y a plus de carte. Le premier écran est collé, donc positionné, et
+        il se peint par-dessus un bloc qui ne l'est pas, quel que soit l'ordre du DOM. Lui donner un
+        fond n'y change rien — il serait peint dans la mauvaise couche. Positionné, il passe devant :
+        il devient le sol qui recouvre, comme les cartes avant lui, et sans qu'un
+        <code>z-index</code> soit écrit.
+      </p>
+      <p>
         Le reste tombe tout seul. Le bouton de l'intro et l'onglet du Nav pointent
         <code>#projets</code>, la liste porte cette ancre, et le navigateur amène son haut à
-        <code>100svh − 50px</code> — c'est-à-dire exactement la position « première carte collée en
-        haut ». Le clic et le défilement décrivent le même état sans partager une ligne de code.
+        <code>100svh</code> moins le liseré — c'est-à-dire exactement la position « première carte
+        collée en haut ». Le clic et le défilement décrivent le même état sans partager une ligne de
+        code.
       </p>
 
       <div class="table-scroll">
@@ -1036,14 +1048,17 @@ const caseStudyListVars = [
         une fois empilées (<code>222:912</code>, <code>itemSpacing: −50</code>). Le liseré, lui, tombe
         tout seul dans la maquette et n'y est pas constant : <code>166px</code> au repos
         (834 − 101 − 517 − 50), <code>70px</code> une fois la première carte montée. Le code fait le
-        choix inverse — un liseré <em>garanti</em> de 50px dans tous les états — parce que c'est
-        l'intention. Les deux lectures se rejoignent à une condition, qui est devenue la clé du
-        calcul : une carte au repos occupe la hauteur de l'écran.
+        choix inverse — un liseré <em>garanti</em> dans tous les états — parce que c'est l'intention.
+        Il vaut <strong>90px</strong>, et ce nombre est un arbitrage, pas une lecture : il a été jugé
+        à l'écran, et il tombe entre les <code>166</code> et les <code>70</code> que la maquette
+        dessine. Il y était à 50 jusqu'au 2026-08-25 ; le déplacement rapproche le code de ce qui est
+        dessiné plutôt qu'il ne l'en éloigne. Les deux lectures se rejoignent à une condition, qui est
+        devenue la clé du calcul : une carte au repos occupe la hauteur de l'écran.
       </p>
 
       <p class="flag">
         <strong>Trois mesures de la maquette ne suivent pas.</strong> Le bloc nav + intro est dessiné à
-        668px là où un liseré de 50 en demande 784 sur un écran de 834 — les 116px d'écart sont l'air
+        668px là où un liseré de 90 en demande 744 sur un écran de 834 — les 76px d'écart sont l'air
         qui manque autour de l'intro. Et les deux cartes sont dessinées à 814 et 776px là où le
         comportement en demande 834. À reprendre côté Figma : c'est le fichier qui doit rattraper le
         code, pas l'inverse.
@@ -1059,10 +1074,11 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>Le liseré n'a pas de token.</strong> <code>space.layout.48</code> vaut 48 : ces 2px
-        d'écart déplaceraient le liseré à chaque cran, puisqu'il entre dans le calcul de position. La
-        valeur reste donc en dur, dans <code>--fold-peek</code>, comme <code>--card-shadow</code> et
-        <code>--intro-measure</code> avant elle. Le jour où Figma nomme ce 50, il rentre dans le rang.
+        <strong>Le liseré n'a pas de token.</strong> Le cran voisin, <code>space.layout.96</code>,
+        vaut 96 : ces 6px d'écart déplaceraient le liseré à chaque cran, puisqu'il entre dans le calcul
+        de position. La valeur reste donc en dur, dans <code>--fold-peek</code>, comme
+        <code>--card-shadow</code> et <code>--intro-measure</code> avant elle. Le jour où Figma nomme
+        ce 90, il rentre dans le rang.
       </p>
 
       <p class="flag">
@@ -1088,11 +1104,11 @@ const caseStudyListVars = [
       </p>
 
       <p class="flag">
-        <strong>L'écart de 50 px sous l'intro est absorbé par le centrage.</strong> Figma le pose en
+        <strong>L'écart que Figma pose sous l'intro est absorbé par le centrage.</strong> Il le pose en
         <code>itemSpacing</code> sur <code>209:2383</code>, mais Figma ne dessine aucun mou : son
         premier écran fait exactement la taille de son contenu. Dès qu'on cale ce bloc sur la hauteur
         de la fenêtre, il y a du mou, et le répartir autour de l'intro vaut mieux que de tout laisser
-        tomber sous elle. Sur une fenêtre basse — moins de 650 px — c'est l'inverse : l'intro se
+        tomber sous elle. Sur une fenêtre basse — moins de 690 px — c'est l'inverse : l'intro se
         resserre, son grand écart interne retombe à <code>space.xl</code>. Le liseré, lui, ne cède
         jamais.
       </p>
@@ -1193,9 +1209,11 @@ const caseStudyListVars = [
      sans les déclarer — c'est tout ce qu'il faut pour le montrer petit.
      --layer-height vaut la hauteur de la boîte, et le faux premier écran cette
      même hauteur moins le liseré : c'est la géométrie de la vraie page, à
-     l'échelle. */
+     l'échelle. Le liseré suit donc la même proportion — 90px sur une fenêtre de
+     900 fait un dixième, et un dixième de 420 fait 42. Le facteur brut en ferait
+     une bande, pas un affleurement. */
   .demo-list {
-    --fold-peek: 32px;
+    --fold-peek: 42px;
     --layer-height: 420px;
 
     height: 420px;
@@ -1207,7 +1225,7 @@ const caseStudyListVars = [
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(420px - 32px);
+    height: calc(420px - 42px);
     margin: 0;
     padding: var(--space-xl);
     background: var(--color-bg-section);

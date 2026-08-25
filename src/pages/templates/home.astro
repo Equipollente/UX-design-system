@@ -45,7 +45,8 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
 
       {/* Le premier écran : l'intro. C'est la couche du dessous de la pile — il
           tient sa place et les cartes lui passent dessus. Sa hauteur est ce qui
-          fait affleurer la première carte de 50px, et rien d'autre. */}
+          fait affleurer la première carte, et rien d'autre : le liseré est ce
+          qu'on lui retire, --fold-peek. */}
       <div class="home-first" id="accueil">
         <div class="intro-slot">
           <Intro
@@ -90,8 +91,14 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
 
   .home {
     /* Déclaré une seule fois : le premier écran et la pile lisent le même nombre.
-       Figma le pose en itemSpacing (209:2383) ; aucun token ne le porte. */
-    --fold-peek: 50px;
+       Il vaut deux fois — le liseré de carte qui dépasse sous le bas de l'écran,
+       et le chevauchement entre deux cartes, qui est le même écart vu de l'autre
+       côté. Le changer ici les déplace ensemble, et c'est voulu.
+       90 est un arbitrage, pas une lecture : Figma pose 50 en itemSpacing
+       (209:2383), mais ce 50 n'est pas le liseré — celui qu'il dessine vaut 166
+       au repos puis 70, jamais constant. Le code en garantit un seul, et 90 tombe
+       entre les deux. Aucun token ne le porte. Écrit sur /components. */
+    --fold-peek: 90px;
   }
 
   /* --nav-height n'est pas déclarée ici, seulement lue : c'est le token
@@ -111,9 +118,9 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      Collé à .home-deck et non à .home : son collage doit cesser avec la pile,
      sinon il se peindrait par-dessus tout ce qui suit — la section de clôture
      comprise.
-     Une hauteur, et non un plancher : c'est elle qui garantit le liseré de 50px
-     à toute hauteur d'écran. Avec min-height, un contenu un peu grand poussait
-     le bloc et mangeait le liseré. */
+     Une hauteur, et non un plancher : c'est elle qui garantit le liseré à toute
+     hauteur d'écran. Avec min-height, un contenu un peu grand poussait le bloc
+     et mangeait le liseré. */
   .home-first {
     position: sticky;
     /* Sous la barre, et non sous le haut de la fenêtre : sans quoi l'intro
@@ -133,7 +140,7 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      point de rupture. */
 
   /* L'intro prend l'air qui reste, centrée : le mou se répartit au-dessus et
-     au-dessous d'elle. Figma pose 50px sous elle (209:2383), mais Figma ne
+     au-dessous d'elle. Figma pose un écart sous elle (209:2383), mais Figma ne
      dessine aucun mou — son premier écran fait exactement la taille de son
      contenu. Ajouter ce padding en plus du centrage ne ferait que décaler le
      bloc vers le haut, et il ne tiendrait pas sur une fenêtre basse : l'écart
@@ -145,7 +152,7 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
     flex: 1;
     min-height: 0;
     flex-direction: column;
-    /* `safe` : sous ~650px de fenêtre, l'intro ne tient plus dans son écran moins
+    /* `safe` : sous ~690px de fenêtre, l'intro ne tient plus dans son écran moins
        le liseré. Centrée, elle déborderait des deux côtés et remonterait sur la
        nav. En alignement sûr, le centrage cède au profit du haut dès que ça
        déborde : l'intro reste sous la nav et ne dépasse que par le bas, où la
@@ -156,7 +163,17 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
 
   /* ── Le reste est la chrome de cette page de doc, pas du système ────────── */
 
+  /* `relative` sans décalage : il ne déplace rien, il change de couche. Sur une
+     fenêtre courte, l'intro déborde de son écran par le bas — c'est assumé, une
+     carte passe dessus. Mais en fin de page il n'y a plus de carte, et le bas de
+     l'intro tombait dans cette section : collé, .home-first est un élément
+     positionné, et un élément positionné se peint par-dessus un élément qui ne
+     l'est pas, quel que soit l'ordre du DOM. Un fond n'y suffirait pas — il serait
+     peint dans la mauvaise couche. Positionné, ce bloc passe devant : il devient
+     le sol qui recouvre, comme les cartes avant lui, et sans qu'un z-index soit
+     écrit. */
   .after {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -185,13 +202,16 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
     text-decoration: none;
   }
 
-  /* Sous ~650px de fenêtre, l'intro (601px avec la nav) ne tient plus dans son
-     écran moins le liseré. C'est le liseré qui gagne — la consigne est qu'il
-     tienne à toute hauteur — donc c'est l'intro qui se resserre : son grand
-     écart interne retombe à space.xl, ce qui lui rend 40px et la fait tenir
-     jusqu'à ~610px de fenêtre. En dessous, elle dépasse par le bas, où la carte
-     la recouvre. */
-  @media (max-height: 650px) {
+  /* Sous ~690px de fenêtre, l'intro ne tient plus dans son écran moins le liseré :
+     il lui faut 513px, plus les 88 de la barre et le liseré. C'est le liseré qui
+     gagne — la consigne est qu'il tienne à toute hauteur — donc c'est l'intro qui
+     se resserre : son grand écart interne retombe à space.xl, ce qui lui rend
+     40px et la fait tenir jusqu'à ~651px. En dessous, elle dépasse par le bas, où
+     la carte la recouvre — et en fin de page, où il n'y a plus de carte, c'est
+     .after qui la recouvre.
+     Ce seuil est dérivé de --fold-peek : il suit le liseré pixel pour pixel, et
+     doit être recalculé si celui-ci change. */
+  @media (max-height: 690px) {
     .intro-slot {
       --intro-gap: var(--space-xl);
     }

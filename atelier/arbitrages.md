@@ -31,7 +31,7 @@ trois familles, et une seule entre :
 | Section.Intro | `209:2348` | trois couleurs tapées à la main, non liées | /components → Intro | ouvert |
 | Section.Intro | `142:1354` | la variante mobile ne descend pas au plancher déclaré (320) | /components → Intro | ouvert |
 | Style `heading/display` | — | la description annonce « tight », les valeurs disent 1.23 et 0 | /components → Intro | ouvert |
-| Page HP | `222:1168` | bloc nav + intro à 668 là où le liseré en demande 784 | /components → Case Study List | ouvert |
+| Page HP | `222:1168` | bloc nav + intro à 668 là où le liseré en demande 744 | /components → Case Study List | ouvert |
 | Page HP | `222:1168` | cartes à 814 et 776 là où le comportement en demande 834 | /components → Case Study List | ouvert |
 | Page Icons | `45:395` | le nommage mélange quatre conventions pour onze objets | /icons → Icon | ouvert |
 | Icônes | `45:395` | `file-text`, `box-plus`, `mail-edit` s'exportent en aplat | /icons → Icon | ouvert |
@@ -46,7 +46,7 @@ nomme, le composant n'a qu'une ligne à changer.
 | `icon.size.*` | emprunt à `button.icon-size.*` | /icons → Icon | ouvert |
 | les ombres `shadow/lg` et `shadow/lg-invert` | `--card-shadow`, `--carousel-item-shadow` | /components → Case Study Card | ouvert |
 | une mesure de texte | `--intro-measure`, `--header-title-min` | /components → Intro | ouvert |
-| un cran à 50 pour le liseré | `--fold-peek` — le cran voisin ne tombe pas juste | /components → Case Study List | ouvert |
+| un cran à 90 pour le liseré | `--fold-peek` — `space.layout.96` est à 6 px, et l'écart déplacerait le liseré à chaque cran | /components → Case Study List | ouvert |
 | un cran à 33 et un à 10 | `--space-2xl` et `--space-md`, les crans voisins | /components → Case Study Card | ouvert |
 
 ## Nommage

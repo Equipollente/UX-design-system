@@ -98,14 +98,17 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
 <style>
   .case-study-list {
     /* Le liseré qui dépasse sous le bas de l'écran, et le chevauchement entre
-       deux cartes : c'est le même nombre, vu des deux côtés. Figma le pose en
-       itemSpacing — +50 entre l'intro et la liste (209:2383), −50 entre les
-       cartes une fois empilées (222:912) — mais aucun token ne le porte :
-       space.layout.48 vaut 48, et ces 2 px déplaceraient le liseré à chaque
-       cran. Signalé sur /components.
+       deux cartes : c'est le même nombre, vu des deux côtés.
+       90 est un arbitrage, pas une lecture. Figma pose bien 50 en itemSpacing —
+       +50 entre l'intro et la liste (209:2383), −50 entre les cartes empilées
+       (222:912) — mais ce 50 n'est pas le liseré : celui qu'il dessine vaut 166
+       au repos puis 70, il n'est jamais constant. Le code en garantit un seul
+       dans tous les états, et 90 tombe entre les deux valeurs dessinées.
+       Aucun token ne le porte : le cran voisin est space.layout.96, et ces 6 px
+       déplaceraient le liseré à chaque cran. Signalé sur /components.
        La page déclare --fold-peek une seule fois ; son premier écran et cette
        pile lisent alors le même nombre. */
-    --peek: var(--fold-peek, 50px);
+    --peek: var(--fold-peek, 90px);
   }
 
   /* Le repère de toutes les couches : c'est ce bloc qui borne leur collage. Une
@@ -145,9 +148,9 @@ const classes = ['case-study-list', className].filter(Boolean).join(' ');
   /* Les couches sont positionnées : elles se peignent dans l'ordre du DOM. La
      carte 2 recouvre la carte 1 sans qu'aucun z-index soit écrit. */
 
-  /* Le chevauchement que Figma pose en itemSpacing: -50 (222:912). Il ne touche
-     pas au liseré — la hauteur de couche l'absorbe — il raccourcit de 50px la
-     course d'un cran. */
+  /* Le chevauchement, que Figma pose en itemSpacing négatif (222:912). Il ne
+     touche pas au liseré — la hauteur de couche l'absorbe — il raccourcit d'un
+     liseré la course d'un cran. */
   .layer + .layer {
     margin-top: calc(-1 * var(--peek));
   }

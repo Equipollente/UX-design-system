@@ -110,12 +110,34 @@ Même contrat que les flèches du Carousel : sans son script, le composant march
 
 `← b9f0ff8`
 
-## Le liseré de la pile vaut 50 px par arbitrage, pas par lecture
+## Le liseré de la pile vaut 90 px par arbitrage, pas par lecture
 
 Figma pose bien 50 en `itemSpacing`, mais ce n'est pas le liseré : celui qu'il dessine vaut 166 px
-au repos puis 70, il n'est pas constant. Le code garantit 50 partout, parce que c'est l'intention.
-Les deux lectures se rejoignent à une condition, devenue la clé du calcul : **une carte au repos
-occupe la hauteur de l'écran.**
+au repos puis 70, il n'est pas constant. Le code en garantit un seul partout, parce que c'est
+l'intention. Les deux lectures se rejoignent à une condition, devenue la clé du calcul : **une carte
+au repos occupe la hauteur de l'écran.**
+
+Il valait 50 jusqu'au 2026-08-25, et il a été porté à 90 en montant la pile sur le portfolio : à 50,
+le liseré se lisait comme un défaut d'alignement plutôt que comme une carte qui attend. Le nombre
+n'a pas d'autre source que ce jugement — mais il tombe entre les 166 et les 70 que la maquette
+dessine, donc il rapproche le code de ce qui est dessiné au lieu de l'en éloigner.
+
+Le liseré n'est pas un réglage isolé : le chevauchement entre deux cartes est le même nombre vu de
+l'autre côté, et le seuil de fenêtre basse du gabarit en est dérivé pixel pour pixel. Le déplacer,
+c'est déplacer les trois.
+
+`← b9f0ff8`
+
+## Le bloc qui suit la pile doit être positionné
+
+Sur une fenêtre courte, l'intro déborde du premier écran par le bas. C'est assumé : une carte la
+recouvre pendant toute la pile. Mais en fin de page il n'y a plus de carte, et le premier écran —
+collé, donc positionné — se peint par-dessus le bloc qui suit, quel que soit l'ordre du DOM. Lui
+donner un fond ne suffit pas : il est peint dans la mauvaise couche.
+
+`position: relative`, sans décalage, suffit à l'y remettre. Le bloc devient alors le sol qui
+recouvre, comme les cartes avant lui, et aucun `z-index` n'est écrit. Le cas a été mesuré sur le
+portfolio, pas supposé — et le gabarit portait le même défaut.
 
 `← b9f0ff8`
 
