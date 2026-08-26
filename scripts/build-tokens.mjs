@@ -35,6 +35,7 @@ const GROUP_TITLES = {
   color: 'Couleurs',
   space: 'Espacements',
   radius: 'Rayons',
+  shadow: 'Ombres — les parties nommées, puis les ombres composées',
   font: 'Typographie',
   motion: 'Mouvement — durées et courbes',
   button: 'Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13)',
@@ -87,7 +88,16 @@ function toCss(token) {
 
   if (isAlias(value)) return `var(${cssName(aliasTarget(value))})`;
 
-  if (type === 'color') return value.hex;
+  if (type === 'color') {
+    const { alpha = 1, components } = value;
+    if (alpha === 1) return value.hex;
+    // Une couleur transparente ne s'écrit pas en hex sans devenir illisible :
+    // `#2F2D2E1A` ne dit pas 10 %. Les trois couleurs d'ombre sont les seules
+    // concernées aujourd'hui, et c'est exactement la forme que les composants
+    // portaient en dur avant d'être nommées.
+    const [r, g, b] = components.map((c) => Math.round(c * 255));
+    return `rgb(${r} ${g} ${b} / ${round(alpha)})`;
+  }
 
   if (type === 'string') {
     if (path.startsWith('font.family.')) {
@@ -129,6 +139,45 @@ const resolved = base.map((t) => ({
 
 // --- Émission de tokens.css --------------------------------------------------
 
+/**
+ * Recompose les ombres à partir de leurs parties.
+ *
+ * Ajoutée par le build, pas par Figma — comme les polices de repli. Figma n'a
+ * pas de type de variable « ombre » : une variable y est couleur, nombre, texte
+ * ou booléen. Les parties d'une couche sont donc nommées séparément et liées à
+ * l'effet dans le fichier — le dessin et le code lisent la même valeur, et rien
+ * ne peut diverger. Il ne reste qu'à les remettre bout à bout, ici.
+ *
+ * Deux règles du système sont écrites dans cette fonction plutôt que dans une
+ * variable, parce que ce sont des règles et non des valeurs :
+ *
+ *   — aucune ombre n'a de décalage horizontal, d'où le `0` en tête ;
+ *   — toute ombre pose la même couche de contact, d'où `shadow.contact`, qui
+ *     n'est pas une ombre mais la seconde couche de toutes les autres.
+ *
+ * Les parties restent émises à côté des composées : c'est ce qui rend une
+ * ombre réglable dans Figma sans toucher au code.
+ */
+function composeShadows(tokens) {
+  const layer = (prefix) => {
+    const part = (suffix) => tokens.find((t) => t.name === `${prefix}-${suffix}`);
+    const [y, blur, spread, color] = ['y', 'blur', 'spread', 'color'].map(part);
+    if (!y || !blur || !color) return null; // couche incomplète : on n'invente pas
+    return ['0', y, blur, spread, color]
+      .filter(Boolean)
+      .map((t) => (typeof t === 'string' ? t : `var(${t.name})`))
+      .join(' ');
+  };
+
+  const contact = layer(cssName('shadow.contact'));
+
+  return [...new Set(tokens.map((t) => t.path.split('.')[1]))]
+    .filter((sub) => sub !== 'contact')
+    .map((sub) => ({ name: cssName(`shadow.${sub}`), own: layer(cssName(`shadow.${sub}`)) }))
+    .filter((s) => s.own)
+    .map((s) => ({ name: s.name, css: [s.own, contact].filter(Boolean).join(', ') }));
+}
+
 const pad = Math.max(...resolved.map((t) => t.name.length)) + 1;
 const declare = (t) => `  ${(t.name + ':').padEnd(pad + 1)} ${t.css};`;
 
@@ -168,6 +217,15 @@ for (const [group, title] of Object.entries(GROUP_TITLES)) {
     if (subgroup !== undefined && current !== subgroup) lines.push('');
     subgroup = current;
     lines.push(declare(token));
+  }
+
+  // Les composées ferment le groupe : on lit les parties, puis ce qu'elles font.
+  if (group === 'shadow') {
+    const composed = composeShadows(tokens);
+    if (composed.length) {
+      lines.push('');
+      for (const shadow of composed) lines.push(declare(shadow));
+    }
   }
 }
 

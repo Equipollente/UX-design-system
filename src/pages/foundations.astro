@@ -25,6 +25,16 @@ const weights = byPrefix('font.weight.');
 const families = byPrefix('font.family.');
 const spaces = byGroup('space');
 const radii = byGroup('radius');
+
+// Les ombres. Figma n'a pas de type de variable « ombre » : chaque partie y est
+// nommée seule et liée à l'effet, et `npm run tokens` les remet bout à bout.
+// Les sous-groupes ne sont pas listés en dur — `contact` est la seule à porter
+// un nom que cette page connaisse, parce qu'elle n'est pas une ombre mais la
+// seconde couche de toutes les autres.
+const shadowParts = (sub: string) => byPrefix(`shadow.${sub}.`);
+const shadowSubs = [...new Set(byGroup('shadow').map((t) => t.path.split('.')[1]))];
+const shadows = shadowSubs.filter((sub) => sub !== 'contact');
+const contact = shadowParts('contact');
 const durations = byPrefix('motion.duration.');
 const easings = byPrefix('motion.easing.');
 const layout = byGroup('layout');
@@ -224,6 +234,74 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
       </ul>
     </section>
 
+    <!-- ── Ombres ───────────────────────────────────────────────────────── -->
+    {
+      shadows.length > 0 && (
+        <section>
+          <h2>Ombres</h2>
+          <p class="section-note">
+            Figma n'a pas de type de variable « ombre » : une variable y est couleur, nombre, texte
+            ou booléen. Chaque partie est donc nommée seule et <strong>liée à l'effet</strong> dans
+            le fichier — le dessin et le code lisent la même valeur, et rien ne peut diverger.
+            <code>npm run tokens</code> les remet bout à bout. Un composant utilise la ligne
+            composée, jamais les parties.
+          </p>
+
+          <ul class="shadows">
+            {shadows.map((sub) => (
+              <li>
+                <div class="shadow-box" style={`box-shadow: var(--shadow-${sub})`} />
+                <code class="name">--shadow-{sub}</code>
+                <ul class="parts">
+                  {shadowParts(sub).map((t) => (
+                    <li>
+                      <code class="name">{t.name}</code>
+                      <span class="value">{t.resolved}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+
+          {contact.length > 0 && (
+            <div class="family">
+              <h3>La couche de contact</h3>
+              <p class="section-note">
+                Toutes les ombres du système posent la même seconde couche, très près de la surface.
+                Ce n'est pas une ombre : elle est nommée une fois et entre dans chacune des
+                précédentes.
+              </p>
+              <ul class="parts">
+                {contact.map((t) => (
+                  <li>
+                    <code class="name">{t.name}</code>
+                    <span class="value">{t.resolved}</span>
+                    {t.description && <p class="desc">{t.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p class="flag">
+            <strong>Les couleurs d'ombre ne suivent pas l'encre.</strong> Elles valent
+            <code>color.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
+            avec la couleur : on ne peut pas pointer l'encre et n'en changer que la transparence.
+            Les trois sont donc des couleurs littérales. Si l'encre du système change, elles sont à
+            reprendre à la main — c'est le seul point du groupe qui puisse dériver.
+          </p>
+
+          <p class="flag">
+            <strong>Aucune ombre n'a de décalage horizontal.</strong> Le <code>0</code> de tête
+            n'est pas un token : c'est une règle du système, écrite dans
+            <code>build-tokens.mjs</code> avec la couche de contact. Le jour où une ombre en
+            demande un, il devient une variable comme les autres.
+          </p>
+        </section>
+      )
+    }
+
     <!-- ── Mouvement ────────────────────────────────────────────────────── -->
     <section>
       <h2>Mouvement</h2>
@@ -394,6 +472,41 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     .track {
       --piste: calc(var(--space-layout-128) * 2);
     }
+  }
+
+  /* — ombres —
+     Les boîtes sont posées sur le fond de page et non sur une surface : c'est
+     là qu'une ombre se lit. La marge haute est celle qu'exige `lg-invert`, qui
+     porte vers le haut — sans elle, l'ombre sortirait de sa case. */
+  .shadows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-2xl);
+  }
+
+  /* `lg-invert` porte 46px au-dessus de sa boîte — 30 de décalage, 30 de flou,
+     moins les 14 d'étalement. `space.layout.48` est le premier cran qui les
+     couvre ; en dessous l'ombre mordrait sur la section précédente. */
+  .shadows > li {
+    padding-block-start: var(--space-layout-48);
+  }
+
+  .shadow-box {
+    height: 7rem;
+    margin-block-end: var(--space-md);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-md);
+  }
+
+  .parts {
+    list-style: none;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xs);
   }
 
   /* — rayons — */
