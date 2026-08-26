@@ -11,10 +11,12 @@ import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
+import edit from '../icons/edit.svg';
 import fileText from '../icons/file-text.svg';
 import mailEdit from '../icons/mail-edit.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
+import trash from '../icons/trash.svg';
 
 export const icons = {
   'arrow-narrow-down': arrowNarrowDown,
@@ -24,10 +26,12 @@ export const icons = {
   'box-plus': boxPlus,
   'circle-face-content': circleFaceContent,
   'corner-right-down': cornerRightDown,
+  'edit': edit,
   'file-text': fileText,
   'mail-edit': mailEdit,
   'quote-down': quoteDown,
   'route': route,
+  'trash': trash,
 } as const;
 
 /** Les noms qu'un appelant a le droit d'écrire. */
