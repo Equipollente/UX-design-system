@@ -6,6 +6,10 @@
 // Une pilule sur laquelle on clique est un Button. Et le texte doit dire ce
 // qu'il veut dire — la couleur ne porte pas de sens à elle seule.
 //
+// Un tag n'a qu'une couleur, pas deux : --tag-color reprend d'un coup le liseré
+// et l'encre. C'est le seul point de surcharge — le dessin, la graisse, le
+// rayon et la mesure ne se reprennent pas.
+//
 // Figma 19:12. Le composant Figma décrit aussi des variantes remplies (fond
 // ramp 100, encre ramp 800, chaque paire au-delà de 8:1). Le code n'implémente
 // que l'outline, la seule qu'une vue utilise aujourd'hui — même politique que
@@ -13,6 +17,11 @@
 
 interface Props {
   class?: string;
+  /**
+   * Le point de surcharge décrit plus haut : --tag-color, et rien d'autre.
+   * Déclarée parce qu'elle fait partie du contrat.
+   */
+  style?: string;
 }
 
 const { class: className, ...rest } = Astro.props;
@@ -27,13 +36,21 @@ const classes = ['tag', className].filter(Boolean).join(' ');
     align-items: center;
     justify-content: center;
     padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--color-accent-500);
     border-radius: var(--radius-pill);
     font-family: var(--font-family-body);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-ui);
     line-height: var(--font-line-height-snug);
     letter-spacing: var(--font-letter-spacing-wide);
-    color: var(--color-text-accent);
+
+    /* Le repli se lit sans être déclaré sur .tag : une déclaration ici battrait
+       ce qu'un appelant — ou un ancêtre — pose, et le point de surcharge ne
+       servirait à rien. La couleur reçue se prend au cran 800 d'une rampe, celui
+       que Figma donne déjà à l'encre des variantes remplies : c'est le seul cran
+       qui tient 4,5:1 sur les trois fonds du système (WCAG 1.4.3) — accent 11,2:1,
+       highlight 6,7:1, neutral 9:1 au pire, sur bg.section. Le liseré suit la même
+       couleur et passe donc 1.4.11 par surcroît. */
+    border: 1px solid var(--tag-color, var(--color-accent-500));
+    color: var(--tag-color, var(--color-text-accent));
   }
 </style>
