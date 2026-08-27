@@ -54,7 +54,7 @@ un composant. Les deux fichiers générés sont versionnés parce que `npm run d
 
 ## Les icônes ne s'écrivent pas non plus dans le code
 
-Même contrat que les tokens, même raison. Les 17 icônes sont les composants de la page Figma
+Même contrat que les tokens, même raison. Les 18 icônes sont les composants de la page Figma
 `Icons` (`45:395`), exportés dans `icons/` **au niveau du composant et non du vecteur** — sans quoi
 la `viewBox` n'est pas celle de la frame 24 × 24, et le script refuse le fichier. `npm run icons` en
 fait `src/design-system/icons/*.svg` (nettoyés) et `src/design-system/lib/icons.ts` (le registre
