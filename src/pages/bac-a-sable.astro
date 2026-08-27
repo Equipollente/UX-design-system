@@ -1,0 +1,1350 @@
+---
+// Bac à sable — la page où l'on manipule un composant plutôt que de lire sa
+// fiche. Trois ateliers : on règle, on voit, on copie le code entier.
+//
+// Elle ne remplace pas /components, qui documente le système à lui-même : les
+// écarts Figma, les tokens, la doctrine. Ici, une seule question — qu'est-ce
+// que j'écris, et est-ce que ça a marché.
+//
+// Astro rend au build : on ne peut pas re-rendre un composant dans le
+// navigateur. Toutes les combinaisons sont donc rendues à l'avance et le script
+// n'en montre qu'une. C'est ce qui garde l'aperçu honnête — ce qui est à
+// l'écran est vraiment le composant, pas une imitation en CSS.
+
+import { withBase } from '../design-system/lib/url';
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import Button from '../design-system/components/Button.astro';
+import Tag from '../design-system/components/Tag.astro';
+import Icon from '../design-system/components/Icon.astro';
+import { iconNames } from '../design-system/lib/icons';
+import tokens from '../design-system/data/tokens.json';
+
+// Les descriptions des tokens sont la meilleure aide qu'on puisse afficher :
+// elles disent à quoi sert une taille (« H1, and the headline on a title
+// slide ») et ce que coûte une encre (« 4.45:1 — large text only there »). On
+// les lit ici plutôt que de les réécrire, sans quoi elles mentiraient un jour.
+const parNom = new Map(tokens.map((t) => [t.name, t]));
+const decrire = (nom: string) => parNom.get(nom)?.description ?? '';
+const valeurDe = (nom: string) => parNom.get(nom)?.resolved ?? '';
+
+// Du plus grand au plus petit, comme dans tokens.css.
+const tailles = [
+  'display',
+  'title',
+  'subtitle',
+  'heading',
+  'brand',
+  'body-lg',
+  'subheading',
+  'body',
+  'ui',
+  'body-sm',
+  'caption',
+  'label',
+  'micro',
+];
+
+const graisses = ['regular', 'medium', 'semibold', 'bold'];
+const interlignes = ['tight', 'snug', 'body'];
+const lettrages = ['tight', 'normal', 'wide', 'wider', 'widest'];
+
+// Trois encres se posent sur le blanc de la page ; les trois autres sont faites
+// pour un panneau plein et seraient illisibles sur le blanc. L'aperçu change
+// donc de fond avec l'encre — sans quoi « voir si ça a marché » ne voudrait
+// rien dire.
+const encres = [
+  { cle: 'default', fond: 'default' },
+  { cle: 'muted', fond: 'default' },
+  { cle: 'accent', fond: 'default' },
+  { cle: 'on-accent', fond: 'feature' },
+  { cle: 'on-accent-soft', fond: 'feature' },
+  { cle: 'on-highlight', fond: 'celebrate' },
+];
+
+const variants = ['primary', 'secondary'] as const;
+const sizes = ['sm', 'md', 'lg'] as const;
+const tagVariants = ['accent', 'lime', 'neutral', 'outline'] as const;
+
+// Les douze boutons : deux variantes × trois tailles × lien ou non. Les icônes
+// et le libellé sont posés par le script, dans les trois fentes que voici.
+const boutons = variants.flatMap((variant) =>
+  sizes.flatMap((size) => [
+    { variant, size, lien: false },
+    { variant, size, lien: true },
+  ]),
+);
+
+// Le code se copie en deux morceaux parce qu'il va à deux endroits : l'import
+// tout en haut du fichier, la balise là où l'on veut voir la chose. Les coller
+// ensemble ferait apparaître un bloc --- au milieu d'une page, ce qui ne marche
+// pas. L'en-tête ne dépend d'aucun réglage : il est écrit ici une fois pour
+// toutes, et le script n'a que la balise à réécrire.
+const entete = (nom: string) =>
+  `---\nimport ${nom} from 'ux-design-system/components/${nom}.astro';\n---`;
+
+const defautBouton = '<Button icon="mail-edit">Voir le projet</Button>';
+const defautTag = '<Tag>Recherche utilisateur</Tag>';
+const defautIcone = '<Icon name="mail-edit" size="md" />';
+
+// Un style de texte n'est pas un composant : ses deux morceaux sont la règle
+// CSS et la balise qui la porte, et ils ne vont pas au même endroit du fichier.
+const defautRegle = `.mon-style {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-line-height-body);
+  letter-spacing: var(--font-letter-spacing-normal);
+  color: var(--color-text-default);
+}`;
+
+const defautTexteHtml =
+  '<p class="mon-style">Concevoir, c’est rendre évident ce qui ne l’était pas.</p>';
+
+const importStyles = `import 'ux-design-system/styles/tokens.css';
+import 'ux-design-system/styles/global.css';`;
+
+const importBase = `---
+import { withBase } from 'ux-design-system/lib/url';
+---
+
+<img src={withBase('/images/avatar.png')} alt="" />`;
+---
+
+<DocsLayout
+  title="Bac à sable — UX design system"
+  description="Régler un composant, voir le résultat, copier le code entier."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Bac à sable</h1>
+    <p class="lead">
+      Quatre ateliers. Dans chacun : les réglages à gauche, la chose en vrai au milieu, et le code en
+      dessous — en deux morceaux qui se copient séparément, parce qu'ils vont à deux endroits
+      différents du fichier. Rien à lire avant de commencer : on touche un réglage, le code se réécrit.
+    </p>
+    <p class="section-note">
+      Ce que tu vois n'est pas une image, c'est la chose elle-même. Si l'aperçu est juste, le code
+      copié donnera exactement ça. La fiche complète — props, tokens, écarts avec Figma — reste sur
+      {' '}<a href={withBase('/components')}>Composants</a>.
+    </p>
+    <nav class="sommaire" aria-label="Les ateliers">
+      <ul>
+        <li><a href="#atelier-texte">Un style de texte</a></li>
+        <li><a href="#atelier-button">Button</a></li>
+        <li><a href="#atelier-tag">Tag</a></li>
+        <li><a href="#atelier-icon">Icon</a></li>
+        <li><a href="#pannes">Quand ça ne marche pas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ── Texte ────────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="texte" id="atelier-texte">
+      <h2>Un style de texte</h2>
+      <p class="section-note">
+        <strong>La règle d'abord :</strong> dans ce système, ce sont les balises HTML qui portent les
+        styles. Un <code>&lt;h2&gt;</code> <em>est</em> le style « title » — il n'y a aucun CSS à
+        écrire pour l'obtenir. Le CSS ci-dessous ne sert que lorsqu'aucune balise ne convient. Compose
+        librement : si ta combinaison retombe sur une balise existante, l'atelier te le dira et te
+        donnera la balise à la place.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend><label for="txt-texte">Ton texte</label></legend>
+            <input
+              id="txt-texte"
+              type="text"
+              name="texte"
+              value="Concevoir, c’est rendre évident ce qui ne l’était pas."
+              autocomplete="off"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>Police</legend>
+            <div class="choix">
+              <label
+                ><input type="radio" name="famille" value="body" checked /><span>body</span></label
+              >
+              <label
+                ><input type="radio" name="famille" value="heading" /><span>heading</span></label
+              >
+            </div>
+            <p class="aide">
+              <code>body</code> est Inter, pour lire. <code>heading</code> est Poppins, pour les
+              titres, les boutons et les marques.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Graisse</legend>
+            <div class="choix">
+              {
+                graisses.map((g) => (
+                  <label>
+                    <input type="radio" name="graisse" value={g} checked={g === 'regular'} />
+                    <span>{g}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide">Le système met toutes ses têtes en <code>bold</code>, et rien de plus léger.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="txt-taille">Taille</label></legend>
+            <select id="txt-taille" name="taille">
+              {
+                tailles.map((t) => (
+                  <option
+                    value={t}
+                    selected={t === 'body-lg'}
+                    data-desc={decrire(`--font-size-${t}`)}
+                  >
+                    {t} — {valeurDe(`--font-size-${t}`)}
+                  </option>
+                ))
+              }
+            </select>
+            <p class="aide" data-desc="taille"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Interligne</legend>
+            <div class="choix">
+              {
+                interlignes.map((l) => (
+                  <label>
+                    <input type="radio" name="interligne" value={l} checked={l === 'body'} />
+                    <span>
+                      {l} — {valeurDe(`--font-line-height-${l}`)}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide">
+              <code>tight</code> pour les titres, <code>snug</code> pour ce qui tient sur une ou deux
+              lignes, <code>body</code> pour ce qui se lit.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Interlettrage</legend>
+            <div class="choix">
+              {
+                lettrages.map((l) => (
+                  <label>
+                    <input type="radio" name="lettrage" value={l} checked={l === 'normal'} />
+                    <span>{l}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide">
+              Négatif sur les grandes tailles, qui ont besoin d'être resserrées. Large sur les petites
+              capitales, qui ont besoin de respirer.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Capitales</legend>
+            <label class="case"
+              ><input type="checkbox" name="capitales" /><span>Tout en capitales</span></label
+            >
+            <p class="aide">
+              Le texte reste écrit normalement dans ton HTML : ce sont les capitales du dessin, pas
+              celles du contenu. Un lecteur d'écran lit toujours la phrase telle que tu l'as tapée.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Encre</legend>
+            <div class="choix">
+              {
+                encres.map(({ cle, fond }) => (
+                  <label>
+                    <input
+                      type="radio"
+                      name="encre"
+                      value={cle}
+                      checked={cle === 'default'}
+                      data-fond={fond}
+                      data-desc={decrire(`--color-text-${cle}`)}
+                    />
+                    <span>{cle}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide" data-desc="encre"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="txt-classe">Nom de la classe</label></legend>
+            <input id="txt-classe" type="text" name="classe" value="mon-style" autocomplete="off" />
+            <p class="aide">Le nom dit à quoi sert le texte, pas de quoi il a l'air.</p>
+          </fieldset>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le texte</p>
+          <div class="demo demo-texte" data-apercu>
+            <p class="apercu-texte" data-texte>
+              Concevoir, c’est rendre évident ce qui ne l’était pas.
+            </p>
+          </div>
+          <p class="alerte" data-fond-note hidden></p>
+
+          <p class="trouvaille" data-trouvaille hidden></p>
+
+          <div class="morceau" data-morceau="css">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Dans le bloc <code>&lt;style&gt;</code>, en bas du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{defautRegle}</code></pre>
+            <p class="aide">
+              Les six lignes sont écrites en entier, même celles qui ressemblent au réglage par défaut :
+              posée sur un titre plutôt que sur un paragraphe, ta classe n'hériterait pas des mêmes
+              valeurs.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang" data-rang>2</span> Là où tu veux ce texte</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautTexteHtml}</code></pre>
+            <p class="aide" data-defauts></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Button ───────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="button" id="atelier-button">
+      <h2>Button</h2>
+      <p class="section-note">La chose sur laquelle on clique.</p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend>Variante</legend>
+            <div class="choix">
+              <label
+                ><input type="radio" name="variant" value="primary" checked /><span>primary</span></label
+              >
+              <label
+                ><input type="radio" name="variant" value="secondary" /><span>secondary</span></label
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Taille</legend>
+            <div class="choix">
+              <label><input type="radio" name="size" value="sm" /><span>sm</span></label>
+              <label><input type="radio" name="size" value="md" checked /><span>md</span></label>
+              <label><input type="radio" name="size" value="lg" /><span>lg</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Icône</legend>
+            <div class="choix">
+              <label><input type="radio" name="place" value="none" /><span>aucune</span></label>
+              <label
+                ><input type="radio" name="place" value="start" checked /><span>à gauche</span></label
+              >
+              <label><input type="radio" name="place" value="end" /><span>à droite</span></label>
+              <label
+                ><input type="radio" name="place" value="both" /><span>des deux côtés</span></label
+              >
+            </div>
+          </fieldset>
+
+          <fieldset data-si="place" data-sauf="none">
+            <legend><label for="btn-icon">Laquelle</label></legend>
+            <select id="btn-icon" name="icon">
+              {iconNames.map((n) => <option value={n} selected={n === 'mail-edit'}>{n}</option>)}
+            </select>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="btn-label">Libellé</label></legend>
+            <input
+              id="btn-label"
+              type="text"
+              name="label"
+              value="Voir le projet"
+              autocomplete="off"
+            />
+            <p class="aide">
+              Vide, le bouton n'a plus que son icône — et il lui faut alors deux précautions que le
+              code ajoutera tout seul.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Destination</legend>
+            <label class="case"
+              ><input type="checkbox" name="lien" /><span>Le bouton mène quelque part</span></label
+            >
+            <p class="aide">Coché, c'est un lien. Décoché, c'est un bouton à câbler.</p>
+          </fieldset>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le composant</p>
+          <div class="demo" data-apercu>
+            {
+              boutons.map(({ variant, size, lien }) => (
+                <span
+                  class:list={['pv', variant === 'primary' && size === 'md' && !lien && 'is-on']}
+                  data-cle={`${variant}|${size}|${lien ? 'a' : 'b'}`}
+                >
+                  <Button variant={variant} size={size} href={lien ? '#atelier-button' : undefined}>
+                    <span class="fente-debut" />
+                    <span class="fente-label">Voir le projet</span>
+                    <span class="fente-fin" />
+                  </Button>
+                </span>
+              ))
+            }
+          </div>
+          <p class="alerte" data-alerte hidden></p>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{entete('Button')}</code></pre>
+            <p class="aide">
+              Si ton fichier a déjà un bloc <code>---</code>, n'y ajoute que la ligne d'<code>import</code>.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux le bouton</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautBouton}</code></pre>
+            <p class="aide" data-defauts></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="banque" data-banque aria-hidden="true">
+        {iconNames.map((n) => <span data-icone={n}><Icon name={n} /></span>)}
+      </div>
+    </section>
+
+    <!-- ── Tag ──────────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="tag" id="atelier-tag">
+      <h2>Tag</h2>
+      <p class="section-note">
+        Une étiquette qui classe. Elle ne se clique pas — une pilule cliquable est un <em>Button</em>.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend>Variante</legend>
+            <div class="choix colonne">
+              {
+                tagVariants.map((v) => (
+                  <label>
+                    <input type="radio" name="variant" value={v} checked={v === 'outline'} />
+                    <span>{v}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide">
+              Le défaut est <code>outline</code> — c'est la variante que porte la carte d'étude de cas.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="tag-label">Texte</label></legend>
+            <input
+              id="tag-label"
+              type="text"
+              name="label"
+              value="Recherche utilisateur"
+              autocomplete="off"
+            />
+            <p class="aide">
+              Le texte doit dire ce qu'il veut dire : la couleur ne porte pas de sens à elle seule.
+            </p>
+          </fieldset>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le composant</p>
+          <div class="demo" data-apercu>
+            {
+              tagVariants.map((v) => (
+                <span class:list={['pv', v === 'outline' && 'is-on']} data-cle={v}>
+                  <Tag variant={v}>
+                    <span class="fente-label">Recherche utilisateur</span>
+                  </Tag>
+                </span>
+              ))
+            }
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{entete('Tag')}</code></pre>
+            <p class="aide">
+              Si ton fichier a déjà un bloc <code>---</code>, n'y ajoute que la ligne d'<code>import</code>.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux l'étiquette</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautTag}</code></pre>
+            <p class="aide" data-defauts></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Icon ─────────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="icon" id="atelier-icon">
+      <h2>Icon</h2>
+      <p class="section-note">
+        Une icône est un nom, pas un chemin. Le jeu complet est sur
+        <a href={withBase('/icons')}>Icônes</a>.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend><label for="ico-name">Laquelle</label></legend>
+            <select id="ico-name" name="icon">
+              {iconNames.map((n) => <option value={n} selected={n === 'mail-edit'}>{n}</option>)}
+            </select>
+          </fieldset>
+
+          <fieldset>
+            <legend>Taille</legend>
+            <div class="choix">
+              <label><input type="radio" name="size" value="sm" /><span>sm</span></label>
+              <label><input type="radio" name="size" value="md" checked /><span>md</span></label>
+              <label><input type="radio" name="size" value="lg" /><span>lg</span></label>
+            </div>
+            <p class="aide">
+              Sans <code>size</code>, l'icône prend la taille de ce qui l'entoure — un bouton lui donne
+              la bonne.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Nom accessible</legend>
+            <label class="case"
+              ><input type="checkbox" name="seule" /><span>Elle est seule à porter le sens</span></label
+            >
+            <input
+              id="ico-label"
+              type="text"
+              name="label"
+              value="Image suivante"
+              autocomplete="off"
+              data-si="seule"
+              hidden
+            />
+            <p class="aide">
+              Décoché — le cas ordinaire — elle double un mot écrit à côté d'elle, donc elle est
+              masquée aux lecteurs d'écran.
+            </p>
+          </fieldset>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le composant</p>
+          <div class="demo demo-icone" data-apercu>
+            {
+              iconNames.flatMap((n) =>
+                sizes.map((s) => (
+                  <span
+                    class:list={['pv', n === 'mail-edit' && s === 'md' && 'is-on']}
+                    data-cle={`${n}|${s}`}
+                  >
+                    <Icon name={n} size={s} />
+                  </span>
+                )),
+              )
+            }
+          </div>
+          <p class="lecture" data-lecture></p>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{entete('Icon')}</code></pre>
+            <p class="aide">
+              Si ton fichier a déjà un bloc <code>---</code>, n'y ajoute que la ligne d'<code>import</code>.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux l'icône</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautIcone}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Quand ça ne marche pas ───────────────────────────────────────── -->
+    <section id="pannes">
+      <h2>Quand ça ne marche pas</h2>
+      <p class="section-note">
+        Cinq pannes, dans l'ordre où on les rencontre. Chacune a un signe et un geste.
+      </p>
+
+      <div class="panne">
+        <h3>La page est blanche, ou le composant s'affiche en toutes lettres</h3>
+        <p>
+          <strong>Le signe.</strong> Tu vois <code>&lt;Button&gt;</code> écrit tel quel dans la page, ou
+          une erreur qui dit qu'il n'est pas défini.
+        </p>
+        <p>
+          <strong>Le geste.</strong> La ligne d'<code>import</code> manque. Elle va tout en haut du fichier,
+          <strong>entre les deux lignes de trois tirets</strong> — ce bloc s'appelle le frontmatter, et
+          c'est le seul endroit où un import a le droit d'être.
+        </p>
+      </div>
+
+      <div class="panne">
+        <h3>Tout est là mais rien n'est stylé</h3>
+        <p>
+          <strong>Le signe.</strong> Les textes s'empilent en Times New Roman, le bouton n'est qu'un rectangle
+          gris.
+        </p>
+        <p>
+          <strong>Le geste.</strong> Les feuilles du système ne sont pas chargées. Si ta page passe par
+          {' '}<code>BaseLayout</code>, elles arrivent toutes seules. Sinon, une fois pour tout le site :
+        </p>
+        <pre><code>{importStyles}</code></pre>
+        <p class="aide">Dans cet ordre : le second se sert des variables du premier.</p>
+      </div>
+
+      <div class="panne">
+        <h3>« Icon : “xxx” n'existe pas »</h3>
+        <p>
+          <strong>Le signe.</strong> Le build s'arrête, et l'erreur liste toutes les icônes disponibles.
+        </p>
+        <p>
+          <strong>Le geste.</strong> Le nom n'est pas dans le registre — souvent une faute de frappe ou
+          un tiret oublié. Recopie-le depuis <a href={withBase('/icons')}>Icônes</a>, ou depuis le menu
+          déroulant de l'atelier ci-dessus. Pour en ajouter une, c'est un export Figma déposé dans
+          {' '}<code>icons/</code> puis <code>npm run icons</code>.
+        </p>
+      </div>
+
+      <div class="panne">
+        <h3>Une prop que tu écris ne fait rien</h3>
+        <p>
+          <strong>Le signe.</strong> Aucune erreur, aucun effet. C'est la panne la plus coûteuse, parce
+          qu'elle est muette.
+        </p>
+        <p>
+          <strong>Le geste.</strong> <code>npm run build</code> ne vérifie pas les noms de props. C'est
+          {' '}<code>npm run check</code> qui le fait, et qui te dira laquelle n'existe pas :
+        </p>
+        <pre><code>npm run check</code></pre>
+        <p class="aide">À lancer avant de pousser, systématiquement.</p>
+      </div>
+
+      <div class="panne">
+        <h3>Une image marche en local et donne un 404 en ligne</h3>
+        <p>
+          <strong>Le signe.</strong> Rien à voir en développement, et l'image manque une fois le site publié.
+        </p>
+        <p>
+          <strong>Le geste.</strong> Le site est publié sous un préfixe. Tout chemin absolu — image, lien
+          vers une page — passe par <code>withBase()</code> :
+        </p>
+        <pre><code>{importBase}</code></pre>
+        <p class="aide">Les icônes échappent à cette règle : inlinées, elles n'ont pas d'URL.</p>
+      </div>
+    </section>
+  </main>
+</DocsLayout>
+
+<script>
+  // Toutes les combinaisons sont dans la page ; on n'en montre qu'une. Le code
+  // affiché est reconstruit entièrement à chaque changement — jamais rapiécé par
+  // morceaux, pour qu'il ne puisse pas mentir sur ce qui est à l'écran.
+
+  const LARGEUR_MAX = 62;
+
+  // Le code s'écrit comme on l'écrirait à la main : tout sur une ligne tant que
+  // ça tient, et une prop par ligne au-delà. Une balise sans contenu se ferme
+  // sur elle-même — c'est ce qu'attend un bouton qui n'a qu'une icône.
+  function baliser(nom: string, attrs: string[], contenu: string | null) {
+    const tete = `<${nom}${attrs.length ? ' ' + attrs.join(' ') : ''}`;
+    const empilee = `<${nom}\n  ${attrs.join('\n  ')}\n`;
+
+    if (contenu === null) {
+      return tete.length + 3 > LARGEUR_MAX && attrs.length > 1 ? `${empilee}/>` : `${tete} />`;
+    }
+
+    const uneLigne = `${tete}>${contenu}</${nom}>`;
+    if (uneLigne.length <= LARGEUR_MAX) return uneLigne;
+
+    const ouvrante = tete.length > LARGEUR_MAX && attrs.length > 1 ? `${empilee}>` : `${tete}>`;
+    return `${ouvrante}\n  ${contenu}\n</${nom}>`;
+  }
+
+  function montrer(apercu: Element, cle: string) {
+    for (const el of apercu.querySelectorAll<HTMLElement>('.pv')) {
+      el.classList.toggle('is-on', el.dataset.cle === cle);
+    }
+    return apercu.querySelector('.pv.is-on');
+  }
+
+  // Les champs qui ne concernent qu'un état : ils disparaissent quand il n'y est pas.
+  function conditionner(form: HTMLFormElement) {
+    for (const el of form.querySelectorAll<HTMLElement>('[data-si]')) {
+      const nom = el.dataset.si as string;
+      const radio = form.querySelector<HTMLInputElement>(`[name="${nom}"][type="radio"]`);
+      const actif = el.dataset.sauf
+        ? form.querySelector<HTMLInputElement>(`[name="${nom}"]:checked`)?.value !== el.dataset.sauf
+        : radio
+          ? Boolean(radio.checked)
+          : Boolean(form.querySelector<HTMLInputElement>(`[name="${nom}"]`)?.checked);
+      el.hidden = !actif;
+    }
+  }
+
+  // Un atelier réécrit toujours le second morceau. Les trois ateliers de
+  // composants s'arrêtent là — leur import ne dépend d'aucun réglage. Celui du
+  // texte réécrit aussi le premier, qui est sa règle CSS.
+  type Rendu = (d: FormData, apercu: Element) => string | { entete: string; balise: string };
+
+  function brancher(atelier: Element, rendre: Rendu) {
+    const form = atelier.querySelector<HTMLFormElement>('[data-form]');
+    const apercu = atelier.querySelector('[data-apercu]');
+    const balise = atelier.querySelector('[data-code="balise"]');
+    const entete = atelier.querySelector('[data-code="entete"]');
+    if (!form || !apercu || !balise) return;
+
+    const tour = () => {
+      conditionner(form);
+      const r = rendre(new FormData(form), apercu);
+      if (typeof r === 'string') {
+        balise.textContent = r;
+      } else {
+        balise.textContent = r.balise;
+        if (entete) entete.textContent = r.entete;
+      }
+    };
+
+    form.addEventListener('input', tour);
+    form.addEventListener('change', tour);
+    form.addEventListener('submit', (e) => e.preventDefault());
+
+    // Un bouton par morceau : chacun copie le bloc qu'il annonce.
+    for (const copier of atelier.querySelectorAll<HTMLButtonElement>('[data-copier]')) {
+      copier.addEventListener('click', async () => {
+        const cible = atelier.querySelector(`[data-code="${copier.dataset.copier}"]`);
+        try {
+          await navigator.clipboard.writeText(cible?.textContent ?? '');
+          copier.textContent = 'Copié';
+        } catch {
+          copier.textContent = 'Sélectionne-le et copie';
+        }
+        setTimeout(() => (copier.textContent = 'Copier'), 2000);
+      });
+    }
+
+    tour();
+  }
+
+  // ── Un style de texte ──────────────────────────────────────────────────
+  // Les sept recettes que global.css pose sur les balises. Elles ne sont pas
+  // recopiées pour faire joli : c'est en s'y comparant que l'atelier peut dire
+  // « tu n'as rien à écrire, c'est un h2 ». Si global.css change, ceci change.
+  const BALISES = [
+    { tag: 'h1', role: 'le titre de la page', famille: 'heading', graisse: 'bold', taille: 'display', interligne: 'snug', lettrage: 'normal', capitales: false },
+    { tag: 'h2', role: 'un titre de section', famille: 'heading', graisse: 'bold', taille: 'title', interligne: 'tight', lettrage: 'tight', capitales: false },
+    { tag: 'h3', role: 'un sous-titre', famille: 'heading', graisse: 'bold', taille: 'subtitle', interligne: 'tight', lettrage: 'tight', capitales: false },
+    { tag: 'h4', role: 'un titre de bloc, ou de fenêtre', famille: 'heading', graisse: 'bold', taille: 'heading', interligne: 'tight', lettrage: 'tight', capitales: false },
+    { tag: 'h5', role: 'un titre de rang mineur', famille: 'heading', graisse: 'bold', taille: 'subheading', interligne: 'tight', lettrage: 'tight', capitales: false },
+    { tag: 'h6', role: "l'eyebrow, la ligne en capitales posée au-dessus d'un titre", famille: 'heading', graisse: 'bold', taille: 'body-sm', interligne: 'snug', lettrage: 'wider', capitales: true },
+    { tag: 'p', role: 'un paragraphe', famille: 'body', graisse: 'regular', taille: 'body', interligne: 'body', lettrage: 'normal', capitales: false },
+  ];
+
+  const atelierTexte = document.querySelector('[data-atelier="texte"]');
+  if (atelierTexte) {
+    const vueTexte = atelierTexte.querySelector<HTMLElement>('[data-texte]');
+    const trouvaille = atelierTexte.querySelector<HTMLElement>('[data-trouvaille]');
+    const morceauCss = atelierTexte.querySelector<HTMLElement>('[data-morceau="css"]');
+    const rang = atelierTexte.querySelector<HTMLElement>('[data-rang]');
+    const fondNote = atelierTexte.querySelector<HTMLElement>('[data-fond-note]');
+    const defauts = atelierTexte.querySelector<HTMLElement>('[data-defauts]');
+
+    // La description du token choisi, affichée sous le réglage qui l'a choisi.
+    const decrireChoix = (form: HTMLFormElement, nom: string) => {
+      const cible = atelierTexte.querySelector<HTMLElement>(`[data-desc="${nom}"]`);
+      if (!cible) return;
+      const champ = form.elements.namedItem(nom);
+      const source =
+        champ instanceof HTMLSelectElement
+          ? champ.selectedOptions[0]
+          : form.querySelector<HTMLInputElement>(`[name="${nom}"]:checked`);
+      cible.textContent = source instanceof HTMLElement ? (source.dataset.desc ?? '') : '';
+    };
+
+    // Un nom de classe se colle dans une feuille de style : il ne peut ni être
+    // vide, ni contenir d'espace, ni commencer par un point.
+    const nettoyerClasse = (brut: string) => {
+      const propre = brut
+        .trim()
+        .replace(/^\.+/, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^A-Za-z0-9_-]/g, '')
+        .replace(/^-+|-+$/g, '');
+      return propre === '' || /^[0-9-]/.test(propre) ? 'mon-style' : propre;
+    };
+
+    brancher(atelierTexte, (d, apercu) => {
+      const form = atelierTexte.querySelector('[data-form]') as HTMLFormElement;
+      const texte = String(d.get('texte') ?? '').trim() || 'Ton texte';
+      const famille = String(d.get('famille'));
+      const graisse = String(d.get('graisse'));
+      const taille = String(d.get('taille'));
+      const interligne = String(d.get('interligne'));
+      const lettrage = String(d.get('lettrage'));
+      const capitales = d.get('capitales') === 'on';
+      const encre = String(d.get('encre'));
+      const classe = nettoyerClasse(String(d.get('classe') ?? ''));
+
+      decrireChoix(form, 'taille');
+      decrireChoix(form, 'encre');
+
+      // L'aperçu prend les mêmes var() que le code : il ne peut pas diverger.
+      if (vueTexte) {
+        vueTexte.textContent = texte;
+        vueTexte.style.fontFamily = `var(--font-family-${famille})`;
+        vueTexte.style.fontWeight = `var(--font-weight-${graisse})`;
+        vueTexte.style.fontSize = `var(--font-size-${taille})`;
+        vueTexte.style.lineHeight = `var(--font-line-height-${interligne})`;
+        vueTexte.style.letterSpacing = `var(--font-letter-spacing-${lettrage})`;
+        vueTexte.style.color = `var(--color-text-${encre})`;
+        vueTexte.style.textTransform = capitales ? 'uppercase' : '';
+      }
+
+      // Trois encres réclament un panneau plein : l'aperçu le pose, et le dit,
+      // parce que ce fond n'appartient pas au style de texte mais au bloc qui
+      // le contient.
+      const choixEncre = form.querySelector<HTMLInputElement>('[name="encre"]:checked');
+      const fond = choixEncre?.dataset.fond ?? 'default';
+      if (apercu instanceof HTMLElement) apercu.style.background = `var(--color-bg-${fond})`;
+      if (fondNote) {
+        fondNote.hidden = fond === 'default';
+        fondNote.textContent =
+          fond === 'default'
+            ? ''
+            : `Cette encre est faite pour un panneau plein : le fond ci-dessus est var(--color-bg-${fond}). Sur le blanc de la page, elle serait illisible — le fond est l'affaire du bloc qui contient le texte, pas du style de texte.`;
+      }
+
+      // La comparaison qui évite de réécrire ce que le système donne déjà.
+      const jumelle = BALISES.find(
+        (b) =>
+          b.famille === famille &&
+          b.graisse === graisse &&
+          b.taille === taille &&
+          b.interligne === interligne &&
+          b.lettrage === lettrage &&
+          b.capitales === capitales &&
+          encre === 'default',
+      );
+
+      if (trouvaille) {
+        trouvaille.hidden = !jumelle;
+        trouvaille.textContent = jumelle
+          ? `C'est exactement un <${jumelle.tag}> — ${jumelle.role}. Tu n'as aucun CSS à écrire : la balise porte déjà ce style.`
+          : '';
+      }
+      if (morceauCss) morceauCss.hidden = Boolean(jumelle);
+      if (rang) rang.textContent = jumelle ? '1' : '2';
+
+      if (defauts) {
+        defauts.textContent = jumelle
+          ? "Si ce texte n'est pas vraiment ce rang dans le plan de la page, choisis la balise qui dit son rang et écris le CSS pour l'apparence : le rang sert à la navigation au clavier et aux lecteurs d'écran, pas au dessin."
+          : "Si ce texte est un titre, pose la classe sur la balise de titre qui convient plutôt que sur un <p> — le rang compte, même quand l'apparence n'en dépend pas.";
+      }
+
+      const regle = [
+        `.${classe} {`,
+        `  font-family: var(--font-family-${famille});`,
+        `  font-weight: var(--font-weight-${graisse});`,
+        `  font-size: var(--font-size-${taille});`,
+        `  line-height: var(--font-line-height-${interligne});`,
+        `  letter-spacing: var(--font-letter-spacing-${lettrage});`,
+        capitales ? '  text-transform: uppercase;' : '',
+        `  color: var(--color-text-${encre});`,
+        '}',
+      ]
+        .filter((l) => l !== '')
+        .join('\n');
+
+      return {
+        entete: regle,
+        balise: jumelle
+          ? `<${jumelle.tag}>${texte}</${jumelle.tag}>`
+          : `<p class="${classe}">${texte}</p>`,
+      };
+    });
+  }
+
+  // ── Button ─────────────────────────────────────────────────────────────
+  const atelierBouton = document.querySelector('[data-atelier="button"]');
+  if (atelierBouton) {
+    const banque = atelierBouton.querySelector('[data-banque]');
+    const alerte = atelierBouton.querySelector<HTMLElement>('[data-alerte]');
+    const defauts = atelierBouton.querySelector<HTMLElement>('[data-defauts]');
+
+    const icone = (nom: string) => {
+      const svg = banque?.querySelector(`[data-icone="${nom}"] svg`);
+      return svg ? [svg.cloneNode(true)] : [];
+    };
+
+    brancher(atelierBouton, (d, apercu) => {
+      const variant = String(d.get('variant'));
+      const size = String(d.get('size'));
+      const place = String(d.get('place'));
+      const nomIcone = String(d.get('icon'));
+      const label = String(d.get('label') ?? '').trim();
+      const lien = d.get('lien') === 'on';
+
+      const vue = montrer(apercu, `${variant}|${size}|${lien ? 'a' : 'b'}`);
+      const btn = vue?.querySelector<HTMLElement>('.btn');
+      const debut = vue?.querySelector('.fente-debut');
+      const fin = vue?.querySelector('.fente-fin');
+      const texte = vue?.querySelector('.fente-label');
+
+      debut?.replaceChildren(...(place === 'start' || place === 'both' ? icone(nomIcone) : []));
+      fin?.replaceChildren(...(place === 'end' || place === 'both' ? icone(nomIcone) : []));
+      if (texte) texte.textContent = label;
+
+      // Sans libellé, la largeur minimale de la taille ferait flotter l'icône
+      // au milieu d'un vide : le bouton la perd, comme le fera le code copié.
+      const iconeSeule = label === '' && place !== 'none';
+      btn?.style.setProperty('--btn-min-w', iconeSeule ? '0' : '');
+
+      if (alerte) {
+        alerte.hidden = !(label === '' && place === 'none');
+        alerte.textContent = "Sans libellé ni icône, le bouton n'affiche rien.";
+      }
+
+      const attrs: string[] = [];
+      const omis: string[] = [];
+      if (variant !== 'primary') attrs.push(`variant="${variant}"`);
+      else omis.push('variant="primary"');
+      if (size !== 'md') attrs.push(`size="${size}"`);
+      else omis.push('size="md"');
+      if (place === 'start' || place === 'both') attrs.push(`icon="${nomIcone}"`);
+      if (place === 'end' || place === 'both') attrs.push(`iconEnd="${nomIcone}"`);
+      if (lien) attrs.push('href="/projets"');
+      if (iconeSeule) {
+        attrs.push('aria-label="Dis ici ce que fait le bouton"');
+        attrs.push('style="--btn-min-w: 0"');
+      }
+
+      if (defauts) {
+        defauts.textContent = iconeSeule
+          ? "Sans libellé, deux choses s'ajoutent toutes seules : aria-label, sans quoi un lecteur d'écran ne dit que « bouton » — et --btn-min-w: 0, sans quoi la largeur minimale de la taille ferait flotter l'icône dans le vide."
+          : omis.length
+            ? `Ce qui est déjà le défaut ne s'écrit pas : ${omis.join(' et ')}.`
+            : '';
+      }
+
+      return baliser('Button', attrs, label === '' ? null : label);
+    });
+  }
+
+  // ── Tag ────────────────────────────────────────────────────────────────
+  const atelierTag = document.querySelector('[data-atelier="tag"]');
+  if (atelierTag) {
+    const defauts = atelierTag.querySelector<HTMLElement>('[data-defauts]');
+
+    brancher(atelierTag, (d, apercu) => {
+      const variant = String(d.get('variant'));
+      const label = String(d.get('label') ?? '').trim();
+
+      const vue = montrer(apercu, variant);
+      const texte = vue?.querySelector('.fente-label');
+      if (texte) texte.textContent = label;
+
+      if (defauts) {
+        defauts.textContent =
+          variant === 'outline'
+            ? 'Ce qui est déjà le défaut ne s’écrit pas : variant="outline".'
+            : '';
+      }
+
+      return baliser('Tag', variant === 'outline' ? [] : [`variant="${variant}"`], label);
+    });
+  }
+
+  // ── Icon ───────────────────────────────────────────────────────────────
+  const atelierIcone = document.querySelector('[data-atelier="icon"]');
+  if (atelierIcone) {
+    const lecture = atelierIcone.querySelector<HTMLElement>('[data-lecture]');
+
+    brancher(atelierIcone, (d, apercu) => {
+      const nom = String(d.get('icon'));
+      const size = String(d.get('size'));
+      const seule = d.get('seule') === 'on';
+      const label = String(d.get('label') ?? '').trim();
+
+      montrer(apercu, `${nom}|${size}`);
+
+      const attrs = [`name="${nom}"`, `size="${size}"`];
+      if (seule && label) attrs.push(`label="${label}"`);
+
+      if (lecture) {
+        lecture.textContent =
+          seule && label
+            ? `Un lecteur d'écran annoncera : « ${label} ».`
+            : "Un lecteur d'écran passera dessus sans rien dire — c'est ce qu'on veut quand un mot est déjà écrit à côté.";
+      }
+
+      return baliser('Icon', attrs, null);
+    });
+  }
+</script>
+
+<style>
+  .atelier,
+  #pannes {
+    scroll-margin-top: var(--space-xl);
+  }
+
+  .sommaire ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-body-sm);
+  }
+
+  /* Réglages à gauche, composant et code à droite. Sous 62rem tout s'empile —
+     et les réglages restent au-dessus, parce que c'est par eux qu'on commence. */
+  .etabli {
+    display: grid;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  @media (min-width: 62rem) {
+    .etabli {
+      grid-template-columns: minmax(15rem, 19rem) 1fr;
+      align-items: start;
+    }
+  }
+
+  .reglages {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-md);
+  }
+
+  .reglages fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .reglages fieldset[hidden] {
+    display: none;
+  }
+
+  .reglages legend {
+    margin-bottom: var(--space-sm);
+    padding: 0;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-label);
+    color: var(--color-text-default);
+  }
+
+  .choix {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .choix.colonne {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Le radio reste là — c'est lui qui porte le clavier et le focus — mais c'est
+     l'étiquette qui se voit. */
+  .choix input,
+  .case input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .choix span {
+    display: block;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-body-sm);
+    cursor: pointer;
+    transition: background var(--motion-duration-quick) var(--motion-easing-standard, ease);
+  }
+
+  .choix label:hover span {
+    background: var(--color-bg-section);
+  }
+
+  .choix input:checked + span {
+    background: var(--color-accent-500);
+    border-color: var(--color-accent-500);
+    color: var(--color-text-on-accent);
+  }
+
+  .choix input:focus-visible + span,
+  .case input:focus-visible + span {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  .case {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-body-sm);
+    cursor: pointer;
+  }
+
+  .case span::before {
+    content: '\2610\00a0';
+  }
+
+  .case input:checked + span::before {
+    content: '\2611\00a0';
+  }
+
+  .reglages input[type='text'],
+  .reglages select {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-default);
+  }
+
+  .reglages input[type='text'][hidden] {
+    display: none;
+  }
+
+  .reglages input[type='text'][data-si] {
+    margin-top: var(--space-sm);
+  }
+
+  .aide {
+    max-width: none;
+    margin: var(--space-sm) 0 0;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-muted);
+  }
+
+  .aide:empty {
+    display: none;
+  }
+
+  .etiquette {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .demo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 8rem;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .demo-icone {
+    min-height: 6rem;
+  }
+
+  /* Le texte se lit sur une mesure, pas centré dans une boîte. */
+  .demo-texte {
+    display: block;
+    padding: var(--space-2xl) var(--space-xl);
+  }
+
+  .apercu-texte {
+    max-width: 34rem;
+    margin: 0 auto;
+  }
+
+  /* Ce qu'on a trouvé sans le chercher : la combinaison réglée existe déjà sous
+     forme de balise. Le filet accentué le distingue d'une note de plus. */
+  .trouvaille {
+    max-width: none;
+    margin: 0 0 var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-surface);
+    border-left: 3px solid var(--color-accent-500);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-default);
+  }
+
+  .trouvaille[hidden],
+  .morceau[hidden] {
+    display: none;
+  }
+
+  /* Toutes les combinaisons sont rendues ; une seule est montrée. */
+  .pv {
+    display: none;
+  }
+
+  .pv.is-on {
+    display: block;
+  }
+
+  /* Une fente vide reste un enfant de la flexbox du bouton et prendrait sa
+     gouttière. Vide, elle sort donc de la mise en page. */
+  .fente-debut:empty,
+  .fente-fin:empty,
+  .fente-label:empty {
+    display: none;
+  }
+
+  .banque {
+    display: none;
+  }
+
+  .etiquette > span {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Les deux morceaux du code. Ils sont séparés parce qu'ils ne vont pas au même
+     endroit du fichier — pas pour aérer. */
+  .morceau {
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Le numéro dit l'ordre des deux collages, pas une importance. */
+  .rang {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: var(--space-xs);
+    background: var(--color-bg-section);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-default);
+  }
+
+  .copier {
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-default);
+    cursor: pointer;
+  }
+
+  .copier:hover {
+    background: var(--color-bg-section);
+  }
+
+  .copier:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  pre {
+    margin: 0 0 var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--color-bg-section);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+  }
+
+  .alerte,
+  .lecture {
+    max-width: none;
+    margin: calc(-1 * var(--space-md)) 0 var(--space-lg);
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-muted);
+  }
+
+  .alerte[hidden] {
+    display: none;
+  }
+
+  .panne {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .panne h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .panne p {
+    margin-bottom: var(--space-sm);
+  }
+</style>
