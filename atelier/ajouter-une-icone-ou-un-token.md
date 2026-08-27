@@ -43,6 +43,10 @@ script compare.
 - La page qui montre ce qui a changé : [/icons](../src/pages/icons.astro) pour la planche,
   [/foundations](../src/pages/foundations.astro) pour le vocabulaire. Les deux se construisent
   depuis les fichiers générés — un token ajouté y apparaît seul, avec sa description Figma.
-- Le compte annoncé : `index.astro` et `README.md` citent des **nombres** de tokens et d'icônes.
+- Le compte annoncé, qui ne se met jamais à jour tout seul. Pour les **icônes** : `index.astro`
+  (deux fois), `LINKS.md`, `CLAUDE.md` — `README.md` n'en cite aucun. Pour les **tokens** :
+  `index.astro`, `README.md` (116 en tête, 94 dans le tableau), `LINKS.md`, `CLAUDE.md`, plus les
+  21 tokens `button.*` cités en commentaire dans `foundations.astro`. Les pages, elles, comptent
+  depuis les fichiers générés : `/icons` et `/foundations` n'ont rien à corriger.
 - Le `git diff` des fichiers générés. Il doit être exactement ce qu'on attendait : un diff plus
   large que prévu veut dire qu'un autre export a bougé en même temps.
