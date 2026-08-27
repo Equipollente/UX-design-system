@@ -10,6 +10,7 @@ import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
 import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
+import close from '../icons/close.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
 import edit from '../icons/edit.svg';
 import fileText from '../icons/file-text.svg';
@@ -25,6 +26,7 @@ export const icons = {
   'book-open': bookOpen,
   'box-plus': boxPlus,
   'circle-face-content': circleFaceContent,
+  'close': close,
   'corner-right-down': cornerRightDown,
   'edit': edit,
   'file-text': fileText,
