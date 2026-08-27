@@ -146,6 +146,16 @@
   --button-min-width-md:         96px;
   --button-min-width-lg:         140px;
 
+  /* ── Carte — la taille et l’encre de ses trois lignes de texte ─────────────── */
+  --card-title-size:             var(--font-size-title);
+  --card-title-color:            var(--color-text-default);
+
+  --card-subtitle-size:          var(--font-size-body-lg);
+  --card-subtitle-color:         var(--color-text-default);
+
+  --card-meta-size:              var(--font-size-body);
+  --card-meta-color:             var(--color-text-muted);
+
   /* ── Nav — la hauteur de la barre, lue par les pages qui se calent dessous ─── */
   --nav-height:                  88px;
 

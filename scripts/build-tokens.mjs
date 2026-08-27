@@ -39,6 +39,7 @@ const GROUP_TITLES = {
   font: 'Typographie',
   motion: 'Mouvement — durées et courbes',
   button: 'Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13)',
+  card: 'Carte — la taille et l’encre de ses trois lignes de texte',
   nav: 'Nav — la hauteur de la barre, lue par les pages qui se calent dessous',
   layout: 'Layout — métadonnées de mode Figma, informatives',
 };

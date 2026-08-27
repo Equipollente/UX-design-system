@@ -1795,6 +1795,80 @@
       }
     }
   },
+  "card": {
+    "title": {
+      "size": {
+        "$type": "number",
+        "$value": "{font.size.title}",
+        "$description": "Card title size. Aliases font/size/title — the same step an H2 takes. Named so the text of a card can be retuned without moving page headings.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:231",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.text.default}",
+        "$description": "Card title ink. Aliases color/text/default. 15.3:1 on color/bg/default, which is what a card is painted with.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:232",
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ]
+        }
+      }
+    },
+    "subtitle": {
+      "size": {
+        "$type": "number",
+        "$value": "{font.size.body-lg}",
+        "$description": "Card subtitle size. Aliases font/size/body-lg — one step above body, so the line under the title reads before the secondary one.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:233",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.text.default}",
+        "$description": "Card subtitle ink. Aliases color/text/default: the subtitle carries meaning, so it reads at full strength and is not muted.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:234",
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ]
+        }
+      }
+    },
+    "meta": {
+      "size": {
+        "$type": "number",
+        "$value": "{font.size.body}",
+        "$description": "Card secondary info size. Aliases font/size/body — a date, a place, an author. Read after the subtitle, so it does not shrink below body.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:235",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.text.muted}",
+        "$description": "Card secondary info ink. Aliases color/text/muted. 5.56:1 on color/bg/default — the only quiet step, and it stays above 4.5:1 on the card.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:336:236",
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ]
+        }
+      }
+    }
+  },
   "nav": {
     "height": {
       "$type": "number",

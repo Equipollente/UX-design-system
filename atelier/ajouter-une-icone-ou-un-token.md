@@ -28,6 +28,18 @@ dépôt venaient du vecteur : leurs dimensions bâtardes (17,8 × 13,8) étaient
 ça que les quatre fichiers générés sont **versionnés** : sans eux, un clone frais serait cassé.
 Après un ré-export, lancer la commande à la main.
 
+**Un groupe de tokens nouveau doit gagner une ligne dans `GROUP_TITLES`.** Le script refuse de
+construire tant qu'il ne la trouve pas, et c'est voulu : sans elle, le groupe sortirait de
+`tokens.css` sans un mot, et on chercherait la variable manquante dans le composant qui la lit.
+L'erreur nomme le groupe — il n'y a rien à chercher, seulement une ligne à écrire. Le groupe `card`
+a payé ce détour. Deux pages comptent aussi les groupes qui décrivent un objet plutôt que le
+système, chacune dans sa liste écrite à la main : `foundations.astro` et `index.astro`.
+
+**L'export ne se fait pas depuis un outil quelconque.** Le format des quatre `tokens/*.tokens.json`
+est celui du plugin d'export Figma — `$extensions` en `com.figma.*`. Un autre exportateur produit
+un DTCG voisin mais pas identique, et réécrirait les quatre fichiers en entier pour six lignes.
+Vérifier le `git diff` avant de le croire.
+
 **Une icône est un nom, pas un chemin.** `<Button icon="mail-edit">`. Il se vérifie à la
 compilation, et un nom faux arrête `npm run check` en listant les valides. Pas d'`<img>`, pas
 d'URL, donc pas de `withBase()` — les fichiers ne portent que `currentColor`, et c'est le contexte
@@ -45,7 +57,7 @@ script compare.
   depuis les fichiers générés — un token ajouté y apparaît seul, avec sa description Figma.
 - Le compte annoncé, qui ne se met jamais à jour tout seul. Pour les **icônes** : `index.astro`
   (deux fois), `LINKS.md`, `CLAUDE.md` — `README.md` n'en cite aucun. Pour les **tokens** :
-  `index.astro`, `README.md` (116 en tête, 94 dans le tableau), `LINKS.md`, `CLAUDE.md`, plus les
+  `index.astro`, `README.md` (122 en tête, 94 dans le tableau), `LINKS.md`, `CLAUDE.md`, plus les
   21 tokens `button.*` cités en commentaire dans `foundations.astro`. Les pages, elles, comptent
   depuis les fichiers générés : `/icons` et `/foundations` n'ont rien à corriger.
 - Le `git diff` des fichiers générés. Il doit être exactement ce qu'on attendait : un diff plus
