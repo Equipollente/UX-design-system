@@ -9,6 +9,7 @@ import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
 import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
 import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
+import check from '../icons/check.svg';
 import chevronDown from '../icons/chevron-down.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
 import close from '../icons/close.svg';
@@ -26,6 +27,7 @@ export const icons = {
   'arrow-narrow-right': arrowNarrowRight,
   'book-open': bookOpen,
   'box-plus': boxPlus,
+  'check': check,
   'chevron-down': chevronDown,
   'circle-face-content': circleFaceContent,
   'close': close,
