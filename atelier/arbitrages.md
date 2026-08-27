@@ -35,6 +35,9 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Button | `21:47` | `height`, `padding-y` et `icon-size` ne s'accordent pas | /components → Button | ouvert |
 | Tag | `19:12` | la variante `Lime` porte un nom de couleur ; sa rampe s'appelle `highlight` | /components → Tag | ouvert |
 | Nav | `24:5` | la description décrit encore l'ancienne barre | /components → Nav | ouvert |
+| Cards | `334:1129` | le composant n'a aucune description : la doctrine n'engage que le code | /components → Card | ouvert |
+| Cards | `334:1129` | le fond blanc n'est lié à aucune variable | /components → Card | ouvert |
+| Cards | `334:1130` | l'image de l'horizontale est en hauteur fixe ; le code l'étire — la passer en *fill* | /components → Card | ouvert |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |
 | Section Header | `88:74` | l'eyebrow en Inter semibold contredit le `h6` du système | /components → Case Study Card | ouvert |
@@ -56,7 +59,8 @@ nomme, le composant n'a qu'une ligne à changer.
 | Ce qui manque | Ce qui le remplace en attendant | Écrit dans | État |
 |---|---|---|---|
 | `icon.size.*` | emprunt à `button.icon-size.*` | /icons → Icon | ouvert |
-| les ombres `shadow/lg` et `shadow/lg-invert` | `--card-shadow`, `--carousel-item-shadow` | /components → Case Study Card | ouvert |
+| les ombres `shadow/md`, `shadow/lg` et `shadow/lg-invert` | `--card-shadow` (deux fois, deux ombres), `--carousel-item-shadow`, `--card-media-shadow` | /components → Card et Case Study Card | ouvert |
+| une hauteur de média | `--card-media-height` — 324 et 256, sans token | /components → Card | ouvert |
 | une mesure de texte | `--intro-measure`, `--header-title-min` | /components → Intro | ouvert |
 | un cran à 90 pour le liseré | `--fold-peek` — `space.layout.96` est à 6 px, et l'écart déplacerait le liseré à chaque cran | /components → Case Study List | ouvert |
 | un cran à 33 et un à 10 | `--space-2xl` et `--space-md`, les crans voisins | /components → Case Study Card | ouvert |
@@ -67,6 +71,8 @@ nomme, le composant n'a qu'une ligne à changer.
 |---|---|---|---|
 | `Section Header` | `CaseStudyHeader` | tout ce qu'il contient est propre à une étude de cas | ouvert |
 | `Section.Intro` | `Intro` | `Section.` est une convention de rangement du fichier | assumé |
+| `Cards ` | `Card` | un pluriel avec une espace finale nomme un tiroir, pas un objet | ouvert |
+| `Property 1` | `orientation` | le nom de la propriété de variante ne dit pas ce qu'elle commande | ouvert |
 
 ---
 

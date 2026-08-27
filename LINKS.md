@@ -27,6 +27,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
 | Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |
+| Cards (jeu de variantes) | [`334-1129`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1129) | [Card.astro](src/design-system/components/Card.astro) |
 | Case Study Card | [`88-131`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-131) | [CaseStudyCard.astro](src/design-system/components/CaseStudyCard.astro) |
 | Section Header (en-tête de la carte) | [`88-74`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-74) | [CaseStudyHeader.astro](src/design-system/components/CaseStudyHeader.astro) |
 | Carousel | [`88-85`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=88-85) | [Carousel.astro](src/design-system/components/Carousel.astro) |
@@ -42,6 +43,12 @@ de cas : le code le nomme `CaseStudyHeader`. Renommage à trancher côté Figma.
 
 Même décalage sur `Section.Intro`, pour une autre raison : le préfixe `Section.` est une convention
 de rangement du fichier Figma, pas une partie du nom de l'objet. Le code le nomme `Intro`.
+
+Le jeu de variantes `334:1129` s'appelle « Cards » — au pluriel, avec une espace finale — et sa
+propriété de variante s'appelle « Property 1 ». Le code les nomme `Card` et `orientation` : un nom
+de tiroir et un nom vide ne désignent pas un objet. Les deux renommages sont à trancher côté Figma.
+Attention à la confusion : trois autres composants de la page portent le préfixe `Cards/` et ne sont
+pas celui-là — ils sont toujours dans la liste des non-intégrés, plus bas.
 
 Troisième décalage, tranché dans l'autre sens : la variante `Lime` du Tag consomme la rampe
 `highlight`. Le code a gardé `lime` pour que la prop se recoupe avec le fichier, et écrit donc un nom
@@ -68,7 +75,9 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | La taille de l'avatar (`64px`, en dur) | `--nav-home-size` dans [Nav.astro](src/design-system/components/Nav.astro) | Une variable. Elle vaut la hauteur d'une pilule d'onglets, et c'est ce qui fait que `nav/height` est le même nombre avec ou sans avatar — une coïncidence que rien ne garde aujourd'hui |
 | Un fond pour la barre, ou l'absence assumée | `.nav-bar` dans [Nav.astro](src/design-system/components/Nav.astro) | À trancher : la pilule lavande sur une carte lavande perd son contour, et l'eyebrow de la carte passe derrière la barre |
 | Une échelle d'empilement | `z-index: 1` dans [Nav.astro](src/design-system/components/Nav.astro) | Exception assumée : le seul z-index du système, à ne transformer en échelle que si un deuxième cas arrive |
-| Les deux ombres | `--carousel-item-shadow`, `--card-shadow` | Des tokens, le jour où une troisième apparaît |
+| Les trois ombres | `--carousel-item-shadow`, `--card-shadow` (deux fois, deux ombres différentes), `--card-media-shadow` | Des tokens. La troisième est arrivée avec la fiche — `shadow/md` — et `shadow/lg` est désormais écrite en dur à deux endroits : le seuil annoncé ici est atteint |
+| Un fond lié pour la fiche | `background` de `.card` dans [Card.astro](src/design-system/components/Card.astro) | Le blanc de `334:1129` n'est lié à aucune variable, alors qu'il vaut exactement `color.bg.default` |
+| Une hauteur de média | `--card-media-height` dans [Card.astro](src/design-system/components/Card.astro) | 324 et 256 n'ont pas de token. Un troisième nombre ouvrirait le groupe |
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
@@ -82,7 +91,7 @@ groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double 
 aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
 fichiers se renvoient l'un à l'autre en commentaire.
 
-Les 116 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Les 122 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 

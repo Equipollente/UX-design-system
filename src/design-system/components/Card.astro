@@ -1,0 +1,316 @@
+---
+// Card — une fiche qui présente une chose : son image, son titre, son
+// sous-titre, une ligne d'informations secondaires, puis deux emplacements
+// libres — les tags et les actions.
+//
+// Ce n'est pas la carte d'étude de cas : celle-là est une feuille pleine
+// largeur qui monte du bas de la page, avec son eyebrow, sa phrase d'impact et
+// son carrousel — c'est CaseStudyCard. Ce n'est pas non plus un bouton : la
+// carte entière ne se clique pas, et rien ici n'est un lien. Ce qui mène
+// quelque part se pose dans l'emplacement `actions`, et c'est un Button.
+//
+// Figma 334:1129, deux variantes — Vertical et Horizontal. La propriété qui les
+// commande s'appelle « Property 1 » dans le fichier, ce qui ne dit rien : le
+// code la nomme `orientation`. Le composant, lui, s'appelle « Cards » au
+// pluriel — un nom de tiroir, pas un nom d'objet.
+//
+// Les deux emplacements sont des slots nommés, comme dans Figma, là où le
+// Carousel avait refusé le sien. La raison de ce refus ne vaut pas ici : le
+// carrousel devait dessiner ses vignettes — hauteur, rayon, ombre — et les
+// styles scopés d'Astro n'atteignent pas un contenu slotté. La carte n'a rien à
+// dessiner dans ses emplacements : elle ne pose que la rangée qui les tient, et
+// une rangée se règle depuis le conteneur.
+
+interface Props {
+  /** Les deux variantes de Figma. Verticale, l'image est en tête ; horizontale,
+   *  elle occupe la moitié gauche. */
+  orientation?: 'vertical' | 'horizontal';
+  title: string;
+  /** La ligne sous le titre. */
+  subtitle?: string;
+  /** L'information de second plan, sous le sous-titre — une date, un lieu, un
+   *  auteur. Absente ⇒ la ligne n'est pas rendue. */
+  meta?: string;
+  /** L'image de tête. `width` et `height` donnent le rapport de l'image, pas la
+   *  taille de la boîte : c'est la carte qui pose la hauteur, l'image la
+   *  remplit en cover. Absente ⇒ la carte n'en réserve pas la place. */
+  image?: { src: string; alt: string; width: number; height: number };
+  /** Le rang du titre : il se range sous ce que la page porte déjà. Le rang ne
+   *  change pas le dessin — la taille vient du composant, pas de la balise. */
+  headingLevel?: 2 | 3 | 4 | 5;
+  class?: string;
+  /** Le point de surcharge : --card-media-height, et rien d'autre. Déclarée
+   *  parce qu'elle fait partie du contrat. */
+  style?: string;
+}
+
+const {
+  orientation = 'vertical',
+  title,
+  subtitle,
+  meta,
+  image,
+  headingLevel = 2,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5';
+const classes = ['card', `card-${orientation}`, className].filter(Boolean).join(' ');
+
+// Figma ne montre pas les emplacements vides (`displayEmptyByDefault: false`) :
+// une rangée sans contenu n'est pas une rangée vide, elle n'existe pas. Sans
+// cette vérification, le `gap` du corps compterait quand même une place.
+const hasTags = Astro.slots.has('tags');
+const hasActions = Astro.slots.has('actions');
+---
+
+<article class={classes} {...rest}>
+  {
+    image && (
+      <img
+        class="media"
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+
+  <div class="body">
+    <div class="text">
+      <Heading class="title">{title}</Heading>
+      {subtitle && <p class="subtitle">{subtitle}</p>}
+      {meta && <p class="meta">{meta}</p>}
+    </div>
+
+    {
+      hasTags && (
+        <div class="tags">
+          <slot name="tags" />
+        </div>
+      )
+    }
+
+    {
+      hasActions && (
+        <div class="actions">
+          <slot name="actions" />
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    /* Trois valeurs que l'export Figma donne en dur.
+
+       Les deux ombres sont des styles d'effet — shadow/md pour la carte,
+       shadow/lg pour l'image — et la collection Design tokens n'expose aucune
+       variable d'ombre. shadow/lg est mot pour mot l'ombre des vignettes du
+       Carousel : c'est la troisième ombre du système, donc le moment de la
+       tokeniser. Signalé sur /components.
+
+       La hauteur de l'image est le seul nombre de dessin qui n'ait pas de
+       token : 324 en vertical, 256 en horizontal. C'est aussi le point de
+       surcharge public de la carte — comme --card-height sur CaseStudyCard, la
+       carte pose la valeur de Figma en repli et accepte qu'un contexte la lui
+       reprenne. Elle se lit donc sans être déclarée ici : une déclaration sur
+       .card battrait ce qu'un appelant pose.
+
+       --card-shadow porte le même nom que la variable locale de CaseStudyCard,
+       qui n'est pas la même ombre. Les deux sont déclarées chez elles, sur
+       l'élément qui les lit : une carte imbriquée dans l'autre ne peut donc pas
+       hériter de la mauvaise. */
+    --card-shadow: 0 8px 24px rgb(47 45 46 / 0.06), 0 1px 2px rgb(47 45 46 / 0.04);
+    --card-media-shadow: 0 22px 9px -14px rgb(47 45 46 / 0.1), 0 2px 4px rgb(47 45 46 / 0.04);
+
+    display: flex;
+    gap: var(--space-2xl);
+    padding: var(--space-xl);
+    /* Figma peint la carte en blanc sans lier la couleur : c'est exactement
+       color.bg.default, et c'est ce qui est écrit ici plutôt que le blanc.
+       Signalé sur /components. */
+    background: var(--color-bg-default);
+    border-radius: var(--radius-md);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* L'image remplit la place qu'on lui donne dans les deux sens, et c'est la
+     carte qui la lui donne — jamais le rapport de l'image. `object-fit: cover`
+     est ce qui rend ça honnête : l'image est recadrée, jamais déformée, et deux
+     photos de rapports différents font la même bande.
+
+     La hauteur est donc toujours écrite, et jamais laissée en `auto` : `auto`
+     la ferait dépendre du rapport du fichier, et une carte changerait de
+     dessin selon la photo qu'on y met. --card-media-height reste le point de
+     surcharge — la valeur de Figma en repli, qu'un contexte peut reprendre. */
+  .media {
+    width: 100%;
+    height: var(--card-media-height, 324px);
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-media-shadow);
+  }
+
+  /* Le corps tient les trois rangées : le texte, les tags, les actions. */
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* Les trois blocs intérieurs sont rentrés de 16 de plus que la carte, l'image
+     non : elle seule affleure la marge de 24. C'est ce que Figma dessine. */
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-inline: var(--space-lg);
+  }
+
+  /* Les trois lignes lisent le groupe de tokens `card`, qui ne fixe que ce qui
+     leur est propre : la taille et l'encre. Le reste du dessin du titre est
+     celui d'un h2 — Poppins bold, interligne et interlettrage serrés — et
+     global.css le pose déjà pour tous les rangs, donc il n'y a rien à réécrire
+     ici. La taille, elle, se déclare quand même : sans elle le rang du titre
+     changerait le dessin, ce que la prop headingLevel promet de ne pas faire.
+
+     Les six tokens sont des alias — card.title.size lit font.size.title. Ce
+     n'est pas une indirection pour rien : c'est le point où la typographie
+     d'une carte peut bouger sans emporter les titres de page avec elle. */
+  .title {
+    margin: 0;
+    font-size: var(--card-title-size);
+    color: var(--card-title-color);
+  }
+
+  .subtitle {
+    margin: 0;
+    font-size: var(--card-subtitle-size);
+    line-height: var(--font-line-height-body);
+    color: var(--card-subtitle-color);
+  }
+
+  .meta {
+    margin: 0;
+    font-size: var(--card-meta-size);
+    line-height: var(--font-line-height-body);
+    color: var(--card-meta-color);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding-inline: var(--space-lg);
+  }
+
+  /* Les actions sont calées à droite, et l'écart entre deux d'entre elles est
+     celui de Figma — space.xs. Il ne se desserre pas comme celui des tags de
+     l'en-tête d'étude de cas : là-bas les cibles mesurent 33px de haut et
+     l'écart devait compenser, ici ce sont des boutons d'au moins
+     button.height.sm — 44px, donc WCAG 2.5.8 est tenu par la taille de la cible
+     et non par sa marge. */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-xs);
+    padding-inline: var(--button-padding-x-sm);
+  }
+
+  /* Verticale, l'image est l'élément qui donne et qui reprend la hauteur : elle
+     part de celle de Figma et absorbe ce que la carte a en trop, ou rend ce
+     qu'il lui manque. Le texte est le point fixe — c'est la même règle que la
+     carte d'étude de cas, où l'en-tête ne bouge pas et le carrousel se
+     resserre. Une carte posée dans une grille à hauteur imposée aligne donc ses
+     images sans qu'on ait à mesurer quoi que ce soit. */
+  .card-vertical {
+    flex-direction: column;
+  }
+
+  .card-vertical .media {
+    flex: 1 1 auto;
+  }
+
+  .card-vertical .body {
+    flex: 0 0 auto;
+  }
+
+  /* Horizontale, l'image et le corps se partagent la largeur à parts égales, et
+     le corps se centre sur la hauteur de l'image. Les deux `flex-basis: 0` sont
+     ce qui fait les moitiés : sans eux, c'est la longueur du titre qui
+     déciderait du partage.
+
+     Les deux `min-width: 0` ne sont pas une précaution. Un élément de flex a un
+     plancher automatique égal à son contenu minimal, et ce plancher bat le
+     partage : l'image, qui a un rapport et une hauteur, réclame la largeur que
+     ce rapport lui donne — 551px pour une vignette de 822 × 382 haute de 256 —
+     et le texte réclame son mot le plus long. Mesuré : l'image prenait 551, le
+     corps 234, la ligne débordait de 97px et la carte passait de 304 à 565 de
+     haut. Le rapport de l'image ne décide pas de sa place ; c'est `cover` qui
+     la recadre. */
+  .card-horizontal {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  /* Les deux colonnes remplissent la carte : l'image et le bloc de contenu font
+     sa hauteur, l'une comme l'autre. C'est le `stretch` posé sur la carte qui
+     les étire toutes les deux, et il l'emporte sur le rapport du fichier image
+     — une photo ne décide donc jamais de la hauteur d'une carte.
+
+     Le contenu, lui, se centre dans sa colonne. C'est ce que Figma pose sur ce
+     bloc (334:1360, rempli dans les deux sens, aligné au centre), et c'est ce
+     qui empêche un titre court de se coller en haut d'une carte haute.
+
+     Reste à savoir d'où vient la hauteur : du plus haut des deux — le plancher
+     de l'image, ou le contenu du bloc quand il le dépasse. --card-media-height
+     est ce plancher, et c'est le seul endroit du système où un réglage vaut un
+     minimum et non une taille. Sans lui, une carte réduite à son titre
+     écraserait son image sur deux lignes de texte. */
+  .card-horizontal .media {
+    flex: 1 1 0;
+    min-width: 0;
+    height: auto;
+    min-height: var(--card-media-height, 256px);
+    align-self: stretch;
+  }
+
+  .card-horizontal .body {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  /* Figma borne la carte horizontale entre 560 et 768 de large : en dessous,
+     deux colonnes ne tiennent plus. Le dépôt laisse la largeur à la page — un
+     composant qui se borne lui-même déciderait à sa place — donc la carte
+     bascule en colonne au seul point de rupture du système, qui est aussi
+     l'endroit où le plancher de 560 cesse d'être tenable. Figma ne dessine pas
+     ce cas : c'est une décision du code, comme le padding mobile de la carte
+     d'étude de cas. */
+  @media (max-width: 767px) {
+    .card-horizontal {
+      flex-direction: column;
+    }
+
+    /* En colonne il n'y a plus de texte en face pour donner sa hauteur à
+       l'image : elle redevient une taille écrite, comme dans la verticale. */
+    .card-horizontal .media {
+      flex: 1 1 auto;
+      height: var(--card-media-height, 256px);
+      min-height: 0;
+    }
+
+    .card-horizontal .body {
+      flex: 0 0 auto;
+    }
+  }
+</style>

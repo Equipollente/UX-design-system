@@ -7,6 +7,7 @@ import Button from '../design-system/components/Button.astro';
 import Tag from '../design-system/components/Tag.astro';
 import Nav from '../design-system/components/Nav.astro';
 import Carousel from '../design-system/components/Carousel.astro';
+import Card from '../design-system/components/Card.astro';
 import CaseStudyHeader from '../design-system/components/CaseStudyHeader.astro';
 import CaseStudyCard from '../design-system/components/CaseStudyCard.astro';
 import Intro from '../design-system/components/Intro.astro';
@@ -20,9 +21,11 @@ import {
   caseStudyDemo,
   caseStudies,
   introDemo,
+  cardDemo,
 } from './_demo';
 
 const buttonTokens = tokens.filter((t) => t.group === 'button');
+const cardTokens = tokens.filter((t) => t.group === 'card');
 const buttonSizes = ['sm', 'md', 'lg'] as const;
 
 // Les props sont recopiées des interface Props des composants. Une seule
@@ -92,6 +95,50 @@ const tagProps = [
   ],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
   ['style', 'string', '—', 'Le point de surcharge : --tag-color sur l’outline, et rien d’autre.'],
+];
+
+const cardProps = [
+  [
+    'orientation',
+    `'vertical' | 'horizontal'`,
+    'vertical',
+    'Les deux variantes de Figma. Verticale, l’image est en tête ; horizontale, elle occupe la moitié gauche.',
+  ],
+  ['title', 'string', '—', 'Le titre. La seule prop obligatoire.'],
+  ['subtitle', 'string', '—', 'La ligne sous le titre.'],
+  [
+    'meta',
+    'string',
+    '—',
+    'L’information de second plan, sous le sous-titre — une date, un lieu, un auteur. Absente ⇒ la ligne n’est pas rendue.',
+  ],
+  [
+    'image',
+    '{ src, alt, width, height }',
+    '—',
+    'L’image de tête. width et height donnent le rapport de l’image, pas la taille de la boîte. Absente ⇒ la carte n’en réserve pas la place.',
+  ],
+  [
+    'headingLevel',
+    '2 | 3 | 4 | 5',
+    '2',
+    'Le rang du titre, sous ce que la page porte déjà. Il ne change pas le dessin.',
+  ],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+  ['style', 'string', '—', 'Le point de surcharge : --card-media-height, et rien d’autre.'],
+];
+
+// Les deux emplacements. Ce ne sont pas des props : ce sont les slots nommés de
+// Figma, recopiés tels quels.
+const cardSlots = [
+  [
+    'tags',
+    'Les tags. Figma n’y accepte que des Tag — le code ne peut pas l’imposer, la doctrine le dit.',
+  ],
+  [
+    'actions',
+    'Ce qui mène quelque part : un Button, ou plusieurs. Ils se calent à droite de la carte.',
+  ],
 ];
 
 const caseStudyCardProps = [
@@ -180,15 +227,15 @@ const caseStudyListVars = [
 
 <DocsLayout
   title="Composants — UX design system"
-  description="Les composants du système : Button, Tag, Nav, la carte d'étude de cas et leur pile, avec leur doctrine, leurs états et leurs props."
+  description="Les composants du système : Button, Tag, Nav, la fiche, la carte d'étude de cas et leur pile, avec leur doctrine, leurs états et leurs props."
 >
   <header class="page-head">
     <h6>Design system</h6>
     <h1>Composants</h1>
     <p class="lead">
-      Deux primitives — Button et Tag — et les objets qui les composent : le Nav, la carte d'étude
-      de cas avec son en-tête et son carrousel, l'intro d'une page d'accueil, et la pile qui empile
-      les études de cas. Tous construits uniquement à partir des tokens. Ce qui est montré ici est
+      Deux primitives — Button et Tag — et les objets qui les composent : le Nav, la fiche, la carte
+      d'étude de cas avec son en-tête et son carrousel, l'intro d'une page d'accueil, et la pile qui
+      empile les études de cas. Tous construits uniquement à partir des tokens. Ce qui est montré ici est
       rendu par les composants eux-mêmes — pas par une copie de leur markup. La doctrine d'usage
       vient des descriptions Figma : c'est elle qui porte les interdits.
     </p>
@@ -682,6 +729,294 @@ const caseStudyListVars = [
       </ul>
     </section>
 
+    <!-- ── Card ─────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Card</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Une fiche qui présente une chose : son image, son titre, son
+        sous-titre, une ligne d'informations secondaires, puis deux emplacements libres — les tags et
+        les actions. Verticale ou horizontale, c'est la même fiche.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni la carte d'étude de cas — celle-là est une feuille
+        pleine largeur qui monte du bas de la page, avec sa phrase d'impact et son carrousel, et elle
+        est plus bas — ni un bouton : la carte entière ne se clique pas, et rien n'y est un lien. Ce
+        qui mène quelque part se pose dans l'emplacement <code>actions</code>, et c'est un
+        {' '}<em>Button</em>.
+        <br />
+        <span class="source">
+          Figma <code>334:1129</code>. Le composant n'a pas de description : ce qui précède est lu sur
+          le dessin, pas sur le fichier — voir plus bas.
+        </span>
+      </p>
+
+      <div class="demo demo-card">
+        <div class="card-stand">
+          <Card
+            title={cardDemo.title}
+            subtitle={cardDemo.subtitle}
+            meta={cardDemo.meta}
+            image={cardDemo.image}
+            headingLevel={3}
+          >
+            <Fragment slot="tags">
+              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
+            <Fragment slot="actions">
+              <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">
+                {cardDemo.action.label}
+              </Button>
+            </Fragment>
+          </Card>
+        </div>
+      </div>
+
+      <h3>Les deux orientations</h3>
+      <p class="section-note">
+        <strong>Verticale, l'image est en tête et prend toute la largeur de la carte.</strong>
+        {' '}Horizontale, elle occupe la moitié gauche et le texte se centre en face, sur sa hauteur.
+        C'est la seule différence : mêmes marges, mêmes espacements, même dessin du texte. Le
+        contenu ci-dessus et ci-dessous est le même.
+      </p>
+
+      <div class="demo demo-card">
+        <div class="card-stand-wide">
+          <Card
+            orientation="horizontal"
+            title={cardDemo.title}
+            subtitle={cardDemo.subtitle}
+            meta={cardDemo.meta}
+            image={cardDemo.image}
+            headingLevel={3}
+          >
+            <Fragment slot="tags">
+              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
+            <Fragment slot="actions">
+              <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">
+                {cardDemo.action.label}
+              </Button>
+            </Fragment>
+          </Card>
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>La carte prend la largeur qu'on lui donne</strong> — c'est la page qui décide, comme
+        pour la carte d'étude de cas. Les deux cadres ci-dessus ne montrent donc pas une largeur du
+        composant mais celle que Figma lui dessine : <code>337</code> pour la verticale, le plafond de
+        {' '}<code>768</code> pour l'horizontale.
+        <br />
+        <strong>Sous 768px, l'horizontale repasse en colonne.</strong> Figma la borne à
+        {' '}<code>560</code> de large au minimum, et deux colonnes ne tiennent pas dans un téléphone de
+        390. Ce cas n'est pas dessiné : c'est une décision du code, prise au seul point de rupture du
+        système.
+      </p>
+
+      <h3>Les deux emplacements</h3>
+      <p class="section-note">
+        <strong>Les tags et les actions ne sont pas des props, ce sont des slots nommés</strong> — les
+        mêmes que dans Figma. La carte ne pose que la rangée qui les tient : les tags se replient sur
+        plusieurs lignes, les actions se calent à droite. Ce qu'on y met se dessine tout seul.
+        <br />
+        <strong>Un emplacement vide n'existe pas</strong> : sans tag, la rangée des tags n'est pas
+        rendue, et l'espacement du corps ne lui compte pas de place. C'est ce que dit Figma —
+        {' '}<code>displayEmptyByDefault: false</code>.
+        <br />
+        <strong>Figma restreint l'emplacement des tags aux Tag</strong> et laisse celui des actions
+        ouvert. Le code ne peut pas imposer la première règle ; elle reste une doctrine. Dans le
+        fichier, l'action est un <em>Button</em> secondaire de taille <code>sm</code>, réduit à sa
+        seule flèche.
+      </p>
+
+      <h3>Ce qu'elle fait quand une prop manque</h3>
+      <p class="section-note">
+        <strong>Seul le titre est obligatoire.</strong> Sans image, la carte ne réserve pas la place —
+        elle commence au texte. Sans sous-titre, sans ligne secondaire, sans tags, sans actions : la
+        ligne n'est pas rendue, et rien ne laisse un trou. Une carte réduite à son titre est une carte
+        valide.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              cardProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Slots</h4>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Slot</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              cardSlots.map(([nom, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>L'image s'adapte, elle ne commande pas</h3>
+      <p class="section-note">
+        <strong>C'est la carte qui donne sa place à l'image, jamais le rapport du fichier.</strong>
+        {' '}<code>object-fit: cover</code> est ce qui rend ça tenable : l'image est recadrée, jamais
+        déformée, et deux photos de rapports différents font exactement la même bande. Une carte ne
+        change donc pas de dessin selon la photo qu'on y met.
+        <br />
+        <strong>Horizontale, les deux colonnes remplissent la carte</strong> — l'image et le bloc de
+        contenu font sa hauteur, l'une comme l'autre. Le contenu, lui, se centre dans sa colonne :
+        un titre court ne se colle pas en haut d'une carte haute, il reste au milieu. C'est
+        exactement ce que Figma pose sur ce bloc.
+        <br />
+        <strong>La hauteur vient du plus haut des deux</strong> : le plancher de l'image, ou le
+        contenu du bloc quand il le dépasse. Une carte dont le titre se replie sur trois lignes a
+        donc une image aussi haute que son texte, et non une image de 256 centrée entre deux bandes
+        vides.
+        <br />
+        <strong>Verticale, l'image est ce qui donne et reprend la hauteur.</strong> Sans consigne,
+        elle vaut celle de Figma. Si une page impose une hauteur à la carte, c'est l'image qui
+        absorbe le surplus ou qui se resserre — le texte, lui, ne bouge pas. C'est la même règle que
+        la carte d'étude de cas, où l'en-tête est le point fixe et le carrousel cède. Une grille de
+        cartes à hauteur égale aligne donc ses images sans qu'on ait à mesurer quoi que ce soit.
+      </p>
+
+      <h3>Reprendre la hauteur de l'image</h3>
+      <p class="section-note">
+        <strong>Un seul levier.</strong> <code>--card-media-height</code> vaut <code>324px</code> en
+        vertical et <code>256px</code> en horizontal. Elle se pose en <code>style</code> sur une
+        carte, ou sur un ancêtre pour toute une grille. Le reste ne se reprend pas — une carte qui
+        change de marges, de rayon ou d'ombre n'est plus cette carte.
+        <br />
+        <strong>C'est le seul réglage du système dont le sens change d'une orientation à l'autre</strong>,
+        et c'est assumé. Verticale, c'est une <em>hauteur</em> : celle que l'image prend quand rien ne
+        la contraint. Horizontale, c'est un <em>plancher</em> : la hauteur vient du texte d'en face, et
+        cette valeur empêche seulement une carte réduite à son titre d'écraser son image sur deux
+        lignes.
+      </p>
+
+      <h3>Tokens</h3>
+      <p class="section-note">
+        Les {cardTokens.length} tokens <code>card.*</code> : la taille et l'encre des trois lignes de
+        texte de la carte. Ils décrivent cet objet et pas le système — c'est pour ça qu'ils sont ici
+        plutôt que dans <a href={withBase('/foundations')}>Fondations</a>.
+        <br />
+        <strong>Ce sont six alias, et c'est voulu.</strong> Aucun ne porte de valeur à lui : chacun
+        renvoie à une primitive que le système avait déjà — <code>card.title.size</code> lit
+        {' '}<code>font.size.title</code>, qui est aussi la taille d'un <code>h2</code>. Le token n'ajoute
+        donc pas une valeur, il ajoute un <em>endroit</em> : celui où la typographie d'une carte peut
+        bouger sans emporter les titres de page avec elle. C'est ce que fait déjà le groupe
+        {' '}<code>button</code> avec <code>button.radius</code>, qui n'est qu'un alias de
+        {' '}<code>radius.pill</code>.
+        <br />
+        <strong>Ils ne fixent que la taille et l'encre.</strong> La police, la graisse, l'interligne et
+        l'interlettrage du titre restent ceux d'un <code>h2</code>, posés par <code>global.css</code>
+        {' '}pour tous les rangs : les nommer ici aurait détaché les titres de carte de l'échelle
+        typographique du système, ce qui est exactement ce qu'un design system ne doit pas laisser
+        arriver par distraction.
+      </p>
+      <ul class="plain token-list">
+        {
+          cardTokens.map((t) => (
+            <li>
+              <code class="name">
+                {t.name} — {t.resolved}
+                {t.alias && <em class="alias"> ← {t.alias}</em>}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="section-note">
+        <strong>La carte d'étude de cas ne les lit pas.</strong> Son titre et sa phrase d'impact
+        portent pourtant les mêmes valeurs, et c'était l'autre partage possible. Le groupe a été
+        gardé sur la fiche seule : les deux objets pourront donc diverger, et si l'un doit suivre
+        l'autre, c'est une décision à reprendre — pas un oubli.
+      </p>
+
+      <h3>Ce que la maquette ne dit pas</h3>
+
+      <p class="flag">
+        <strong>Le composant n'a pas de description.</strong> C'est d'elle que sortent normalement le
+        « ce qu'elle est » et le « ce qu'elle n'est pas » ; ici la doctrine ci-dessus est déduite du
+        dessin et du reste du système. Elle n'engage donc que le code, et c'est l'écart le plus cher
+        de cette section : deux personnes qui lisent le même dessin n'en tirent pas les mêmes
+        interdits. Une description dans Figma les trancherait pour de bon.
+      </p>
+
+      <p class="flag">
+        <strong>Deux noms à reprendre.</strong> Le composant s'appelle <code>Cards</code> au pluriel,
+        avec une espace finale — un nom de tiroir, pas un nom d'objet : le code le nomme
+        {' '}<code>Card</code>. Et la propriété qui commande les deux variantes s'appelle
+        {' '}<code>Property 1</code>, ce qui ne dit rien de ce qu'elle fait : le code la nomme
+        {' '}<code>orientation</code>. Les deux se renomment côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>Le fond blanc de la carte n'est lié à aucune variable.</strong> La valeur est
+        exactement celle de <code>color.bg.default</code>, et c'est ce que le code écrit — mais rien
+        dans le fichier ne le dit, et un changement de la variable ne repeindrait pas la maquette. Il
+        manque une liaison, pas un token.
+      </p>
+
+      <p class="flag">
+        <strong>Les deux ombres sont des styles d'effet, pas des variables.</strong>
+        {' '}<code>shadow/md</code> pour la carte, <code>shadow/lg</code> pour l'image — et cette
+        seconde est mot pour mot celle des vignettes du carrousel, qui la porte déjà en dur sous le nom
+        {' '}<code>--carousel-item-shadow</code>. C'est la troisième ombre écrite en dur dans le système,
+        après celle-là et le <code>shadow/lg-invert</code> de la carte d'étude de cas : le seuil
+        annoncé pour les tokeniser est atteint.
+      </p>
+
+      <p class="flag">
+        <strong>Figma centrerait l'image là où le code l'étire.</strong> Dans le fichier, l'image de
+        la carte horizontale est haute de <code>256</code> et la carte s'ajuste à son contenu : les
+        deux tombent juste parce que le texte de la maquette fait exactement cette hauteur. Avec un
+        titre de vraie longueur, l'auto-layout laisserait l'image à 256 et la centrerait entre deux
+        bandes vides — ce que le code refuse de faire. L'écart ne se voit donc pas sur le nœud tel
+        qu'il est dessiné aujourd'hui, et c'est bien pour ça qu'il est écrit ici. Le geste côté
+        Figma tient en un réglage : passer la hauteur de l'image en <em>fill</em>, comme sa largeur.
+      </p>
+
+      <p class="flag">
+        <strong>La hauteur de l'image n'a pas de token</strong> — <code>324</code> en vertical,
+        {' '}<code>256</code> en horizontal. Elle est hissée en <code>--card-media-height</code>, qui est
+        aussi le point de surcharge public de la carte. Aucun groupe de tokens ne décrit une hauteur
+        de média ; l'ouvrir pour deux nombres serait prématuré, mais un troisième le rendrait
+        nécessaire.
+      </p>
+
+      <p class="flag">
+        <strong>L'écart entre deux actions vaut <code>space.xs</code></strong>, là où l'en-tête
+        d'étude de cas desserre le sien pour tenir WCAG 2.5.8. La règle n'est pas contredite : les
+        boutons d'action mesurent au moins <code>button.height.sm</code>, soit 44px, et une cible de
+        44px satisfait 2.5.8 par sa taille sans rien demander à sa marge. Ce serait faux si
+        l'emplacement recevait des cibles plus petites — c'est une raison de plus pour n'y mettre que
+        des boutons.
+      </p>
+    </section>
+
     <!-- ── Case Study Card ──────────────────────────────────────────────── -->
     <section>
       <h2>Case Study Card</h2>
@@ -699,7 +1034,7 @@ const caseStudyListVars = [
         <span class="source">Figma <code>88:131</code>, en situation <code>176:1248</code>.</span>
       </p>
 
-      <div class="demo demo-card">
+      <div class="demo demo-case-study">
         <CaseStudyCard
           eyebrow={caseStudyDemo.eyebrow}
           title={caseStudyDemo.title}
@@ -1326,10 +1661,30 @@ const caseStudyListVars = [
     overflow-x: auto;
   }
 
-  /* La carte porte ses propres marges et vient buter en bas de son cadre : ses
-     coins bas sont carrés parce qu'elle monte depuis le bord. Reste un peu d'air
-     en haut, sans quoi son ombre — projetée vers le haut — ne se verrait pas. */
+  /* La carte de fiche est blanche sur un cadre blanc : son ombre — shadow/md,
+     très basse — ne suffirait pas à l'en détacher. Elle se montre donc sur la
+     surface lavande, comme le carrousel et ses flèches blanches. */
   .demo-card {
+    background: var(--color-bg-surface);
+  }
+
+  /* La carte prend la largeur qu'on lui donne — c'est la page qui décide. Ces
+     deux socles lui donnent celle de Figma : 337 pour la verticale, le plafond
+     de 768 pour l'horizontale. Ils sont dans la doc et non dans le composant,
+     précisément parce que c'est une décision de page. */
+  .card-stand {
+    max-width: 337px;
+  }
+
+  .card-stand-wide {
+    max-width: 768px;
+  }
+
+  /* La carte d'étude de cas porte ses propres marges et vient buter en bas de
+     son cadre : ses coins bas sont carrés parce qu'elle monte depuis le bord.
+     Reste un peu d'air en haut, sans quoi son ombre — projetée vers le haut —
+     ne se verrait pas. */
+  .demo-case-study {
     padding: var(--space-2xl) 0 0;
     /* Le cadre perd ses coins bas arrondis pour épouser ceux de la carte, qui
        sont carrés. Pas d'overflow: hidden ici — il rognerait l'ombre. */

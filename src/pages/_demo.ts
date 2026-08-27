@@ -84,3 +84,17 @@ export const caseStudies = [
   { ...caseStudyDemo, images: caseStudyImages },
   { ...caseStudyDemo, images: caseStudyImages },
 ];
+
+// La carte de 334:1129. Figma ne lui met que des libellés d'emplacement — « Card
+// Title », « Card subtitle », « Card secondary infos » — qui ne disent rien de la
+// longueur des vrais mots, et une carte se juge dessus. Le contenu est donc celui
+// de l'étude Rubika, déjà dans ce fichier et déjà vrai : rien n'est inventé, et rien
+// n'est écrit au nom d'une entreprise réelle qui ne l'ait pas déjà été.
+export const cardDemo = {
+  title: caseStudyDemo.title,
+  subtitle: caseStudyDemo.impact,
+  meta: caseStudyDemo.eyebrow,
+  image: caseStudyImages[0],
+  tags: caseStudyDemo.tags,
+  action: caseStudyDemo.action,
+};
