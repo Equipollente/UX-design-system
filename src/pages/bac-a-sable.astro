@@ -1,6 +1,6 @@
 ---
 // Bac à sable — la page où l'on manipule un composant plutôt que de lire sa
-// fiche. Trois ateliers : on règle, on voit, on copie le code entier.
+// fiche. Cinq ateliers : on règle, on voit, on copie le code entier.
 //
 // Elle ne remplace pas /components, qui documente le système à lui-même : les
 // écarts Figma, les tokens, la doctrine. Ici, une seule question — qu'est-ce
@@ -16,8 +16,13 @@ import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
 import Tag from '../design-system/components/Tag.astro';
 import Icon from '../design-system/components/Icon.astro';
+import Card from '../design-system/components/Card.astro';
 import { iconNames } from '../design-system/lib/icons';
 import tokens from '../design-system/data/tokens.json';
+// L'image de l'aperçu est un vrai asset de ce site : une carte sans image ne
+// dirait rien de ce que fait une carte. Les textes, eux, sont ceux de l'atelier
+// et non ceux de Figma — ici on règle, on ne documente pas une maquette.
+import { cardDemo } from './_demo';
 
 // Les descriptions des tokens sont la meilleure aide qu'on puisse afficher :
 // elles disent à quoi sert une taille (« H1, and the headline on a title
@@ -100,6 +105,32 @@ const defautRegle = `.mon-style {
 const defautTexteHtml =
   '<p class="mon-style">Concevoir, c’est rendre évident ce qui ne l’était pas.</p>';
 
+// La carte est le seul atelier dont l'en-tête bouge : elle importe ce qu'on a
+// mis dans ses emplacements, donc la liste dépend des réglages. Ces deux
+// constantes sont l'état de départ — sans JavaScript, c'est ce qui reste à
+// l'écran, et c'est du code juste.
+const defautCarteEntete = `---
+import Card from 'ux-design-system/components/Card.astro';
+import Tag from 'ux-design-system/components/Tag.astro';
+import Button from 'ux-design-system/components/Button.astro';
+import { withBase } from 'ux-design-system/lib/url';
+---`;
+
+const defautCarte = `<Card
+  title="Quatre guides pour concevoir accessible"
+  subtitle="Déploiements plus rapides, langage UX partagé"
+  meta="2025 — atelier de six semaines"
+  image={{ src: withBase('/images/projet.jpg'), alt: 'Décris ce qu’on voit', width: 822, height: 382 }}
+>
+  <Fragment slot="tags">
+    <Tag>Recherche utilisateur</Tag>
+  </Fragment>
+
+  <Fragment slot="actions">
+    <Button variant="secondary" size="sm" iconEnd="arrow-narrow-right">Lire l’étude</Button>
+  </Fragment>
+</Card>`;
+
 const importStyles = `import 'ux-design-system/styles/tokens.css';
 import 'ux-design-system/styles/global.css';`;
 
@@ -118,9 +149,10 @@ import { withBase } from 'ux-design-system/lib/url';
     <h6>Design system</h6>
     <h1>Bac à sable</h1>
     <p class="lead">
-      Quatre ateliers. Dans chacun : les réglages à gauche, la chose en vrai au milieu, et le code en
+      Cinq ateliers. Dans chacun : les réglages à gauche, la chose en vrai au milieu, et le code en
       dessous — en deux morceaux qui se copient séparément, parce qu'ils vont à deux endroits
       différents du fichier. Rien à lire avant de commencer : on touche un réglage, le code se réécrit.
+      Le dernier, la carte, va plus loin : on y pose des composants dans un composant.
     </p>
     <p class="section-note">
       Ce que tu vois n'est pas une image, c'est la chose elle-même. Si l'aperçu est juste, le code
@@ -133,6 +165,7 @@ import { withBase } from 'ux-design-system/lib/url';
         <li><a href="#atelier-button">Button</a></li>
         <li><a href="#atelier-tag">Tag</a></li>
         <li><a href="#atelier-icon">Icon</a></li>
+        <li><a href="#atelier-card">Card</a></li>
         <li><a href="#pannes">Quand ça ne marche pas</a></li>
       </ul>
     </nav>
@@ -615,6 +648,237 @@ import { withBase } from 'ux-design-system/lib/url';
       </div>
     </section>
 
+    <!-- ── Card ─────────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="card" id="atelier-card">
+      <h2>Card</h2>
+      <p class="section-note">
+        Une fiche : une image, trois lignes de texte, et deux emplacements qu'on remplit soi-même —
+        les tags et les actions. C'est le premier atelier où l'on met des composants
+        {' '}<em>dans</em> un composant.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend>Orientation</legend>
+            <div class="choix">
+              <label
+                ><input type="radio" name="orientation" value="vertical" checked /><span
+                  >vertical</span
+                ></label
+              >
+              <label
+                ><input type="radio" name="orientation" value="horizontal" /><span>horizontal</span
+                ></label
+              >
+            </div>
+            <p class="aide">
+              Verticale, l'image est en tête. Horizontale, elle prend la moitié gauche — et sous
+              768px elle repasse en colonne toute seule.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="carte-title">Titre</label></legend>
+            <input
+              id="carte-title"
+              type="text"
+              name="title"
+              value="Quatre guides pour concevoir accessible"
+              autocomplete="off"
+            />
+            <p class="aide">La seule chose que la carte exige.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="carte-subtitle">Sous-titre</label></legend>
+            <input
+              id="carte-subtitle"
+              type="text"
+              name="subtitle"
+              value="Déploiements plus rapides, langage UX partagé"
+              autocomplete="off"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="carte-meta">Informations secondaires</label></legend>
+            <input
+              id="carte-meta"
+              type="text"
+              name="meta"
+              value="2025 — atelier de six semaines"
+              autocomplete="off"
+            />
+            <p class="aide">
+              Vide, la ligne n'est pas rendue : la carte ne laisse pas de trou à la place.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Image</legend>
+            <label class="case"
+              ><input type="checkbox" name="image" checked /><span>La carte a une image</span></label
+            >
+            <p class="aide">
+              Décochée, la carte commence au titre. L'aperçu montre une image de ce site : dans ton
+              code, c'est <code>src</code> qu'il faut faire pointer sur la tienne.
+            </p>
+          </fieldset>
+
+          <!-- ── L'emplacement des tags ── -->
+          <fieldset class="emplacement">
+            <legend>Emplacement « tags »</legend>
+            <label class="case"
+              ><input type="checkbox" name="tags" checked /><span>Afficher cet emplacement</span
+              ></label
+            >
+            <div data-si="tags">
+              <div class="rangs" data-liste="tags"></div>
+              <button class="ajouter" type="button" data-ajouter="tags">+ Ajouter un tag</button>
+              <p class="aide" data-vide="tags"></p>
+              <p class="aide">
+                Figma n'accepte que des <em>Tag</em> ici. Le code ne peut pas l'imposer — c'est à
+                toi de ne pas y mettre autre chose.
+              </p>
+            </div>
+          </fieldset>
+
+          <!-- Le modèle d'une rangée. Il est rendu par Astro pour que la liste des
+               variantes vienne du système et non d'une copie tenue à la main dans
+               le script. Le script n'en fait que des clones. -->
+          <template data-modele="tags">
+            <div class="rang-slot">
+              <input class="rang-texte" type="text" value="Recherche utilisateur" autocomplete="off" />
+              <select class="rang-variant">
+                {tagVariants.map((v) => <option value={v} selected={v === 'outline'}>{v}</option>)}
+              </select>
+              <button class="retirer" type="button">✕</button>
+            </div>
+          </template>
+
+          <!-- ── L'emplacement des actions ── -->
+          <fieldset class="emplacement">
+            <legend>Emplacement « actions »</legend>
+            <label class="case"
+              ><input type="checkbox" name="actions" checked /><span>Afficher cet emplacement</span
+              ></label
+            >
+            <div data-si="actions">
+              <div class="rangs" data-liste="actions"></div>
+              <button class="ajouter" type="button" data-ajouter="actions">
+                + Ajouter une action
+              </button>
+              <p class="aide" data-vide="actions"></p>
+              <p class="aide">
+                Des boutons, et rien d'autre : ils se calent à droite, et leur taille
+                {' '}<code>sm</code> fait 44px — c'est ce qui rend l'écart serré entre deux d'entre eux
+                acceptable.
+              </p>
+            </div>
+          </fieldset>
+
+          <template data-modele="actions">
+            <div class="rang-slot">
+              <input class="rang-texte" type="text" value="Lire l’étude" autocomplete="off" />
+              <select class="rang-variant">
+                {variants.map((v) => <option value={v} selected={v === 'secondary'}>{v}</option>)}
+              </select>
+              <select class="rang-icone">
+                <option value="">sans icône</option>
+                {
+                  iconNames.map((n) => (
+                    <option value={n} selected={n === 'arrow-narrow-right'}>
+                      {n}
+                    </option>
+                  ))
+                }
+              </select>
+              <button class="retirer" type="button">✕</button>
+            </div>
+          </template>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le composant</p>
+          <div class="demo demo-carte" data-apercu>
+            {
+              (['vertical', 'horizontal'] as const).map((o) => (
+                <div class:list={['pv', o === 'vertical' && 'is-on']} data-cle={o}>
+                  <div class:list={['carte-socle', `carte-socle-${o}`]}>
+                    <Card
+                      orientation={o}
+                      title="Quatre guides pour concevoir accessible"
+                      subtitle="Déploiements plus rapides, langage UX partagé"
+                      meta="2025 — atelier de six semaines"
+                      image={cardDemo.image}
+                      headingLevel={3}
+                    >
+                      <Fragment slot="tags">
+                        <span class="fente-tags" />
+                      </Fragment>
+                      <Fragment slot="actions">
+                        <span class="fente-actions" />
+                      </Fragment>
+                    </Card>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <p class="alerte" data-alerte hidden></p>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{defautCarteEntete}</code></pre>
+            <p class="aide">
+              Il y a plusieurs lignes parce qu'il y a plusieurs composants : la carte, et ce que tu
+              as mis dedans. Elles disparaissent d'elles-mêmes quand un emplacement se vide.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux la carte</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautCarte}</code></pre>
+            <p class="aide" data-defauts></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- La banque : les composants dont on clone les exemplaires posés dans les
+           emplacements. Ils sont rendus par Astro au build comme tous les autres —
+           c'est ce qui fait que ce qu'on voit dans la carte est vraiment un Tag et
+           vraiment un Button, pas un dessin qui leur ressemble. -->
+      <div class="banque" data-banque aria-hidden="true">
+        {
+          tagVariants.map((v) => (
+            <span data-tag={v}>
+              <Tag variant={v}>
+                <span class="fente-label" />
+              </Tag>
+            </span>
+          ))
+        }
+        {
+          variants.map((v) => (
+            <span data-action={v}>
+              <Button variant={v} size="sm">
+                <span class="fente-label" />
+                <span class="fente-fin" />
+              </Button>
+            </span>
+          ))
+        }
+        {iconNames.map((n) => <span data-icone={n}><Icon name={n} /></span>)}
+      </div>
+    </section>
+
     <!-- ── Quand ça ne marche pas ───────────────────────────────────────── -->
     <section id="pannes">
       <h2>Quand ça ne marche pas</h2>
@@ -674,6 +938,34 @@ import { withBase } from 'ux-design-system/lib/url';
         </p>
         <pre><code>npm run check</code></pre>
         <p class="aide">À lancer avant de pousser, systématiquement.</p>
+      </div>
+
+      <div class="panne">
+        <h3>Ce que tu mets dans une carte n'apparaît pas</h3>
+        <p>
+          <strong>Le signe.</strong> Aucune erreur, et les tags — ou les boutons — ont simplement
+          disparu. La carte s'affiche, elle est juste vide à cet endroit.
+        </p>
+        <p>
+          <strong>Le geste.</strong> Vérifie que le contenu est bien enveloppé dans son
+          {' '}<code>Fragment</code>. La carte a deux emplacements <em>nommés</em> : ce qui n'annonce pas
+          son nom n'atterrit nulle part, et Astro le laisse tomber sans rien dire.
+        </p>
+        <pre><code>{`<!-- ne s’affiche pas : le Tag ne dit pas où il va -->
+<Card title="…">
+  <Tag>Recherche utilisateur</Tag>
+</Card>
+
+<!-- s’affiche -->
+<Card title="…">
+  <Fragment slot="tags">
+    <Tag>Recherche utilisateur</Tag>
+  </Fragment>
+</Card>`}</code></pre>
+        <p class="aide">
+          Le code de l'atelier Card l'écrit toujours correctement : en cas de doute, recopie-le
+          plutôt que de l'écrire de mémoire.
+        </p>
       </div>
 
       <div class="panne">
@@ -1036,6 +1328,296 @@ import { withBase } from 'ux-design-system/lib/url';
       return baliser('Icon', attrs, null);
     });
   }
+
+  // ── Card ───────────────────────────────────────────────────────────────
+  // Le premier atelier où l'on compose. Deux populations d'éléments s'y
+  // croisent, et elles n'ont pas les mêmes règles :
+  //
+  // Ce qui est DANS la carte est cloné de la banque — donc un vrai Tag, un vrai
+  // Button, rendus par Astro au build. C'est la règle de la page, et elle vaut
+  // ici plus qu'ailleurs : une carte qui montrerait des pilules dessinées en CSS
+  // mentirait sur le composant qu'on est en train d'apprendre à remplir.
+  //
+  // Les RANGÉES DE RÉGLAGE, elles, sont fabriquées par le script. Ce ne sont pas
+  // des composants du système mais des champs de formulaire : rien n'oblige à
+  // les rendre à l'avance, et leur nombre n'est pas connu au build. Leur modèle
+  // est quand même un <template> rendu par Astro, pour que la liste des
+  // variantes et celle des icônes viennent du système et non d'une copie.
+  const atelierCarte = document.querySelector('[data-atelier="card"]');
+  if (atelierCarte) {
+    const banque = atelierCarte.querySelector('[data-banque]');
+    const form = atelierCarte.querySelector<HTMLFormElement>('[data-form]');
+    const defauts = atelierCarte.querySelector<HTMLElement>('[data-defauts]');
+    const alerte = atelierCarte.querySelector<HTMLElement>('[data-alerte]');
+
+    const MOTS = {
+      tags: { de: 'du tag', le: 'le tag' },
+      actions: { de: "de l'action", le: "l'action" },
+    } as const;
+    type Quoi = keyof typeof MOTS;
+    const QUOI: Quoi[] = ['tags', 'actions'];
+
+    // Les deux zones de chaque aperçu, relevées une fois avant que le script ne
+    // les vide. On remonte depuis le repère posé dans le slot plutôt que de
+    // viser le nom de classe interne de la carte : ce nom appartient au
+    // composant, il peut changer sans que cette page le sache.
+    const zones = new Map<Element, Partial<Record<Quoi, HTMLElement>>>();
+    for (const pv of atelierCarte.querySelectorAll('.pv')) {
+      const z: Partial<Record<Quoi, HTMLElement>> = {};
+      for (const quoi of QUOI) {
+        const repere = pv.querySelector(`.fente-${quoi}`);
+        const zone = repere?.parentElement;
+        if (zone) {
+          zone.replaceChildren();
+          z[quoi] = zone;
+        }
+      }
+      zones.set(pv, z);
+    }
+
+    // ── Les rangées : ajouter, éditer, supprimer ──
+    const liste = (quoi: Quoi) => atelierCarte.querySelector(`[data-liste="${quoi}"]`);
+    const rangs = (quoi: Quoi) =>
+      [...atelierCarte.querySelectorAll<HTMLElement>(`[data-liste="${quoi}"] .rang-slot`)];
+
+    // Chaque rangée porte son rang dans son nom accessible. Sans ça, une liste
+    // de trois croix s'annonce trois fois « Supprimer » et rien ne les
+    // distingue au clavier (WCAG 2.4.6). Le rang se refait à chaque ajout et à
+    // chaque retrait, sinon il ment dès la deuxième suppression.
+    const numeroter = () => {
+      for (const quoi of QUOI) {
+        rangs(quoi).forEach((r, i) => {
+          const n = i + 1;
+          const nommer = (sel: string, texte: string) =>
+            r.querySelector(sel)?.setAttribute('aria-label', texte);
+          nommer('.rang-texte', `Texte ${MOTS[quoi].de} ${n}`);
+          nommer('.rang-variant', `Variante ${MOTS[quoi].de} ${n}`);
+          nommer('.rang-icone', `Icône ${MOTS[quoi].de} ${n}`);
+          nommer('.retirer', `Supprimer ${MOTS[quoi].le} ${n}`);
+        });
+      }
+    };
+
+    // Le formulaire se réécoute lui-même : ajouter ou retirer une rangée n'est
+    // pas une saisie, donc rien ne se déclencherait sans ça.
+    const rafraichir = () => form?.dispatchEvent(new Event('input', { bubbles: true }));
+
+    const ajouter = (quoi: Quoi) => {
+      const modele = atelierCarte.querySelector<HTMLTemplateElement>(`[data-modele="${quoi}"]`);
+      const ou = liste(quoi);
+      if (!modele || !ou) return;
+      ou.append(modele.content.cloneNode(true));
+    };
+
+    for (const bouton of atelierCarte.querySelectorAll<HTMLButtonElement>('[data-ajouter]')) {
+      bouton.addEventListener('click', () => {
+        const quoi = bouton.dataset.ajouter as Quoi;
+        ajouter(quoi);
+        numeroter();
+        rafraichir();
+        // Le focus va sur le champ qu'on vient de créer : c'est ce qu'on veut
+        // écrire tout de suite, et au clavier il serait autrement à retrouver.
+        rangs(quoi).at(-1)?.querySelector<HTMLInputElement>('.rang-texte')?.focus();
+      });
+    }
+
+    atelierCarte.addEventListener('click', (e) => {
+      const croix = (e.target as HTMLElement).closest('.retirer');
+      if (!croix) return;
+      const rangee = croix.closest('.rang-slot');
+      const dans = rangee?.parentElement as HTMLElement | null;
+      const quoi = dans?.dataset.liste as Quoi | undefined;
+      rangee?.remove();
+      numeroter();
+      rafraichir();
+      // Le focus disparaîtrait avec le bouton qui le portait, et repartirait en
+      // haut du document. Il se pose sur la rangée suivante, ou à défaut sur
+      // « Ajouter » (WCAG 2.4.3).
+      if (!quoi) return;
+      const suite = rangs(quoi)[0];
+      const cible =
+        suite?.querySelector<HTMLElement>('.retirer') ??
+        atelierCarte.querySelector<HTMLElement>(`[data-ajouter="${quoi}"]`);
+      cible?.focus();
+    });
+
+    const lire = (quoi: Quoi) =>
+      rangs(quoi).map((r) => ({
+        texte: (r.querySelector('.rang-texte') as HTMLInputElement | null)?.value.trim() ?? '',
+        variant: (r.querySelector('.rang-variant') as HTMLSelectElement | null)?.value ?? '',
+        icone: (r.querySelector('.rang-icone') as HTMLSelectElement | null)?.value ?? '',
+      }));
+
+    // ── Les exemplaires clonés de la banque ──
+    const exemplaire = (selecteur: string) => {
+      const src = banque?.querySelector(selecteur)?.firstElementChild;
+      return src ? (src.cloneNode(true) as HTMLElement) : null;
+    };
+
+    const poserTag = (t: { texte: string; variant: string }) => {
+      const el = exemplaire(`[data-tag="${t.variant}"]`);
+      const fente = el?.querySelector('.fente-label');
+      if (fente) fente.textContent = t.texte;
+      return el;
+    };
+
+    const poserAction = (a: { texte: string; variant: string; icone: string }) => {
+      const el = exemplaire(`[data-action="${a.variant}"]`);
+      const label = el?.querySelector('.fente-label');
+      const fin = el?.querySelector('.fente-fin');
+      if (label) label.textContent = a.texte;
+      const svg = a.icone ? banque?.querySelector(`[data-icone="${a.icone}"] svg`) : null;
+      fin?.replaceChildren(...(svg ? [svg.cloneNode(true)] : []));
+      // Même règle que dans l'atelier Button : sans libellé, la largeur minimale
+      // ferait flotter l'icône au milieu d'un vide.
+      if (a.texte === '' && a.icone) el?.style.setProperty('--btn-min-w', '0');
+      return el;
+    };
+
+    // Une valeur libre part dans un attribut : un guillemet droit tapé dans le
+    // titre fermerait l'attribut et casserait le code copié.
+    const attr = (v: string) => v.replace(/"/g, '&quot;');
+
+    const IMAGE =
+      "image={{ src: withBase('/images/projet.jpg'), alt: 'Décris ce qu’on voit', width: 822, height: 382 }}";
+
+    ajouter('tags');
+    ajouter('actions');
+    numeroter();
+
+    brancher(atelierCarte, (d, apercu) => {
+      const orientation = String(d.get('orientation'));
+      const title = String(d.get('title') ?? '').trim();
+      const subtitle = String(d.get('subtitle') ?? '').trim();
+      const meta = String(d.get('meta') ?? '').trim();
+      const avecImage = d.get('image') === 'on';
+
+      const montre = { tags: d.get('tags') === 'on', actions: d.get('actions') === 'on' };
+      const tags = montre.tags ? lire('tags') : [];
+      const actions = montre.actions ? lire('actions') : [];
+
+      const vue = montrer(apercu, orientation);
+
+      // Les trois lignes de texte et l'image : vides ou décochées, elles sortent
+      // de la mise en page au lieu d'y laisser une place. C'est ce que fait
+      // vraiment le composant — il ne rend pas la balise du tout — et c'est
+      // pour ça que ce n'est pas une simple mise en transparent.
+      const ligne = (sel: string, texte: string) => {
+        const el = vue?.querySelector<HTMLElement>(sel);
+        if (!el) return;
+        el.textContent = texte;
+        el.style.display = texte ? '' : 'none';
+      };
+      ligne('.title', title);
+      ligne('.subtitle', subtitle);
+      ligne('.meta', meta);
+
+      const img = vue?.querySelector<HTMLElement>('img');
+      if (img) img.style.display = avecImage ? '' : 'none';
+
+      // Une zone se cache en `display: none` et non en `hidden` : la carte pose
+      // `display: flex` sur ses rangées, ce qui l'emporterait sur l'attribut.
+      const z = vue ? zones.get(vue) : undefined;
+      const remplir = (quoi: Quoi, enfants: (HTMLElement | null)[]) => {
+        const zone = z?.[quoi];
+        if (!zone) return;
+        zone.replaceChildren(...enfants.filter((e): e is HTMLElement => Boolean(e)));
+        zone.style.display = enfants.length ? '' : 'none';
+      };
+      remplir('tags', tags.map(poserTag));
+      remplir('actions', actions.map(poserAction));
+
+      // Un emplacement affiché mais vide n'est pas une rangée vide : Astro ne le
+      // rend pas du tout. Le dire ici évite de chercher pourquoi « rien ne se
+      // passe » quand on coche sans rien ajouter.
+      for (const quoi of QUOI) {
+        const note = atelierCarte.querySelector<HTMLElement>(`[data-vide="${quoi}"]`);
+        const n = quoi === 'tags' ? tags.length : actions.length;
+        if (note) {
+          note.textContent =
+            montre[quoi] && n === 0
+              ? "Affiché mais vide : la rangée ne sera pas rendue du tout — c'est la même chose que de le décocher."
+              : '';
+        }
+      }
+
+      if (alerte) {
+        alerte.hidden = title !== '';
+        alerte.textContent = "Sans titre, la carte n'annonce plus rien : c'est la seule prop qu'elle exige.";
+      }
+
+      // ── Le code ──
+      const attrs: string[] = [];
+      const omis: string[] = [];
+      if (orientation !== 'vertical') attrs.push(`orientation="${orientation}"`);
+      else omis.push('orientation="vertical"');
+      attrs.push(`title="${attr(title)}"`);
+      if (subtitle) attrs.push(`subtitle="${attr(subtitle)}"`);
+      if (meta) attrs.push(`meta="${attr(meta)}"`);
+      if (avecImage) attrs.push(IMAGE);
+
+      const enfants: string[] = [];
+
+      if (tags.length) {
+        enfants.push('<Fragment slot="tags">');
+        for (const t of tags) {
+          const a = t.variant === 'outline' ? [] : [`variant="${t.variant}"`];
+          enfants.push('  ' + baliser('Tag', a, attr(t.texte)));
+        }
+        enfants.push('</Fragment>');
+      }
+
+      if (actions.length) {
+        if (enfants.length) enfants.push('');
+        enfants.push('<Fragment slot="actions">');
+        for (const a of actions) {
+          const at: string[] = [];
+          if (a.variant !== 'primary') at.push(`variant="${a.variant}"`);
+          at.push('size="sm"');
+          if (a.icone) at.push(`iconEnd="${a.icone}"`);
+          if (a.texte === '' && a.icone) {
+            at.push('aria-label="Dis ici ce que fait le bouton"');
+            at.push('style="--btn-min-w: 0"');
+          }
+          const balise = baliser('Button', at, a.texte === '' ? null : attr(a.texte));
+          enfants.push('  ' + balise.split('\n').join('\n  '));
+        }
+        enfants.push('</Fragment>');
+      }
+
+      // L'en-tête de la carte est le seul de la page à bouger : il importe ce
+      // qu'on a mis dans les emplacements, et withBase seulement s'il y a une
+      // image à préfixer.
+      const imports = ['Card'];
+      if (tags.length) imports.push('Tag');
+      if (actions.length) imports.push('Button');
+      const lignes = imports.map((n) => `import ${n} from 'ux-design-system/components/${n}.astro';`);
+      if (avecImage) lignes.push(`import { withBase } from 'ux-design-system/lib/url';`);
+
+      if (defauts) {
+        defauts.textContent = omis.length
+          ? `Ce qui est déjà le défaut ne s'écrit pas : ${omis.join(' et ')}.`
+          : '';
+      }
+
+      // Un enfant peut tenir sur plusieurs lignes — un bouton à trois props se
+      // range en colonne. Il faut donc décaler chacune de ses lignes, et pas
+      // seulement la première : sinon les props du bouton se retrouvent au même
+      // cran que sa balise, et le code copié est juste mais illisible.
+      const decaler = (bloc: string) =>
+        bloc
+          .split('\n')
+          .map((l) => (l ? '  ' + l : ''))
+          .join('\n');
+
+      return {
+        entete: `---\n${lignes.join('\n')}\n---`,
+        balise: enfants.length
+          ? `<Card\n  ${attrs.join('\n  ')}\n>\n${enfants.map(decaler).join('\n')}\n</Card>`
+          : baliser('Card', attrs, null),
+      };
+    });
+  }
 </script>
 
 <style>
@@ -1269,6 +1851,136 @@ import { withBase } from 'ux-design-system/lib/url';
 
   .banque {
     display: none;
+  }
+
+  /* Les repères posés dans les deux emplacements de la carte. Le script les
+     remplace par les exemplaires clonés ; sans JavaScript ils resteraient, et
+     une carte avec deux traits vides serait un mensonge de plus qu'une carte
+     sans tags. */
+  .fente-tags,
+  .fente-actions {
+    display: none;
+  }
+
+  /* ── L'atelier de la carte ─────────────────────────────────────────────── */
+
+  /* Une carte blanche sur le fond blanc de la démo ne se détacherait pas : son
+     ombre est trop basse pour ça. Elle se montre donc sur la surface lavande,
+     comme sur /components. */
+  .demo-carte {
+    align-items: flex-start;
+    background: var(--color-bg-surface);
+  }
+
+  .demo-carte .pv.is-on {
+    width: 100%;
+  }
+
+  /* La carte prend la largeur qu'on lui donne : c'est la page qui décide. Ces
+     deux socles lui donnent celle de Figma — et ils sont dans la doc, pas dans
+     le composant, exactement pour cette raison. */
+  .carte-socle {
+    margin-inline: auto;
+  }
+
+  .carte-socle-vertical {
+    max-width: 337px;
+  }
+
+  .carte-socle-horizontal {
+    max-width: 768px;
+  }
+
+  /* Un emplacement est un réglage qui en contient d'autres : le cadre dit où il
+     commence et où il finit. */
+  .reglages fieldset.emplacement {
+    padding: var(--space-md);
+    background: var(--color-bg-default);
+    border-radius: var(--radius-sm);
+  }
+
+  .reglages fieldset.emplacement .case {
+    margin-bottom: var(--space-md);
+  }
+
+  .rangs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .rangs:empty {
+    margin-bottom: 0;
+  }
+
+  .rang-slot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Le texte prend sa ligne, les listes se partagent la suivante : dans une
+     colonne de réglages, tout mettre côte à côte réduirait le champ le plus
+     important à quelques caractères. */
+  .rang-slot .rang-texte {
+    flex: 1 1 100%;
+    width: auto;
+  }
+
+  .rang-slot select {
+    flex: 1 1 5rem;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* 44px : la hauteur que le système donne à son plus petit bouton, et le
+     minimum de WCAG 2.5.5. Une croix de suppression est la dernière cible qu'on
+     a intérêt à rendre difficile à viser. */
+  .retirer {
+    flex: none;
+    width: var(--button-height-sm);
+    height: var(--button-height-sm);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-default);
+    cursor: pointer;
+  }
+
+  .retirer:hover {
+    background: var(--color-bg-section);
+  }
+
+  /* Le tireté dit que rien n'est encore là : c'est un emplacement à remplir, pas
+     une action au même rang que les autres. */
+  .ajouter {
+    width: 100%;
+    min-height: var(--button-height-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-default);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-default);
+    cursor: pointer;
+  }
+
+  .ajouter:hover {
+    background: var(--color-bg-section);
+  }
+
+  .retirer:focus-visible,
+  .ajouter:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
   }
 
   .etiquette > span {
