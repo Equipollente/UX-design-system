@@ -84,8 +84,14 @@ const navVars = [
 ];
 
 const tagProps = [
+  [
+    'variant',
+    `'accent' | 'lime' | 'neutral' | 'outline'`,
+    'outline',
+    'Les quatre variantes de Figma. Les trois premières sont remplies.',
+  ],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
-  ['style', 'string', '—', 'Le point de surcharge : --tag-color, et rien d’autre.'],
+  ['style', 'string', '—', 'Le point de surcharge : --tag-color sur l’outline, et rien d’autre.'],
 ];
 
 const caseStudyCardProps = [
@@ -338,7 +344,8 @@ const caseStudyListVars = [
 
       <p class="section-note">
         <strong>Ce qu'il est.</strong> Une étiquette courte qui classe la chose posée à côté d'elle :
-        une méthode sur une carte d'étude de cas, une catégorie dans un document.
+        un statut dans une ligne de tableau, un mot-clé sur une slide, une catégorie dans un document
+        — ici, les méthodes d'une étude de cas.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni un bouton — il n'a aucun état interactif, et une pilule
         sur laquelle on clique est un <em>Button</em> — ni une phrase, ni le seul porteur d'un sens :
@@ -349,16 +356,34 @@ const caseStudyListVars = [
 
       <div class="demo">
         <div class="tag-row">
-          <Tag>Hypothesis Testing</Tag>
-          <Tag>Co-design Facilitation</Tag>
-          <Tag>Journey Prototyping</Tag>
-        </div>
-        <div class="tag-row">
-          <Tag style="--tag-color: var(--color-accent-800)">Recherche</Tag>
-          <Tag style="--tag-color: var(--color-highlight-800)">Atelier</Tag>
-          <Tag style="--tag-color: var(--color-neutral-800)">Archive</Tag>
+          <Tag variant="accent">Accent</Tag>
+          <Tag variant="lime">Lime</Tag>
+          <Tag variant="neutral">Neutral</Tag>
+          <Tag variant="outline">Outline</Tag>
         </div>
       </div>
+
+      <h3>Les quatre variantes</h3>
+      <p class="section-note">
+        <strong>Les trois remplies tiennent par une seule règle :</strong> fond au cran 100 d'une
+        rampe, encre au cran 800 de la même rampe. La paire ne se dissocie pas — c'est elle qui porte
+        le contraste, et chacune dépasse 8:1. La quatrième n'a pas de fond : liseré
+        {' '}<code>color.accent.500</code>, encre <code>color.text.accent</code>. C'est tout le jeu : il n'y
+        a pas de cinquième couleur à composer, et un tag n'a jamais deux couleurs à la fois.
+      </p>
+      <p class="section-note">
+        <strong>Le défaut est <code>outline</code></strong>, là où Figma ouvre le jeu sur
+        {' '}<code>Accent</code>. C'est la variante que portent 42 des 49 tags du fichier, et la seule
+        qu'une vue d'ici utilise — la carte d'étude de cas, plus bas. Prendre le défaut de Figma
+        l'aurait repeinte sans le dire.
+      </p>
+      <p class="section-note">
+        <strong>Le liseré est un <code>outline</code> rentré d'un pixel, pas un <code>border</code>.</strong>
+        {' '}Dans Figma le contour est tracé en dedans et la pilule mesure 33 px de haut ; un
+        {' '}<code>border</code> s'ajoute au padding et l'aurait portée à 35. L'outline ne compte pas dans
+        la boîte — les quatre variantes ont donc exactement la même hauteur, et une rangée qui les
+        mélange ne bouge pas.
+      </p>
 
       <h3>Props</h3>
       <p class="section-note">Le texte passe par le slot par défaut.</p>
@@ -382,30 +407,34 @@ const caseStudyListVars = [
         </table>
       </div>
 
+      <h3>Reprendre la couleur de l'outline</h3>
       <p class="section-note">
-        <strong>Une seule couleur, un seul levier.</strong> <code>--tag-color</code> reprend d'un coup
-        le liseré et l'encre — un tag n'a qu'une couleur, pas deux. Elle se pose en
-        <code>style</code> sur un tag, ou sur un ancêtre pour toute une rangée, et le repli reste
-        <code>color.accent.500</code>. C'est le seul point de surcharge : le dessin, la graisse, le
-        rayon et l'espacement font le tag, et un tag qui change de dessin n'est plus un tag.
+        <strong>Un seul levier, et il ne vaut que pour l'<code>outline</code>.</strong>
+        {' '}<code>--tag-color</code> reprend d'un coup le liseré et l'encre — jamais l'un sans l'autre.
+        Elle se pose en <code>style</code> sur un tag, ou sur un ancêtre pour toute une rangée, et le
+        repli reste <code>color.accent.500</code>. Le dessin, la graisse, le rayon et l'espacement ne
+        se reprennent pas : un tag qui change de dessin n'est plus un tag.
+        <br />
+        <strong>Sur une variante remplie, elle ne fait rien</strong> — elle n'y toucherait que
+        l'encre, donc déferait la paire 100/800 et le contraste qui la justifie. Une couleur qui n'est
+        pas au catalogue se demande à Figma ; elle ne se pose pas ici.
       </p>
-
       <p class="section-note">
         <strong>La valeur attendue est le cran 800 d'une rampe</strong>, celui que Figma donne déjà à
         l'encre des variantes remplies. C'est le seul cran qui tienne 4,5:1 sur les trois fonds du
         système : au pire, sur <code>color.bg.section</code>, accent 800 mesure 11,2:1, neutral 800
-        9:1 et highlight 800 6,7:1 (WCAG 1.4.3) — le liseré suivant la même couleur, 1.4.11 passe
-        par surcroît. Les crans plus clairs ne tiennent pas : highlight 700 tombe à 4,2:1 sur cette
-        même surface, et <code>color.feedback.danger</code> à 3,3:1. Et la couleur ne remplace pas le
-        texte : c'est le mot qui dit la catégorie.
+        9:1 et highlight 800 6,7:1 (WCAG 1.4.3) — le liseré suivant la même couleur, 1.4.11 passe par
+        surcroît. Les crans plus clairs ne tiennent pas : highlight 700 tombe à 4,2:1 sur cette même
+        surface, et <code>color.feedback.danger</code> à 3,3:1.
       </p>
 
       <p class="flag">
-        <strong>Ce que Figma déclare et que le code n'a pas.</strong> Le composant Figma porte aussi des
-        variantes remplies, qui suivent toutes la même règle : fond au cran 100 d'une rampe, encre au
-        cran 800 de la même rampe — chaque paire dépasse 8:1. Le code n'implémente que l'outline, la
-        seule qu'une vue utilise aujourd'hui. Même politique que <code>Ghost</code> et <code>CTA</code>
-        sur Button.
+        <strong>Écart à arbitrer côté Figma.</strong> La deuxième variante s'appelle <code>Lime</code>
+        {' '}dans le fichier, mais la rampe qu'elle consomme s'appelle <code>highlight</code> —
+        {' '}<code>highlight.100</code> et <code>highlight.800</code>. Le code a gardé le nom de la
+        variante pour que la prop se recoupe avec Figma, et se retrouve donc à écrire
+        {' '}<code>lime</code> pour lire <code>highlight</code>. Un nom de couleur pour une variante, un
+        nom de rôle pour la rampe : c'est la variante qu'il faut renommer.
       </p>
     </section>
 
@@ -1377,10 +1406,6 @@ const caseStudyListVars = [
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm) var(--space-md);
-  }
-
-  .tag-row + .tag-row {
-    margin-top: var(--space-lg);
   }
 
   /* Les boutons eux-mêmes vivent dans Button.astro — il n'y a qu'une seule

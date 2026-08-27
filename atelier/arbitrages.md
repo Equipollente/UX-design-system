@@ -33,6 +33,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Objet | Nœud | L'écart | Écrit dans | État |
 |---|---|---|---|---|
 | Button | `21:47` | `height`, `padding-y` et `icon-size` ne s'accordent pas | /components → Button | ouvert |
+| Tag | `19:12` | la variante `Lime` porte un nom de couleur ; sa rampe s'appelle `highlight` | /components → Tag | ouvert |
 | Nav | `24:5` | la description décrit encore l'ancienne barre | /components → Nav | ouvert |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |

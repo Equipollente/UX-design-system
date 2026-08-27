@@ -42,8 +42,8 @@ des mots en fichiers, et cette traduction se paie en lectures.
 **Quelle vue en a besoin, aujourd'hui.** La ligne la plus importante du gabarit, et celle qu'on
 n'écrit jamais spontanément.
 
-La règle du dépôt est qu'une variante ne s'intègre que le jour où une vue en a besoin — `Ghost`,
-`CTA`, les Tag remplies attendent depuis le début. Sans cette ligne, le dev ne peut pas trancher
+La règle du dépôt est qu'une variante ne s'intègre que le jour où une vue en a besoin — `Ghost` et
+`CTA` attendent depuis le début. Sans cette ligne, le dev ne peut pas trancher
 entre intégrer et attendre, et par défaut il intègre.
 
 Elle décide aussi de la **forme** de la réponse, ce qui est moins évident. Le dépôt traite un besoin

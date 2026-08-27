@@ -56,9 +56,16 @@ nom, vérifié à la compilation.
 
 ## Une variante ne s'intègre que quand une vue en a besoin
 
-`Ghost` et `CTA` sur Button, les Tag remplies : décrits dans Figma, volontairement absents du code.
-Intégrer par anticipation, c'est maintenir du code que personne n'appelle et documenter des états
-que personne ne voit.
+`Ghost` et `CTA` sur Button : décrits dans Figma, volontairement absents du code. Intégrer par
+anticipation, c'est maintenir du code que personne n'appelle et documenter des états que personne ne
+voit.
+
+Les trois Tag remplies ont longtemps tenu la même ligne, puis sont entrées — non parce qu'une vue
+d'ici les demandait, mais parce que **le point de surcharge dessinait à leur place** : `--tag-color`
+posé au cran 800 fabriquait des outlines colorées que Figma ne dessine nulle part, en empruntant
+pour se justifier le contraste des variantes remplies. Une doctrine qui reproduit de travers ce
+qu'elle refuse d'intégrer ne tient plus. C'est le second chemin d'entrée d'une variante, et il est
+plus étroit que le premier.
 
 `← ` [Tag.astro](../src/design-system/components/Tag.astro),
 [Button.astro](../src/design-system/components/Button.astro)

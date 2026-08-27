@@ -13,8 +13,8 @@ autre, ou rouvrir la définition. Le pavé se met alors à jour dans le même co
 le fichier, puis dans l'export, puis dans `npm run tokens`. Jamais en dur dans un composant — voir
 [ajouter-une-icone-ou-un-token.md](ajouter-une-icone-ou-un-token.md).
 
-**Une variante réclamée ne s'intègre que si une vue l'utilise vraiment.** `Ghost`, `CTA`, les Tag
-remplies attendent depuis le début, et c'est voulu.
+**Une variante réclamée ne s'intègre que si une vue l'utilise vraiment.** `Ghost` et `CTA` attendent
+depuis le début, et c'est voulu.
 
 ## Ce que le changement entraîne
 

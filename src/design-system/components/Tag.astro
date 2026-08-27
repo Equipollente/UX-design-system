@@ -1,31 +1,42 @@
 ---
-// Tag — une étiquette courte qui classe la chose posée à côté d'elle : un mot-clé
-// de méthode sur une carte d'étude de cas, une catégorie dans un document.
+// Tag — une étiquette courte qui classe la chose posée à côté d'elle : un statut
+// dans une ligne de tableau, un mot-clé sur une slide, une catégorie dans un
+// document. Ici, les méthodes d'une étude de cas.
 //
 // Ce n'est pas un bouton : aucun état interactif, aucun href, jamais de clic.
 // Une pilule sur laquelle on clique est un Button. Et le texte doit dire ce
 // qu'il veut dire — la couleur ne porte pas de sens à elle seule.
 //
-// Un tag n'a qu'une couleur, pas deux : --tag-color reprend d'un coup le liseré
-// et l'encre. C'est le seul point de surcharge — le dessin, la graisse, le
-// rayon et la mesure ne se reprennent pas.
+// Quatre variantes, celles de Figma 19:12. Les trois remplies suivent une seule
+// règle : fond au cran 100 d'une rampe, encre au cran 800 de la même rampe —
+// chaque paire dépasse 8:1. L'outline n'a pas de fond : liseré color.accent.500,
+// encre color.text.accent.
 //
-// Figma 19:12. Le composant Figma décrit aussi des variantes remplies (fond
-// ramp 100, encre ramp 800, chaque paire au-delà de 8:1). Le code n'implémente
-// que l'outline, la seule qu'une vue utilise aujourd'hui — même politique que
-// Ghost et CTA sur Button.
+// Le défaut est `outline` et non `accent` comme dans Figma. C'est la variante
+// que portent 42 des 49 tags du fichier, et la seule qu'une vue d'ici utilise :
+// prendre le défaut de Figma changerait la carte d'étude de cas sans le dire.
+//
+// Le liseré est un `outline` rentré d'un pixel, pas un `border`. Dans Figma le
+// contour est tracé en dedans et la pilule mesure 33 px de haut ; un `border`
+// s'ajoute au padding et l'aurait portée à 35. L'outline ne compte pas dans la
+// boîte — les quatre variantes ont donc exactement la même hauteur.
 
 interface Props {
+  /**
+   * Les quatre variantes de Figma. Les trois premières sont remplies, la
+   * dernière n'a qu'un liseré — et c'est elle par défaut.
+   */
+  variant?: 'accent' | 'lime' | 'neutral' | 'outline';
   class?: string;
   /**
-   * Le point de surcharge décrit plus haut : --tag-color, et rien d'autre.
-   * Déclarée parce qu'elle fait partie du contrat.
+   * Le point de surcharge : --tag-color sur la variante outline, et rien
+   * d'autre. Déclarée parce qu'elle fait partie du contrat.
    */
   style?: string;
 }
 
-const { class: className, ...rest } = Astro.props;
-const classes = ['tag', className].filter(Boolean).join(' ');
+const { variant = 'outline', class: className, ...rest } = Astro.props;
+const classes = ['tag', `tag-${variant}`, className].filter(Boolean).join(' ');
 ---
 
 <span class={classes} {...rest}><slot /></span>
@@ -42,15 +53,39 @@ const classes = ['tag', className].filter(Boolean).join(' ');
     font-size: var(--font-size-ui);
     line-height: var(--font-line-height-snug);
     letter-spacing: var(--font-letter-spacing-wide);
+  }
 
-    /* Le repli se lit sans être déclaré sur .tag : une déclaration ici battrait
-       ce qu'un appelant — ou un ancêtre — pose, et le point de surcharge ne
-       servirait à rien. La couleur reçue se prend au cran 800 d'une rampe, celui
-       que Figma donne déjà à l'encre des variantes remplies : c'est le seul cran
-       qui tient 4,5:1 sur les trois fonds du système (WCAG 1.4.3) — accent 11,2:1,
-       highlight 6,7:1, neutral 9:1 au pire, sur bg.section. Le liseré suit la même
-       couleur et passe donc 1.4.11 par surcroît. */
-    border: 1px solid var(--tag-color, var(--color-accent-500));
+  /* — les trois remplies : fond au cran 100, encre au cran 800 de la même rampe.
+       La paire ne se dissocie pas : c'est elle qui porte le contraste. — */
+  .tag-accent {
+    background: var(--color-accent-100);
+    color: var(--color-accent-800);
+  }
+
+  .tag-lime {
+    background: var(--color-highlight-100);
+    color: var(--color-highlight-800);
+  }
+
+  .tag-neutral {
+    background: var(--color-neutral-100);
+    color: var(--color-neutral-800);
+  }
+
+  /* — l'outline : pas de fond, une seule couleur pour le liseré et l'encre — */
+  .tag-outline {
+    /* Le repli se lit sans être déclaré sur .tag-outline : une déclaration ici
+       battrait ce qu'un appelant — ou un ancêtre — pose, et le point de
+       surcharge ne servirait à rien. La couleur reçue se prend au cran 800 d'une
+       rampe, celui que Figma donne déjà à l'encre des variantes remplies : c'est
+       le seul cran qui tient 4,5:1 sur les trois fonds du système (WCAG 1.4.3) —
+       accent 11,2:1, highlight 6,7:1, neutral 9:1 au pire, sur bg.section. Le
+       liseré suit la même couleur et passe donc 1.4.11 par surcroît.
+
+       Sur une variante remplie, --tag-color ne fait rien : il n'y reprendrait
+       que l'encre, donc déferait la paire 100/800 et son contraste. */
+    outline: 1px solid var(--tag-color, var(--color-accent-500));
+    outline-offset: -1px;
     color: var(--tag-color, var(--color-text-accent));
   }
 </style>

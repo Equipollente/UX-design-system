@@ -10,8 +10,10 @@ Ce sont des conventions et non des lois : s'en écarter demande une raison, et l
 
 Avant l'`interface Props`, un commentaire `//` qui dit, dans cet ordre et sans titre ni décoration :
 ce que l'objet **est**, ce qu'il **n'est pas** — avec l'objet qu'il faudrait employer à la place —
-et son nœud Figma en notation deux-points (`Figma 88:85`), suivi de ce que le composant Figma
-déclare et que le code n'implémente pas, avec la raison.
+et son nœud Figma en notation deux-points (`Figma 88:85`), suivi — **s'il y a lieu** — de ce que
+le composant Figma déclare et que le code n'implémente pas, avec la raison. Cette dernière ligne
+disparaît le jour où l'écart est comblé : le pavé du Tag l'a portée jusqu'à ce que ses variantes
+remplies entrent.
 
 C'est la première chose qu'on écrit, avant toute ligne de code : elle décide du reste.
 [Tag.astro](../src/design-system/components/Tag.astro) en est le plus court exemple.
@@ -81,8 +83,12 @@ a déjà fait ; il ne déplace rien et ne dessine rien.
 
 ## 9. Une variante ne s'intègre que le jour où une vue en a besoin
 
-`Ghost` et `CTA` sur Button, les Tag remplies : décrits dans Figma, volontairement absents du code.
-Pas avant. La même politique vaut pour les procédures de ce dossier.
+`Ghost` et `CTA` sur Button : décrits dans Figma, volontairement absents du code. Pas avant. La même
+politique vaut pour les procédures de ce dossier.
+
+Il existe un second chemin d'entrée, plus étroit, ouvert par les Tag remplies : quand le point de
+surcharge se met à dessiner à la place de la variante absente. Voir
+[decisions.md](decisions.md).
 
 ## 10. Les écarts se signalent, ils ne se corrigent pas en dur
 

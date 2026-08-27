@@ -43,6 +43,11 @@ de cas : le code le nomme `CaseStudyHeader`. Renommage à trancher côté Figma.
 Même décalage sur `Section.Intro`, pour une autre raison : le préfixe `Section.` est une convention
 de rangement du fichier Figma, pas une partie du nom de l'objet. Le code le nomme `Intro`.
 
+Troisième décalage, tranché dans l'autre sens : la variante `Lime` du Tag consomme la rampe
+`highlight`. Le code a gardé `lime` pour que la prop se recoupe avec le fichier, et écrit donc un nom
+de couleur pour lire un nom de rôle. C'est la variante qu'il faut renommer — ligne ouverte dans
+[arbitrages.md](atelier/arbitrages.md).
+
 La page **HP** porte trois frames de 1280 × 834 qui sont trois états de défilement, pas trois
 écrans : `45-388` au repos, `222-907` la première carte montée, `222-1042` la seconde par-dessus.
 Aucune réaction de prototypage n'y est posée — le mouvement vient de la consigne, et il est
