@@ -204,7 +204,7 @@ const caseStudyListVars = [
         ; dans un document ou sur une slide, la représentation d'une action.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni une étiquette — une pilule qui ne fait rien est un
-        <em>Tag</em> — ni un objet qu'on répète : deux boutons primaires dans une vue, et aucun des deux
+        {' '}<em>Tag</em> — ni un objet qu'on répète : deux boutons primaires dans une vue, et aucun des deux
         n'est principal. Pour naviguer à l'intérieur du Nav, c'est un lien qu'il faut, pas un bouton.
         <br />
         <span class="source">Description du composant Figma <code>21:47</code>.</span>
@@ -229,7 +229,7 @@ const caseStudyListVars = [
       <p class="section-note">
         L'écart entre deux boutons est <code>--button-target-spacing</code> (WCAG 2.5.8). Tabulez pour
         voir l'anneau de focus, et survolez pour voir le fond changer en
-        <code>--motion-duration-quick</code>.
+        {' '}<code>--motion-duration-quick</code>.
       </p>
 
       <h3>Props</h3>
@@ -254,10 +254,10 @@ const caseStudyListVars = [
       </div>
       <p class="section-note">
         Chaque taille pose ses variables locales (<code>--btn-h</code>, <code>--btn-px</code>,
-        <code>--btn-gap</code>, <code>--btn-icon</code>, <code>--btn-min-w</code>) et chaque variante
+        {' '}<code>--btn-gap</code>, <code>--btn-icon</code>, <code>--btn-min-w</code>) et chaque variante
         ses trois fonds (<code>--btn-bg</code>, <code>--btn-bg-hover</code>,
-        <code>--btn-bg-active</code>) : un appelant peut en surcharger un ponctuellement via
-        <code>style</code> plutôt que d'inventer une taille ou une variante de plus. C'est ce que fait
+        {' '}<code>--btn-bg-active</code>) : un appelant peut en surcharger un ponctuellement via
+        {' '}<code>style</code> plutôt que d'inventer une taille ou une variante de plus. C'est ce que fait
         le Nav pour son bouton d'action, que Figma compose en hauteur lg avec le padding horizontal md
         — et le Carousel pour ses flèches, que Figma pose sur <code>color.bg.default</code> et non sur
         la surface lavande du secondaire.
@@ -265,7 +265,7 @@ const caseStudyListVars = [
 
       <p class="section-note">
         <strong>L'icône prend la couleur du bouton</strong>, parce qu'elle est inlinée et ne connaît que
-        <code>currentColor</code>. <code>icon</code> et <code>iconEnd</code> attendent un nom du registre,
+        {' '}<code>currentColor</code>. <code>icon</code> et <code>iconEnd</code> attendent un nom du registre,
         pas un chemin : la même flèche sert au primaire et au secondaire. Le jeu complet est sur
         {' '}<a href={withBase('/icons')}>Icônes</a>.
       </p>
@@ -299,7 +299,7 @@ const caseStudyListVars = [
 
       <p class="flag">
         <strong>Écart à arbitrer côté Figma.</strong> Les trois familles <code>height</code>,
-        <code>padding-y</code> et <code>icon-size</code> sont sur-déterminées et ne s'accordent pas : en
+        {' '}<code>padding-y</code> et <code>icon-size</code> sont sur-déterminées et ne s'accordent pas : en
         taille md, <code>16 + 24 + 16 = 56 px</code> alors que <code>--button-height-md</code> vaut 48.
         Seule la taille sm est cohérente. Ici la hauteur prime — c'est la dimension que les descriptions
         rattachent à WCAG 2.5.5 — et le padding vertical n'est pas appliqué.
@@ -309,11 +309,11 @@ const caseStudyListVars = [
         <strong>Ce que Figma déclare et que le code n'a pas.</strong> Le composant Figma porte quatre
         variantes (<code>Primary</code>, <code>Secondary</code>, <code>Ghost</code>, <code>CTA</code>) et
         quatre états (<code>Default</code>, <code>Hover</code>, <code>Pressed</code>,
-        <code>Disabled</code>). Le code implémente deux variantes et les quatre états : ni
-        <code>Ghost</code> ni <code>CTA</code>. À intégrer le jour où une vue en a besoin — pas avant.
+        {' '}<code>Disabled</code>). Le code implémente deux variantes et les quatre états : ni
+        {' '}<code>Ghost</code> ni <code>CTA</code>. À intégrer le jour où une vue en a besoin — pas avant.
         L'état désactivé, lui, est arrivé avec les flèches du carrousel : Figma ne change ni le fond ni
         la bordure, il baisse l'opacité de tout le bouton à 45 % (<code>21:11</code>,
-        <code>21:26</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3 exempte les contrôles
+        {' '}<code>21:26</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3 exempte les contrôles
         inactifs.
       </p>
 
@@ -458,7 +458,7 @@ const caseStudyListVars = [
         décrit encore l'ancienne barre — « a wordmark on the left » — et affirme que le survol et la page
         courante partagent la même couleur (<code>color.text.accent</code>). Ni l'un ni l'autre n'est
         vrai du composant actuel : il porte un avatar, et l'état courant est une pastille
-        <code>color.bg.default</code>. Le texte ci-dessus ne reprend donc que ce qui vaut encore. La
+        {' '}<code>color.bg.default</code>. Le texte ci-dessus ne reprend donc que ce qui vaut encore. La
         description est à réécrire dans Figma.
       </p>
 
@@ -474,7 +474,7 @@ const caseStudyListVars = [
         <strong>La barre n'a pas de fond, et une carte a le même que sa pilule.</strong> Rien n'est
         dessiné sous la barre : ce qui flotte au-dessus du contenu, ce sont trois objets déjà opaques —
         l'avatar, la pilule et le bouton. Mais la carte d'étude de cas est en
-        <code>color.bg.surface</code>, <em>exactement</em> le lavande de la pilule : quand une carte
+        {' '}<code>color.bg.surface</code>, <em>exactement</em> le lavande de la pilule : quand une carte
         passe sous la barre révélée, la pilule perd son contour et il ne reste que la pastille blanche
         de l'onglet courant. Et la carte pose son eyebrow — l'année et le client — à 64px de son haut,
         sous une barre qui en fait 88 : il passe entièrement derrière elle. Mesuré, pas supposé. À
@@ -546,7 +546,7 @@ const caseStudyListVars = [
       <p class="demo-note">
         Il n'y a pas de démonstration ici, et ce n'est pas un oubli : une barre qui se juge sur le
         défilement d'une page entière ne se montre pas dans une section de doc, et elle lit
-        <code>scrollY</code> — dans une boîte qui défile, elle ne bougerait pas. Elle est en situation
+        {' '}<code>scrollY</code> — dans une boîte qui défile, elle ne bougerait pas. Elle est en situation
         sur le <a href={withBase('/templates/home')}>gabarit</a>.
       </p>
 
@@ -556,7 +556,7 @@ const caseStudyListVars = [
         pour comprendre pourquoi. Un élément collé est un contexte d'empilement : rien de ce qu'il
         contient ne peut se peindre devant ce qui le recouvre, donc une barre restée dedans serait
         condamnée à passer sous les cartes, quel que soit son <code>z-index</code>. Et
-        <code>Case Study List</code> rend ce bloc inerte quand il est recouvert, ce qui sortirait ses
+        {' '}<code>Case Study List</code> rend ce bloc inerte quand il est recouvert, ce qui sortirait ses
         onglets du clavier au moment même où elle est la seule chose encore visible.
       </p>
       <pre><code>{`<Nav sticky … />        <!-- hors de .home-first, pas dedans -->
@@ -580,7 +580,7 @@ const caseStudyListVars = [
         la compose. La hauteur se lit et ne se mesure pas : la
         mesurer en JavaScript ferait sauter la carte au chargement, pour la raison déjà écrite sur la
         pile. Les ancres, elles, peuvent l'être : le composant pose lui-même
-        <code>scroll-padding-top</code> sur la page, parce que ce décalage n'a de conséquence qu'au
+        {' '}<code>scroll-padding-top</code> sur la page, parce que ce décalage n'a de conséquence qu'au
         moment où l'on suit un lien, et que rien ne bouge au chargement.
       </p>
 
@@ -609,7 +609,7 @@ const caseStudyListVars = [
           <p class="desc">
             <strong>Le sens du défilement est du JavaScript, le mouvement non.</strong> Le script
             compare deux positions de <code>scrollY</code> d'une image à l'autre, jamais un geste. Un
-            <code>wheel</code> dirait la main ; il ne dirait rien d'un saut — touche Origine, clic sur
+            {' '}<code>wheel</code> dirait la main ; il ne dirait rien d'un saut — touche Origine, clic sur
             une ancre, <code>scrollTo</code> — qui ramène la page en haut sans que personne n'ait
             touché la molette. Deux positions comparées disent les deux : remonter, c'est remonter,
             quelle qu'en soit la cause. C'est aussi ce qui rend le tactile et la souris identiques sans
@@ -634,7 +634,7 @@ const caseStudyListVars = [
             couches se peignent dans l'ordre du DOM, et c'est ce qu'on veut : la carte écrite après
             recouvre celle d'avant. La barre est le cas contraire — écrite avant tout le reste, elle
             doit se peindre après, sans quoi la révéler derrière une carte opaque ne révélerait rien.
-            <code>1</code>, et non <code>10</code> : le plus petit nombre qui suffit, et qui ne laisse
+            {' '}<code>1</code>, et non <code>10</code> : le plus petit nombre qui suffit, et qui ne laisse
             pas croire que le système a une échelle d'élévation. Il n'en a pas.
           </p>
         </li>
@@ -656,14 +656,14 @@ const caseStudyListVars = [
           <p class="desc">
             <strong>La pastille est du JavaScript.</strong> Le script mesure l'onglet visé et écrit sa
             géométrie en variables CSS ; le mouvement, lui, reste au CSS. Elle suit le survol
-            <em>et</em> le focus clavier.
+            {' '}<em>et</em> le focus clavier.
           </p>
         </li>
         <li>
           <p class="desc">
             <strong>Elle a un repli.</strong> Sans JavaScript, l'onglet courant garde son fond blanc et
             le survol son aplat lavande — le comportement d'avant la pastille. C'est le script qui pose
-            <code>data-slider-ready</code> et neutralise ces deux aplats.
+            {' '}<code>data-slider-ready</code> et neutralise ces deux aplats.
           </p>
         </li>
         <li>
@@ -806,7 +806,7 @@ const caseStudyListVars = [
         <li>
           <p class="desc">
             <strong>Une barre posée par-dessus une zone qui défile doit se laisser traverser.</strong>
-            Figma pose la nav en absolu sur toute la largeur de la piste, mais ne dit rien de ce qu'il
+            {' '}Figma pose la nav en absolu sur toute la largeur de la piste, mais ne dit rien de ce qu'il
             advient des gestes : telle quelle, cette bande avalerait le défilement au doigt et à la
             molette au milieu des images — une panne qu'on ne voit pas en cliquant les flèches. Elle
             est donc en <code>pointer-events: none</code>, et chaque flèche le reprend pour son compte
@@ -818,14 +818,14 @@ const caseStudyListVars = [
           <p class="desc">
             <strong>Le focus ne se perd pas.</strong> Quand une flèche se désactive sous le focus, le
             script le déplace sur l'autre plutôt que de le laisser retomber sur le
-            <code>&lt;body&gt;</code>.
+            {' '}<code>&lt;body&gt;</code>.
           </p>
         </li>
         <li>
           <p class="desc">
             <strong>C'est le seul composant qui lit <code>prefers-reduced-motion</code>.</strong> Le
-            <code>behavior: 'smooth'</code> du défilement n'est pas une durée : <code>tokens.css</code>
-            ne peut pas le remettre à zéro comme il le fait des <code>motion.duration.*</code>. Le
+            {' '}<code>behavior: 'smooth'</code> du défilement n'est pas une durée : <code>tokens.css</code>
+            {' '}ne peut pas le remettre à zéro comme il le fait des <code>motion.duration.*</code>. Le
             script bascule donc lui-même sur <code>'auto'</code>.
           </p>
         </li>
@@ -834,10 +834,10 @@ const caseStudyListVars = [
             <strong>Sous 768px</strong>, les marges de 48px tomberaient à la moitié d'un écran de 390 :
             elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et la
             piste à <code>272px</code>, ce qui laisse aux vignettes les 240px qu'elles avaient déjà.
-            <strong>Et les tags s'effacent</strong>, comme les icônes et l'action du Nav au même point
+            {' '}<strong>Et les tags s'effacent</strong>, comme les icônes et l'action du Nav au même point
             de rupture : c'est ce que la maquette mobile dessine, et ce n'est pas qu'une économie de
             place. Trois méthodes qui se replient sur trois lignes dans une colonne de 390 pèsent
-            <code>119px</code> — un tiers de l'en-tête — pour une information de second plan, lue
+            {' '}<code>119px</code> — un tiers de l'en-tête — pour une information de second plan, lue
             après le titre et l'impact. <code>display: none</code> et non un masquage visuel : ces
             tags ne font pas partie de la vue mobile, ils n'ont donc à rester ni dans l'ordre de
             tabulation ni dans l'arbre d'accessibilité.
@@ -848,8 +848,8 @@ const caseStudyListVars = [
       <p class="flag">
         <strong>La carte accepte qu'on lui impose sa hauteur.</strong> Par défaut elle fait la taille
         de son contenu — 735 px à 1280 px de large, ce que Figma dessine.
-        <code>--card-height</code>, posée depuis l'extérieur, la borne : c'est ainsi que
-        <em>Case Study List</em> lui fait remplir un écran entier, donc en recouvrir vraiment une
+        {' '}<code>--card-height</code>, posée depuis l'extérieur, la borne : c'est ainsi que
+        {' '}<em>Case Study List</em> lui fait remplir un écran entier, donc en recouvrir vraiment une
         autre. Une hauteur et non un plancher, sans quoi la carte grandirait au-delà de l'écran dès
         que son contenu dépasse, et son bas resterait hors d'atteinte une fois la carte collée en
         haut. Bornée, elle passe l'écart au carrousel — c'est lui qui prend ou rend la place, jamais
@@ -858,33 +858,33 @@ const caseStudyListVars = [
 
       <p class="flag">
         <strong>Aucun token ne porte les ombres.</strong> Figma déclare deux styles d'effet,
-        <code>shadow/lg</code> sur les vignettes et <code>shadow/lg-invert</code> sur la carte, que la
+        {' '}<code>shadow/lg</code> sur les vignettes et <code>shadow/lg-invert</code> sur la carte, que la
         collection <em>Design tokens</em> n'expose pas en variables. Les deux valeurs vivent donc en dur
         dans les composants, hissées en <code>--card-shadow</code> et
-        <code>--carousel-item-shadow</code> — comme <code>--nav-home-size</code> dans le Nav. Le jour où
+        {' '}<code>--carousel-item-shadow</code> — comme <code>--nav-home-size</code> dans le Nav. Le jour où
         Figma les porte en variables, elles rejoignent <code>tokens/</code> et les composants n'ont
         qu'une ligne à changer.
       </p>
 
       <p class="flag">
         <strong>Les deux ombres de la carte divergent.</strong> Le composant <code>88:131</code> déclare
-        <code>0 -30px 30px -14px</code> ; l'instance d'exemple <code>176:1248</code> déclare
-        <code>0 -22px 48px -12px</code>. Le code suit le composant — c'est lui la spécification, l'autre
+        {' '}<code>0 -30px 30px -14px</code> ; l'instance d'exemple <code>176:1248</code> déclare
+        {' '}<code>0 -22px 48px -12px</code>. Le code suit le composant — c'est lui la spécification, l'autre
         est une surcharge locale. À réaligner côté Figma.
       </p>
 
       <p class="flag">
         <strong>L'eyebrow contredit le système.</strong> Figma le dessine en Inter semibold ;
-        <code>global.css</code> réserve cette forme — 13px, capitales, interlettrage large — au
-        <code>h6</code>, en Poppins bold. Le code suit Figma et ne rend donc pas un <code>h6</code> :
+        {' '}<code>global.css</code> réserve cette forme — 13px, capitales, interlettrage large — au
+        {' '}<code>h6</code>, en Poppins bold. Le code suit Figma et ne rend donc pas un <code>h6</code> :
         ce n'est de toute façon pas un titre mais une ligne de contexte au-dessus du titre. À trancher
         côté Figma : ou l'eyebrow rentre dans le rang, ou le système reconnaît deux eyebrows.
       </p>
 
       <p class="flag">
         <strong>Deux écarts d'espacement.</strong> Figma pose <code>33px</code> entre les vignettes et
-        <code>10px</code> entre les tags. Aucun token ne porte ces deux valeurs : la première devient
-        <code>--space-2xl</code> (32), la seconde <code>--space-md</code> (12) — on n'a jamais intérêt à
+        {' '}<code>10px</code> entre les tags. Aucun token ne porte ces deux valeurs : la première devient
+        {' '}<code>--space-2xl</code> (32), la seconde <code>--space-md</code> (12) — on n'a jamais intérêt à
         resserrer l'écart entre deux cibles voisines (WCAG 2.5.8).
       </p>
 
@@ -899,13 +899,13 @@ const caseStudyListVars = [
       <p class="flag">
         <strong>L'en-tête est le point fixe, le carrousel est ce qui bouge.</strong> Figma fige la
         piste à <code>442px</code> — le Slot de <code>88:143</code>, marges comprises — dont
-        <code>410</code> pour les images. C'est la hauteur d'où l'on part. Mais dans une carte dont la
+        {' '}<code>410</code> pour les images. C'est la hauteur d'où l'on part. Mais dans une carte dont la
         hauteur est imposée, comme dans <em>Case Study List</em> où une carte fait exactement un
         écran, le carrousel prend ou rend tout ce qui reste, et les vignettes le suivent : c'est la
         piste qui porte la hauteur, l'image la remplit. L'en-tête, lui, ne bouge pas — il est protégé
         par la taille minimale automatique des boîtes flexibles, que le carrousel lève sur lui-même
         par <code>min-height: 0</code>. Montré seul, hors de toute carte, le carrousel garde ses
-        <code>442</code>.
+        {' '}<code>442</code>.
       </p>
 
       <p class="flag">
@@ -924,7 +924,7 @@ const caseStudyListVars = [
         porte le <code>h1</code>.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni un en-tête de section — ça, c'est
-        <em>CaseStudyHeader</em>, qui ouvre une carte et non une page — ni un porteur de contenu : le
+        {' '}<em>CaseStudyHeader</em>, qui ouvre une carte et non une page — ni un porteur de contenu : le
         visage, les textes et la destination du bouton tombent tous des props, parce qu'ils
         appartiennent au site et pas au système.
         <br />
@@ -965,21 +965,21 @@ const caseStudyListVars = [
 
       <p class="flag">
         <strong>L'écart sous le bloc de texte se laisse resserrer.</strong> Figma pose
-        <code>space.layout.64</code> entre le bloc et le bouton, et c'est ce que l'intro garde partout
+        {' '}<code>space.layout.64</code> entre le bloc et le bouton, et c'est ce que l'intro garde partout
         — mais la valeur est <em>lue</em> dans <code>--intro-gap</code>, jamais déclarée sur
-        <code>.intro</code>, pour qu'une valeur posée sur un ancêtre passe au travers. C'est le seul
+        {' '}<code>.intro</code>, pour qu'une valeur posée sur un ancêtre passe au travers. C'est le seul
         endroit de l'intro où il y a de l'air à reprendre, et une page qui cale son premier écran sur
         la hauteur de la fenêtre en a besoin : sous 690 px, le gabarit le ramène à
-        <code>space.xl</code> pour que l'intro tienne dans ce qu'on lui laisse. Déclarer la variable
+        {' '}<code>space.xl</code> pour que l'intro tienne dans ce qu'on lui laisse. Déclarer la variable
         sur <code>.intro</code> battrait l'héritage et le point de surcharge ne servirait à rien.
       </p>
 
       <p class="flag">
         <strong>Les tailles sont liées, les couleurs ne le sont pas.</strong> Les trois calques
         portent maintenant un style de texte — <code>body/hero</code>, <code>heading/display</code>,
-        <code>body/lead</code> — et deux des trois tailles tombent d'une variable. Les
-        <em>couleurs</em>, elles, restent tapées à la main : noir pur, <code>#2f2d2e</code> et
-        <code>#666</code>. Les deux premières valent par chance <code>color.text.default</code> ; la
+        {' '}<code>body/lead</code> — et deux des trois tailles tombent d'une variable. Les
+        {' '}<em>couleurs</em>, elles, restent tapées à la main : noir pur, <code>#2f2d2e</code> et
+        {' '}<code>#666</code>. Les deux premières valent par chance <code>color.text.default</code> ; la
         troisième, non — le gris du système est <code>#6a676d</code>. Le code prend le token, donc la
         description ne s'affiche pas dans le gris de la maquette. À lier côté Figma, c'est le dernier
         morceau.
@@ -988,7 +988,7 @@ const caseStudyListVars = [
       <p class="flag">
         <strong>Le style <code>heading/display</code> se contredit.</strong> Sa description annonce
         « line-height.tight + letter-spacing.tight » ; ses valeurs disent <code>1.23</code> et
-        <code>0</code>. C'est la note qui a tort, pas le style : <code>heading/title</code>, lui, est
+        {' '}<code>0</code>. C'est la note qui a tort, pas le style : <code>heading/title</code>, lui, est
         bien serré. Le code suit les valeurs — <code>global.css</code> desserre le <code>h1</code>, et
         le composant ne surcharge plus rien. Deux choses restent à faire côté Figma : réécrire la
         description, et décider si <code>1.23</code> mérite un cran dans l'échelle. Faute de quoi le
@@ -1008,8 +1008,8 @@ const caseStudyListVars = [
 
       <p class="flag">
         <strong>La mesure du bloc n'a pas de token.</strong> Figma la donne en dur —
-        <code>929px</code>, minimum <code>280px</code>. Le composant la pose en variable locale
-        <code>--intro-measure</code>, comme la carte d'étude de cas pose <code>--header-title-min</code>.
+        {' '}<code>929px</code>, minimum <code>280px</code>. Le composant la pose en variable locale
+        {' '}<code>--intro-measure</code>, comme la carte d'étude de cas pose <code>--header-title-min</code>.
         Le jour où le système nomme ses mesures de texte, ces deux-là rentrent dans le rang.
       </p>
     </section>
@@ -1031,7 +1031,7 @@ const caseStudyListVars = [
         <br />
         <span class="source">
           Page Figma <code>222:1168</code>, composant <code>222:814</code>, états empilés
-          <code>222:912</code> et <code>222:1043</code>.
+          {' '}<code>222:912</code> et <code>222:1043</code>.
         </span>
       </p>
 
@@ -1110,12 +1110,12 @@ const caseStudyListVars = [
         il se peint par-dessus un bloc qui ne l'est pas, quel que soit l'ordre du DOM. Lui donner un
         fond n'y change rien — il serait peint dans la mauvaise couche. Positionné, il passe devant :
         il devient le sol qui recouvre, comme les cartes avant lui, et sans qu'un
-        <code>z-index</code> soit écrit.
+        {' '}<code>z-index</code> soit écrit.
       </p>
       <p>
         Le reste tombe tout seul. Le bouton de l'intro et l'onglet du Nav pointent
-        <code>#projets</code>, la liste porte cette ancre, et le navigateur amène son haut à
-        <code>100svh</code> moins le liseré — c'est-à-dire exactement la position « première carte
+        {' '}<code>#projets</code>, la liste porte cette ancre, et le navigateur amène son haut à
+        {' '}<code>100svh</code> moins le liseré — c'est-à-dire exactement la position « première carte
         collée en haut ». Le clic et le défilement décrivent le même état sans partager une ligne de
         code.
       </p>
@@ -1166,7 +1166,7 @@ const caseStudyListVars = [
       <p class="flag">
         <strong>Le mouvement n'est écrit nulle part.</strong> Aucune réaction de prototypage n'est
         posée sur la page HP — les trois frames sont des captures d'états, et <code>222:1042</code>
-        mime le recouvrement en <em>réordonnant</em> les cartes dans son auto-layout. C'est un
+        {' '}mime le recouvrement en <em>réordonnant</em> les cartes dans son auto-layout. C'est un
         artifice de maquette : en défilement réel rien ne se réordonne, une couche en recouvre
         simplement une autre. Le comportement ne vient donc pas du fichier mais de la consigne, et
         c'est ici qu'il est écrit.
@@ -1176,7 +1176,7 @@ const caseStudyListVars = [
         <strong>Le liseré n'a pas de token.</strong> Le cran voisin, <code>space.layout.96</code>,
         vaut 96 : ces 6px d'écart déplaceraient le liseré à chaque cran, puisqu'il entre dans le calcul
         de position. La valeur reste donc en dur, dans <code>--fold-peek</code>, comme
-        <code>--card-shadow</code> et <code>--intro-measure</code> avant elle. Le jour où Figma nomme
+        {' '}<code>--card-shadow</code> et <code>--intro-measure</code> avant elle. Le jour où Figma nomme
         ce 90, il rentre dans le rang.
       </p>
 
@@ -1186,7 +1186,7 @@ const caseStudyListVars = [
         le carrousel qui prend ou rend la place. La vignette vaut les <code>410px</code> de Figma quand
         la fenêtre fait 735 px de haut — la hauteur naturelle de la carte — puis suit dans les deux
         sens : <code>315</code> à 640, <code>375</code> à 700, <code>509</code> à 834, <code>675</code>
-        à 1000. L'image maigrit ou grossit, elle n'est jamais rognée, et rien ne sort de l'écran à
+        {' '}à 1000. L'image maigrit ou grossit, elle n'est jamais rognée, et rien ne sort de l'écran à
         aucune hauteur. C'est un écart avec Figma, qui fige cette hauteur : à trancher côté fichier.
       </p>
 
@@ -1203,7 +1203,7 @@ const caseStudyListVars = [
 
       <p class="flag">
         <strong>L'écart que Figma pose sous l'intro est absorbé par le centrage.</strong> Il le pose en
-        <code>itemSpacing</code> sur <code>209:2383</code>, mais Figma ne dessine aucun mou : son
+        {' '}<code>itemSpacing</code> sur <code>209:2383</code>, mais Figma ne dessine aucun mou : son
         premier écran fait exactement la taille de son contenu. Dès qu'on cale ce bloc sur la hauteur
         de la fenêtre, il y a du mou, et le répartir autour de l'intro vaut mieux que de tout laisser
         tomber sous elle. Sur une fenêtre basse — moins de 690 px — c'est l'inverse : l'intro se
@@ -1221,7 +1221,7 @@ const caseStudyListVars = [
       <p class="flag">
         <strong>Le premier écran est une couche, pas un décor.</strong> La nav et l'intro restent en
         place, et la première carte vient <em>par-dessus</em> elles — c'est la maquette
-        <code>222:907</code>, où la nav n'est nulle part en haut de l'écran. Elles gardent donc leur
+        {' '}<code>222:907</code>, où la nav n'est nulle part en haut de l'écran. Elles gardent donc leur
         place dans la page tout en étant invisibles, ce qui les laisserait atteignables au clavier :
         d'où <code>covers</code>, et le <code>inert</code> que le script leur pose au bon moment.
         Sans cette prop, la pile fonctionne mais le bouton de l'intro reste dans l'ordre de
@@ -1245,8 +1245,8 @@ const caseStudyListVars = [
         vignette tombait à 147px sur une fenêtre de 660, à 13px sur les 553 d'un petit iPhone.
         <br />
         <strong>Effacer les tags a rendu 132px</strong>, et tout a basculé. L'en-tête retombe à
-        <code>229px</code> — 30 à 46% de l'écran selon l'appareil — et la carte ne réclame plus que
-        <code>621px</code>, c'est-à-dire moins que la plupart des téléphones :
+        {' '}<code>229px</code> — 30 à 46% de l'écran selon l'appareil — et la carte ne réclame plus que
+        {' '}<code>621px</code>, c'est-à-dire moins que la plupart des téléphones :
       </p>
 
       <div class="table-scroll">
@@ -1273,7 +1273,7 @@ const caseStudyListVars = [
         <br />
         <strong>Reste un écart, et c'est le seul du système où une mesure de dessin n'est pas
         constante.</strong> La couche fait <code>100svh</code>, c'est-à-dire la hauteur d'écran
-        <em>barre d'URL visible</em> — la plus petite des deux que donne un téléphone. Quand la barre
+        {' '}<em>barre d'URL visible</em> — la plus petite des deux que donne un téléphone. Quand la barre
         se rétracte au défilement, l'écran grandit de 60 à 90px et la carte ne bouge pas : le liseré
         vaut <code>90px</code> au chargement et <code>~160px</code> en lecture, et il repasse à 90 si
         l'on remonte. Aucun émulateur ne le montre — cette barre ne se rétracte que sur un appareil
@@ -1296,10 +1296,10 @@ const caseStudyListVars = [
         <br />
         <strong>Ce n'est pas un cas mobile, c'est le cas des fenêtres courtes</strong>, que le système
         connaît déjà : un écran de bureau trop bas produit exactement le même débordement, et
-        <code>justify-content: safe center</code> le fait tomber du bon côté — l'intro reste sous la
+        {' '}<code>justify-content: safe center</code> le fait tomber du bon côté — l'intro reste sous la
         nav et ne dépasse que par le bas, là où quelque chose la recouvre toujours. Seule la fréquence
         change : sur téléphone c'est la règle plutôt que l'exception. L'arbitrage est explicite —
-        <strong>le liseré prime sur ce qui dépasse</strong> — et il se renverse le jour où la maquette
+        {' '}<strong>le liseré prime sur ce qui dépasse</strong> — et il se renverse le jour où la maquette
         dessine une intro mobile plus courte. Le titre, lui, reste celui de Figma : 42px, sept lignes,
         et personne n'y touche pour faire tenir une géométrie.
       </p>

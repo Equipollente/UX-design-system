@@ -40,7 +40,7 @@ const figmaNames: Record<string, string> = {
     <h1>Icônes</h1>
     <p class="lead">
       <strong>{iconNames.length} icônes</strong>, générées depuis la page Figma <code>Icons</code> par
-      <code>npm run icons</code>. Elles sont inlinées dans le document : elles n'ont pas d'URL, elles ne
+      {' '}<code>npm run icons</code>. Elles sont inlinées dans le document : elles n'ont pas d'URL, elles ne
       peuvent pas manquer, et elles prennent la couleur de ce qui les entoure.
     </p>
   </header>
@@ -56,8 +56,8 @@ const figmaNames: Record<string, string> = {
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni un remplacement du mot — une icône seule n'est lisible
         que de qui la connaît déjà — ni une illustration : ce qui raconte est une image, et passe par
-        <code>&lt;img&gt;</code>. Ni un bouton : une icône sur laquelle on clique est un
-        <em>Button</em> qui porte une icône.
+        {' '}<code>&lt;img&gt;</code>. Ni un bouton : une icône sur laquelle on clique est un
+        {' '}<em>Button</em> qui porte une icône.
         <br />
         <span class="source">Composants Figma de la page <code>Icons</code>, <code>45:395</code>.</span>
       </p>
@@ -77,7 +77,7 @@ const figmaNames: Record<string, string> = {
 
       <p class="section-note">
         Le nom est celui du composant Figma, en minuscules et tirets. Il se vérifie à la compilation :
-        <code>icon="mail-edt"</code> arrête le build, là où un chemin de fichier faux ne se voyait qu'en
+        {' '}<code>icon="mail-edt"</code> arrête le build, là où un chemin de fichier faux ne se voyait qu'en
         production, sur un 404.
       </p>
 
@@ -109,7 +109,7 @@ const figmaNames: Record<string, string> = {
 
       <p class="section-note">
         Une icône n'a pas de couleur à elle : les fichiers générés ne portent que
-        <code>currentColor</code>. Elle prend donc celle du texte à côté duquel elle est posée, et suit
+        {' '}<code>currentColor</code>. Elle prend donc celle du texte à côté duquel elle est posée, et suit
         son contexte sans qu'on ait à le lui dire. C'est le même fichier dans les trois cadres
         ci-dessous.
       </p>
@@ -125,7 +125,7 @@ const figmaNames: Record<string, string> = {
       <p class="section-note">
         C'est ce qui a fait disparaître <code>arrow-right-on-accent.svg</code> : le même dessin existait
         en double, une fois sombre pour les fonds clairs, une fois clair pour l'accent. Un
-        <code>&lt;img&gt;</code> ne pouvait pas faire autrement. Les deux boutons ci-dessous montrent le
+        {' '}<code>&lt;img&gt;</code> ne pouvait pas faire autrement. Les deux boutons ci-dessous montrent le
         même fichier.
       </p>
 
@@ -138,17 +138,17 @@ const figmaNames: Record<string, string> = {
 
       <p class="section-note">
         Un composant peut nommer la teinte de ses icônes plutôt que de la laisser suivre le texte, par
-        <code>--icon-color</code>. <em>Button</em> ne s'en sert que pour le primaire, où Figma lie
+        {' '}<code>--icon-color</code>. <em>Button</em> ne s'en sert que pour le primaire, où Figma lie
         l'icône à <code>color/neutral/100</code> et le libellé à <code>color/text/on-accent</code> —
         quatre valeurs d'écart. Sur le secondaire, les deux sont la même encre : rien à nommer,
-        <code>currentColor</code> suffit.
+        {' '}<code>currentColor</code> suffit.
       </p>
 
       <p class="section-note">
         <strong>Au passage, une erreur trouvée par les icônes.</strong> Le libellé du bouton secondaire
         était écrit en <code>--color-text-accent</code> là où Figma dit <code>color/text/default</code>.
         Il fait 14 px : le seuil WCAG applicable est 4,5:1, et l'indigo tombait à <strong>3,31:1</strong>
-        sur le fond d'appui — l'état pressé n'est pas exempté, contrairement à l'état désactivé. La
+        {' '}sur le fond d'appui — l'état pressé n'est pas exempté, contrairement à l'état désactivé. La
         description du token le disait déjà : « safe at body size (7.00:1 <em>on the ground</em>) », or
         le secondaire n'est pas sur le blanc mais sur la brume lavande. À l'encre, les trois états
         donnent 12,19:1, 9,50:1 et 6,47:1. L'écart préexistait ; il est devenu visible le jour où
@@ -205,7 +205,7 @@ const figmaNames: Record<string, string> = {
         général : <em>Icon</em> emprunte <code>button.icon-size.*</code>, des variables qui décrivent le
         bouton. Tant qu'une icône ne vit qu'à l'intérieur d'un bouton ou d'un onglet, l'emprunt est
         exact ; il cessera de l'être à la première icône posée ailleurs. Une collection
-        <code>icon.size.*</code> manque dans la source.
+        {' '}<code>icon.size.*</code> manque dans la source.
       </p>
     </section>
 
@@ -215,7 +215,7 @@ const figmaNames: Record<string, string> = {
 
       <p class="section-note">
         <strong>Décorative par défaut.</strong> Sans <code>label</code>, l'icône est
-        <code>aria-hidden</code> : elle double un mot déjà écrit à côté d'elle, et l'annoncer deux fois
+        {' '}<code>aria-hidden</code> : elle double un mot déjà écrit à côté d'elle, et l'annoncer deux fois
         ne renseigne personne.
       </p>
 
@@ -255,7 +255,7 @@ const figmaNames: Record<string, string> = {
       <p class="section-note">
         La source est Figma, comme pour les tokens. Exporter le <strong>composant</strong> — pas le
         vecteur qu'il contient — dans <code>icons/</code> sous son nom Figma, puis
-        <code>npm run icons</code>. Le script vérifie la <code>viewBox</code> et le tracé, remplace les
+        {' '}<code>npm run icons</code>. Le script vérifie la <code>viewBox</code> et le tracé, remplace les
         couleurs par <code>currentColor</code>, écrit le SVG nettoyé et la ligne du registre. L'icône
         apparaît alors ici, et son nom devient disponible partout.
       </p>
@@ -287,17 +287,17 @@ const figmaNames: Record<string, string> = {
       <p class="flag">
         <strong>Écart à arbitrer côté Figma.</strong> Le nommage de la page <code>Icons</code> mélange
         quatre conventions pour onze objets — <code>File - Text</code>, <code>Circle-face-content</code>,
-        <code>Mail-Edit</code>, <code>box-plus</code>. Le code en hérite : d'où
-        <code>circle-face-content</code>, qui dit une chose de trop. Renommer dans Figma ferait converger
+        {' '}<code>Mail-Edit</code>, <code>box-plus</code>. Le code en hérite : d'où
+        {' '}<code>circle-face-content</code>, qui dit une chose de trop. Renommer dans Figma ferait converger
         les deux noms, et le registre suivrait tout seul.
       </p>
 
       <p class="flag">
         <strong>Écart à arbitrer côté Figma.</strong> Trois icônes — <code>file-text</code>,
-        <code>box-plus</code>, <code>mail-edit</code> — s'exportent en aplat et non en tracé, parce que
+        {' '}<code>box-plus</code>, <code>mail-edit</code> — s'exportent en aplat et non en tracé, parce que
         leur jointure de contour est mixte dans Figma. Leur tracé pèse alors dix à soixante fois celui
         des autres : 5 672 caractères pour <code>mail-edit</code>, contre 25 pour
-        <code>arrow-narrow-right</code>. Uniformiser la jointure les ramènerait à un trait.
+        {' '}<code>arrow-narrow-right</code>. Uniformiser la jointure les ramènerait à un trait.
       </p>
 
       <p class="section-note">

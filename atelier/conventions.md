@@ -99,7 +99,19 @@ et l'arbitrage retenu. Si l'écart appelle un geste dans Figma, il gagne aussi u
 
 Corriger en dur ferait diverger le code et la source sans que rien ne le dise.
 
-## 11. Les commits
+## 11. Dans la doc, un retour à la ligne collé à une balise mange son espace
+
+Astro supprime l'espace d'un saut de ligne quand il touche une balise. Une phrase coupée entre
+`… ouvre le jeu sur` et `<code>Accent</code>` s'affiche **`surAccent`**, en ligne et à l'écran, sans
+que rien ne le signale — ni `npm run check`, ni le build. Le défaut avait couru sur quatre pages et
+84 endroits avant d'être vu.
+
+La parade est un `{' '}` en tête de la ligne suivante, et le contrôle tient en une phrase : dans le
+navigateur, parcourir les `<p>` et repérer un nœud de texte finissant sur un mot suivi d'un élément
+en commençant un. Couper une phrase **après** un mot entier, jamais entre un mot et sa balise, évite
+le problème plutôt que de le rattraper.
+
+## 12. Les commits
 
 Français. Sujet à l'impératif ou en phrase déclarative complète, pas de préfixe conventionnel, pas
 de point final. Le sujet dit l'intention ou l'effet, jamais le fichier touché — « La carte, le

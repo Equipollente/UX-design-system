@@ -121,7 +121,7 @@ C'est l'étape qui fait perdre le plus de temps quand elle est sautée.
 
 ## 10. Commiter
 
-Au style du dépôt — voir [conventions.md](conventions.md), § 11. Et si un arbitrage structurant a
+Au style du dépôt — voir [conventions.md](conventions.md), § 12. Et si un arbitrage structurant a
 été pris, une entrée dans [decisions.md](decisions.md).
 
 ---

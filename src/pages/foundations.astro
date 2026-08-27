@@ -243,7 +243,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
             Figma n'a pas de type de variable « ombre » : une variable y est couleur, nombre, texte
             ou booléen. Chaque partie est donc nommée seule et <strong>liée à l'effet</strong> dans
             le fichier — le dessin et le code lisent la même valeur, et rien ne peut diverger.
-            <code>npm run tokens</code> les remet bout à bout. Un composant utilise la ligne
+            {' '}<code>npm run tokens</code> les remet bout à bout. Un composant utilise la ligne
             composée, jamais les parties.
           </p>
 
@@ -286,7 +286,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
 
           <p class="flag">
             <strong>Les couleurs d'ombre ne suivent pas l'encre.</strong> Elles valent
-            <code>color.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
+            {' '}<code>color.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
             avec la couleur : on ne peut pas pointer l'encre et n'en changer que la transparence.
             Les trois sont donc des couleurs littérales. Si l'encre du système change, elles sont à
             reprendre à la main — c'est le seul point du groupe qui puisse dériver.
@@ -295,7 +295,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
           <p class="flag">
             <strong>Aucune ombre n'a de décalage horizontal.</strong> Le <code>0</code> de tête
             n'est pas un token : c'est une règle du système, écrite dans
-            <code>build-tokens.mjs</code> avec la couche de contact. Le jour où une ombre en
+            {' '}<code>build-tokens.mjs</code> avec la couche de contact. Le jour où une ombre en
             demande un, il devient une variable comme les autres.
           </p>
         </section>
@@ -307,7 +307,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
       <h2>Mouvement</h2>
       <p class="section-note">
         Trois durées et trois courbes. La règle tient en une ligne :
-        <strong>un changement de couleur prend <code>quick</code></strong>, <strong
+        {' '}<strong>un changement de couleur prend <code>quick</code></strong>, <strong
           >un déplacement prend <code>default</code></strong
         >, <strong>une entrée ou une sortie prend <code>slow</code></strong>. Survolez une piste pour
         rejouer le mouvement — la pastille voyage avec le token de sa ligne, pas avec une valeur
