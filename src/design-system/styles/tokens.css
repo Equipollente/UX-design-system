@@ -12,7 +12,7 @@
   --color-bg-feature:            var(--color-accent-500);
   --color-bg-celebrate:          var(--color-highlight-200);
 
-  --color-border-default:        #E6E1F5;
+  --color-border-default:        var(--color-accent-100);
   --color-border-strong:         var(--color-neutral-300);
   --color-border-focus:          var(--color-accent-500);
 

@@ -107,16 +107,7 @@
     "border": {
       "default": {
         "$type": "color",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.9019607901573181,
-            0.8823529481887817,
-            0.9607843160629272
-          ],
-          "alpha": 1,
-          "hex": "#E6E1F5"
-        },
+        "$value": "{color.accent.100}",
         "$description": "Pale lavender hairline, never grey. Decorative only at 1.28:1 — never let a border be the sole separator between two pieces of content.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:6",
@@ -1437,7 +1428,7 @@
       "tight": {
         "$type": "number",
         "$value": 112,
-        "$description": "Headings. Token value is the unitless multiplier 1.12; Figma states line height as a percentage, so it is stored here as 112%. Same value, different notation.",
+        "$description": "Headings. Token value is the unitless multiplier 1.12; Figma states line height as a percentage, so it is stored here as 112%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives a line height in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:79",
           "com.figma.scopes": [
@@ -1451,7 +1442,7 @@
       "snug": {
         "$type": "number",
         "$value": 120,
-        "$description": "Buttons and card titles — text that sits on one or two lines. Token value is the unitless multiplier 1.2; Figma states line height as a percentage, so it is stored here as 120%. Same value, different notation.",
+        "$description": "Buttons and card titles — text that sits on one or two lines. Token value is the unitless multiplier 1.2; Figma states line height as a percentage, so it is stored here as 120%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives a line height in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:80",
           "com.figma.scopes": [
@@ -1465,7 +1456,7 @@
       "body": {
         "$type": "number",
         "$value": 155,
-        "$description": "Body copy. Token value is the unitless multiplier 1.55; Figma states line height as a percentage, so it is stored here as 155%. Same value, different notation.",
+        "$description": "Body copy. Token value is the unitless multiplier 1.55; Figma states line height as a percentage, so it is stored here as 155%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives a line height in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:81",
           "com.figma.scopes": [
@@ -1481,7 +1472,7 @@
       "tight": {
         "$type": "number",
         "$value": -1.5,
-        "$description": "Headings. Large type needs pulling together. Token value is -0.015em; Figma states letter spacing as a percentage, so it is stored here as -1.5%. Same value, different notation.",
+        "$description": "Headings. Large type needs pulling together. Token value is -0.015em; Figma states letter spacing as a percentage, so it is stored here as -1.5%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives letter spacing in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:82",
           "com.figma.scopes": [
@@ -1495,7 +1486,7 @@
       "normal": {
         "$type": "number",
         "$value": 0,
-        "$description": "Body copy and everything not listed here. Token value is 0em; Figma states letter spacing as a percentage, so it is stored here as 0%. Same value, different notation.",
+        "$description": "Body copy and everything not listed here. Token value is 0em; Figma states letter spacing as a percentage, so it is stored here as 0%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives letter spacing in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:83",
           "com.figma.scopes": [
@@ -1509,7 +1500,7 @@
       "wide": {
         "$type": "number",
         "$value": 2,
-        "$description": "Tags. Token value is 0.02em; Figma states letter spacing as a percentage, so it is stored here as 2%. Same value, different notation.",
+        "$description": "Tags. Token value is 0.02em; Figma states letter spacing as a percentage, so it is stored here as 2%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives letter spacing in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:84",
           "com.figma.scopes": [
@@ -1523,7 +1514,7 @@
       "wider": {
         "$type": "number",
         "$value": 8,
-        "$description": "The H6 eyebrow and table headers. Token value is 0.08em; Figma states letter spacing as a percentage, so it is stored here as 8%. Same value, different notation.",
+        "$description": "The H6 eyebrow and table headers. Token value is 0.08em; Figma states letter spacing as a percentage, so it is stored here as 8%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives letter spacing in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:85",
           "com.figma.scopes": [
@@ -1537,7 +1528,7 @@
       "widest": {
         "$type": "number",
         "$value": 10,
-        "$description": "The card kicker, the smallest uppercase text in the system. Token value is 0.1em; Figma states letter spacing as a percentage, so it is stored here as 10%. Same value, different notation.",
+        "$description": "The card kicker, the smallest uppercase text in the system. Token value is 0.1em; Figma states letter spacing as a percentage, so it is stored here as 10%. Same value, different notation. ⚠️ DO NOT bind this variable to a text style. A number variable carries the number but not the unit, so Figma applies it as PIXELS — binding this gives letter spacing in px, not a percentage. Type the percentage into the style by hand, and keep this variable for the code, which converts it. Measured 27/08.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:86",
           "com.figma.scopes": [
