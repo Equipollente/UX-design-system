@@ -37,6 +37,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Nav | `24:5` | la description décrit encore l'ancienne barre | /components → Nav | ouvert |
 | Cards | `334:1129` | le composant n'a aucune description : la doctrine n'engage que le code | /components → Card | ouvert |
 | Cards | `334:1129` | le fond blanc n'est lié à aucune variable | /components → Card | ouvert |
+| Cards | `392:1075` · `392:1076` | la rangée de tags du haut est un frame « Frame 6 », pas un slot, et n'a pas de nom | /components → Card | ouvert |
+| Cards | `334:1129` | les deux rangées de tags portent le même contenu témoin : rien ne dit ce qui va en haut plutôt qu'en bas | /components → Card | ouvert |
 | Cards | `334:1130` | l'image de l'horizontale est en hauteur fixe ; le code l'étire — la passer en *fill* | /components → Card | ouvert |
 | **Système** | — | **aucune famille de mesures pour la géométrie d'un contrôle** — 18, 22, 5 | /formulaire | *réglé — 27/08, groupe `control`* |
 | **Système** | — | **aucune famille d'épaisseurs de trait** (1 · 1,5 · 2) | /formulaire | *réglé — 27/08, groupe `border`* |

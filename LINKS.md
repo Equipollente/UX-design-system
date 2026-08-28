@@ -86,6 +86,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | Une échelle d'empilement | `z-index: 1` dans [Nav.astro](src/design-system/components/Nav.astro) | Exception assumée : le seul z-index du système, à ne transformer en échelle que si un deuxième cas arrive |
 | ~~Les trois ombres~~ | — | **Réglé le 27/08.** Figma n'a pas de type « ombre » : chaque morceau est nommé seul et lié à la couche, et `npm run tokens` les recompose. Une couche de contact partagée, plus une diffusion par élévation — 16 variables |
 | Un fond lié pour la fiche | `background` de `.card` dans [Card.astro](src/design-system/components/Card.astro) | Le blanc de `334:1129` n'est lié à aucune variable, alors qu'il vaut exactement `color.bg.default` |
+| Un slot nommé pour la rangée de tags du haut | slot `tags-top` dans [Card.astro](src/design-system/components/Card.astro) | « Frame 6 » (`392:1075`, `392:1076`) est un frame, pas un slot : l'emplacement ne se remplit pas dans la maquette, et son nom est une décision du code |
 | Une hauteur de média | `--card-media-height` dans [Card.astro](src/design-system/components/Card.astro) | 324 et 256 n'ont pas de token. Un troisième nombre ouvrirait le groupe |
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
 
