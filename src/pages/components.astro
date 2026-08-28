@@ -284,6 +284,12 @@ const caseStudyListVars = [
       </div>
 
       <p class="section-note">
+        <strong>Ni l'une ni l'autre des deux variantes n'a de liseré</strong>, et c'est ce que Figma
+        dessine : le secondaire se pose par son fond, <code>color.bg.surface</code>, et rien d'autre.
+        Le trait qu'il portait jusqu'ici n'avait pas de source — il venait du portfolio, entré avec
+        l'extraction du système, et valait 1,28:1 sur ce même fond quand WCAG 1.4.11 en demande 3.
+        C'est ce qui explique qu'il ait tenu si longtemps sans que personne le voie.
+        <br />
         L'écart entre deux boutons est <code>--button-target-spacing</code> (WCAG 2.5.8). Tabulez pour
         voir l'anneau de focus, et survolez pour voir le fond changer en
         {' '}<code>--motion-duration-quick</code>.
@@ -368,8 +374,8 @@ const caseStudyListVars = [
         quatre états (<code>Default</code>, <code>Hover</code>, <code>Pressed</code>,
         {' '}<code>Disabled</code>). Le code implémente deux variantes et les quatre états : ni
         {' '}<code>Ghost</code> ni <code>CTA</code>. À intégrer le jour où une vue en a besoin — pas avant.
-        L'état désactivé, lui, est arrivé avec les flèches du carrousel : Figma ne change ni le fond ni
-        la bordure, il baisse l'opacité de tout le bouton à 45 % (<code>21:11</code>,
+        L'état désactivé, lui, est arrivé avec les flèches du carrousel : Figma ne change pas le fond, il
+        baisse l'opacité de tout le bouton à 45 % (<code>21:11</code>,
         {' '}<code>21:26</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3 exempte les contrôles
         inactifs.
       </p>

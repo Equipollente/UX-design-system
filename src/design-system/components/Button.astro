@@ -13,6 +13,12 @@
 // supplémentaire. C'est ce que font le Nav pour son bouton d'action et le
 // Carousel pour ses flèches, que Figma pose sur color.bg.default.
 //
+// Le secondaire n'a pas de liseré, et Figma n'en a jamais dessiné : le nœud 21:32
+// ne porte qu'un fond. Le trait qui vivait ici était hérité du portfolio, entré
+// avec l'extraction du système, et il n'a jamais eu de source. Il valait
+// color/border/default sur le fond lavande du bouton — 1,28:1, là où WCAG 1.4.11
+// en demande 3 : c'est pourquoi personne ne l'a vu pendant si longtemps.
+//
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
 // en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
@@ -79,6 +85,11 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
        viser l'icône, et Icon n'a pas à connaître le bouton. */
     --icon-size: var(--btn-icon);
     background: var(--btn-bg);
+    /* Le trait est transparent dans les deux variantes, et il reste écrit. La
+       boîte est en border-box, donc il ne change rien à la taille du bouton :
+       ce qu'il sert, c'est le mode contrastes forcés de Windows, où une bordure
+       transparente est repeinte par le système. C'est là, et là seulement, que
+       le bouton retrouve un bord — et il vaut mieux que ce bord existe. */
     border: 1px solid transparent;
     border-radius: var(--button-radius);
     font-family: var(--font-family-heading);
@@ -87,9 +98,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     line-height: var(--font-line-height-snug);
     text-decoration: none;
     cursor: pointer;
-    /* Seul le fond change entre le repos, le survol et l'appui — la bordure du
-       secondaire, elle, ne bouge pas. Un changement de couleur prend
-       duration.quick ; tokens.css le remet à zéro sous prefers-reduced-motion. */
+    /* Seul le fond change entre le repos, le survol et l'appui — il n'y a plus
+       rien d'autre à animer. Un changement de couleur prend duration.quick ;
+       tokens.css le remet à zéro sous prefers-reduced-motion. */
     transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
   }
 
@@ -137,7 +148,6 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-bg-hover: var(--color-accent-100);
     --btn-bg-active: var(--color-accent-200);
     color: var(--color-text-default);
-    border-color: var(--color-border-default);
   }
 
   .btn:hover:not(:disabled) {
@@ -148,8 +158,8 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     background: var(--btn-bg-active);
   }
 
-  /* Désactivé : Figma ne change ni le fond ni la bordure, il baisse l'opacité de
-     tout le bouton à 45 % (états Disabled, 21:11 et 21:26). Le contraste tombe
+  /* Désactivé : Figma ne change pas le fond, il baisse l'opacité de tout le
+     bouton à 45 % (états Disabled, 21:11 et 21:26). Le contraste tombe
      alors sous le seuil — c'est admis, WCAG 1.4.3 exempte les contrôles
      inactifs. Le Carousel s'en sert pour ses flèches en bout de piste. */
   .btn:disabled {
