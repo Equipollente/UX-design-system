@@ -1,6 +1,6 @@
 # UX design system
 
-Le design system de [Judith Heckmann](https://github.com/Equipollente) — 122 tokens exportés de Figma et
+Le design system de [Judith Heckmann](https://github.com/Equipollente) — 128 tokens exportés de Figma et
 les composants qui en sont faits. La documentation est le site lui-même, et elle montre les
 composants en vrai plutôt qu'une copie de leur markup : si un composant change, la page change.
 
@@ -8,8 +8,9 @@ composants en vrai plutôt qu'une copie de leur markup : si un composant change,
 
 | | |
 | --- | --- |
-| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 94 tokens : couleur, typographie, espacement, rayon, mouvement, layout. Chaque valeur affichée est lue dans sa variable CSS. |
+| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 100 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, mouvement, layout. Chaque valeur affichée est lue dans sa variable CSS. |
 | [Composants](https://equipollente.github.io/UX-design-system/components) | Button, Tag, Nav, la fiche, et la carte d'étude de cas avec son en-tête et son carrousel. Doctrine d'usage, états, props. |
+| [Formulaire](https://equipollente.github.io/UX-design-system/formulaire) | FieldLabel — le libellé que tous les champs partagent — puis Select, Radio, Checkbox, Toggle, Text Area, Chip, Add Image et Edit Image Gallery. |
 
 ## La source de vérité est Figma
 
@@ -30,12 +31,14 @@ liste tenue à la main.
 
 ```
 src/design-system/     le système
-  components/          Button, Card, Carousel, CaseStudyCard, CaseStudyHeader,
-                       CaseStudyList, Icon, Intro, Nav, Tag
+  components/          affichage : Button, Card, Carousel, CaseStudyCard,
+                       CaseStudyHeader, CaseStudyList, Icon, Intro, Nav, Tag
+                       formulaire : FieldLabel, Select, Radio, Checkbox, Toggle,
+                       TextArea, Chip, AddImage, EditImageGallery
   layouts/             BaseLayout (coquille HTML nue), DocsLayout (doc)
   lib/                 withBase(), le préfixe d'URL du déploiement
   styles/ data/        générés — ne pas éditer à la main
-src/pages/             la doc : /, /foundations, /components
+src/pages/             la doc : /, /foundations, /icons, /components, /formulaire
 tokens/                les exports Figma, un par mode
 scripts/               build-tokens.mjs
 ```

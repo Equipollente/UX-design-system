@@ -1795,6 +1795,158 @@
       }
     }
   },
+  "layout": {
+    "Device": {
+      "$type": "string",
+      "$value": "tablet",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:142:1998",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-responsive-device)"
+        },
+        "com.figma.type": "string"
+      }
+    },
+    "Device Width": {
+      "$type": "number",
+      "$value": 768,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:142:1997",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-responsive-device-width)"
+        }
+      }
+    },
+    "Root Font Size": {
+      "$type": "number",
+      "$value": 16,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:142:1996",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-responsive-root-font-size)"
+        },
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:6af26bd4536b2b8d79f54881015b1ba86fc54830/716:43",
+          "targetVariableName": "Scale 03",
+          "targetVariableSetId": "VariableCollectionId:96027c992cb3119ac620f3f9cb991735e58521b7/197:606",
+          "targetVariableSetName": "Typography Primitives"
+        }
+      }
+    },
+    "Scale": {
+      "$type": "number",
+      "$value": 1,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:142:1995",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-responsive-scale)"
+        }
+      }
+    }
+  },
+  "motion": {
+    "duration": {
+      "quick": {
+        "$type": "number",
+        "$value": 140,
+        "$description": "140ms. Colour changes and fades — anything that does not travel: a hover fill, an opacity swap. Do NOT use it for movement; at this speed a path cannot be read.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:442",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-duration-quick)"
+          }
+        }
+      },
+      "default": {
+        "$type": "number",
+        "$value": 200,
+        "$description": "200ms. Movement inside the screen: something that slides from one place to another while staying visible. The nav pill travels on this one.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:443",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-duration-default)"
+          }
+        }
+      },
+      "slow": {
+        "$type": "number",
+        "$value": 320,
+        "$description": "320ms. Things that enter or leave the screen — a dialog, a drawer. Not yet used: it waits for the contact dialog. Do NOT use it for a hover; it would feel broken.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:444",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-duration-slow)"
+          }
+        }
+      }
+    },
+    "easing": {
+      "standard": {
+        "$type": "string",
+        "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "$description": "An object that moves while staying on screen: it leaves briskly and settles. The default curve — reach for this one first, and pair it with duration.default.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:445",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-easing-standard)"
+          },
+          "com.figma.type": "string"
+        }
+      },
+      "enter": {
+        "$type": "string",
+        "$value": "cubic-bezier(0, 0, 0.2, 1)",
+        "$description": "Something arriving: full speed at the start, gentle landing. Pair with duration.slow. Only for what comes from outside the screen.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:446",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-easing-enter)"
+          },
+          "com.figma.type": "string"
+        }
+      },
+      "exit": {
+        "$type": "string",
+        "$value": "cubic-bezier(0.4, 0, 1, 1)",
+        "$description": "Something leaving: gentle start, then gone. Pair with duration.slow. Never on something that stays — it reads as a departure.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:172:447",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--motion-easing-exit)"
+          },
+          "com.figma.type": "string"
+        }
+      }
+    }
+  },
+  "nav": {
+    "height": {
+      "$type": "number",
+      "$value": 88,
+      "$description": "The height of the nav bar when it sticks to the top: a tab, plus the air the pill puts around it, plus the air the bar puts around the pill. 88 above 768, 72 below. A page reads it to sit its first screen under the bar — it is the number the case study peek depends on. Same in both Nav states: the avatar is exactly as tall as the pill.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:234:1222",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--nav-height)"
+        }
+      }
+    }
+  },
   "card": {
     "title": {
       "size": {
@@ -1869,154 +2021,94 @@
       }
     }
   },
-  "nav": {
-    "height": {
+  "control": {
+    "size": {
       "$type": "number",
-      "$value": 88,
-      "$description": "The height of the nav bar when it sticks to the top: a tab, plus the air the pill puts around it, plus the air the bar puts around the pill. 88 above 768, 72 below. A page reads it to sit its first screen under the bar — it is the number the case study peek depends on. Same in both Nav states: the avatar is exactly as tall as the pill.",
+      "$value": 18,
+      "$description": "The side of a compact control's box — radio, checkbox. Both are drawn at 18.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:234:1222",
+        "com.figma.variableId": "VariableID:370:1207",
         "com.figma.scopes": [
           "WIDTH_HEIGHT"
         ],
         "com.figma.codeSyntax": {
-          "WEB": "var(--nav-height)"
+          "WEB": "var(--control-size)"
         }
       }
-    }
-  },
-  "layout": {
-    "Device": {
-      "$type": "string",
-      "$value": "tablet",
-      "$extensions": {
-        "com.figma.variableId": "VariableID:142:1998",
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ],
-        "com.figma.codeSyntax": {
-          "WEB": "var(--sds-responsive-device)"
-        },
-        "com.figma.type": "string"
-      }
     },
-    "Device Width": {
+    "track-height": {
       "$type": "number",
-      "$value": 768,
+      "$value": 22,
+      "$description": "The height of a switch track. Its width needs no variable: 40 is space/xl + space/lg exactly.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:142:1997",
+        "com.figma.variableId": "VariableID:370:1208",
         "com.figma.scopes": [
           "WIDTH_HEIGHT"
         ],
         "com.figma.codeSyntax": {
-          "WEB": "var(--sds-responsive-device-width)"
+          "WEB": "var(--control-track-height)"
         }
       }
     },
-    "Root Font Size": {
+    "field-gap": {
       "$type": "number",
-      "$value": 16,
+      "$value": 5,
+      "$description": "The vertical gap between a field's label, its box and its counter. Not the gap between a compact control and its word — that one is space/sm.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:142:1996",
+        "com.figma.variableId": "VariableID:370:1209",
         "com.figma.scopes": [
-          "ALL_SCOPES"
+          "GAP"
         ],
         "com.figma.codeSyntax": {
-          "WEB": "var(--sds-responsive-root-font-size)"
-        }
-      }
-    },
-    "Scale": {
-      "$type": "number",
-      "$value": 1,
-      "$extensions": {
-        "com.figma.variableId": "VariableID:142:1995",
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ],
-        "com.figma.codeSyntax": {
-          "WEB": "var(--sds-responsive-scale)"
+          "WEB": "var(--control-field-gap)"
         }
       }
     }
   },
-  "motion": {
-    "duration": {
-      "quick": {
-        "$type": "number",
-        "$value": 140,
-        "$description": "140ms. Colour changes and fades — anything that does not travel: a hover fill, an opacity swap. Do NOT use it for movement; at this speed a path cannot be read.",
-        "$extensions": {
-          "com.figma.variableId": "VariableID:172:442",
-          "com.figma.scopes": [],
-          "com.figma.codeSyntax": {
-            "WEB": "var(--motion-duration-quick)"
-          }
-        }
-      },
+  "border": {
+    "width": {
       "default": {
         "$type": "number",
-        "$value": 200,
-        "$description": "200ms. Movement inside the screen: something that slides from one place to another while staying visible. The nav pill travels on this one.",
+        "$value": 1,
+        "$description": "The resting stroke of a field, a box, a chip. The system's only one: drawn 217 times across five pages.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:172:443",
-          "com.figma.scopes": [],
+          "com.figma.variableId": "VariableID:370:1210",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ],
           "com.figma.codeSyntax": {
-            "WEB": "var(--motion-duration-default)"
+            "WEB": "var(--border-width-default)"
           }
         }
       },
-      "slow": {
+      "focus": {
         "$type": "number",
-        "$value": 320,
-        "$description": "320ms. Things that enter or leave the screen — a dialog, a drawer. Not yet used: it waits for the contact dialog. Do NOT use it for a hover; it would feel broken.",
+        "$value": 2,
+        "$description": "The focus mark. Every control that carries one draws it at 2. Supersedes button/focus-ring-width, which draws nothing — the Button has no Focused state.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:172:444",
-          "com.figma.scopes": [],
+          "com.figma.variableId": "VariableID:370:1211",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ],
           "com.figma.codeSyntax": {
-            "WEB": "var(--motion-duration-slow)"
+            "WEB": "var(--border-width-focus)"
           }
         }
       }
-    },
-    "easing": {
-      "standard": {
-        "$type": "string",
-        "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
-        "$description": "An object that moves while staying on screen: it leaves briskly and settles. The default curve — reach for this one first, and pair it with duration.default.",
-        "$extensions": {
-          "com.figma.variableId": "VariableID:172:445",
-          "com.figma.scopes": [],
-          "com.figma.codeSyntax": {
-            "WEB": "var(--motion-easing-standard)"
-          },
-          "com.figma.type": "string"
-        }
-      },
-      "enter": {
-        "$type": "string",
-        "$value": "cubic-bezier(0, 0, 0.2, 1)",
-        "$description": "Something arriving: full speed at the start, gentle landing. Pair with duration.slow. Only for what comes from outside the screen.",
-        "$extensions": {
-          "com.figma.variableId": "VariableID:172:446",
-          "com.figma.scopes": [],
-          "com.figma.codeSyntax": {
-            "WEB": "var(--motion-easing-enter)"
-          },
-          "com.figma.type": "string"
-        }
-      },
-      "exit": {
-        "$type": "string",
-        "$value": "cubic-bezier(0.4, 0, 1, 1)",
-        "$description": "Something leaving: gentle start, then gone. Pair with duration.slow. Never on something that stays — it reads as a departure.",
-        "$extensions": {
-          "com.figma.variableId": "VariableID:172:447",
-          "com.figma.scopes": [],
-          "com.figma.codeSyntax": {
-            "WEB": "var(--motion-easing-exit)"
-          },
-          "com.figma.type": "string"
+    }
+  },
+  "opacity": {
+    "disabled": {
+      "$type": "number",
+      "$value": 50,
+      "$description": "How far a disabled object fades, in percent — Figma stores opacity the way it stores line-height. One value for all of them, where the file had drawn 40, 50 and 60 for the same intent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:370:1212",
+        "com.figma.scopes": [
+          "OPACITY"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--opacity-disabled)"
         }
       }
     }

@@ -35,6 +35,9 @@ const GROUP_TITLES = {
   color: 'Couleurs',
   space: 'Espacements',
   radius: 'Rayons',
+  control: 'Contrôles — la géométrie d’une case, d’une piste, d’un champ',
+  border: 'Traits — les épaisseurs, et rien d’autre',
+  opacity: 'Opacités — l’atténuation d’un objet, pas sa couleur',
   shadow: 'Ombres — les parties nommées, puis les ombres composées',
   font: 'Typographie',
   motion: 'Mouvement — durées et courbes',
@@ -116,7 +119,13 @@ function toCss(token) {
   if (path.startsWith('motion.duration.')) return `${value}ms`; // Figma stocke le nombre nu
   if (path === 'layout.Root Font Size') return `${value}px`;
   if (path.startsWith('layout.')) return String(value);
-  return `${value}px`; // space.*, radius.*, button.*
+  // Figma stocke une opacité en pourcentage, exactement comme un interligne — et
+  // pour la même raison : c'est ce que la liaison de variable attend côté dessin.
+  // Une variable à 0,5 y vaudrait un demi pour cent. Elle se divise donc ici, et
+  // le repli en pixels ci-dessous en aurait fait `50px` : une longueur là où le
+  // navigateur attend un rapport, donc une déclaration jetée sans un mot.
+  if (path.startsWith('opacity.')) return String(value / 100);
+  return `${value}px`; // space.*, radius.*, button.*, control.*, border.*
 }
 
 const round = (n) => parseFloat(n.toFixed(4));

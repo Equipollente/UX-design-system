@@ -25,6 +25,9 @@ const weights = byPrefix('font.weight.');
 const families = byPrefix('font.family.');
 const spaces = byGroup('space');
 const radii = byGroup('radius');
+const controls = byGroup('control');
+const borders = byGroup('border');
+const opacities = byGroup('opacity');
 
 // Les ombres. Figma n'a pas de type de variable « ombre » : chaque partie y est
 // nommée seule et liée à l'effet, et `npm run tokens` les remet bout à bout.
@@ -53,7 +56,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
 
 <DocsLayout
   title="Fondations — UX design system"
-  description="Le vocabulaire du système : couleur, typographie, espacement, rayon, mouvement."
+  description="Le vocabulaire du système : couleur, typographie, espacement, rayon, contrôle, trait, opacité, mouvement."
 >
   <header class="page-head">
     <h6>Design system</h6>
@@ -233,6 +236,95 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
         }
       </ul>
     </section>
+
+    <!-- ── Contrôles ────────────────────────────────────────────────────── -->
+    {
+      controls.length > 0 && (
+        <section>
+          <h2>Contrôles</h2>
+          <p class="section-note">
+            La géométrie d'un contrôle de formulaire — ce qu'un espacement ne sait pas dire. Une case
+            à cocher n'a pas la taille d'un écart, et une piste d'interrupteur n'a pas celle d'un
+            rembourrage : ces trois mesures ont leur propre famille parce qu'elles décrivent un objet
+            qu'on vise, pas un intervalle entre deux choses.
+          </p>
+          <p class="section-note">
+            Elles sont peu nombreuses <strong>et c'est voulu</strong> : tout ce qui se compose depuis
+            un espacement reste composé. La largeur d'une piste vaut
+            {' '}<code>space/xl + space/lg</code> — 40 exactement — et n'a donc pas de variable.
+          </p>
+          <ul class="plain">
+            {controls.map((t) => (
+              <li class="ruler">
+                <div class="bar" style={`width: var(${t.name})`} />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Traits ───────────────────────────────────────────────────────── -->
+    {
+      borders.length > 0 && (
+        <section>
+          <h2>Traits</h2>
+          <p class="section-note">
+            Deux crans, et rien de plus : le trait au repos, et la marque de focus. Le fichier Figma
+            en dessinait un troisième — 1,5, sur les deux zones de dépôt — quand 1 est dessiné 217
+            fois ailleurs. Un même geste fait deux fois n'est pas une échelle, et les deux nœuds ont
+            été redessinés.
+          </p>
+          <ul class="swatches">
+            {borders.map((t) => (
+              <li>
+                <div
+                  class="stroke-box"
+                  style={`border-width: var(${t.name})`}
+                />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Opacités ─────────────────────────────────────────────────────── -->
+    {
+      opacities.length > 0 && (
+        <section>
+          <h2>Opacités</h2>
+          <p class="section-note">
+            Une seule valeur, pour un seul rôle : ce qu'un objet désactivé perd. Le fichier en
+            dessinait trois — 0,4 sur les contrôles compacts, 0,5 sur les surfaces, 0,6 sur les
+            champs de texte — pour la même intention. Elles ont été ramenées à une.
+          </p>
+          <p class="section-note">
+            <strong>Elle se stocke en pourcentage dans Figma</strong>, comme un interligne : c'est ce
+            que la liaison de variable attend côté dessin. <code>npm run tokens</code> divise par 100.
+          </p>
+          <ul class="swatches">
+            {opacities.map((t) => (
+              <li>
+                <div class="opacity-box" style={`opacity: var(${t.name})`} />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     <!-- ── Ombres ───────────────────────────────────────────────────────── -->
     {
@@ -510,6 +602,39 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
   }
 
   /* — rayons — */
+  /* Traits et opacités se montrent de la même façon : une pastille, son nom, sa
+     description. Même gabarit que les rayons, sans le carré plein. */
+  .swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+  }
+
+  .swatches > li {
+    max-width: 18rem;
+  }
+
+  /* Le trait se regarde sur un fond blanc, comme dans la page : c'est là qu'il
+     doit se détacher, et c'est là qu'il est le plus difficile. */
+  .stroke-box {
+    width: 7rem;
+    height: 4rem;
+    background: var(--color-bg-default);
+    border-style: solid;
+    border-color: var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .opacity-box {
+    width: 7rem;
+    height: 4rem;
+    background: var(--color-accent-500);
+    border-radius: var(--radius-md);
+  }
+
   .radii {
     list-style: none;
     margin: 0;

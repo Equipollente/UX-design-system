@@ -75,6 +75,18 @@
   --radius-lg:                   28px;
   --radius-pill:                 999px;
 
+  /* ── Contrôles — la géométrie d’une case, d’une piste, d’un champ ──────────── */
+  --control-size:                18px;
+  --control-track-height:        22px;
+  --control-field-gap:           5px;
+
+  /* ── Traits — les épaisseurs, et rien d’autre ──────────────────────────────── */
+  --border-width-default:        1px;
+  --border-width-focus:          2px;
+
+  /* ── Opacités — l’atténuation d’un objet, pas sa couleur ───────────────────── */
+  --opacity-disabled:            0.5;
+
   /* ── Typographie ───────────────────────────────────────────────────────────── */
   --font-family-heading:         "Poppins", system-ui, sans-serif;
   --font-family-body:            "Inter", system-ui, -apple-system, sans-serif;
@@ -175,10 +187,10 @@
 
 @media (max-width: 767px) {
   :root {
-    --nav-height:                  72px;
     --layout-device:               mobile;
     --layout-device-width:         390;
     --layout-scale:                1.25;
+    --nav-height:                  72px;
   }
 }
 

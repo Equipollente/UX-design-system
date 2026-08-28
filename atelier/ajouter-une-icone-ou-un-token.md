@@ -35,6 +35,17 @@ L'erreur nomme le groupe — il n'y a rien à chercher, seulement une ligne à �
 a payé ce détour. Deux pages comptent aussi les groupes qui décrivent un objet plutôt que le
 système, chacune dans sa liste écrite à la main : `foundations.astro` et `index.astro`.
 
+**Un groupe nouveau doit aussi gagner son unité dans `toCss()`.** `GROUP_TITLES` décide qu'un
+groupe sort ; `toCss()` décide en quoi. Le repli, tout en bas, est le **pixel** — ce qui convient à
+`space`, `radius`, `button`, `control` et `border`, et à rien d'autre. Un groupe dont les valeurs ne
+sont pas des longueurs sort donc en `…px`, et le navigateur jette la déclaration sans un mot.
+
+**Et une opacité se stocke en pourcentage dans Figma**, comme un interligne : c'est ce que la liaison
+de variable attend côté dessin. Une variable `opacity/disabled` créée à `0,5` y vaut **un demi pour
+cent** — les onze nœuds désactivés du formulaire sont devenus invisibles avant qu'on le voie. Elle se
+crée à `50`, et `toCss()` divise par 100, sur la ligne voisine de celle qui le fait pour
+`font/line-height`. Les deux détours ont été payés le 27/08.
+
 **L'export ne se fait pas depuis un outil quelconque.** Le format des quatre `tokens/*.tokens.json`
 est celui du plugin d'export Figma — `$extensions` en `com.figma.*`. Un autre exportateur produit
 un DTCG voisin mais pas identique, et réécrirait les quatre fichiers en entier pour six lignes.
@@ -51,7 +62,9 @@ script compare.
 
 ## Ce qu'il faut regarder après
 
-- `npm run check`, qui refuse un nom d'icône inconnu.
+- `npm run check`, qui refuse un nom d'icône inconnu — **mais lui seul ne suffit pas**. Il est
+  passé à 0 erreur sur une page dont il manquait une balise `</section>` ; c'est `npm run build`
+  qui l'a arrêtée, et le message nommait la ligne. Les deux se lancent, dans cet ordre.
 - La page qui montre ce qui a changé : [/icons](../src/pages/icons.astro) pour la planche,
   [/foundations](../src/pages/foundations.astro) pour le vocabulaire. Les deux se construisent
   depuis les fichiers générés — un token ajouté y apparaît seul, avec sa description Figma.
