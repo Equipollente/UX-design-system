@@ -1,0 +1,179 @@
+---
+// EditImageGallery — les images déjà déposées, chacune avec de quoi la revoir ou
+// la retirer.
+//
+// Ce n'est pas AddImage : AddImage accepte un fichier, elle ne montre rien de ce
+// qui est entré. Ce n'est pas non plus un carrousel — un carrousel fait défiler
+// pour montrer, celle-ci étale pour laisser modifier. Et ce n'est pas une
+// galerie de consultation : chaque vignette porte deux actions, donc elle
+// appartient à un formulaire.
+//
+// Nœud Figma : 355:1396.
+//
+// Les deux boutons sont le Button du système, en `secondary` / `md` — c'est
+// exactement ce que le nœud instancie. Ils ne sont pas redessinés ici : une
+// vignette qui aurait ses propres boutons cesserait de suivre le système au
+// premier changement de bouton.
+//
+// « supprimer » est un `submit` qui porte son `name` et sa `value` : le
+// formulaire sait donc laquelle retirer sans une ligne de JavaScript. « voir »
+// est un lien quand l'appelant donne une adresse, et disparaît sinon — un bouton
+// qui ne mène nulle part vaut moins que pas de bouton.
+//
+// Mesures : quand Figma ne lie aucune variable, on prend le token de la même
+// famille le plus proche, ou on compose deux tokens quand ils donnent la mesure
+// exacte. Chaque écart est écrit ci-dessous et dans le suivi.
+// — vignette 140 de haut → `space-layout-128 + space-md` = 140, exact ;
+// — vignette 189 de large → `space-layout-128 + space-layout-64` = 192, +3. La
+//   largeur est un minimum : la grille étire les vignettes pour remplir la
+//   ligne, ce qui est de toute façon ce qu'il faut ici ;
+// — rembourrage 24 / 28 → `space-xl` (lié dans le nœud) et
+//   `space-xl + space-xs` = 28, exact ;
+// — écart des vignettes et rembourrage de la grille → `space/sm`, liés dans le
+//   nœud.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — le voile noir à 20 % posé sur chaque image : le système n'a pas d'échelle
+//   d'opacité. Il n'était là que pour détacher les boutons de la photo, et les
+//   boutons `secondary` ont leur propre fond opaque — le contraste tient sans
+//   lui (WCAG 1.4.3 est porté par le bouton, pas par le voile) ;
+// — la vignette ne porte aucun trait : le nœud n'en dessine pas. Ce pavé en a
+//   annoncé un de 1,5 jusqu'à ce qu'une relecture du nœud ne le trouve nulle part ;
+// — la largeur maximale de 337 : aucune variable ne la porte, et une vignette
+//   qui s'étire jusqu'à la largeur de sa colonne est le comportement attendu.
+
+import Button from './Button.astro';
+
+interface Image {
+  /** Ce que « supprimer » enverra au formulaire pour désigner cette image-là. */
+  id: string;
+  src: string;
+  /** Ce que l'image montre. Vide seulement si elle est purement décorative. */
+  alt: string;
+  /** Où mène « voir ». Absent : le bouton n'est pas rendu. */
+  href?: string;
+  width?: number;
+  height?: number;
+}
+
+interface Props {
+  /** Les images déjà déposées. Vide : la galerie ne rend rien. */
+  images: Image[];
+  /** Ce qui nomme la galerie pour les lecteurs d'écran. Une liste sans nom se traverse mal. */
+  label: string;
+  /** Le `name` du bouton supprimer. Sa `value` est l'`id` de l'image. */
+  removeName?: string;
+  /** Le mot du bouton qui ouvre l'image. Celui de Figma. */
+  viewLabel?: string;
+  /** Le mot du bouton qui la retire. Celui de Figma. */
+  removeLabel?: string;
+  class?: string;
+}
+
+const {
+  images,
+  label,
+  removeName = 'remove',
+  viewLabel = 'voir',
+  removeLabel = 'supprimer',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['gallery', className].filter(Boolean).join(' ');
+---
+
+{
+  images.length > 0 && (
+    <ul class={classes} aria-label={label} {...rest}>
+      {images.map((image) => (
+        <li class="gallery-item">
+          <img
+            class="gallery-image"
+            src={image.src}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            loading="lazy"
+          />
+          <div class="gallery-actions">
+            {image.href && (
+              <Button variant="secondary" size="md" href={image.href}>
+                {viewLabel}
+              </Button>
+            )}
+            {/* Le nom accessible dit de quelle image il s'agit : quatre boutons
+                « supprimer » à la suite ne se distinguent pas autrement au
+                lecteur d'écran (WCAG 2.4.6 — un libellé décrit sa cible). */}
+            <Button
+              variant="secondary"
+              size="md"
+              type="submit"
+              name={removeName}
+              value={image.id}
+              aria-label={`${removeLabel} — ${image.alt}`}
+            >
+              {removeLabel}
+            </Button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  /* La grille. Rembourrage et écart sont liés à `space/sm` dans le nœud. La
+     largeur minimale d'une vignette compose deux tokens de mise en page :
+     128 + 64 = 192, pour les 189 du nœud. */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(calc(var(--space-layout-128) + var(--space-layout-64)), 1fr)
+    );
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    margin: 0;
+    /* C'est une liste, mais ses puces ne disent rien que les vignettes ne disent
+       déjà. Le rôle de liste, lui, reste — il est ce qui annonce « 3 éléments ». */
+    list-style: none;
+  }
+
+  /* La vignette. 128 + 12 = 140, la hauteur exacte du nœud. Pas de bordure, et le
+     nœud n'en demande pas — voir le pavé en tête. */
+  .gallery-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md); /* 12 — la liaison space/md du nœud */
+    min-height: calc(var(--space-layout-128) + var(--space-md));
+    padding: calc(var(--space-xl) + var(--space-xs)) var(--space-xl); /* 28 / 24 */
+    border-radius: var(--radius-lg); /* 28 */
+    overflow: hidden;
+  }
+
+  /* L'image remplit la vignette et passe dessous : c'est le fond de Figma, mais
+     écrit en <img> pour qu'elle porte son alt. Une image de fond n'en a pas. */
+  .gallery-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Les boutons repassent au-dessus de l'image. Le voile noir de Figma n'est pas
+     écrit — voir le pavé en tête : les boutons secondaires ont leur propre fond
+     opaque, et c'est lui qui porte le contraste. */
+  .gallery-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+</style>

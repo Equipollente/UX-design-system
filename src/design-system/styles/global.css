@@ -102,14 +102,18 @@ pre {
   font-size: var(--font-size-caption);
 }
 
-/* Focus visible : les trois tokens button.focus-* et color.border.focus
- * existent précisément pour ça (WCAG 2.4.13 — anneau de 3px, décalé de 3px). */
+/* Focus visible. L'épaisseur est `border/width/focus` : c'est la mesure que neuf
+ * contrôles dessinent dans Figma, et le Button n'a pas d'état Focused — ses huit
+ * variantes sont Primary/Secondary × Default/Hover/Pressed/Disabled, et il ne
+ * porte aucun trait. `button/focus-ring-width` ne décrivait donc aucun dessin ;
+ * plus personne ne le lit. Le décalage, lui, reste le sien.
+ * WCAG 2.4.13 demande 2px d'épaisseur : c'est exactement ce que l'anneau fait. */
 :focus {
   outline: none;
 }
 
 :focus-visible {
-  outline: var(--button-focus-ring-width) solid var(--color-border-focus);
+  outline: var(--border-width-focus) solid var(--color-border-focus);
   outline-offset: var(--button-focus-offset);
 }
 

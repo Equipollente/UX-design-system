@@ -1,0 +1,160 @@
+---
+// Chip — une pastille qu'on retient ou qu'on relâche.
+//
+// Ce n'est pas une étiquette : une étiquette (Tag) affiche une catégorie, on ne
+// la touche pas. Un chip est un contrôle — il porte un état sélectionné, il prend
+// le focus, et il change quelque chose quand on le retient. Ce n'est pas non plus
+// un bouton : un bouton déclenche et retombe, un chip reste enfoncé.
+//
+// Nœud Figma : 351:273 — 8 variantes, Selected × State.
+//
+// C'est une case à cocher, et c'est ce qui lui permet de fonctionner sans une
+// ligne de JavaScript : cliquer le chip le retient, la barre d'espace aussi, et
+// le formulaire l'envoie. La case est déportée hors du cadre plutôt que masquée —
+// `display: none` la retirerait du parcours au clavier et de l'arbre
+// d'accessibilité, ce qui reviendrait à supprimer le contrôle pour ne garder que
+// son dessin.
+//
+// Le chip est presque entièrement tokenisé dans Figma — rembourrage `space/lg`
+// et `space/sm`, rayon `radius/pill`, les quatre fonds, toute la typographie.
+// C'est le premier de ce sprint dans ce cas.
+//
+// Le chip porte enfin son trait — `border/width/default` sur
+// `color/border/default`. C'est la ligne qui le détache du blanc de la page : son
+// fond au repos est `bg/default`, et sans trait un chip non retenu était
+// littéralement invisible.
+//
+// ⚠️ `color/border/default` ne vaut que 1,28:1 sur le blanc — sa propre
+// description le dit, et le mesure. Le chip se voit donc, mais son trait n'atteint
+// pas les 3:1 que WCAG 1.4.11 demande à la limite d'un contrôle. Aucune couleur de
+// trait du système n'y arrive : c'est un arbitrage ouvert dans Figma.
+//
+// Le trait ajoute 2 px à la pastille, là où Figma le pose vers l'intérieur : un
+// chip se dimensionne sur son mot, sans largeur posée, donc rien ne peut le
+// rentrer. Sur une pilule, ça ne se voit pas.
+//
+// Figma ne distingue pas le chip à choix multiple du chip à choix unique. Celui-ci
+// est une case : plusieurs peuvent être retenus en même temps. Un groupe à choix
+// unique demanderait des radios, et donc une variante que le nœud ne porte pas.
+
+interface Props {
+  /** Lie la case au chip. Unique dans la page. */
+  id: string;
+  /** Le mot porté par la pastille. Court : un chip ne se coupe pas en deux lignes. */
+  label: string;
+  /** Le nom envoyé par le formulaire. Le même pour tout un groupe de filtres. */
+  name?: string;
+  /** Ce que le formulaire enverra si le chip est retenu. À défaut, l'`id`. */
+  value?: string;
+  /** Retenu à l'ouverture. */
+  selected?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  value,
+  selected = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['chip', className].filter(Boolean).join(' ');
+---
+
+<label class={classes} for={id} {...rest}>
+  <input
+    class="chip-input"
+    type="checkbox"
+    id={id}
+    name={name ?? id}
+    value={value ?? id}
+    checked={selected}
+    disabled={disabled}
+  />
+  <span class="chip-text">{label}</span>
+</label>
+
+<style>
+  /* La case est déportée hors du cadre, pas masquée : elle reste au clavier et
+     dans l'arbre d'accessibilité. `inset(50%)` la réduit à rien sans qu'aucune
+     mesure soit écrite. */
+  .chip-input {
+    position: absolute;
+    clip-path: inset(50%);
+  }
+
+  /* La forme du chip. Rembourrage, rayon et typographie viennent tous du nœud,
+     où ils sont liés à des variables — rien n'est décidé ici. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: var(--space-sm) var(--space-lg); /* 8 / 16 — les liaisons du nœud */
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-family-body); /* Inter */
+    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--font-weight-regular); /* 400 */
+    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--font-letter-spacing-normal);
+    /* WCAG 2.5.5 — le chip entier est la cible, pas seulement son mot. */
+    cursor: pointer;
+    /* Un chip ne se coupe pas : il perdrait sa forme de pastille. */
+    white-space: nowrap;
+  }
+
+  /* — default — Le fond est le blanc de la page ; c'est le trait qui l'en
+     détache. Voir le pavé en tête pour ce qu'il vaut en contraste. */
+  .chip {
+    color: var(--color-text-default);
+    background: var(--chip-bg, var(--color-bg-default));
+  }
+
+  /* — hover — */
+  .chip:hover {
+    background: var(--chip-bg-hover, var(--color-neutral-100));
+  }
+
+  /* — focused — L'anneau du système, porté par le chip : la case étant hors du
+     cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
+  .chip:has(.chip-input:focus-visible) {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — selected — Le mot passe en medium : c'est la graisse qui porte l'état, pas
+     seulement la couleur. Un chip retenu se reconnaît donc aussi en niveaux de
+     gris (WCAG 1.4.1 — la couleur n'est pas le seul indice). */
+  .chip:has(.chip-input:checked) {
+    color: var(--color-text-on-accent);
+    background: var(--chip-bg-selected, var(--color-accent-500));
+    font-weight: var(--font-weight-medium); /* 500 */
+  }
+
+  .chip:has(.chip-input:checked):hover {
+    background: var(--chip-bg-selected-hover, var(--color-accent-600));
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et un chip désactivé ne doit prendre ni le survol ni l'état retenu.
+     Le chip garde son fond et s'atténue, comme le nœud le dessine : c'est
+     l'opacité qui porte l'état, l'encre ne fait que la suivre. */
+  .chip:has(.chip-input:disabled),
+  .chip:has(.chip-input:disabled):hover {
+    color: var(--color-neutral-400);
+    background: var(--chip-bg, var(--color-bg-default));
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  .chip:has(.chip-input:checked:disabled),
+  .chip:has(.chip-input:checked:disabled):hover {
+    background: var(--chip-bg-selected, var(--color-accent-500));
+  }
+</style>

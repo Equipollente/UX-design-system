@@ -35,6 +35,15 @@ le `LINKS.md` du dossier `portfolio`.
 | Case Study Card en situation | [`176-1248`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1248) | — |
 | Case Study List | [`222-814`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-814) | [CaseStudyList.astro](src/design-system/components/CaseStudyList.astro) |
 | Page HP (la pile en situation, 3 états) | [`222-1168`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-1168) | [templates/home.astro](src/pages/templates/home.astro) |
+| FieldLabel | — (spécifié en conversation) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
+| Select (jeu de variantes) | [`340-933`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-933) | [Select.astro](src/design-system/components/Select.astro) |
+| Radio (jeu de variantes) | [`340-879`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-879) | [Radio.astro](src/design-system/components/Radio.astro) |
+| Checkbox (jeu de variantes) | [`340-842`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-842) | [Checkbox.astro](src/design-system/components/Checkbox.astro) |
+| Toggle (jeu de variantes) | [`340-912`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-912) | [Toggle.astro](src/design-system/components/Toggle.astro) |
+| Text Area (jeu de variantes) | [`343-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-273) | [TextArea.astro](src/design-system/components/TextArea.astro) |
+| Chip (jeu de variantes) | [`351-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=351-273) | [Chip.astro](src/design-system/components/Chip.astro) |
+| Add Image (jeu de variantes) | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) | [AddImage.astro](src/design-system/components/AddImage.astro) |
+| Edit Image Gallery | [`355-1396`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=355-1396) | [EditImageGallery.astro](src/design-system/components/EditImageGallery.astro) |
 
 La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
 
@@ -81,7 +90,37 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
-`Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components.
+`Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components. Les sept objets
+de formulaire en sont sortis le 27/08.
+
+### Ce que le formulaire attend de Figma
+
+Le sprint des sept composants avait buté sur une seule chose, et toujours la même : le système
+n'avait aucune famille de mesures pour la géométrie d'un contrôle, ni pour l'épaisseur d'un trait,
+ni pour l'opacité. **Les trois ont été créées le 27/08**, et les six variables sont dans la
+collection — voir [suivi-formulaires.md](atelier/suivi-formulaires.md).
+
+| Ce qui manquait | Ce que ça vaut maintenant |
+| --- | --- |
+| La boîte d'un contrôle (18) | `control/size` — Radio et Checkbox font 18 |
+| La hauteur d'une piste (22) | `control/track-height` — le Toggle fait 22 |
+| Une famille d'épaisseurs | `border/width/default` = 1 et `border/width/focus` = 2. Les champs portent leur trait, et le Chip se voit sur fond blanc |
+| Une échelle d'opacité | `opacity/disabled` = 50 %. Un champ désactivé s'atténue au lieu de compter sur l'encre de son libellé |
+| Un rembourrage de champ (14 / 10) | le nœud de Text Area redessiné sur les 12 / 16 du bouton |
+| Un écart libellé ↔ champ (5) | `control/field-gap` — Text Area et Select s'espacent enfin pareil |
+
+Ce qui reste ouvert côté Figma, et qui n'est plus une affaire de token :
+
+| Ce qui reste | Ce que ça coûte |
+| --- | --- |
+| `color/border/default` ne vaut que **1,28:1** sur le blanc | Le trait du Chip se voit, mais n'atteint pas les 3:1 que WCAG 1.4.11 demande. C'est une couleur à foncer, pas une épaisseur |
+| Le Select ne porte aucun trait au repos | Text Area en a un de 1 : deux champs voisins dessinés différemment |
+| Le Button n'a **aucun état Focused** | `button/focus-ring-width` ne décrit donc aucun dessin. Plus personne ne le lit : c'est un reliquat à supprimer |
+
+Tout le reste tombait déjà juste, souvent par composition de deux tokens : la piste du Toggle
+(`space-xl + space-lg` = 40), le point du Radio (18 − 1 − 1 − 4 − 4 = 8), le rembourrage d'AddImage
+(`space-xl + space-xs` = 28), son icône (`space/2xl` = 32), la hauteur d'une vignette
+(`space-layout-128 + space-md` = 140), et la hauteur du Select (`space/2xl + space/xs` = 36).
 
 ### Variables
 
@@ -91,7 +130,7 @@ groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double 
 aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
 fichiers se renvoient l'un à l'autre en commentaire.
 
-Les 122 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Les 128 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 
@@ -109,6 +148,7 @@ ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 | Fondations | `/foundations` |
 | Icônes | `/icons` |
 | Composants | `/components` |
+| Formulaire | `/formulaire` |
 
 ## Construire un lien Figma à la main
 

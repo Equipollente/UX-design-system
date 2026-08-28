@@ -1,0 +1,71 @@
+---
+// FieldLabel — le libellé d'un champ de formulaire, et lui seul. Text, Select,
+// Checkbox, Radio : tous l'appellent, aucun ne redessine son propre <label>.
+//
+// C'est le point de la chose. Un token partage une valeur ; il ne partage pas
+// une structure. Si chaque champ écrivait son <label>, ils auraient la même
+// graisse — mais déplacer l'astérisque, ou ajouter un texte d'aide, demanderait
+// de rouvrir chaque composant, et rien n'empêcherait l'un d'oublier une ligne.
+// Ici il n'y a qu'un fichier : ce qui change ici a déjà changé partout.
+//
+// Deux états, et une seule chose qui les sépare : l'encre. Taille, police,
+// graisse, interligne et interlettrage sont les mêmes — un libellé désactivé
+// reste un libellé, il ne rapetisse pas et ne s'allège pas.
+//
+// L'astérisque n'est pas le signal d'obligation, il en est la trace visible.
+// Le signal est porté par le champ lui-même — l'attribut `required`, que les
+// lecteurs d'écran annoncent. L'astérisque est donc `aria-hidden` : sans quoi
+// il serait lu deux fois, une fois en « étoile », une fois en « obligatoire ».
+// Et parce qu'il ne porte plus seul l'information, son rouge peut rester celui
+// du système : color/feedback/danger ne tient pas 4,5:1 en texte de corps, et
+// n'a pas à le tenir pour un signe redondant. Le formulaire qui s'en sert doit
+// en revanche ouvrir sur la phrase « Les champs marqués * sont obligatoires ».
+
+interface Props {
+  /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. */
+  for: string;
+  /** Pose l'astérisque. Le champ doit porter `required` de son côté. */
+  required?: boolean;
+  /** L'encre passe en muted. Le champ doit porter `disabled` de son côté. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const { for: htmlFor, required = false, disabled = false, class: className } = Astro.props;
+const classes = ['field-label', disabled && 'field-label-disabled', className]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<label class={classes} for={htmlFor}>
+  <slot />{required && <span class="field-label-mark" aria-hidden="true">*</span>}
+</label>
+
+<style>
+  /* Les déclarations qui font le libellé. Elles lisent les primitives du système
+     en attendant les variables field/label/* — quand elles existeront dans
+     Figma, ce sont ces lignes qui changeront, et elles seules. */
+  .field-label {
+    display: inline-block;
+    color: var(--color-text-default); /* #2F2D2E */
+    font-family: var(--font-family-body); /* Inter */
+    font-size: var(--font-size-body); /* 0.9375rem */
+    font-weight: var(--font-weight-medium); /* 500 */
+    line-height: var(--font-line-height-tight); /* 1.12 */
+    letter-spacing: var(--font-letter-spacing-normal); /* 0em */
+  }
+
+  /* Désactivé : l'encre, et rien d'autre. */
+  .field-label-disabled {
+    color: var(--color-text-muted); /* #6A676D */
+  }
+
+  /* L'astérisque hérite de tout le reste — taille, graisse, interligne — et ne
+     redéclare que sa couleur. C'est ce qui le tient collé au mot : une seconde
+     déclaration de police l'en détacherait au premier changement de libellé. */
+  .field-label-mark {
+    /* L'écart au mot n'est pas encore écrit : aucune variable ne vaut cette
+       fraction de cadratin. En attendant, l’astérisque est collé au libellé. */
+    color: var(--color-feedback-danger); /* #D94A4A */
+  }
+</style>

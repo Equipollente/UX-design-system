@@ -1,0 +1,165 @@
+---
+// Select — un champ qui fait choisir une valeur dans une liste fermée.
+//
+// Ce n'est pas un menu : un menu déclenche des actions, un select renseigne une
+// valeur qu'un formulaire enverra. Et ce n'est pas un champ texte à suggestions :
+// la liste est close, on ne peut rien y écrire qui n'y soit pas.
+//
+// Le libellé n'est pas dessiné ici : il vient de FieldLabel, comme dans tous les
+// autres champs. C'est ce qui garantit qu'ils sont identiques.
+//
+// Le <select> est natif. Un menu réécrit en div coûterait le clavier, la
+// recherche à la frappe, et la roulette du téléphone — pour un chevron dessiné
+// autrement. Le chevron du système est donc posé par-dessus, et le natif est
+// masqué par appearance: none.
+//
+// Nœud Figma : 340:933 — 4 états. Ce composant a longtemps été écrit sans lui :
+// on le croyait « spécifié en conversation », et personne ne l'avait cherché. Le
+// relire a corrigé trois mesures — la boîte fait 36 et non les 44 du bouton, le
+// chevron 20 et non 24, l'écart au libellé 5 et non 8.
+//
+// Mesures :
+// — hauteur 36 → `space/2xl + space/xs`, exact ;
+// — rembourrage 12 / 16 → `button/padding-*/sm`, exact, tel que le nœud le lie ;
+// — chevron 20 → `button/icon-size/sm` ;
+// — écart au libellé → `control/field-gap` = 5 ;
+// — anneau de focus 2 → `border/width/focus`.
+//
+// ⚠️ Ce champ ne porte aucun trait au repos, et c'est le nœud qui le dit : sa
+// boîte n'a pas de contour, là où Text Area en a un de 1. Deux champs voisins
+// dessinés différemment — l'écart est ouvert dans arbitrages.md. Le fond
+// `bg/surface` détache tout de même la boîte du blanc de la page.
+//
+// La liste ouverte n'est pas ici non plus : elle est dessinée par le système
+// d'exploitation, hors d'atteinte du CSS.
+
+import FieldLabel from './FieldLabel.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Les choix. Une chaîne vaut pour sa propre valeur. */
+  options: (string | { value: string; label: string })[];
+  /** La première ligne, non sélectionnable. Absente : la liste ouvre sur son premier choix. */
+  placeholder?: string;
+  value?: string;
+  name?: string;
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  options,
+  placeholder,
+  value,
+  name,
+  required = false,
+  disabled = false,
+  class: className,
+} = Astro.props;
+
+const items = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o));
+const classes = ['field', className].filter(Boolean).join(' ');
+---
+
+<div class={classes}>
+  <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
+
+  <div class="field-control">
+    <select id={id} name={name ?? id} required={required} disabled={disabled}>
+      {placeholder && <option value="" disabled selected={!value}>{placeholder}</option>}
+      {
+        items.map((o) => (
+          <option value={o.value} selected={value === o.value}>
+            {o.label}
+          </option>
+        ))
+      }
+    </select>
+    <Icon name="chevron-down" class="field-chevron" />
+  </div>
+</div>
+
+<style>
+  /* 5 — la mesure du nœud, la même que Text Area. */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--control-field-gap);
+  }
+
+  .field-control {
+    position: relative;
+    display: flex;
+  }
+
+  /* La géométrie de la boîte, et rien d'autre. L'encre viendra avec les
+     variables du champ ; les fonds, eux, sont déjà décidés plus bas. */
+  select {
+    display: flex;
+    border-radius: var(--radius-md);
+    align-items: center;
+    align-self: stretch;
+    /* 32 + 4 = 36, la hauteur exacte du nœud. */
+    height: calc(var(--space-2xl) + var(--space-xs));
+    width: 100%;
+    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
+    /* La place du chevron s'ajoute au padding droit : sans elle, une option longue
+       passerait dessous. */
+    padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+    /* Le chevron natif s'efface : c'est celui du système qui est posé dessus. */
+    appearance: none;
+  }
+
+  /* — default — Les quatre états ne portent que leur fond : le nœud ne dessine
+     aucun contour sur ce champ-là. `border: none` est un mot-clé, pas une
+     valeur — il efface le contour gris que le navigateur pose de lui-même sur un
+     contrôle natif, et qui serait le seul trait à ne venir d'aucune variable. */
+  select {
+    border: none;
+    background: var(--color-bg-surface);
+  }
+
+  /* — hover — */
+  select:hover {
+    background: var(--color-neutral-100);
+  }
+
+  /* — focus — L'anneau du système, en `outline` : il se pose par-dessus sans
+     rien déplacer autour de lui. 2, la mesure du nœud. WCAG 2.4.7. */
+  select:focus {
+    background: var(--color-bg-surface);
+  }
+
+  select:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale, c'est l'ordre qui
+     tranche, et un champ désactivé ne doit pas prendre le survol. La boîte garde
+     son fond et s'atténue, comme le nœud le dessine. */
+  select:disabled {
+    background: var(--color-bg-surface);
+    opacity: var(--opacity-disabled);
+  }
+
+  /* Pas de couleur ici non plus : l'icône est en currentColor, elle prend donc
+     l'encre du champ quand celle-ci sera décidée. */
+  .field-chevron {
+    position: absolute;
+    right: var(--button-padding-x-sm);
+    top: 50%;
+    translate: 0 -50%;
+    width: var(--button-icon-size-sm); /* 20 — la mesure du nœud */
+    height: var(--button-icon-size-sm);
+    /* Le chevron est décoratif : le clic doit traverser jusqu'au select. */
+    pointer-events: none;
+  }
+</style>

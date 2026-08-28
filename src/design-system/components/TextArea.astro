@@ -1,0 +1,209 @@
+---
+// TextArea — un champ pour du texte qui court sur plusieurs lignes.
+//
+// Ce n'est pas un champ texte : un champ texte tient sur une ligne et se remplit
+// d'un nom, d'un courriel, d'un nombre — quelque chose dont on connaît la forme.
+// Une zone de texte attend une phrase dont on ne connaît que la longueur
+// maximale, et c'est pourquoi elle est la seule à compter ses caractères. Ce
+// n'est pas non plus un éditeur : rien ici ne met en gras, n'insère de lien ni
+// ne garde de mise en forme.
+//
+// Nœud Figma : 343:273 — 4 variantes d'état, plus `Show Count`.
+//
+// Le <textarea> est natif, et celui-là se laisse habiller entièrement — c'est ce
+// qui le sépare de Radio, Checkbox et Toggle, dont le dessin appartient au
+// navigateur. Il porte donc `border: none` : un contrôle natif arrive avec un
+// contour gris que rien dans le système ne réclame, et le mot-clé l'efface sans
+// écrire de valeur.
+//
+// La hauteur passe par `rows`, et c'est délibéré. `rows` compte des lignes, pas
+// des pixels : la boîte se mesure alors sur sa propre typographie, et grandit
+// avec elle. Les 120 px du nœud n'ont de toute façon pas de variable.
+//
+// Toutes les mesures viennent du nœud, et aucune n'est approchée :
+// — rembourrage 12 / 16 → `button/padding-y/sm` et `button/padding-x/sm`. Le
+//   nœud disait 10 / 14 ; il a été redessiné sur ceux du bouton, pour que les
+//   deux champs se rembourrent pareil côte à côte ;
+// — écart entre libellé, boîte et compteur → `control/field-gap` = 5, la mesure
+//   que Text Area et Select portent tous deux ;
+// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus` ;
+// — rayon → `radius/md`, lié dans le nœud ;
+// — hauteur 120 → `rows`, en lignes plutôt qu'en pixels : voir plus haut.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — la casse `TITLE` du libellé : elle capitaliserait chaque mot du texte que
+//   l'appelant donne, ce qui est faux dès qu'un libellé porte un nom propre ou
+//   une abréviation ;
+// — l'encre `muted` que le libellé prend au survol et au focus : FieldLabel n'a
+//   que deux états, et un libellé qui pâlit quand on entre dans son champ est
+//   un arbitrage de dessin, pas une mécanique — il se tranche dans Figma.
+
+import FieldLabel from './FieldLabel.astro';
+
+interface Props {
+  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Le contenu déjà saisi. */
+  value?: string;
+  /** L'invite dans la boîte vide. Une consigne, pas un exemple à recopier. */
+  placeholder?: string;
+  /** Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes. */
+  rows?: number;
+  /** La limite de caractères. C'est elle qui allume le compteur. */
+  maxlength?: number;
+  /** Montre le compteur. Sans `maxlength`, il n'y a rien à compter. */
+  showCount?: boolean;
+  name?: string;
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  value,
+  placeholder,
+  rows,
+  maxlength,
+  showCount = false,
+  name,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Le compteur n'a de sens qu'avec une limite : « 12 caractères » ne dit rien,
+// « 12 / 500 » dit combien il en reste.
+const count = showCount && maxlength ? { current: (value ?? '').length, max: maxlength } : null;
+const countId = `${id}-count`;
+
+const classes = ['field', className].filter(Boolean).join(' ');
+---
+
+<div class={classes} {...rest}>
+  <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
+
+  <textarea
+    id={id}
+    name={name ?? id}
+    rows={rows}
+    maxlength={maxlength}
+    placeholder={placeholder}
+    required={required}
+    disabled={disabled}
+    data-count-for={count ? countId : undefined}>{value}</textarea
+  >
+
+  {
+    count && (
+      /* Le compteur n'est pas une région vivante. Annoncer un nouveau total à
+         chaque frappe couvrirait la dictée du texte lui-même ; c'est `maxlength`
+         que les lecteurs d'écran annoncent, une fois, à l'entrée dans le champ.
+         Le compteur visible est un confort pour qui voit la boîte se remplir. */
+      <p class="field-count" id={countId}>
+        {count.current} / {count.max}
+      </p>
+    )
+  }
+</div>
+
+{
+  count && (
+    /* Le seul script du dépôt, et il se justifie par un échec mesurable : sans
+       lui le compteur affiche « 0 / 500 » alors que la boîte en contient 40 —
+       il n'est pas dégradé, il est faux. Ce qu'il enrichit est facultatif : la
+       limite est tenue par `maxlength`, côté navigateur, et le champ fonctionne
+       entièrement sans lui. */
+    <script is:inline define:vars={{ countId }}>
+      {
+        const output = document.getElementById(countId);
+        const field = document.querySelector(`[data-count-for="${countId}"]`);
+        if (output && field) {
+          const max = field.getAttribute('maxlength');
+          field.addEventListener('input', () => {
+            output.textContent = `${field.value.length} / ${max}`;
+          });
+        }
+      }
+    </script>
+  )
+}
+
+<style>
+  /* 5 — la mesure du nœud, et celle que Select emploie pour le même rapport. */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--control-field-gap);
+  }
+
+  /* La boîte. Tout vient du système ; `rows` tient la hauteur, en lignes. */
+  textarea {
+    width: 100%;
+    /* 12 / 16, les mêmes que Select — et maintenant les mêmes que le nœud. */
+    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
+    border-radius: var(--radius-md);
+    /* La boîte ne s'élargit pas au-delà de sa colonne : un glissement horizontal
+       casserait la mise en page de tout ce qui l'entoure. Mot-clé, pas mesure. */
+    resize: vertical;
+    font-family: var(--font-family-body); /* Inter */
+    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--font-weight-medium); /* 500 */
+    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--font-letter-spacing-normal);
+    color: var(--color-text-default);
+  }
+
+  /* — default — Le trait du nœud, enfin écrit. Il remplace le contour gris que
+     le navigateur pose de lui-même sur un contrôle natif : celui-là ne venait
+     d'aucune variable. */
+  textarea {
+    border: var(--border-width-default) solid var(--color-border-default);
+    background: var(--textarea-bg, var(--color-bg-surface));
+  }
+
+  /* — hover — */
+  textarea:hover {
+    background: var(--textarea-bg-hover, var(--color-neutral-100));
+  }
+
+  /* — focus — L'anneau du système, en `outline` : il se pose par-dessus sans
+     rien déplacer autour de lui. Le nœud, lui, épaissit sa bordure vers
+     l'intérieur ; l'anneau dit la même chose, à la même épaisseur, et sans
+     décaler le texte de la boîte. 2, la mesure du nœud. WCAG 2.4.7. */
+  textarea:focus {
+    background: var(--textarea-bg, var(--color-bg-surface));
+  }
+
+  textarea:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et un champ désactivé ne doit pas prendre le survol. La boîte garde
+     son fond et son trait, et s'atténue : c'est elle qui dit « éteint », plus
+     seulement l'encre de son libellé. */
+  textarea:disabled {
+    background: var(--textarea-bg, var(--color-bg-surface));
+    color: var(--color-neutral-400);
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  /* Le compteur. Il se range à droite, sous la boîte : c'est là que le regard
+     revient quand la ligne se termine. */
+  .field-count {
+    margin: 0;
+    text-align: right;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-label); /* 0.6875rem — les 11 du nœud */
+    font-weight: var(--font-weight-regular); /* 400 */
+    line-height: var(--font-line-height-snug); /* 1.2 */
+    color: var(--color-text-muted);
+  }
+</style>

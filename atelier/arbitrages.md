@@ -38,6 +38,23 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Cards | `334:1129` | le composant n'a aucune description : la doctrine n'engage que le code | /components → Card | ouvert |
 | Cards | `334:1129` | le fond blanc n'est lié à aucune variable | /components → Card | ouvert |
 | Cards | `334:1130` | l'image de l'horizontale est en hauteur fixe ; le code l'étire — la passer en *fill* | /components → Card | ouvert |
+| **Système** | — | **aucune famille de mesures pour la géométrie d'un contrôle** — 18, 22, 5 | /formulaire | *réglé — 27/08, groupe `control`* |
+| **Système** | — | **aucune famille d'épaisseurs de trait** (1 · 1,5 · 2) | /formulaire | *réglé — 27/08, groupe `border`* |
+| **Système** | — | **aucune échelle d'opacité** (0,4 · 0,5 · 0,6) | /formulaire | *réglé — 27/08, groupe `opacity`* |
+| **Chip** | `351:273` | **son trait ne vaut que 1,28:1 sur le blanc** — WCAG 1.4.11 en demande 3 ; c'est une couleur à foncer, pas une épaisseur | /formulaire → Chip | ouvert |
+| Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
+| Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
+| Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
+| Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
+| Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
+| Select | `340:933` | boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile | /formulaire → Select | ouvert |
+| Select | `340:933` | chevron de 20, quand le code prend les 24 de `button/icon-size/md` | /formulaire → Select | ouvert |
+| Text Area · Select | `343:273` · `340:933` | l'écart libellé ↔ champ | /formulaire → Text Area | *réglé — 27/08, `control/field-gap` = 5* |
+| Text Area | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Text Area | ouvert |
+| Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |
+| Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
+| Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
+| Edit Image Gallery | `355:1396` | vignette de 189 × 140 : 140 se compose, 189 non — mais c'est un minimum que la grille étire, donc pas une mesure | /formulaire → Edit Image Gallery | *assumé* |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |
 | Section Header | `88:74` | l'eyebrow en Inter semibold contredit le `h6` du système | /components → Case Study Card | ouvert |
@@ -50,6 +67,12 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Case Study List | `222:814` | l'état empilé n'est pas dessiné en mobile, alors que la carte y tiendrait | /components → Case Study List | ouvert |
 | Page Icons | `45:395` | le nommage mélange quatre conventions pour onze objets | /icons → Icon | ouvert |
 | Icônes | `45:395` | `file-text`, `box-plus`, `mail-edit` s'exportent en aplat | /icons → Icon | ouvert |
+
+## Le reliquat à retirer
+
+| Ce qui reste | Pourquoi il reste | État |
+|---|---|---|
+| `button/focus-ring-width` = 3 | Plus personne ne le lit : `global.css` et les neuf composants sont passés à `border/width/focus`. Il n'a pas été touché — le brief l'interdisait — mais il ne décrit plus rien, et le Button n'a pas d'état Focused pour le justifier. À supprimer dans Figma, seul, quand tu voudras. | ouvert |
 
 ## Tokens qui manquent dans la collection
 

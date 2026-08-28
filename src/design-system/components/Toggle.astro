@@ -1,0 +1,166 @@
+---
+// Toggle — un interrupteur : deux positions, et l'effet suit la bascule.
+//
+// Ce n'est pas une case à cocher. Une case enregistre une intention que l'envoi
+// du formulaire ira chercher ; un interrupteur agit tout de suite, et c'est
+// pourquoi il ne s'accompagne jamais d'un bouton « Valider ». Ce n'est pas non
+// plus un bouton : un bouton fait une chose et retombe, un interrupteur tient un
+// état qu'on peut relire sur lui.
+//
+// Nœud Figma : 340:912 — 8 variantes, Value × State.
+//
+// Le contrôle est natif mais son dessin vient du système : `appearance: none`
+// efface celui du navigateur, et tout ce qui le remplace est une variable. La
+// pastille est un second élément posé sur la piste et rendu insensible au clic —
+// même pile que le chevron de Select et que la coche de Checkbox.
+//
+// `role="switch"` fait annoncer « activé / désactivé » plutôt que « coché /
+// décoché », ce qui est la bonne phrase pour un objet qui agit à l'instant où on
+// le bascule.
+//
+// Toutes les mesures viennent du nœud, et aucune n'est approchée. Deux seulement
+// sont nommées ; les autres se déduisent, et c'est ce qui les tient justes :
+// — piste 40 de large → `space-xl + space-lg`, exact ;
+// — piste 22 de haut → `control/track-height` ;
+// — pastille 16 → `space/lg` ;
+// — retrait dans la piste → (22 − 16) / 2 = 3, calculé et non écrit ;
+// — course → 40 − 16 − 3 − 3 = 18, calculée elle aussi ;
+// — écart au libellé 8 → `space/sm`, comme Radio et Checkbox ;
+// — anneau de focus 2 → `border/width/focus`.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — le trait de 2 du focus sur la piste : remplacé par l'anneau du système, posé
+//   en `outline` — il ne déplace donc rien autour de lui ;
+// — la typographie du libellé (14 px, interligne 120 %) et son encre désactivée
+//   (neutral/400), qui ne sont pas celles de FieldLabel. Le libellé partagé
+//   l'emporte — c'est sa raison d'être.
+
+import FieldLabel from './FieldLabel.astro';
+
+interface Props {
+  /** Lie le libellé au contrôle. Unique dans la page. */
+  id: string;
+  /** Ce que l'interrupteur allume. Un état, pas une action : « Notifications », pas « Notifier ». */
+  label: string;
+  /** Le nom envoyé si l'interrupteur est dans un formulaire. À défaut, l'`id`. */
+  name?: string;
+  /** Allumé à l'ouverture. */
+  checked?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  checked = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['toggle', disabled && 'toggle-disabled', className].filter(Boolean).join(' ');
+---
+
+<div class={classes} {...rest}>
+  <span class="toggle-control">
+    <input
+      class="toggle-input"
+      type="checkbox"
+      role="switch"
+      id={id}
+      name={name ?? id}
+      checked={checked}
+      disabled={disabled}
+    />
+    {/* La pastille double l'état que la piste porte déjà : elle est décorative,
+        et le clic doit traverser jusqu'à l'input. */}
+    <span class="toggle-thumb" aria-hidden="true"></span>
+  </span>
+  <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+</div>
+
+<style>
+  /* 8, comme Radio et Checkbox : les trois contrôles compacts s'espacent pareil. */
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .toggle-control {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+  }
+
+  /* La piste. 24 + 16 = 40, la largeur exacte du nœud ; sa hauteur est nommée. */
+  .toggle-input {
+    appearance: none;
+    margin: 0;
+    width: calc(var(--space-xl) + var(--space-lg));
+    height: var(--control-track-height);
+    border-radius: var(--radius-pill);
+    border: none;
+    /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
+    cursor: pointer;
+    transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* — off — */
+  .toggle-input {
+    background: var(--toggle-bg, var(--color-neutral-300));
+  }
+
+  /* — focused — L'anneau du système, en `outline` : il se pose par-dessus sans
+     rien déplacer autour de lui. WCAG 2.4.7. */
+  .toggle-input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — on — */
+  .toggle-input:checked {
+    background: var(--toggle-accent, var(--color-accent-500));
+  }
+
+  .toggle:not(.toggle-disabled):hover .toggle-input:checked {
+    background: var(--toggle-accent-hover, var(--color-accent-600));
+  }
+
+  /* La pastille. 16 de côté, posée à (22 − 16) / 2 = 3 du bord, et parcourant
+     40 − 16 − 3 − 3 = 18 quand l'interrupteur s'allume. Ces deux mesures ne sont
+     pas écrites : elles se calculent depuis la piste et la pastille, et suivront
+     donc toutes seules si l'une des deux bouge dans Figma. */
+  .toggle-thumb {
+    position: absolute;
+    top: calc((var(--control-track-height) - var(--space-lg)) / 2);
+    left: calc((var(--control-track-height) - var(--space-lg)) / 2);
+    width: var(--space-lg);
+    height: var(--space-lg);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-default);
+    pointer-events: none;
+    transition: translate var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  .toggle-input:checked + .toggle-thumb {
+    /* 24 − 22 + 16 = 18. C'est largeur − pastille − 2 × retrait, développé. */
+    translate: calc(var(--space-xl) - var(--control-track-height) + var(--space-lg)) 0;
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et un interrupteur désactivé ne doit pas prendre le survol. La
+     piste garde sa couleur et s'atténue, exactement comme le nœud : éteinte elle
+     reste `neutral/300`, allumée elle reste accent — on lit donc encore sa
+     position, ce qu'un gris uniforme effaçait. */
+  .toggle-disabled .toggle-input,
+  .toggle-disabled :global(.field-label) {
+    cursor: not-allowed;
+  }
+
+  .toggle-disabled .toggle-control {
+    opacity: var(--opacity-disabled);
+  }
+</style>

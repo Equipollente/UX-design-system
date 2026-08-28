@@ -1,0 +1,177 @@
+---
+// AddImage — la zone par laquelle une image entre dans un formulaire.
+//
+// Ce n'est pas un bouton : un bouton déclenche une action, celle-ci ouvre le
+// sélecteur de fichiers du système et rend un fichier au formulaire. Ce n'est pas
+// non plus une galerie — elle ne montre pas ce qui a été déposé, elle ne fait que
+// l'accepter. C'est EditImageGallery qui montre et qui retire.
+//
+// Nœud Figma : 343:315 — 4 variantes d'état.
+//
+// C'est un <input type="file"> et son <label>, et c'est ce qui lui permet de
+// fonctionner sans une ligne de JavaScript : cliquer la zone ouvre le sélecteur,
+// Entrée et la barre d'espace aussi. Le champ est déporté hors du cadre plutôt
+// que masqué — `display: none` le retirerait du parcours au clavier et de l'arbre
+// d'accessibilité, ce qui reviendrait à supprimer le contrôle pour n'en garder
+// que le dessin.
+//
+// L'indication (« PNG, JPG up to 10 MB ») est liée au champ par
+// `aria-describedby` : elle est lue après le libellé, à l'entrée dans le contrôle,
+// et non comme un texte flottant que rien ne rattache.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — la taille de la zone (240 × 140) : aucune variable de mesure ne la porte. La
+//   zone se dimensionne donc sur son contenu, et c'est l'appelant qui lui donne
+//   sa largeur — ce qui est de toute façon ce qu'il faut pour une mise en page
+//   qui s'adapte ;
+// — le rembourrage vertical de 28 → `space-xl + space-xs` = 28, **exact** ;
+//   l'horizontal est `space/xl`, lié dans le nœud ;
+// — l'icône de 32 → `space/2xl` = 32, **exact** ;
+// — le trait → `border/width/default`. Le nœud le dessinait à 1,5, une épaisseur
+//   qu'il ne portait qu'ici et sur Add Folder ; il est redessiné à 1, celle du
+//   reste du système ;
+// — l'anneau de focus 2 → `border/width/focus` ;
+// — la couleur de l'icône : le nœud la lie à une variable d'une **autre
+//   bibliothèque**, étrangère à ce système. Ici l'icône est en `currentColor` et
+//   prend donc l'encre du libellé, ce qui est la règle du dépôt ;
+// — le glisser-déposer : il demanderait un script, et son absence n'est pas un
+//   échec — le clic et le clavier ouvrent tous deux le sélecteur.
+
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Lie le libellé au champ. Unique dans la page. */
+  id: string;
+  /** Ce que la zone propose de faire. Un verbe : « Add image ». */
+  label: string;
+  /** Ce qu'elle accepte, en toutes lettres. Lu après le libellé, pas laissé flottant. */
+  hint?: string;
+  /** Les types acceptés, au format de l'attribut natif : « image/png,image/jpeg ». */
+  accept?: string;
+  /** Autorise plusieurs fichiers en une fois. */
+  multiple?: boolean;
+  name?: string;
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  hint,
+  accept,
+  multiple = false,
+  name,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const hintId = hint ? `${id}-hint` : undefined;
+const classes = ['add-image', className].filter(Boolean).join(' ');
+---
+
+<label class={classes} for={id} {...rest}>
+  <input
+    class="add-image-input"
+    type="file"
+    id={id}
+    name={name ?? id}
+    accept={accept}
+    multiple={multiple}
+    required={required}
+    disabled={disabled}
+    aria-describedby={hintId}
+  />
+  {/* L'icône double un mot écrit juste en dessous : elle est décorative, donc
+      sans `label` — sans quoi les lecteurs d'écran diraient la chose deux fois. */}
+  <Icon name="image-plus" class="add-image-icon" />
+  <span class="add-image-label">{label}</span>
+  {hint && <span class="add-image-hint" id={hintId}>{hint}</span>}
+</label>
+
+<style>
+  /* Le champ est déporté hors du cadre, pas masqué : il reste au clavier et dans
+     l'arbre d'accessibilité. `inset(50%)` le réduit à rien sans qu'aucune mesure
+     soit écrite. */
+  .add-image-input {
+    position: absolute;
+    clip-path: inset(50%);
+  }
+
+  /* La zone. Son rayon, son rembourrage horizontal et l'écart de ses trois lignes
+     viennent du nœud, où ils sont liés. Sa taille, non : elle se dimensionne sur
+     son contenu et prend la largeur que l'appelant lui donne. */
+  .add-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    /* 24 en x, lié dans le nœud ; 24 + 4 = 28 en y, la mesure exacte du nœud. */
+    padding: calc(var(--space-xl) + var(--space-xs)) var(--space-xl);
+    /* L'icône descend par héritage jusqu'au <svg> : 32, la mesure du nœud. */
+    --icon-size: var(--space-2xl);
+    border-radius: var(--radius-lg); /* 28 */
+    text-align: center;
+    /* WCAG 2.5.5 — la zone entière est la cible, pas seulement son mot. */
+    cursor: pointer;
+  }
+
+  /* — default — Le trait du nœud, et le fond qui détache la zone du blanc. */
+  .add-image {
+    border: var(--border-width-default) solid var(--color-border-default);
+    background: var(--add-image-bg, var(--color-bg-surface));
+  }
+
+  .add-image-label {
+    font-family: var(--font-family-body); /* Inter */
+    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--font-weight-medium); /* 500 */
+    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--font-letter-spacing-normal);
+    color: var(--color-text-default);
+  }
+
+  /* L'indication a la même graisse et le même corps que le libellé dans le nœud :
+     c'est l'encre seule qui la met au second plan. */
+  .add-image-hint {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-ui);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-normal);
+    color: var(--color-text-muted);
+  }
+
+  /* — hover — Le fond passe en accent/100 et le libellé en accent/600. L'icône
+     n'a rien à déclarer : en currentColor, elle suit le libellé. */
+  .add-image:hover {
+    background: var(--add-image-bg-hover, var(--color-accent-100));
+  }
+
+  .add-image:hover .add-image-label {
+    color: var(--color-accent-600);
+  }
+
+  /* — focused — L'anneau du système, porté par la zone : le champ étant hors du
+     cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
+  .add-image:has(.add-image-input:focus-visible) {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et une zone désactivée ne doit pas prendre le survol. La zone entière
+     s'atténue, exactement comme le nœud le dessine : le libellé y garde son encre
+     par-dessous, et n'a donc plus à virer au gris pour dire « éteint ». */
+  .add-image:has(.add-image-input:disabled),
+  .add-image:has(.add-image-input:disabled):hover {
+    background: var(--add-image-bg, var(--color-bg-surface));
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+</style>

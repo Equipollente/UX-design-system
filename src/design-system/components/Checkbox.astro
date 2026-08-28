@@ -1,0 +1,179 @@
+---
+// Checkbox — une case qui se coche et se décoche toute seule.
+//
+// Ce n'est pas un radio : un radio ne se relâche qu'en en choisissant un autre,
+// et n'a de sens qu'en groupe. Une case, elle, vit très bien seule — « j'accepte
+// les conditions » en est une, et c'est le cas où `required` a un sens. Ce n'est
+// pas non plus un interrupteur : un Toggle applique son effet à l'instant où on
+// le bascule, une case attend l'envoi du formulaire.
+//
+// Nœud Figma : 340:842 — 8 variantes, Checked × State.
+//
+// Le contrôle est natif mais son dessin vient du système : `appearance: none`
+// efface celui du navigateur, et tout ce qui le remplace est une variable. La
+// coche n'est pas dessinée en CSS — c'est l'icône `check` du registre, posée
+// par-dessus la case et rendue insensible au clic, exactement comme Select pose
+// son chevron sur le <select>. Le dessin du système sert donc à deux endroits au
+// lieu d'être refait ici.
+//
+// Toutes les mesures viennent du nœud, et aucune n'est approchée :
+// — boîte 18 → `control/size` ;
+// — rayon → `radius/sm`, lié dans le nœud ;
+// — écart au libellé 8 → `space/sm`, lié dans le nœud ;
+// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus`.
+//
+// Le trait est posé dans les deux états, et c'est sa couleur qui change : le nœud
+// ne le dessine que sur la case vide, mais un trait accent sur un fond accent se
+// voit pareil, et la boîte garde alors la même taille cochée ou non.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — l'épaisseur de 2 du tracé de la coche : celle de l'icône du registre s'y
+//   substitue, puisque c'est le même dessin qui sert partout ailleurs ;
+// — la typographie du libellé (14 px, interligne 120 %) et son encre désactivée
+//   (neutral/400), qui ne sont pas celles de FieldLabel. Le libellé partagé
+//   l'emporte — c'est sa raison d'être.
+
+import FieldLabel from './FieldLabel.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Lie le libellé au contrôle. Unique dans la page. */
+  id: string;
+  /** Ce que la case affirme quand elle est cochée. Une phrase, pas une question. */
+  label: string;
+  /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
+  name?: string;
+  /** Ce que le formulaire enverra si la case est cochée. À défaut, `on`. */
+  value?: string;
+  /** Cochée à l'ouverture. */
+  checked?: boolean;
+  /** Pose l'astérisque et l'attribut. A du sens ici : une case peut être seule. */
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  value,
+  checked = false,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['checkbox', disabled && 'checkbox-disabled', className]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<div class={classes} {...rest}>
+  <span class="checkbox-control">
+    <input
+      class="checkbox-input"
+      type="checkbox"
+      id={id}
+      name={name ?? id}
+      value={value}
+      checked={checked}
+      required={required}
+      disabled={disabled}
+    />
+    {/* La coche double l'état que la case porte déjà : elle est décorative, donc
+        sans `label` — sans quoi elle serait annoncée en plus de « coché ». */}
+    <Icon name="check" class="checkbox-check" />
+  </span>
+  <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
+</div>
+
+<style>
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+  }
+
+  /* La case et sa coche se superposent : même pile que le chevron de Select. */
+  .checkbox-control {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+  }
+
+  /* La boîte. `appearance: none` efface le dessin du navigateur ; tout ce qui
+     suit vient du système. 18, la mesure du nœud. */
+  .checkbox-input {
+    appearance: none;
+    margin: 0;
+    width: var(--checkbox-size, var(--control-size));
+    height: var(--checkbox-size, var(--control-size));
+    border-radius: var(--radius-sm); /* 6 — la liaison radius/sm du nœud */
+    border: var(--border-width-default) solid var(--color-border-default);
+    /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
+    cursor: pointer;
+    transition:
+      background-color var(--motion-duration-quick) var(--motion-easing-standard),
+      border-color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* — default — */
+  .checkbox-input {
+    background: var(--checkbox-bg, var(--color-bg-surface));
+  }
+
+  /* — hover — */
+  .checkbox:not(.checkbox-disabled):hover .checkbox-input {
+    background: var(--checkbox-bg-hover, var(--color-neutral-100));
+  }
+
+  /* — focused — L'anneau du système remplace celui du navigateur. 2, la mesure
+     du nœud, et WCAG 2.4.7 est tenu. */
+  .checkbox-input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — checked — Le trait suit le fond : la case cochée est d'un seul tenant. */
+  .checkbox-input:checked {
+    background: var(--checkbox-accent, var(--color-accent-500));
+    border-color: var(--checkbox-accent, var(--color-accent-500));
+  }
+
+  .checkbox:not(.checkbox-disabled):hover .checkbox-input:checked {
+    background: var(--checkbox-accent-hover, var(--color-accent-600));
+    border-color: var(--checkbox-accent-hover, var(--color-accent-600));
+  }
+
+  /* La coche est posée sur la case, à sa taille, et ne prend pas le clic : il
+     doit traverser jusqu'à l'input. Elle n'apparaît que cochée — `display` est un
+     mot-clé, là où une opacité aurait demandé une valeur que le système n'a pas. */
+  .checkbox-check {
+    position: absolute;
+    inset: 0;
+    --icon-size: var(--checkbox-size, var(--control-size));
+    --icon-color: var(--color-text-on-accent);
+    pointer-events: none;
+  }
+
+  .checkbox-input:not(:checked) + .checkbox-check {
+    display: none;
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et une case désactivée ne doit pas prendre le survol. La case garde
+     son dessin et s'atténue, exactement comme le nœud : rien ne bascule vers un
+     gris, c'est l'opacité seule qui dit « éteint ». L'atténuation est posée sur
+     la pile, pas sur la case : la coche doit pâlir avec elle, sans quoi elle
+     resterait franche sur un fond éteint. */
+  .checkbox-disabled .checkbox-input,
+  .checkbox-disabled :global(.field-label) {
+    cursor: not-allowed;
+  }
+
+  .checkbox-disabled .checkbox-control {
+    opacity: var(--opacity-disabled);
+  }
+</style>

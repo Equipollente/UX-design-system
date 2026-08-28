@@ -98,3 +98,53 @@ export const cardDemo = {
   tags: caseStudyDemo.tags,
   action: caseStudyDemo.action,
 };
+
+// ── Les champs de /formulaire ────────────────────────────────────────────────
+// Figma ne donne qu'un libellé témoin — « Radio label » — et un témoin ne fait
+// pas un groupe : un radio ne se juge que contre ses voisins. Les mots ci-dessous
+// sont ceux d'un vrai formulaire, de longueurs inégales, parce que c'est là qu'un
+// alignement se trahit.
+
+export const demoRadioName = 'format';
+
+export const demoRadioOptions = [
+  { id: 'format-atelier', label: 'Atelier en présentiel', value: 'atelier' },
+  { id: 'format-visio', label: 'Visioconférence', value: 'visio' },
+  { id: 'format-asynchrone', label: 'Échange asynchrone', value: 'asynchrone' },
+];
+
+// Figma ne donne là non plus qu'un témoin — « Checkbox label ». Une case affirme
+// quelque chose : les mots ci-dessous sont des phrases, pas des étiquettes.
+export const demoCheckboxOptions = [
+  { id: 'envoi-compte-rendu', label: 'M’envoyer le compte rendu de la séance' },
+  { id: 'envoi-relance', label: 'Me relancer si je ne réponds pas sous huit jours' },
+  { id: 'envoi-lettre', label: 'M’inscrire à la lettre mensuelle' },
+];
+
+// Des filtres de vraie longueur : c'est sur des mots inégaux qu'on voit si la
+// rangée de pastilles retombe proprement à la ligne.
+export const demoChipOptions = [
+  { id: 'chip-recherche', label: 'Recherche utilisateur' },
+  { id: 'chip-atelier', label: 'Atelier' },
+  { id: 'chip-ds', label: 'Design system' },
+  { id: 'chip-accessibilite', label: 'Accessibilité' },
+  { id: 'chip-proto', label: 'Prototypage' },
+];
+
+// La zone de depot montre les mots du noeud 343:315, tels quels.
+export const demoAddImage = {
+  label: 'Add image',
+  hint: 'PNG, JPG up to 10 MB',
+  accept: 'image/png,image/jpeg',
+};
+
+// La galerie reprend les images de l'etude de cas : ce sont de vraies planches,
+// de proportions differentes, ce qui est justement ce qu'une grille doit tenir.
+export const demoGalleryImages = caseStudyImages.map((image, i) => ({
+  id: `planche-${i + 1}`,
+  src: image.src,
+  alt: image.alt,
+  href: image.src,
+  width: image.width,
+  height: image.height,
+}));

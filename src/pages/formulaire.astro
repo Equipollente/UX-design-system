@@ -1,0 +1,1212 @@
+---
+// Doc des composants de formulaire. Elle se construit en montant : le libellé
+// d'abord, puisque tous les champs le partagent, les champs ensuite.
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import FieldLabel from '../design-system/components/FieldLabel.astro';
+import Select from '../design-system/components/Select.astro';
+import Radio from '../design-system/components/Radio.astro';
+import Checkbox from '../design-system/components/Checkbox.astro';
+import Toggle from '../design-system/components/Toggle.astro';
+import TextArea from '../design-system/components/TextArea.astro';
+import Chip from '../design-system/components/Chip.astro';
+import AddImage from '../design-system/components/AddImage.astro';
+import EditImageGallery from '../design-system/components/EditImageGallery.astro';
+import {
+  demoRadioName,
+  demoRadioOptions,
+  demoCheckboxOptions,
+  demoChipOptions,
+  demoAddImage,
+  demoGalleryImages,
+} from './_demo';
+
+const labelProps = [
+  ['for', 'string', '—', 'L’id du champ que ce libellé nomme. C’est ce qui les lie.'],
+  ['required', 'boolean', 'false', 'Pose l’astérisque. Le champ doit porter required de son côté.'],
+  ['disabled', 'boolean', 'false', 'L’encre passe en muted. Le champ doit porter disabled de son côté.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const selectProps = [
+  ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
+  ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
+  ['options', '(string | { value, label })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur.'],
+  ['placeholder', 'string', '—', 'La première ligne, non sélectionnable. Absente : la liste ouvre sur son premier choix.'],
+  ['value', 'string', '—', 'Le choix pré-sélectionné.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
+  ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const radioProps = [
+  ['id', 'string', '—', 'Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe.'],
+  ['label', 'string', '—', 'Le mot qui nomme ce choix-ci — pas la question, qui va en legend.'],
+  ['name', 'string', '—', 'Le name du groupe. Deux radios ne s’excluent que s’ils le partagent.'],
+  ['value', 'string', 'id', 'Ce que le formulaire enverra si ce choix est retenu.'],
+  ['checked', 'boolean', 'false', 'Le choix retenu à l’ouverture. Un seul du groupe doit le porter.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const checkboxProps = [
+  ['id', 'string', '—', 'Lie le libellé au contrôle. Unique dans la page.'],
+  ['label', 'string', '—', 'Ce que la case affirme quand elle est cochée. Une phrase, pas une question.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
+  ['value', 'string', 'on', 'Ce que le formulaire enverra si la case est cochée.'],
+  ['checked', 'boolean', 'false', 'Cochée à l’ouverture.'],
+  ['required', 'boolean', 'false', 'Pose l’astérisque et l’attribut. A du sens ici : une case peut être seule.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const toggleProps = [
+  ['id', 'string', '—', 'Lie le libellé au contrôle. Unique dans la page.'],
+  ['label', 'string', '—', 'Ce que l’interrupteur allume. Un état, pas une action : « Notifications », pas « Notifier ».'],
+  ['name', 'string', 'id', 'Le nom envoyé si l’interrupteur est dans un formulaire.'],
+  ['checked', 'boolean', 'false', 'Allumé à l’ouverture.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const textAreaProps = [
+  ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
+  ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
+  ['value', 'string', '—', 'Le contenu déjà saisi.'],
+  ['placeholder', 'string', '—', 'L’invite dans la boîte vide. Une consigne, pas un exemple à recopier.'],
+  ['rows', 'number', '2 (natif)', 'Le nombre de lignes visibles. C’est la hauteur du champ, exprimée en lignes.'],
+  ['maxlength', 'number', '—', 'La limite de caractères. C’est elle qui allume le compteur.'],
+  ['showCount', 'boolean', 'false', 'Montre le compteur. Sans maxlength, il n’y a rien à compter.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
+  ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const chipProps = [
+  ['id', 'string', '—', 'Lie la case au chip. Unique dans la page.'],
+  ['label', 'string', '—', 'Le mot porté par la pastille. Court : un chip ne se coupe pas en deux lignes.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire. Le même pour tout un groupe de filtres.'],
+  ['value', 'string', 'id', 'Ce que le formulaire enverra si le chip est retenu.'],
+  ['selected', 'boolean', 'false', 'Retenu à l’ouverture.'],
+  ['disabled', 'boolean', 'false', 'Grisé, et ne prend plus ni le survol ni le clic.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const addImageProps = [
+  ['id', 'string', '—', 'Lie le libellé au champ. Unique dans la page.'],
+  ['label', 'string', '—', 'Ce que la zone propose de faire. Un verbe.'],
+  ['hint', 'string', '—', 'Ce qu’elle accepte, en toutes lettres. Lu après le libellé, pas laissé flottant.'],
+  ['accept', 'string', '—', 'Les types acceptés, au format de l’attribut natif.'],
+  ['multiple', 'boolean', 'false', 'Autorise plusieurs fichiers en une fois.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
+  ['required', 'boolean', 'false', 'Rend le dépôt obligatoire.'],
+  ['disabled', 'boolean', 'false', 'Grisé, et n’ouvre plus le sélecteur.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const galleryProps = [
+  ['images', 'Image[]', '—', 'Les images déjà déposées. Vide : la galerie ne rend rien.'],
+  ['label', 'string', '—', 'Ce qui nomme la liste pour les lecteurs d’écran.'],
+  ['removeName', 'string', 'remove', 'Le name du bouton supprimer. Sa value est l’id de l’image.'],
+  ['viewLabel', 'string', 'voir', 'Le mot du bouton qui ouvre l’image.'],
+  ['removeLabel', 'string', 'supprimer', 'Le mot du bouton qui la retire.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
+---
+
+<DocsLayout
+  title="Formulaire — UX design system"
+  description="Les composants de formulaire du système : le libellé partagé, puis les champs."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Formulaire</h1>
+    <p class="lead">
+      Tous les champs — texte, sélection, case à cocher — partagent
+      {' '}<strong>un seul libellé</strong>. Pas une copie conforme dans chacun : le même fichier,
+      appelé par tous. Ce qui change ici a déjà changé partout.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>FieldLabel</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Le mot qui nomme un champ, et le signe qui dit s'il faut le
+        remplir.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un titre — il ne structure pas la page, il désigne
+        une chose à remplir — ni le porteur de l'obligation : c'est le champ qui porte
+        {' '}<code>required</code>, et c'est lui que les lecteurs d'écran annoncent. L'astérisque
+        n'en est que la trace visible.
+      </p>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default</p>
+          <FieldLabel for="demo-a">Adresse e-mail</FieldLabel>
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">default + required</p>
+          <FieldLabel for="demo-b" required>Adresse e-mail</FieldLabel>
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled</p>
+          <FieldLabel for="demo-c" disabled>Adresse e-mail</FieldLabel>
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + required</p>
+          <FieldLabel for="demo-d" required disabled>Adresse e-mail</FieldLabel>
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>L'astérisque est redondant, et c'est voulu.</strong> Il est
+        {' '}<code>aria-hidden</code> : sans quoi il serait annoncé deux fois, une fois en « étoile »,
+        une fois en « obligatoire ». Parce qu'il ne porte plus seul l'information, son rouge peut
+        rester celui du système — <code>color/feedback/danger</code> ne tient pas 4,5:1 en texte de
+        corps, et n'a pas à le tenir pour un signe redondant. En contrepartie, le formulaire qui s'en
+        sert doit ouvrir sur la phrase <em>« Les champs marqués * sont obligatoires »</em>.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            labelProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Select ────────────────────────────────────────── -->
+    <section>
+      <h2>Select field</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur dans une liste fermée.
+        Nœud Figma <code>340:933</code>, quatre états.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un menu — un menu déclenche des actions, celui-ci
+        renseigne une valeur qu'un formulaire enverra — ni un champ à suggestions : on ne peut rien
+        écrire qui ne soit pas dans la liste.
+      </p>
+
+      <p class="section-note">
+        Son libellé vient de <code>FieldLabel</code>, comme celui de tous les autres champs. Le
+        {' '}<code>&lt;select&gt;</code>, lui, est natif : un menu réécrit en <code>div</code> coûterait le
+        clavier, la recherche à la frappe et la roulette du téléphone — pour un chevron dessiné
+        autrement. Le chevron du système est donc posé par-dessus, et le natif effacé.
+      </p>
+
+      <p class="section-note">
+        <strong>Ce composant a longtemps été écrit sans son nœud.</strong> On le croyait « spécifié
+        en conversation » — il ne l'était pas, personne ne l'avait cherché. Le relire a corrigé trois
+        mesures que rien ne signalait : la boîte fait <strong>36</strong> et non les 44 du bouton, le
+        chevron <strong>20</strong> et non 24, l'écart au libellé <strong>5</strong> et non 8.
+        {' '}<code>space/2xl + space/xs</code> donne 36 exactement, et
+        {' '}<code>button/icon-size/sm</code> vaut 20 : aucune des trois n'a demandé de variable
+        nouvelle, seulement d'être regardée.
+      </p>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default — sur son invite</p>
+          <Select id="pays-a" label="Pays" options={pays} placeholder="Choisir un pays" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">required</p>
+          <Select id="pays-b" label="Pays" options={pays} placeholder="Choisir un pays" required />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">rempli — une valeur choisie</p>
+          <Select id="pays-c" label="Pays" options={pays} value="Suisse" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + required</p>
+          <Select id="pays-d" label="Pays" options={pays} placeholder="Choisir un pays" required disabled />
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            selectProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Ce champ ne porte aucun trait au repos, et c'est le nœud qui le dit.</strong> Sa
+        boîte n'a pas de contour, là où <code>Text Area</code> en a un de 1 — deux champs voisins,
+        dessinés différemment. Le fond <code>bg/surface</code> le détache tout de même du blanc de la
+        page, mais l'écart se tranche dans Figma.
+      </p>
+
+      <p class="flag">
+        <strong>La boîte est passée de 44 à 36.</strong> Le code prenait
+        {' '}<code>button/height/sm</code>, choisi pour tenir une cible tactile de 44 px — WCAG 2.5.5,
+        niveau AAA. À 36 la cible reste conforme au niveau AA, qui en demande 24, mais le champ ne se
+        vise plus comme un bouton. C'est le dessin qui l'emporte ici, et c'est un choix, pas un oubli.
+      </p>
+    </section>
+
+    <!-- ── Radio ───────────────────────────────── -->
+    <section>
+      <h2>Radio</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Un choix parmi plusieurs, dont un seul peut être retenu.
+        Nœud Figma <code>340:879</code>, huit variantes — <code>Selected</code> × <code>State</code>.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni une case à cocher — une case se coche et se décoche
+        toute seule, un radio ne se relâche qu'en en choisissant un autre — ni un objet qui vit
+        seul : il n'a de sens que dans un groupe qui partage un <code>name</code> et pose sa
+        question en <code>&lt;legend&gt;</code>. Pour un oui/non isolé, c'est
+        {' '}<code>Checkbox</code>.
+      </p>
+
+      <p class="section-note">
+        <strong>Le contrôle est natif, le dessin est du système.</strong>
+        {' '}<code>appearance: none</code> efface celui du navigateur, et tout ce qui le remplace est
+        une variable. Le point du centre n'est pas un second élément : c'est une ombre intérieure de
+        {' '}<code>space/xs</code> posée sur un fond blanc — <strong>16 − 4 − 4 = 8</strong>,
+        exactement le point du nœud, sans qu'une mesure soit écrite à la main. Le contrôle reste un
+        {' '}<code>&lt;input type="radio"&gt;</code> : la navigation aux flèches dans le groupe et
+        l'annonce aux lecteurs d'écran viennent avec.
+      </p>
+
+      <h3>Un groupe, tel qu'il s'écrit</h3>
+
+      <p class="section-note">
+        Un radio ne se juge pas seul. Le <code>&lt;fieldset&gt;</code> et sa
+        {' '}<code>&lt;legend&gt;</code> ne viennent pas du composant : c'est la page qui pose la
+        question, le composant ne connaît que ses propres mots.
+      </p>
+
+      <div class="demo demo-fields">
+        <fieldset class="demo-group">
+          <legend>Format de l'échange</legend>
+          {
+            demoRadioOptions.map((o, i) => (
+              <Radio
+                id={o.id}
+                label={o.label}
+                name={demoRadioName}
+                value={o.value}
+                checked={i === 0}
+              />
+            ))
+          }
+        </fieldset>
+      </div>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default</p>
+          <Radio id="etat-a" label="Atelier en présentiel" name="etat-1" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">selected</p>
+          <Radio id="etat-b" label="Atelier en présentiel" name="etat-2" checked />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled</p>
+          <Radio id="etat-c" label="Atelier en présentiel" name="etat-3" disabled />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + selected</p>
+          <Radio id="etat-d" label="Atelier en présentiel" name="etat-4" checked disabled />
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>Hover</strong> fonce l'accent d'un cran — <code>accent/600</code> au lieu de
+        {' '}<code>accent/500</code> — et ne s'attrape qu'à la souris. <strong>Focused</strong> pose l'anneau
+        du système — <code>button/focus-ring-width</code> sur <code>color/border/focus</code>, en
+        {' '}<code>outline</code> pour ne rien déplacer autour de lui. WCAG 2.4.7.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            radioProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Pas de <code>required</code>, et c'est voulu.</strong> Un astérisque par option
+        dirait que chaque choix est obligatoire. C'est le groupe qui l'est : l'obligation se pose
+        sur le <code>&lt;fieldset&gt;</code>, dans la question, pas sur chacune de ses réponses.
+      </p>
+
+      <p class="section-note">
+        <strong>Plus une seule mesure approchée.</strong> Le cercle fait
+        {' '}<code>control/size</code>, son trait <code>border/width/default</code>, son anneau de
+        focus <code>border/width/focus</code>. Et le point ne se mesure toujours pas : le trait prend
+        1 de chaque côté, la boîte intérieure retombe à 16, et l'anneau de <code>space/xs</code> n'y
+        laisse que <strong>16 − 4 − 4 = 8</strong>. Le désactivé, lui, ne bascule plus vers un gris —
+        le cercle garde son dessin et s'atténue de <code>opacity/disabled</code>, ce que le nœud
+        dessinait depuis le début.
+      </p>
+
+      <p class="flag">
+        <strong>Le libellé n'a pas la typographie du nœud.</strong> Figma le dessine à 14 px,
+        interligne 120 %, et le grise en <code>neutral/400</code> ; <code>FieldLabel</code> le rend à
+        15 px, interligne 112 %, grisé en <em>muted</em>. Le libellé partagé l'emporte : c'est sa
+        raison d'être qu'un seul fichier décide de tous les libellés du formulaire. L'écart est à
+        trancher dans Figma, pas ici.
+      </p>
+    </section>
+
+    <!-- ── Checkbox ────────────────────────────── -->
+    <section>
+      <h2>Checkbox</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Une case qui se coche et se décoche toute seule. Nœud Figma
+        {' '}<code>340:842</code>, huit variantes — <code>Checked</code> × <code>State</code>.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni un radio — un radio ne se relâche qu'en en
+        choisissant un autre, et n'a de sens qu'en groupe — ni un interrupteur : un
+        {' '}<code>Toggle</code> applique son effet à l'instant où on le bascule, une case attend
+        l'envoi du formulaire.
+      </p>
+
+      <p class="section-note">
+        <strong>La coche n'est pas dessinée en CSS.</strong> C'est l'icône <code>check</code> du
+        registre, posée par-dessus la case et rendue insensible au clic — exactement comme
+        {' '}<code>Select</code> pose son chevron sur le <code>&lt;select&gt;</code>. Le dessin du
+        système sert donc à deux endroits au lieu d'être refait ici.
+      </p>
+
+      <p class="section-note">
+        <strong>Elle vit très bien seule</strong>, et c'est là que <code>required</code> a un sens :
+        « j'accepte les conditions » est une case unique et obligatoire. Un radio, lui, n'a jamais
+        d'astérisque — l'obligation y porte sur le groupe.
+      </p>
+
+      <h3>Une liste, telle qu'elle s'écrit</h3>
+
+      <div class="demo demo-fields">
+        <fieldset class="demo-group">
+          <legend>Ce que vous voulez recevoir</legend>
+          {
+            demoCheckboxOptions.map((o, i) => (
+              <Checkbox id={o.id} label={o.label} checked={i === 0} />
+            ))
+          }
+        </fieldset>
+      </div>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default</p>
+          <Checkbox id="case-a" label="M’envoyer le compte rendu" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">checked</p>
+          <Checkbox id="case-b" label="M’envoyer le compte rendu" checked />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">default + required</p>
+          <Checkbox id="case-c" label="J’accepte les conditions" required />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled</p>
+          <Checkbox id="case-d" label="M’envoyer le compte rendu" disabled />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + checked</p>
+          <Checkbox id="case-e" label="M’envoyer le compte rendu" checked disabled />
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>Hover</strong> fonce l'accent d'un cran — <code>accent/600</code> au lieu de
+        {' '}<code>accent/500</code>. <strong>Focused</strong> pose l'anneau du
+        système — <code>button/focus-ring-width</code> sur <code>color/border/focus</code>, en
+        {' '}<code>outline</code> pour ne rien déplacer autour de lui. WCAG 2.4.7.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            checkboxProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>Plus une seule mesure approchée.</strong> La boîte fait <code>control/size</code>,
+        son rayon <code>radius/sm</code>, son trait <code>border/width/default</code>. Le trait est
+        posé cochée comme décochée, et c'est sa couleur qui change : le nœud ne le dessine que sur la
+        case vide, mais un trait accent sur un fond accent se voit pareil — et la boîte garde alors
+        la même taille dans les deux états, ce qui compte davantage.
+      </p>
+
+      <p class="flag">
+        <strong>L'épaisseur du tracé de la coche est celle de l'icône du registre</strong>, pas les 2
+        du nœud. C'est voulu : le même dessin sert partout ailleurs dans le système, et il ne se
+        redessine pas pour une case.
+      </p>
+
+      <p class="flag">
+        <strong>Le libellé n'a pas la typographie du nœud</strong> — 14 px / 120 % et
+        {' '}<code>neutral/400</code> dans Figma, 15 px / 112 % et <em>muted</em> dans
+        {' '}<code>FieldLabel</code>. Même écart que pour Radio, même arbitrage : le libellé partagé
+        l'emporte, et l'écart se tranche dans Figma.
+      </p>
+    </section>
+
+    <!-- ── Toggle ──────────────────────────────── -->
+    <section>
+      <h2>Toggle</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Un interrupteur : deux positions, et l'effet suit la bascule.
+        Nœud Figma <code>340:912</code>, huit variantes — <code>Value</code> × <code>State</code>.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni une case à cocher — une case enregistre une intention
+        que l'envoi du formulaire ira chercher, un interrupteur agit tout de suite, et c'est pourquoi
+        il ne s'accompagne jamais d'un bouton « Valider » — ni un bouton : un bouton fait une chose
+        et retombe, un interrupteur tient un état qu'on peut relire sur lui.
+      </p>
+
+      <p class="section-note">
+        <strong>La piste tombe juste, et c'est la bonne surprise du sprint.</strong> Ses 40 de large
+        sont <code>space-xl + space-lg</code> — <strong>24 + 16, exactement</strong>. La pastille est
+        {' '}<code>space/lg</code>, soit 16 pile. Son retrait dans la piste est
+        {' '}<code>space/xs</code>, soit (24 − 16) / 2 = 4. Et sa course est
+        {' '}<code>space/lg</code> : 40 − 16 − 4 − 4 = 16. Quatre mesures, quatre tokens, aucun
+        chiffre écrit à la main.
+      </p>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">off</p>
+          <Toggle id="int-a" label="Notifications par courriel" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">on</p>
+          <Toggle id="int-b" label="Notifications par courriel" checked />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled — off</p>
+          <Toggle id="int-c" label="Notifications par courriel" disabled />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled — on</p>
+          <Toggle id="int-d" label="Notifications par courriel" checked disabled />
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>Le libellé nomme un état, pas une action.</strong> « Notifications par courriel »,
+        pas « Activer les notifications » : l'interrupteur dit déjà qu'on active, et un libellé qui
+        le répète devient faux dès qu'on l'éteint. C'est aussi la raison de
+        {' '}<code>role="switch"</code> — il fait annoncer <em>« activé / désactivé »</em> plutôt que
+        {' '}<em>« coché / décoché »</em>, ce qui est la bonne phrase pour un objet qui agit à
+        l'instant où on le bascule.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            toggleProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>Deux mesures nommées, et tout le reste se déduit.</strong> La piste prend
+        {' '}<code>control/track-height</code> et la pastille <code>space/lg</code> ; son retrait
+        {' '}<strong>(22 − 16) / 2 = 3</strong> et sa course <strong>40 − 16 − 3 − 3 = 18</strong> ne
+        sont pas écrits mais calculés. Si l'une des deux bouge dans Figma, les deux autres suivent
+        toutes seules. L'écart au libellé, lui, est passé à 8 dans le nœud : les trois contrôles
+        compacts s'espacent enfin pareil.
+      </p>
+
+      <p class="flag">
+        <strong>Le libellé n'a pas la typographie du nœud</strong> — 14 px / 120 % et
+        {' '}<code>neutral/400</code> dans Figma, 15 px / 112 % et <em>muted</em> dans
+        {' '}<code>FieldLabel</code>. Même écart que pour Radio et Checkbox, même arbitrage.
+      </p>
+    </section>
+
+    <!-- ── Text Area ───────────────────────────── -->
+    <section>
+      <h2>Text Area</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Un champ pour du texte qui court sur plusieurs lignes. Nœud
+        Figma <code>343:273</code>, quatre états plus <code>Show Count</code>.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni un champ texte — un champ texte tient sur une ligne
+        et se remplit d'un nom, d'un courriel, d'un nombre, quelque chose dont on connaît la forme ;
+        une zone de texte attend une phrase dont on ne connaît que la longueur maximale, et c'est
+        pourquoi elle est la seule à compter ses caractères — ni un éditeur : rien ici ne met en
+        gras, n'insère de lien ni ne garde de mise en forme.
+      </p>
+
+      <p class="section-note">
+        <strong>La hauteur se dit en lignes, pas en pixels.</strong> <code>rows</code> compte des
+        lignes : la boîte se mesure alors sur sa propre typographie et grandit avec elle, alors
+        qu'une hauteur en pixels se décrocherait au premier changement de corps. Les 120 px du nœud
+        n'ont de toute façon pas de variable.
+      </p>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default — sur son invite</p>
+          <TextArea
+            id="desc-a"
+            label="Description"
+            placeholder="Ce que vous voulez me raconter du projet"
+            rows={5}
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">rempli</p>
+          <TextArea
+            id="desc-b"
+            label="Description"
+            value="Une refonte du parcours d’inscription, à mener avec l’équipe produit."
+            rows={5}
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">required</p>
+          <TextArea
+            id="desc-c"
+            label="Description"
+            placeholder="Ce que vous voulez me raconter du projet"
+            rows={5}
+            required
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled</p>
+          <TextArea
+            id="desc-d"
+            label="Description"
+            value="Une refonte du parcours d’inscription."
+            rows={5}
+            disabled
+          />
+        </div>
+      </div>
+
+      <h3>Avec son compteur</h3>
+
+      <p class="section-note">
+        Le compteur n'a de sens qu'avec une limite : « 12 caractères » ne dit rien, « 12 / 500 » dit
+        combien il en reste. <code>showCount</code> sans <code>maxlength</code> n'affiche donc rien.
+      </p>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">showCount + maxlength</p>
+          <TextArea
+            id="desc-e"
+            label="Description"
+            placeholder="Ce que vous voulez me raconter du projet"
+            rows={5}
+            maxlength={500}
+            showCount
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">showCount + maxlength — déjà rempli</p>
+          <TextArea
+            id="desc-f"
+            label="Description"
+            value="Une refonte du parcours d’inscription, à mener avec l’équipe produit."
+            rows={5}
+            maxlength={500}
+            showCount
+          />
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>C'est le seul script du dépôt, et il se justifie par un échec mesurable.</strong>
+        {' '}Sans lui, le compteur afficherait « 0 / 500 » alors que la boîte en contient quarante : il ne
+        serait pas dégradé, il serait faux. Ce qu'il enrichit reste facultatif — la limite est tenue
+        par <code>maxlength</code>, côté navigateur, et le champ fonctionne entièrement sans lui. Le
+        compteur n'est pas une région vivante : annoncer un nouveau total à chaque frappe couvrirait
+        la dictée du texte lui-même. C'est <code>maxlength</code> que les lecteurs d'écran annoncent,
+        une fois, à l'entrée dans le champ.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            textAreaProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>L'écart au libellé est tranché, et il vaut 5.</strong> Les deux nœuds le disaient
+        déjà — <code>control/field-gap</code> le nomme, et Text Area et Select s'espacent donc
+        pareil. Le rembourrage aussi : le nœud a été redessiné sur les 12 / 16 du bouton, que le code
+        écrivait déjà. La boîte porte enfin son trait, et le champ désactivé s'atténue au lieu de
+        compter sur l'encre de son libellé.
+      </p>
+
+      <p class="flag">
+        <strong>La casse <code>TITLE</code> du libellé n'est pas appliquée.</strong> Elle
+        capitaliserait chaque mot du texte que l'appelant donne — ce qui est faux dès qu'un libellé
+        porte un nom propre, une abréviation ou un mot que le français ne capitalise pas.
+      </p>
+
+      <p class="flag">
+        <strong>Le libellé ne pâlit pas au survol ni au focus.</strong> Figma le passe en
+        {' '}<em>muted</em> dans ces deux états ; <code>FieldLabel</code> n'en a que deux, et un
+        libellé qui pâlit quand on entre dans son champ est un arbitrage de dessin, pas une
+        mécanique. Il se tranche dans Figma. Même remarque pour sa typographie — 14 px / 155 % contre
+        15 px / 112 %.
+      </p>
+    </section>
+
+    <!-- ── Chip ────────────────────────────────── -->
+    <section>
+      <h2>Chip</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Une pastille qu'on retient ou qu'on relâche. Nœud Figma
+        {' '}<code>351:273</code>, huit variantes — <code>Selected</code> × <code>State</code>.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni une étiquette — une étiquette affiche une catégorie,
+        on ne la touche pas — ni un bouton : un bouton déclenche et retombe, un chip reste enfoncé.
+      </p>
+
+      <p class="section-note">
+        <strong>C'est une case à cocher</strong>, et c'est ce qui lui permet de fonctionner sans une
+        ligne de JavaScript : cliquer le chip le retient, la barre d'espace aussi, et le formulaire
+        l'envoie. La case est déportée hors du cadre plutôt que masquée —
+        {' '}<code>display: none</code> la retirerait du parcours au clavier et de l'arbre
+        d'accessibilité, ce qui reviendrait à supprimer le contrôle pour n'en garder que le dessin.
+      </p>
+
+      <p class="section-note">
+        <strong>C'est le premier composant du sprint qui arrive presque entièrement tokenisé.</strong>
+        {' '}Rembourrage <code>space/sm</code> et <code>space/lg</code>, rayon <code>radius/pill</code>,
+        les quatre fonds, toute la typographie : Figma les lie tous à des variables. Rien de sa forme
+        n'est décidé dans le code.
+      </p>
+
+      <h3>Une rangée de filtres</h3>
+
+      <div class="demo demo-chips">
+        {
+          demoChipOptions.map((o, i) => (
+            <Chip id={o.id} label={o.label} name="filtres" selected={i === 2} />
+          ))
+        }
+      </div>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-chips">
+        <Chip id="chip-a" label="Default — invisible ici" />
+        <Chip id="chip-b" label="Selected" selected />
+        <Chip id="chip-c" label="Disabled" disabled />
+        <Chip id="chip-d" label="Disabled + selected" selected disabled />
+      </div>
+
+      <p class="section-note">
+        <strong>Le chip a retrouvé son trait, et il se voit.</strong> C'était l'écart le plus coûteux
+        du sprint : son fond est <code>bg/default</code>, le blanc de la page, et sans bordure un chip
+        non retenu était littéralement invisible. <code>border/width/default</code> sur
+        {' '}<code>color/border/default</code> le détache.
+      </p>
+
+      <p class="flag">
+        <strong>Mais ce trait ne vaut que 1,28:1 sur le blanc.</strong> C'est la mesure de
+        {' '}<code>color/border/default</code>, écrite dans sa propre description, et vérifiée sur la
+        page. WCAG 1.4.11 demande <strong>3:1</strong> à la limite visible d'un contrôle : le chip se
+        voit, mais son trait n'y arrive pas. Aucune couleur de trait du système n'y arriverait —
+        {' '}<code>border/strong</code> vaut 1,29:1, et <code>neutral/500</code> 2,41:1. C'est une
+        couleur qu'il faut foncer dans Figma, pas une épaisseur.
+      </p>
+
+      <p class="section-note">
+        <strong>La graisse porte l'état, pas seulement la couleur.</strong> Un chip retenu passe son
+        mot en <em>medium</em> — il se reconnaît donc aussi en niveaux de gris, ce que WCAG 1.4.1
+        demande : la couleur ne doit jamais être le seul indice.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            chipProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Ce que le chip lit dans le système</caption>
+        <thead>
+          <tr><th>Token</th><th>Où</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--space-sm</code> / <code>--space-lg</code></td><td>Rembourrage — 8 en y, 16 en x</td></tr>
+          <tr><td><code>--radius-pill</code></td><td>La forme de pastille</td></tr>
+          <tr><td><code>--color-bg-default</code></td><td>Fond au repos</td></tr>
+          <tr><td><code>--color-neutral-100</code></td><td>Fond au survol</td></tr>
+          <tr><td><code>--color-accent-500</code> / <code>--color-accent-600</code></td><td>Fond retenu, et retenu survolé</td></tr>
+          <tr><td><code>--color-text-default</code> / <code>--color-text-on-accent</code></td><td>Encre, selon le fond</td></tr>
+          <tr><td><code>--color-neutral-400</code></td><td>Encre désactivée</td></tr>
+          <tr><td><code>--font-size-ui</code></td><td>0.875rem — les 14 du nœud</td></tr>
+          <tr><td><code>--font-weight-regular</code> / <code>--font-weight-medium</code></td><td>Au repos, puis retenu</td></tr>
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>L'anneau de focus est porté par le chip, pas par la case</strong> — celle-ci étant
+        hors du cadre, son propre anneau ne se verrait pas. Il mesure
+        {' '}<code>border/width/focus</code>, comme partout ailleurs. WCAG 2.4.7.
+      </p>
+
+      <p class="flag">
+        <strong>Figma ne distingue pas le choix multiple du choix unique.</strong> Celui-ci est une
+        case : plusieurs chips peuvent être retenus en même temps. Un groupe à choix unique
+        demanderait des radios, donc une variante que le nœud ne porte pas — elle se décide dans
+        Figma avant de s'écrire ici.
+      </p>
+    </section>
+
+    <!-- ── Add Image ───────────────────────────── -->
+    <section>
+      <h2>Add Image</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> La zone par laquelle une image entre dans un formulaire.
+        Nœud Figma <code>343:315</code>, quatre états.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni un bouton — un bouton déclenche une action,
+        celle-ci ouvre le sélecteur de fichiers du système et rend un fichier au formulaire — ni une
+        galerie : elle ne montre pas ce qui a été déposé, elle ne fait que l'accepter. C'est
+        {' '}<code>EditImageGallery</code> qui montre et qui retire.
+      </p>
+
+      <p class="section-note">
+        <strong>C'est un <code>&lt;input type="file"&gt;</code> et son <code>&lt;label&gt;</code></strong>,
+        et c'est ce qui lui permet de fonctionner sans une ligne de JavaScript : cliquer la zone ouvre
+        le sélecteur, Entrée et la barre d'espace aussi. L'indication est liée au champ par
+        {' '}<code>aria-describedby</code> — elle est lue après le libellé, à l'entrée dans le
+        contrôle, et non comme un texte flottant que rien ne rattache.
+      </p>
+
+      <h3>Les états, un par un</h3>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default</p>
+          <AddImage
+            id="depot-a"
+            label={demoAddImage.label}
+            hint={demoAddImage.hint}
+            accept={demoAddImage.accept}
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">sans indication</p>
+          <AddImage id="depot-b" label={demoAddImage.label} accept={demoAddImage.accept} />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">multiple</p>
+          <AddImage
+            id="depot-c"
+            label={demoAddImage.label}
+            hint={demoAddImage.hint}
+            accept={demoAddImage.accept}
+            multiple
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled</p>
+          <AddImage
+            id="depot-d"
+            label={demoAddImage.label}
+            hint={demoAddImage.hint}
+            accept={demoAddImage.accept}
+            disabled
+          />
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>Hover</strong> passe le fond en <code>accent/100</code> et le libellé en
+        {' '}<code>accent/600</code>. L'icône n'a rien à déclarer : en <code>currentColor</code>, elle
+        suit le libellé — c'est la règle du dépôt, et c'est ce qui évite un second fichier SVG.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            addImageProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>Deux mesures tombent juste par composition.</strong> Le rembourrage vertical de 28 est
+        {' '}<code>space-xl + space-xs</code>, et l'icône de 32 est <code>space/2xl</code> — aucune
+        des deux n'est approchée, elles sont exactes. L'horizontal, lui, est
+        {' '}<code>space/xl</code>, lié dans le nœud.
+      </p>
+
+      <p class="flag">
+        <strong>La zone ne fait pas 240 × 140.</strong> Aucune variable ne porte ces deux mesures, et
+        c'est sans doute aussi bien : la zone se dimensionne sur son contenu et prend la largeur que
+        l'appelant lui donne, ce qu'il faut de toute façon pour une mise en page qui s'adapte.
+      </p>
+
+      <p class="section-note">
+        <strong>Le trait de la zone est passé de 1,5 à 1.</strong> Cette épaisseur-là n'existait que
+        sur deux objets du fichier — celui-ci et Add Folder, qui sont la même zone de dépôt — quand
+        1 est dessiné 217 fois ailleurs. Un seul cran valait mieux que deux, et les deux nœuds ont
+        été redessinés.
+      </p>
+
+      <p class="flag">
+        <strong>La couleur de l'icône vient d'une autre bibliothèque dans Figma.</strong> Le nœud la
+        lie à une variable étrangère à ce système. Ici l'icône est en <code>currentColor</code> et
+        prend donc l'encre du libellé — c'est la règle du dépôt, et c'est ce qui la fait virer à
+        l'accent au survol sans qu'une seconde couleur soit écrite.
+      </p>
+
+      <p class="flag">
+        <strong>Le glisser-déposer n'est pas implémenté.</strong> Il demanderait un script, et son
+        absence n'est pas un échec : le clic et le clavier ouvrent tous deux le sélecteur.
+      </p>
+    </section>
+
+    <!-- ── Edit Image Gallery ──────────────────── -->
+    <section>
+      <h2>Edit Image Gallery</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Les images déjà déposées, chacune avec de quoi la revoir ou
+        la retirer. Nœud Figma <code>355:1396</code>.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni <code>AddImage</code> — qui accepte un fichier sans
+        rien montrer de ce qui est entré — ni un carrousel : un carrousel fait défiler pour montrer,
+        celle-ci étale pour laisser modifier. Et ce n'est pas une galerie de consultation : chaque
+        vignette porte deux actions, donc elle appartient à un formulaire.
+      </p>
+
+      <p class="section-note">
+        <strong>Les deux boutons sont le <code>Button</code> du système</strong>, en
+        {' '}<code>secondary</code> / <code>md</code> — exactement ce que le nœud instancie. Ils ne
+        sont pas redessinés ici : une vignette qui aurait ses propres boutons cesserait de suivre le
+        système au premier changement de bouton.
+      </p>
+
+      <p class="section-note">
+        <strong>« supprimer » est un <code>submit</code> qui porte son <code>name</code> et sa
+        {' '}<code>value</code></strong> : le formulaire sait donc laquelle retirer sans une ligne de
+        JavaScript. Son nom accessible dit de quelle image il s'agit — quatre boutons « supprimer » à
+        la suite ne se distinguent pas autrement au lecteur d'écran (WCAG 2.4.6).
+      </p>
+
+      <div class="demo">
+        <EditImageGallery images={demoGalleryImages} label="Planches déposées" />
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            galleryProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Ce qu'une image doit porter</caption>
+        <thead>
+          <tr><th>Champ</th><th>Type</th><th>Ce qu'il fait</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><code>string</code></td><td>Ce que « supprimer » enverra pour désigner cette image-là.</td></tr>
+          <tr><td><code>src</code></td><td><code>string</code></td><td>L’adresse de l’image. Déjà passée par <code>withBase()</code> par l’appelant.</td></tr>
+          <tr><td><code>alt</code></td><td><code>string</code></td><td>Ce que l’image montre. Vide seulement si elle est purement décorative.</td></tr>
+          <tr><td><code>href</code></td><td><code>string</code></td><td>Où mène « voir ». Absent : le bouton n’est pas rendu.</td></tr>
+          <tr><td><code>width</code> / <code>height</code></td><td><code>number</code></td><td>Les dimensions du fichier, pour que la place soit réservée avant le chargement.</td></tr>
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>Deux mesures tombent juste par composition.</strong> La hauteur d'une vignette est
+        {' '}<code>space-layout-128 + space-md</code> — <strong>140 exactement</strong>, la mesure du
+        nœud. Son rembourrage vertical est <code>space-xl + space-xs</code>, soit 28. L'écart des
+        vignettes et le rembourrage de la grille sont <code>space/sm</code>, liés dans le nœud.
+      </p>
+
+      <p class="flag">
+        <strong>La largeur d'une vignette est 192, pas 189.</strong>
+        {' '}<code>space-layout-128 + space-layout-64</code> est la composition la plus proche —
+        <strong>écart +3</strong>. Et c'est un minimum : la grille étire les vignettes pour remplir la
+        ligne, ce qui est de toute façon ce qu'il faut ici. La largeur maximale de 337 du nœud, elle,
+        n'a aucune variable et n'est pas écrite.
+      </p>
+
+      <p class="flag">
+        <strong>Le voile noir à 20 % n'est pas posé.</strong> Le système n'a pas d'échelle d'opacité.
+        Il n'était là que pour détacher les boutons de la photo, et les boutons
+        {' '}<code>secondary</code> ont leur propre fond opaque : le contraste tient sans lui — WCAG
+        1.4.3 est porté par le bouton, pas par le voile.
+      </p>
+
+      <p class="flag">
+        <strong>La vignette ne porte aucun trait, et le nœud non plus.</strong> Ce composant en a
+        annoncé un de 1,5 jusqu'à ce qu'une relecture du nœud ne le trouve nulle part. Ce qui y est,
+        c'est le voile à 20 %, posé sur le remplissage de l'image. La vignette, elle, n'a pas de
+        bord à dessiner : l'image l'occupe entièrement.
+      </p>
+    </section>
+  </main>
+</DocsLayout>
+
+<style>
+  .demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .demo-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .demo-case {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* Une rangée de pastilles retombe à la ligne : c'est la mise en page de la
+     démo, pas une propriété du chip. */
+  .demo-chips {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  /* Le groupe de la démo. Il n'est pas un composant : c'est la page qui pose la
+     question, et c'est elle qui met en page ses réponses. */
+  .demo-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .demo-group legend {
+    padding: 0;
+    margin-bottom: var(--space-md);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-default);
+  }
+
+  /* Le nom de l'état, pas un libellé : plus petit, en capitales, muted — il ne
+     doit pas se confondre avec le FieldLabel qu'il annonce. */
+  .demo-name {
+    margin: 0;
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--font-letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* Meme conteneur que /components : un tableau de props deborde a 375, et c'est
+     lui qui doit defiler, pas la page entiere. */
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: var(--space-xl);
+  }
+
+  table {
+    /* Il remplit sa colonne quand il tient, et la depasse quand il ne tient pas —
+       c'est le conteneur qui rattrape le depassement. */
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-body-sm);
+    text-align: left;
+  }
+
+  caption {
+    text-align: left;
+    padding-bottom: var(--space-sm);
+    font-size: var(--font-size-body-sm);
+    letter-spacing: var(--font-letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  th,
+  td {
+    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border-default);
+    vertical-align: top;
+  }
+
+  td {
+    color: var(--color-text-muted);
+  }
+
+  td:first-child {
+    color: var(--color-text-default);
+    white-space: nowrap;
+  }
+</style>

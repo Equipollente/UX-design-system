@@ -1,0 +1,152 @@
+---
+// Radio — un choix parmi plusieurs, dont un seul peut être retenu.
+//
+// Ce n'est pas une case à cocher : une case se coche et se décoche toute seule,
+// un radio ne se relâche qu'en en choisissant un autre. C'est aussi pourquoi il
+// ne va jamais seul — il n'a de sens que dans un groupe qui partage un `name` et
+// pose sa question en <legend>. Pour un oui/non isolé, c'est Checkbox.
+//
+// Nœud Figma : 340:879 — 8 variantes, Selected × State.
+//
+// Le contrôle est natif mais son dessin vient du système : `appearance: none`
+// efface celui du navigateur, et tout ce qui le remplace est une variable. Le
+// point du centre n'est pas un second élément — c'est une ombre intérieure de
+// `space/xs` posée sur un fond blanc : 16 − 4 − 4 = 8, exactement le point du
+// nœud, sans qu'une mesure soit écrite à la main.
+//
+// Toutes les mesures viennent du nœud, et aucune n'est approchée :
+// — cercle 18 → `control/size` ;
+// — point 8 → `space/sm`, obtenu sans être écrit. Le trait mange 1 de chaque
+//   côté, la boîte intérieure fait donc 16, et l'anneau de `space/xs` n'y laisse
+//   que 16 − 4 − 4 = 8 ;
+// — écart au libellé 8 → `space/sm`, lié dans le nœud ;
+// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus`.
+//
+// Le trait est posé dans tous les états, et c'est sa couleur qui change : le nœud
+// ne le dessine que sur le cercle non retenu, mais un trait accent sur un fond
+// accent se voit pareil, et la géométrie ne bouge alors jamais — sans quoi le
+// point changerait de taille en passant d'un état à l'autre.
+//
+// Ce que Figma déclare et qui n'est pas ici :
+// — la typographie du libellé (14 px, interligne 120 %) et son encre désactivée
+//   (neutral/400), qui ne sont pas celles de FieldLabel (15 px, 112 %, muted).
+//   Le libellé partagé l'emporte : c'est sa raison d'être qu'un seul fichier
+//   décide de tous les libellés du formulaire.
+
+import FieldLabel from './FieldLabel.astro';
+
+interface Props {
+  /** Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe. */
+  id: string;
+  /** Le mot qui nomme ce choix-ci — pas la question, qui va en <legend>. */
+  label: string;
+  /** Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent. */
+  name: string;
+  /** Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`. */
+  value?: string;
+  /** Le choix retenu à l'ouverture. Un seul du groupe doit le porter. */
+  checked?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  value,
+  checked = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolean).join(' ');
+---
+
+<div class={classes} {...rest}>
+  <input
+    class="radio-input"
+    type="radio"
+    id={id}
+    name={name}
+    value={value ?? id}
+    checked={checked}
+    disabled={disabled}
+  />
+  <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+</div>
+
+<style>
+  .radio {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+  }
+
+  /* Le cercle. `appearance: none` efface le dessin du navigateur ; tout ce qui
+     suit vient du système. 18, la mesure du nœud. */
+  .radio-input {
+    appearance: none;
+    flex: none;
+    margin: 0;
+    width: var(--radio-size, var(--control-size));
+    height: var(--radio-size, var(--control-size));
+    border-radius: var(--radius-pill);
+    border: var(--border-width-default) solid var(--color-border-default);
+    /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
+    cursor: pointer;
+    /* Le changement de fond suit la même durée que le bouton du système. */
+    transition:
+      background-color var(--motion-duration-quick) var(--motion-easing-standard),
+      border-color var(--motion-duration-quick) var(--motion-easing-standard),
+      box-shadow var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  /* — default — */
+  .radio-input {
+    background: var(--radio-bg, var(--color-bg-surface));
+  }
+
+  /* — hover — */
+  .radio:not(.radio-disabled):hover .radio-input {
+    background: var(--radio-bg-hover, var(--color-neutral-100));
+  }
+
+  /* — focused — L'anneau du système remplace celui du navigateur. 2, la mesure
+     du nœud, et WCAG 2.4.7 est tenu. */
+  .radio-input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — selected — Le fond passe au blanc de l'encre sur accent, et l'anneau
+     intérieur de `space/xs` peint le reste. Le trait ayant déjà pris 1 de chaque
+     côté, il ne reste au centre que 16 − 4 − 4 = 8 : le point du nœud, sans
+     qu'aucune mesure soit écrite. Le trait passe à l'accent pour que le disque
+     soit d'un seul tenant. */
+  .radio-input:checked {
+    background: var(--color-text-on-accent);
+    border-color: var(--radio-accent, var(--color-accent-500));
+    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent, var(--color-accent-500));
+  }
+
+  .radio:not(.radio-disabled):hover .radio-input:checked {
+    background: var(--color-text-on-accent);
+    border-color: var(--radio-accent-hover, var(--color-accent-600));
+    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent-hover, var(--color-accent-600));
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et un contrôle désactivé ne doit pas prendre le survol. Le cercle
+     garde son dessin et s'atténue, exactement comme le nœud : rien ne bascule
+     vers un gris, c'est l'opacité seule qui dit « éteint ». */
+  .radio-disabled .radio-input,
+  .radio-disabled :global(.field-label) {
+    cursor: not-allowed;
+  }
+
+  .radio-disabled .radio-input {
+    opacity: var(--opacity-disabled);
+  }
+</style>

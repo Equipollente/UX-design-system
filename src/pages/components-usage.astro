@@ -1,0 +1,218 @@
+---
+import { withBase } from '../design-system/lib/url';
+import DocsLayout from '../design-system/layouts/DocsLayout.astro';
+import Button from '../design-system/components/Button.astro';
+import Icon from '../design-system/components/Icon.astro';
+
+const iconNames = ['mail-edit', 'arrow-narrow-right', 'arrow-narrow-left', 'edit', 'book-open', 'route', 'trash'] as const;
+const iconLabels = {
+  'mail-edit': 'Mail edit',
+  'arrow-narrow-right': 'Arrow right',
+  'arrow-narrow-left': 'Arrow left',
+  edit: 'Edit',
+  'book-open': 'Book open',
+  route: 'Route',
+  trash: 'Trash',
+};
+---
+
+<DocsLayout
+  title="Configurer un composant — UX design system"
+  description="Configure un bouton, visualise-le et copie le code Astro prêt à utiliser."
+>
+  <header class="page-head">
+    <p class="kicker">Outil de génération</p>
+    <h1>Configure ton composant</h1>
+    <p class="lead">
+      Choisis les options à gauche. Tu vois le résultat à droite, puis tu copies uniquement le code
+      dont tu as besoin pour ton site.
+    </p>
+  </header>
+
+  <main>
+    <section class="builder" aria-labelledby="builder-title">
+      <div class="builder-head">
+        <div><p class="eyebrow">Composant</p><h2 id="builder-title">Button</h2></div>
+        <span class="status">Interactif</span>
+      </div>
+
+      <div class="builder-grid">
+        <form class="controls" id="button-controls">
+          <fieldset>
+            <legend>Variante</legend>
+            <div class="choice-row">
+              <label><input type="radio" name="variant" value="primary" checked /> <span>Primary</span></label>
+              <label><input type="radio" name="variant" value="secondary" /> <span>Secondary</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Taille</legend>
+            <div class="choice-row">
+              <label><input type="radio" name="size" value="sm" /> <span>Small</span></label>
+              <label><input type="radio" name="size" value="md" checked /> <span>Medium</span></label>
+              <label><input type="radio" name="size" value="lg" /> <span>Large</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Icône</legend>
+            <label class="select-label" for="icon-select">Choisir une icône</label>
+            <select id="icon-select" name="icon">
+              <option value="none">Aucune icône</option>
+              {iconNames.map((name) => <option value={name}>{iconLabels[name]}</option>)}
+            </select>
+            <div class="choice-row compact">
+              <label><input type="radio" name="icon-position" value="left" checked /> <span>À gauche</span></label>
+              <label><input type="radio" name="icon-position" value="right" /> <span>À droite</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Libellé</legend>
+            <label class="select-label" for="label-input">Texte visible</label>
+            <input id="label-input" name="label" value="Voir le projet" maxlength="40" />
+            <label class="toggle-label"><input id="icon-only" name="icon-only" type="checkbox" /> <span>Icône seule</span></label>
+          </fieldset>
+
+          <div class="tip" role="note"><strong>À retenir</strong><span>Une icône seule doit toujours avoir un <code>aria-label</code>.</span></div>
+        </form>
+
+        <div class="result-column">
+          <div class="preview-panel">
+            <div class="panel-label"><span>Aperçu</span><span id="preview-description">Primary · md</span></div>
+            <div class="preview-stage">
+              <Button size="md" icon="mail-edit" aria-label="Voir le projet">Voir le projet</Button>
+              {iconNames.map((name) => <span class="preview-icon" data-icon={name} hidden><Icon name={name} /></span>)}
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="panel-label"><span>Code à copier</span><span>Astro</span></div>
+            <pre><code id="generated-code">&lt;Button size="md" icon="mail-edit"&gt;
+  Voir le projet
+&lt;/Button&gt;</code></pre>
+            <button class="copy-button" id="copy-code" type="button"><span id="copy-label">Copier le code</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <p class="eyebrow">Le principe</p>
+      <h2>Du choix au code en trois étapes</h2>
+      <div class="steps">
+        <article><span>01</span><h3>Configure</h3><p>Choisis une variante, une taille, une icône et un libellé.</p></article>
+        <article><span>02</span><h3>Vérifie</h3><p>L’aperçu te montre exactement la combinaison sélectionnée.</p></article>
+        <article><span>03</span><h3>Copie</h3><p>Colle le snippet dans une page Astro de ton site.</p></article>
+      </div>
+    </section>
+
+    <section class="snippet-context">
+      <div><p class="eyebrow">Dans ton site</p><h2>Avant de coller le snippet</h2></div>
+      <pre><code>{`---
+import Button from 'ux-design-system/components/Button.astro';
+---`}</code></pre>
+    </section>
+
+    <p class="back-link"><a href={withBase('/components')}>Voir la documentation complète des composants →</a></p>
+  </main>
+</DocsLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#button-controls');
+  const preview = document.querySelector<HTMLButtonElement>('.preview-stage > button');
+  const code = document.querySelector<HTMLElement>('#generated-code');
+  const description = document.querySelector<HTMLElement>('#preview-description');
+  const iconSelect = document.querySelector<HTMLSelectElement>('#icon-select');
+  const labelInput = document.querySelector<HTMLInputElement>('#label-input');
+  const iconOnly = document.querySelector<HTMLInputElement>('#icon-only');
+  const copyButton = document.querySelector<HTMLButtonElement>('#copy-code');
+  const copyLabel = document.querySelector<HTMLElement>('#copy-label');
+
+  if (form && preview && code && description && iconSelect && labelInput && iconOnly && copyButton && copyLabel) {
+    const getValue = (name: string) => form.querySelector<HTMLInputElement>(`[name="${name}"]:checked`)?.value ?? '';
+
+    const update = () => {
+      const variant = getValue('variant');
+      const size = getValue('size');
+      const icon = iconSelect.value;
+      const position = getValue('icon-position');
+      const label = labelInput.value.trim();
+      const isIconOnly = iconOnly.checked && icon !== 'none';
+      const visibleLabel = isIconOnly ? '' : label || 'Bouton';
+      const iconProp = position === 'right' ? 'iconEnd' : 'icon';
+
+      preview.className = `btn btn-${variant} btn-${size}`;
+      preview.textContent = visibleLabel;
+      preview.removeAttribute('aria-label');
+      if (icon !== 'none') {
+        const iconSlot = document.querySelector<HTMLElement>(`.preview-icon[data-icon="${icon}"]`);
+        const iconClone = iconSlot?.firstElementChild?.cloneNode(true);
+        if (iconClone) position === 'right' ? preview.append(iconClone) : preview.prepend(iconClone);
+      }
+      if (isIconOnly) preview.setAttribute('aria-label', label || 'Action');
+
+      const props = [`variant="${variant}"`, `size="${size}"`];
+      if (icon !== 'none') props.push(`${iconProp}="${icon}"`);
+      if (isIconOnly) props.push(`aria-label="${label || 'Action'}"`, 'style="--btn-min-w: 0"');
+      const opening = `<Button ${props.join(' ')}${isIconOnly ? ' />' : '>'}`;
+      code.textContent = isIconOnly ? opening : `${opening}\n  ${visibleLabel}\n</Button>`;
+      description.textContent = `${variant} · ${size}${isIconOnly ? ' · icon only' : ''}`;
+      labelInput.disabled = isIconOnly;
+    };
+
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    copyButton.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(code.textContent ?? '');
+      copyLabel.textContent = 'Code copié';
+      window.setTimeout(() => { copyLabel.textContent = 'Copier le code'; }, 1800);
+    });
+    update();
+  }
+</script>
+
+<style>
+  .kicker, .eyebrow { margin: 0 0 var(--space-sm); color: var(--color-text-accent); font-family: var(--font-family-heading); font-size: var(--font-size-label); font-weight: var(--font-weight-bold); letter-spacing: var(--font-letter-spacing-wider); text-transform: uppercase; }
+  .builder { overflow: hidden; border: 1px solid var(--color-border-default); background: var(--color-bg-default); }
+  .builder-head, .panel-label { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
+  .builder-head { padding: var(--space-xl); border-bottom: 1px solid var(--color-border-default); }
+  .builder-head h2, .how-it-works h2, .snippet-context h2 { margin: 0; }
+  .status { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-pill); background: var(--color-highlight-200); color: var(--color-neutral-900); font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); }
+  .builder-grid { display: grid; grid-template-columns: minmax(15rem, .8fr) minmax(20rem, 1.2fr); }
+  .controls { padding: var(--space-xl); border-right: 1px solid var(--color-border-default); }
+  fieldset { margin: 0 0 var(--space-xl); padding: 0; border: 0; }
+  legend { margin-bottom: var(--space-sm); font-family: var(--font-family-heading); font-weight: var(--font-weight-bold); }
+  .choice-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+  .choice-row label { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; padding: 0 var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); cursor: pointer; font-size: var(--font-size-body-sm); }
+  .choice-row label:has(input:checked) { border-color: var(--color-accent-500); background: var(--color-accent-100); color: var(--color-neutral-900); }
+  input[type='radio'] { accent-color: var(--color-accent-500); }
+  .select-label { display: block; margin-bottom: var(--space-xs); color: var(--color-text-muted); font-size: var(--font-size-body-sm); }
+  select, #label-input { width: 100%; min-height: 44px; margin-bottom: var(--space-sm); padding: 0 var(--space-sm); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); background: var(--color-bg-default); color: var(--color-text-default); font: inherit; }
+  .compact { margin-top: var(--space-sm); }
+  .toggle-label { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-size-body-sm); }
+  .tip { display: grid; gap: var(--space-xs); padding: var(--space-md); background: var(--color-bg-section); font-size: var(--font-size-body-sm); }
+  .tip span { color: var(--color-text-muted); }
+  .result-column { display: grid; align-content: start; }
+  .preview-panel, .code-panel { padding: var(--space-xl); }
+  .code-panel { border-top: 1px solid var(--color-border-default); background: var(--color-neutral-900); color: var(--color-neutral-100); }
+  .panel-label { margin-bottom: var(--space-md); color: var(--color-text-muted); font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); letter-spacing: var(--font-letter-spacing-wide); text-transform: uppercase; }
+  .code-panel .panel-label { color: var(--color-neutral-400); }
+  .preview-stage { display: grid; min-height: 13rem; place-items: center; padding: var(--space-xl); background: var(--color-bg-surface); }
+  .preview-stage svg { width: var(--icon-size, 24px); height: var(--icon-size, 24px); flex: 0 0 auto; }
+  pre { overflow-x: auto; margin: 0; padding: var(--space-lg); border-radius: var(--radius-sm); background: var(--color-bg-section); }
+  .code-panel pre { background: #242225; color: var(--color-neutral-100); }
+  code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: var(--font-size-body-sm); }
+  .copy-button { width: 100%; min-height: 44px; margin-top: var(--space-md); border: 1px solid var(--color-accent-300); border-radius: var(--radius-sm); background: var(--color-accent-500); color: white; font: inherit; font-weight: var(--font-weight-bold); cursor: pointer; }
+  .copy-button:hover { background: var(--color-accent-600); }
+  .how-it-works { padding: var(--space-layout-96) 0; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); margin-top: var(--space-xl); }
+  .steps article { padding-top: var(--space-lg); border-top: 2px solid var(--color-accent-500); }
+  .steps span { color: var(--color-text-accent); font-family: var(--font-family-heading); font-weight: var(--font-weight-bold); }
+  .steps h3 { margin: var(--space-lg) 0 var(--space-sm); }
+  .steps p { margin: 0; color: var(--color-text-muted); }
+  .snippet-context { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: var(--space-xl); padding: var(--space-xl); background: var(--color-bg-section); }
+  .back-link { margin-top: var(--space-xl); }
+  @media (max-width: 700px) { .builder-grid, .steps, .snippet-context { grid-template-columns: 1fr; } .controls { border-right: 0; border-bottom: 1px solid var(--color-border-default); } }
++</style>

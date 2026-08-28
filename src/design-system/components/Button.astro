@@ -29,6 +29,13 @@ interface Props {
   /** Idem, mais posée après le label. */
   iconEnd?: IconName;
   type?: 'button' | 'submit';
+  /**
+   * Le couple que le formulaire recevra quand ce bouton-la l'envoie. C'est ce
+   * qui permet a plusieurs submit de se distinguer sans une ligne de script —
+   * EditImageGallery s'en sert pour dire quelle image retirer.
+   */
+  name?: string;
+  value?: string;
   class?: string;
   /**
    * La surcharge ponctuelle décrite plus haut : --btn-bg, --btn-px, --btn-icon…
