@@ -29,3 +29,9 @@ Desktop.ini
 
 # jetbrains setting folder
 .idea/
+
+# Outils locaux, volontairement non versionnés. Le dépôt tient le design system
+# et rien d'autre : un script qui dépanne une machine n'en fait pas partie, et
+# le versionner obligerait à le maintenir. Même politique que l'outil d'ajout
+# d'icône. Les suivants se rangent ici.
+supprimer-worktree-fantome.py
