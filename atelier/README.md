@@ -48,6 +48,7 @@ que de le recopier.
 | [ajouter-un-composant.md](ajouter-un-composant.md) | un nœud Figma devient un `.astro` |
 | [modifier-un-composant.md](modifier-un-composant.md) | on touche à un composant existant |
 | [ajouter-une-icone-ou-un-token.md](ajouter-une-icone-ou-un-token.md) | la source Figma a bougé |
+| [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md) | le chemin complet, de la variable changée à la page qui l'affiche |
 | [verifier-la-typographie.md](verifier-la-typographie.md) | un interligne ou un interlettrage a bougé — les deux familles que Figma ne sait pas lier |
 | [decisions.md](decisions.md) | « pourquoi c'est fait comme ça ? » |
 | [arbitrages.md](arbitrages.md) | on ouvre Figma pour trancher |
