@@ -122,6 +122,10 @@ const defautCarte = `<Card
   meta="2025 — atelier de six semaines"
   image={{ src: withBase('/images/projet.jpg'), alt: 'Décris ce qu’on voit', width: 822, height: 382 }}
 >
+  <Fragment slot="tags-top">
+    <Tag>Étude de cas</Tag>
+  </Fragment>
+
   <Fragment slot="tags">
     <Tag>Recherche utilisateur</Tag>
   </Fragment>
@@ -652,8 +656,9 @@ import { withBase } from 'ux-design-system/lib/url';
     <section class="atelier" data-atelier="card" id="atelier-card">
       <h2>Card</h2>
       <p class="section-note">
-        Une fiche : une image, trois lignes de texte, et deux emplacements qu'on remplit soi-même —
-        les tags et les actions. C'est le premier atelier où l'on met des composants
+        Une fiche : une image, trois lignes de texte, et trois emplacements qu'on remplit soi-même —
+        deux rangées de tags, l'une au-dessus du titre et l'autre sous les informations secondaires,
+        puis les actions. C'est le premier atelier où l'on met des composants
         {' '}<em>dans</em> un composant.
       </p>
 
@@ -726,6 +731,34 @@ import { withBase } from 'ux-design-system/lib/url';
             </p>
           </fieldset>
 
+          <!-- ── L'emplacement des tags du haut ── -->
+          <fieldset class="emplacement">
+            <legend>Emplacement « tags-top »</legend>
+            <label class="case"
+              ><input type="checkbox" name="tags-top" checked /><span>Afficher cet emplacement</span
+              ></label
+            >
+            <div data-si="tags-top">
+              <div class="rangs" data-liste="tags-top"></div>
+              <button class="ajouter" type="button" data-ajouter="tags-top">+ Ajouter un tag</button>
+              <p class="aide" data-vide="tags-top"></p>
+              <p class="aide">
+                La rangée qui passe <strong>au-dessus du titre</strong>, avant tout le texte. Elle est
+                dessinée exactement comme celle du bas : seule sa place la distingue.
+              </p>
+            </div>
+          </fieldset>
+
+          <template data-modele="tags-top">
+            <div class="rang-slot">
+              <input class="rang-texte" type="text" value="Étude de cas" autocomplete="off" />
+              <select class="rang-variant">
+                {tagVariants.map((v) => <option value={v} selected={v === 'outline'}>{v}</option>)}
+              </select>
+              <button class="retirer" type="button">✕</button>
+            </div>
+          </template>
+
           <!-- ── L'emplacement des tags ── -->
           <fieldset class="emplacement">
             <legend>Emplacement « tags »</legend>
@@ -738,7 +771,8 @@ import { withBase } from 'ux-design-system/lib/url';
               <button class="ajouter" type="button" data-ajouter="tags">+ Ajouter un tag</button>
               <p class="aide" data-vide="tags"></p>
               <p class="aide">
-                Figma n'accepte que des <em>Tag</em> ici. Le code ne peut pas l'imposer — c'est à
+                La rangée qui reste <strong>sous les informations secondaires</strong>. Figma
+                n'accepte que des <em>Tag</em> dans les deux. Le code ne peut pas l'imposer — c'est à
                 toi de ne pas y mettre autre chose.
               </p>
             </div>
@@ -814,6 +848,9 @@ import { withBase } from 'ux-design-system/lib/url';
                       image={cardDemo.image}
                       headingLevel={3}
                     >
+                      <Fragment slot="tags-top">
+                        <span class="fente-tags-top" />
+                      </Fragment>
                       <Fragment slot="tags">
                         <span class="fente-tags" />
                       </Fragment>
@@ -1350,14 +1387,19 @@ import { withBase } from 'ux-design-system/lib/url';
     const defauts = atelierCarte.querySelector<HTMLElement>('[data-defauts]');
     const alerte = atelierCarte.querySelector<HTMLElement>('[data-alerte]');
 
+    // Trois emplacements, et le script ne les nomme qu'ici : tout le reste se
+    // déduit de la clé — `data-liste`, `data-modele`, `data-ajouter`,
+    // `data-vide`, `.fente-*` et le nom du slot dans le code produit. Ajouter un
+    // emplacement, c'est ajouter une ligne à MOTS et son fieldset au-dessus.
     const MOTS = {
+      'tags-top': { de: 'du tag du haut', le: 'le tag du haut' },
       tags: { de: 'du tag', le: 'le tag' },
       actions: { de: "de l'action", le: "l'action" },
     } as const;
     type Quoi = keyof typeof MOTS;
-    const QUOI: Quoi[] = ['tags', 'actions'];
+    const QUOI: Quoi[] = ['tags-top', 'tags', 'actions'];
 
-    // Les deux zones de chaque aperçu, relevées une fois avant que le script ne
+    // Les trois zones de chaque aperçu, relevées une fois avant que le script ne
     // les vide. On remonte depuis le repère posé dans le slot plutôt que de
     // viser le nom de classe interne de la carte : ce nom appartient au
     // composant, il peut changer sans que cette page le sache.
@@ -1481,6 +1523,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const IMAGE =
       "image={{ src: withBase('/images/projet.jpg'), alt: 'Décris ce qu’on voit', width: 822, height: 382 }}";
 
+    ajouter('tags-top');
     ajouter('tags');
     ajouter('actions');
     numeroter();
@@ -1492,7 +1535,12 @@ import { withBase } from 'ux-design-system/lib/url';
       const meta = String(d.get('meta') ?? '').trim();
       const avecImage = d.get('image') === 'on';
 
-      const montre = { tags: d.get('tags') === 'on', actions: d.get('actions') === 'on' };
+      const montre = {
+        'tags-top': d.get('tags-top') === 'on',
+        tags: d.get('tags') === 'on',
+        actions: d.get('actions') === 'on',
+      } as Record<Quoi, boolean>;
+      const tagsTop = montre['tags-top'] ? lire('tags-top') : [];
       const tags = montre.tags ? lire('tags') : [];
       const actions = montre.actions ? lire('actions') : [];
 
@@ -1524,15 +1572,22 @@ import { withBase } from 'ux-design-system/lib/url';
         zone.replaceChildren(...enfants.filter((e): e is HTMLElement => Boolean(e)));
         zone.style.display = enfants.length ? '' : 'none';
       };
+      remplir('tags-top', tagsTop.map(poserTag));
       remplir('tags', tags.map(poserTag));
       remplir('actions', actions.map(poserAction));
 
       // Un emplacement affiché mais vide n'est pas une rangée vide : Astro ne le
       // rend pas du tout. Le dire ici évite de chercher pourquoi « rien ne se
       // passe » quand on coche sans rien ajouter.
+      const combien = {
+        'tags-top': tagsTop.length,
+        tags: tags.length,
+        actions: actions.length,
+      } as Record<Quoi, number>;
+
       for (const quoi of QUOI) {
         const note = atelierCarte.querySelector<HTMLElement>(`[data-vide="${quoi}"]`);
-        const n = quoi === 'tags' ? tags.length : actions.length;
+        const n = combien[quoi];
         if (note) {
           note.textContent =
             montre[quoi] && n === 0
@@ -1558,14 +1613,23 @@ import { withBase } from 'ux-design-system/lib/url';
 
       const enfants: string[] = [];
 
-      if (tags.length) {
-        enfants.push('<Fragment slot="tags">');
-        for (const t of tags) {
+      // Les deux rangées de tags produisent le même bloc à un nom près : c'est la
+      // meilleure preuve qu'elles sont un seul emplacement dédoublé, et pas deux
+      // objets. La ligne vide ne se pose qu'entre deux blocs — un Fragment en
+      // tête de carte ne s'annonce pas par un blanc.
+      const blocTags = (nom: string, liste: ReturnType<typeof lire>) => {
+        if (!liste.length) return;
+        if (enfants.length) enfants.push('');
+        enfants.push(`<Fragment slot="${nom}">`);
+        for (const t of liste) {
           const a = t.variant === 'outline' ? [] : [`variant="${t.variant}"`];
           enfants.push('  ' + baliser('Tag', a, attr(t.texte)));
         }
         enfants.push('</Fragment>');
-      }
+      };
+
+      blocTags('tags-top', tagsTop);
+      blocTags('tags', tags);
 
       if (actions.length) {
         if (enfants.length) enfants.push('');
@@ -1589,7 +1653,7 @@ import { withBase } from 'ux-design-system/lib/url';
       // qu'on a mis dans les emplacements, et withBase seulement s'il y a une
       // image à préfixer.
       const imports = ['Card'];
-      if (tags.length) imports.push('Tag');
+      if (tagsTop.length || tags.length) imports.push('Tag');
       if (actions.length) imports.push('Button');
       const lignes = imports.map((n) => `import ${n} from 'ux-design-system/components/${n}.astro';`);
       if (avecImage) lignes.push(`import { withBase } from 'ux-design-system/lib/url';`);
