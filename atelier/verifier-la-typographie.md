@@ -77,11 +77,27 @@ Il ne corrige rien : il liste les styles dont l'interligne ou l'interlettrage n'
 vocabulaire. **Un style en PIXELS est toujours un défaut** — c'est la trace d'une liaison qu'il faut
 retirer.
 
-## Quand le lancer
+## Quand le lancer — et pourquoi tu n'as pas à y penser
 
-- Après avoir touché un `font/line-height/*` ou un `font/letter-spacing/*` dans Figma.
-- Après avoir créé ou dupliqué un style de texte.
-- Avant un ré-export, si la typographie a bougé — c'est le moment le moins cher.
+**`npm run tokens` te le dira.** Le script compare les deux familles en pourcentage à leur état
+précédent, et si l'une a bougé il l'écrit en clair, avec l'ancienne et la nouvelle valeur :
+
+```
+  ⚠️  1 valeur a bougé dans les familles que Figma ne sait pas lier :
+      font.line-height.tight : 1.12 → 1.15
+
+      Le code est à jour. Les styles de texte du fichier Figma, non :
+      ils portent le pourcentage à la main, et il vient de diverger.
+      → lancer l'audit de typographie, atelier/verifier-la-typographie.md
+```
+
+Il ne bloque rien et ne corrige rien : il parle au seul moment où la machine voit passer le
+changement. Quand rien n'a bougé, il se tait — c'est ce qui fait qu'on le croit quand il parle.
+
+Les deux autres moments, eux, ne se voient pas depuis le dépôt :
+
+- après avoir créé ou dupliqué un style de texte dans Figma ;
+- avant un ré-export, si la typographie a bougé — c'est le moment le moins cher.
 
 ## L'état au 27/08
 

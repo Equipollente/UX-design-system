@@ -8,7 +8,7 @@
 // l'exception des 3 tokens du groupe layout. On lit donc Desktop pour tout, et
 // les trois autres uniquement pour ce groupe.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -283,6 +283,13 @@ writeFileSync(join(ROOT, 'src/design-system/styles/tokens.css'), lines.join('\n'
 // Alimente la page /design-system/foundations. Les $description Figma portent la doctrine
 // d'usage et les ratios de contraste : elles ne doivent pas se perdre ici.
 
+// Lu avant la réécriture ci-dessous : après, le fichier contiendrait déjà les
+// nouvelles valeurs et la garde plus bas se comparerait à elle-même.
+const PRECEDENT = join(ROOT, 'src/design-system/data/tokens.json');
+const avant = existsSync(PRECEDENT)
+  ? new Map(JSON.parse(readFileSync(PRECEDENT, 'utf8')).map((t) => [t.path, t.css]))
+  : null;
+
 const literal = (name, seen = new Set()) => {
   if (seen.has(name)) return null; // garde-fou contre un cycle d'alias
   const token = resolved.find((t) => t.name === name);
@@ -298,6 +305,44 @@ writeFileSync(
     2
   ) + '\n'
 );
+
+// --- La garde des deux familles en pourcentage -------------------------------
+//
+// `font/line-height` et `font/letter-spacing` sont les seules variables que Figma
+// **ne sait pas lier** à un style de texte : une variable de type nombre transporte
+// le nombre et pas l'unité, et Figma applique alors des pixels. Le pourcentage est
+// donc tapé à la main dans chacun des styles, et rien dans Figma ne le rattache à
+// la variable.
+//
+// Conséquence : le code suit tout seul — la division par 100 est faite plus haut —
+// mais **les styles du fichier de dessin, non**. Ils gardent leur ancienne valeur
+// sans rien dire.
+//
+// Cette garde ne corrige rien et ne bloque rien : elle parle au seul moment où la
+// machine voit passer le changement. C'est le pendant du refus de construire sur un
+// groupe inconnu, en plus doux — ici il n'y a rien de cassé, seulement quelque chose
+// à aller vérifier ailleurs.
+const FAMILLES_EN_POURCENT = ['font.line-height.', 'font.letter-spacing.'];
+
+if (avant) {
+  const bouge = resolved.filter(
+    (t) =>
+      FAMILLES_EN_POURCENT.some((f) => t.path.startsWith(f)) &&
+      avant.has(t.path) &&
+      avant.get(t.path) !== t.css
+  );
+
+  if (bouge.length) {
+    console.log('');
+    console.log('  ⚠️  ' + bouge.length + (bouge.length > 1 ? ' valeurs ont bougé' : ' valeur a bougé') + ' dans les familles que Figma ne sait pas lier :');
+    for (const t of bouge) console.log(`      ${t.path} : ${avant.get(t.path)} → ${t.css}`);
+    console.log('');
+    console.log("      Le code est à jour. Les styles de texte du fichier Figma, non :");
+    console.log('      ils portent le pourcentage à la main, et il vient de diverger.');
+    console.log('      → lancer l\'audit de typographie, atelier/verifier-la-typographie.md');
+    console.log('');
+  }
+}
 
 const perGroup = Object.keys(GROUP_TITLES)
   .map((g) => `${g} ${resolved.filter((t) => t.group === g).length}`)
