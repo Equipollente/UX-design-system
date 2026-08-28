@@ -19,6 +19,7 @@ import filePlus from '../icons/file-plus.svg';
 import fileText from '../icons/file-text.svg';
 import imagePlus from '../icons/image-plus.svg';
 import mailEdit from '../icons/mail-edit.svg';
+import menuRight from '../icons/menu-right.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
 import trash from '../icons/trash.svg';
@@ -39,6 +40,7 @@ export const icons = {
   'file-text': fileText,
   'image-plus': imagePlus,
   'mail-edit': mailEdit,
+  'menu-right': menuRight,
   'quote-down': quoteDown,
   'route': route,
   'trash': trash,
