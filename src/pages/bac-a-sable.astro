@@ -684,6 +684,23 @@ import { withBase } from 'ux-design-system/lib/url';
           </fieldset>
 
           <fieldset>
+            <legend>Taille du titre</legend>
+            <div class="choix">
+              <label
+                ><input type="radio" name="titleSize" value="title" checked /><span>title</span></label
+              >
+              <label
+                ><input type="radio" name="titleSize" value="heading" /><span>heading</span></label
+              >
+            </div>
+            <p class="aide">
+              <code>title</code> est la taille d'un <code>h2</code> — 2rem, ce que Figma dessine.
+              {' '}<code>heading</code> est celle d'un <code>h4</code> — 1.25rem, pour une grille
+              serrée. Seule la taille bouge : le reste du dessin suit tout seul.
+            </p>
+          </fieldset>
+
+          <fieldset>
             <legend><label for="carte-title">Titre</label></legend>
             <input
               id="carte-title"
@@ -837,11 +854,16 @@ import { withBase } from 'ux-design-system/lib/url';
           <p class="etiquette">Le composant</p>
           <div class="demo demo-carte" data-apercu>
             {
-              (['vertical', 'horizontal'] as const).map((o) => (
-                <div class:list={['pv', o === 'vertical' && 'is-on']} data-cle={o}>
+              (['vertical', 'horizontal'] as const).flatMap((o) =>
+                (['title', 'heading'] as const).map((ts) => (
+                <div
+                  class:list={['pv', o === 'vertical' && ts === 'title' && 'is-on']}
+                  data-cle={`${o}|${ts}`}
+                >
                   <div class:list={['carte-socle', `carte-socle-${o}`]}>
                     <Card
                       orientation={o}
+                      titleSize={ts}
                       title="Quatre guides pour concevoir accessible"
                       subtitle="Déploiements plus rapides, langage UX partagé"
                       meta="2025 — atelier de six semaines"
@@ -860,7 +882,8 @@ import { withBase } from 'ux-design-system/lib/url';
                     </Card>
                   </div>
                 </div>
-              ))
+                )),
+              )
             }
           </div>
           <p class="alerte" data-alerte hidden></p>
@@ -1530,6 +1553,7 @@ import { withBase } from 'ux-design-system/lib/url';
 
     brancher(atelierCarte, (d, apercu) => {
       const orientation = String(d.get('orientation'));
+      const titleSize = String(d.get('titleSize'));
       const title = String(d.get('title') ?? '').trim();
       const subtitle = String(d.get('subtitle') ?? '').trim();
       const meta = String(d.get('meta') ?? '').trim();
@@ -1544,7 +1568,11 @@ import { withBase } from 'ux-design-system/lib/url';
       const tags = montre.tags ? lire('tags') : [];
       const actions = montre.actions ? lire('actions') : [];
 
-      const vue = montrer(apercu, orientation);
+      // Deux réglages décident maintenant de l'exemplaire montré, donc la clé en
+      // porte deux. Les quatre cartes sont rendues par Astro au build comme
+      // avant : ce qu'on voit reste le composant, pas une classe posée après
+      // coup sur un exemplaire unique.
+      const vue = montrer(apercu, `${orientation}|${titleSize}`);
 
       // Les trois lignes de texte et l'image : vides ou décochées, elles sortent
       // de la mise en page au lieu d'y laisser une place. C'est ce que fait
@@ -1606,6 +1634,8 @@ import { withBase } from 'ux-design-system/lib/url';
       const omis: string[] = [];
       if (orientation !== 'vertical') attrs.push(`orientation="${orientation}"`);
       else omis.push('orientation="vertical"');
+      if (titleSize !== 'title') attrs.push(`titleSize="${titleSize}"`);
+      else omis.push('titleSize="title"');
       attrs.push(`title="${attr(title)}"`);
       if (subtitle) attrs.push(`subtitle="${attr(subtitle)}"`);
       if (meta) attrs.push(`meta="${attr(meta)}"`);
