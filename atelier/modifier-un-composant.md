@@ -21,6 +21,7 @@ depuis le début, et c'est voulu.
 | Ce qui change | Ce qui suit, dans le même commit |
 |---|---|
 | Une prop ajoutée, renommée, supprimée | le tableau de sa section dans [components.astro](../src/pages/components.astro) — l'`interface Props` est la seule définition, la doc la recopie |
+| Un slot ajouté, renommé, supprimé | le tableau **Slots** de sa section — c'en est un second, sous celui des props, et on l'oublie parce qu'on ne le cherche pas — plus le `<h3>` qui compte les emplacements, qui ment dès qu'il y en a un de plus. **Un slot ne se renomme pas à la légère** : Astro ne signale pas un nom inconnu, et le contenu disparaît sans erreur chez le consommateur |
 | Une variable CSS de surcharge ajoutée | elle est de la surface publique : elle se documente, comme `--card-height` et `--intro-gap` l'ont été |
 | Un comportement, un état, un défaut | le pavé de tête du `.astro`, et le `<h3>` correspondant dans la doc |
 | Un écart avec Figma résolu | retirer son `<p class="flag">` **et** passer sa ligne d'[arbitrages.md](arbitrages.md) en réglé — un écart réglé qui reste affiché est un mensonge à l'écran |
