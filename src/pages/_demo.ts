@@ -90,11 +90,19 @@ export const caseStudies = [
 // longueur des vrais mots, et une carte se juge dessus. Le contenu est donc celui
 // de l'étude Rubika, déjà dans ce fichier et déjà vrai : rien n'est inventé, et rien
 // n'est écrit au nom d'une entreprise réelle qui ne l'ait pas déjà été.
+//
+// La carte a deux rangées de tags et Figma met la même chose dans les deux —
+// « Accent » quatre fois. Une doc qui recopierait ça ne montrerait pas à quoi
+// sert d'en avoir deux. La rangée du haut porte donc un mot de catégorie, celle
+// du bas les trois méthodes de l'étude : c'est la lecture la plus évidente de
+// deux rangées superposées, et elle n'engage que la doc — le composant, lui, ne
+// distingue les deux que par la place.
 export const cardDemo = {
   title: caseStudyDemo.title,
   subtitle: caseStudyDemo.impact,
   meta: caseStudyDemo.eyebrow,
   image: caseStudyImages[0],
+  tagsTop: ['Case study'],
   tags: caseStudyDemo.tags,
   action: caseStudyDemo.action,
 };

@@ -132,8 +132,12 @@ const cardProps = [
 // Figma, recopiés tels quels.
 const cardSlots = [
   [
+    'tags-top',
+    'La rangée de tags au-dessus du titre, avant tout le texte.',
+  ],
+  [
     'tags',
-    'Les tags. Figma n’y accepte que des Tag — le code ne peut pas l’imposer, la doctrine le dit.',
+    'La seconde rangée, sous les informations secondaires. Figma n’accepte que des Tag dans les deux — le code ne peut pas l’imposer, la doctrine le dit.',
   ],
   [
     'actions',
@@ -734,9 +738,10 @@ const caseStudyListVars = [
       <h2>Card</h2>
 
       <p class="section-note">
-        <strong>Ce qu'elle est.</strong> Une fiche qui présente une chose : son image, son titre, son
-        sous-titre, une ligne d'informations secondaires, puis deux emplacements libres — les tags et
-        les actions. Verticale ou horizontale, c'est la même fiche.
+        <strong>Ce qu'elle est.</strong> Une fiche qui présente une chose : son image, une rangée
+        de tags, son titre, son sous-titre, une ligne d'informations secondaires, puis deux autres
+        emplacements libres — une seconde rangée de tags et les actions. Verticale ou horizontale,
+        c'est la même fiche.
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni la carte d'étude de cas — celle-là est une feuille
         pleine largeur qui monte du bas de la page, avec sa phrase d'impact et son carrousel, et elle
@@ -759,6 +764,9 @@ const caseStudyListVars = [
             image={cardDemo.image}
             headingLevel={3}
           >
+            <Fragment slot="tags-top">
+              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
             <Fragment slot="tags">
               {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
             </Fragment>
@@ -789,6 +797,9 @@ const caseStudyListVars = [
             image={cardDemo.image}
             headingLevel={3}
           >
+            <Fragment slot="tags-top">
+              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
             <Fragment slot="tags">
               {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
             </Fragment>
@@ -813,11 +824,24 @@ const caseStudyListVars = [
         système.
       </p>
 
-      <h3>Les deux emplacements</h3>
+      <h3>Les trois emplacements</h3>
       <p class="section-note">
         <strong>Les tags et les actions ne sont pas des props, ce sont des slots nommés</strong> — les
         mêmes que dans Figma. La carte ne pose que la rangée qui les tient : les tags se replient sur
         plusieurs lignes, les actions se calent à droite. Ce qu'on y met se dessine tout seul.
+        <br />
+        <strong>Les tags ont deux rangées, et seule leur place les distingue.</strong>
+        {' '}<code>tags-top</code> passe au-dessus du titre, avant tout le texte ;
+        {' '}<code>tags</code> reste sous les informations secondaires. Le dessin des deux est
+        exactement le même — même rentrée de 16, même écart de 8, même repli — et c'est voulu : deux
+        rangées de pilules qui ne se ressembleraient pas seraient deux objets, pas un emplacement
+        dédoublé.
+        <br />
+        <strong>Ce qui va dans l'une plutôt que dans l'autre reste à écrire.</strong> La maquette met
+        les mêmes tags aux deux endroits, donc elle ne tranche pas ; la doc, elle, montre une
+        catégorie en haut et les méthodes en bas, parce que c'est la lecture la plus évidente de deux
+        rangées superposées. Ce n'est pas une règle que le composant tient — c'est une doctrine, au
+        même titre que « des Tag et rien d'autre ».
         <br />
         <strong>Un emplacement vide n'existe pas</strong> : sans tag, la rangée des tags n'est pas
         rendue, et l'espacement du corps ne lui compte pas de place. C'est ce que dit Figma —
@@ -971,6 +995,21 @@ const caseStudyListVars = [
         {' '}<code>Card</code>. Et la propriété qui commande les deux variantes s'appelle
         {' '}<code>Property 1</code>, ce qui ne dit rien de ce qu'elle fait : le code la nomme
         {' '}<code>orientation</code>. Les deux se renomment côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>La rangée de tags du haut n'est pas un slot.</strong> Dans le fichier, c'est un frame
+        nommé <code>Frame 6</code> — <code>392:1075</code> en vertical, <code>392:1076</code> en
+        horizontal — qui contient deux instances de <em>Tag</em>, là où la rangée du bas est un vrai
+        slot nommé <code>Tags</code>. L'emplacement n'est donc pas remplissable dans la maquette, et
+        il n'a pas de nom : <code>tags-top</code> est une décision du code, comme
+        {' '}<code>orientation</code> l'a été. Le geste tient en deux réglages — convertir le frame en
+        slot, le nommer.
+        <br />
+        <strong>Et les deux rangées y portent le même contenu témoin</strong>, quatre fois
+        {' '}<em>Accent</em>. Rien dans le dessin ne dit donc ce qui va en haut plutôt qu'en bas : la
+        doctrine écrite plus haut est déduite, pas lue. C'est le même manque que la description
+        absente, en plus petit.
       </p>
 
       <p class="flag">

@@ -1,7 +1,7 @@
 ---
-// Card — une fiche qui présente une chose : son image, son titre, son
-// sous-titre, une ligne d'informations secondaires, puis deux emplacements
-// libres — les tags et les actions.
+// Card — une fiche qui présente une chose : son image, une rangée de tags, son
+// titre, son sous-titre, une ligne d'informations secondaires, puis deux autres
+// emplacements libres — une seconde rangée de tags et les actions.
 //
 // Ce n'est pas la carte d'étude de cas : celle-là est une feuille pleine
 // largeur qui monte du bas de la page, avec son eyebrow, sa phrase d'impact et
@@ -9,12 +9,24 @@
 // carte entière ne se clique pas, et rien ici n'est un lien. Ce qui mène
 // quelque part se pose dans l'emplacement `actions`, et c'est un Button.
 //
+// Dans Figma la rangée du haut n'est pas encore un slot : c'est un frame nommé
+// « Frame 6 » (392:1075 en vertical, 392:1076 en horizontal), quand celle du bas
+// est un slot nommé « Tags ». Le nom `tags-top` est donc une décision du code —
+// signalé sur /components.
+//
 // Figma 334:1129, deux variantes — Vertical et Horizontal. La propriété qui les
 // commande s'appelle « Property 1 » dans le fichier, ce qui ne dit rien : le
 // code la nomme `orientation`. Le composant, lui, s'appelle « Cards » au
 // pluriel — un nom de tiroir, pas un nom d'objet.
 //
-// Les deux emplacements sont des slots nommés, comme dans Figma, là où le
+// Les tags occupent deux rangées, et rien d'autre ne les distingue que leur
+// place : `tags-top` passe avant le titre, `tags` reste sous les informations
+// secondaires. Le dessin des deux est le même — même rentrée, même écart, même
+// repli — et c'est voulu : deux rangées de pilules qui ne se ressembleraient
+// pas seraient deux objets, pas un emplacement dédoublé. Ce qui va dans l'une
+// plutôt que dans l'autre est une doctrine ; le code ne peut pas la tenir.
+//
+// Les trois emplacements sont des slots nommés, comme dans Figma, là où le
 // Carousel avait refusé le sien. La raison de ce refus ne vaut pas ici : le
 // carrousel devait dessiner ses vignettes — hauteur, rayon, ombre — et les
 // styles scopés d'Astro n'atteignent pas un contenu slotté. La carte n'a rien à
@@ -61,6 +73,7 @@ const classes = ['card', `card-${orientation}`, className].filter(Boolean).join(
 // Figma ne montre pas les emplacements vides (`displayEmptyByDefault: false`) :
 // une rangée sans contenu n'est pas une rangée vide, elle n'existe pas. Sans
 // cette vérification, le `gap` du corps compterait quand même une place.
+const hasTagsTop = Astro.slots.has('tags-top');
 const hasTags = Astro.slots.has('tags');
 const hasActions = Astro.slots.has('actions');
 ---
@@ -81,6 +94,14 @@ const hasActions = Astro.slots.has('actions');
   }
 
   <div class="body">
+    {
+      hasTagsTop && (
+        <div class="tags">
+          <slot name="tags-top" />
+        </div>
+      )
+    }
+
     <div class="text">
       <Heading class="title">{title}</Heading>
       {subtitle && <p class="subtitle">{subtitle}</p>}
@@ -158,15 +179,17 @@ const hasActions = Astro.slots.has('actions');
     box-shadow: var(--card-media-shadow);
   }
 
-  /* Le corps tient les trois rangées : le texte, les tags, les actions. */
+  /* Le corps tient les quatre rangées : les tags du haut, le texte, les tags du
+     bas, les actions. Son gap est ce qui pose les 8 de Figma entre la rangée du
+     haut et le titre — la rangée ne les déclare pas, elle les reçoit. */
   .body {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
   }
 
-  /* Les trois blocs intérieurs sont rentrés de 16 de plus que la carte, l'image
-     non : elle seule affleure la marge de 24. C'est ce que Figma dessine. */
+  /* Les blocs intérieurs sont rentrés de 16 de plus que la carte, l'image non :
+     elle seule affleure la marge de 24. C'est ce que Figma dessine. */
   .text {
     display: flex;
     flex-direction: column;
@@ -204,6 +227,9 @@ const hasActions = Astro.slots.has('actions');
     color: var(--card-meta-color);
   }
 
+  /* Une seule règle pour les deux rangées de tags : elles portent la même
+     classe, donc elles ne peuvent pas diverger par distraction. Figma les
+     dessine à l'identique — même rentrée, même écart de 8, même repli. */
   .tags {
     display: flex;
     flex-wrap: wrap;
