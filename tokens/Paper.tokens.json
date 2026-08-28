@@ -108,7 +108,7 @@
       "default": {
         "$type": "color",
         "$value": "{color.accent.100}",
-        "$description": "Pale lavender hairline, never grey. Decorative only at 1.28:1 — never let a border be the sole separator between two pieces of content.",
+        "$description": "Pale lavender hairline, never grey. Aliases color/accent/100 since 27/08, when it was darkened so a chip could be seen at all: with no border, an unselected chip on the page ground was literally invisible. Decorative only at 1.44:1 on white — never let a border be the sole separator between two pieces of content. It does not reach the 3:1 that WCAG 1.4.11 asks of the visible boundary of a control; in this ramp only accent/300 does (3.23:1), at the price of a far more present indigo on all 33 places that read this variable.",
         "$extensions": {
           "com.figma.variableId": "VariableID:3:6",
           "com.figma.scopes": [
