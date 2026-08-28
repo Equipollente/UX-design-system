@@ -84,7 +84,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | La taille de l'avatar (`64px`, en dur) | `--nav-home-size` dans [Nav.astro](src/design-system/components/Nav.astro) | Une variable. Elle vaut la hauteur d'une pilule d'onglets, et c'est ce qui fait que `nav/height` est le même nombre avec ou sans avatar — une coïncidence que rien ne garde aujourd'hui |
 | Un fond pour la barre, ou l'absence assumée | `.nav-bar` dans [Nav.astro](src/design-system/components/Nav.astro) | À trancher : la pilule lavande sur une carte lavande perd son contour, et l'eyebrow de la carte passe derrière la barre |
 | Une échelle d'empilement | `z-index: 1` dans [Nav.astro](src/design-system/components/Nav.astro) | Exception assumée : le seul z-index du système, à ne transformer en échelle que si un deuxième cas arrive |
-| Les trois ombres | `--carousel-item-shadow`, `--card-shadow` (deux fois, deux ombres différentes), `--card-media-shadow` | Des tokens. La troisième est arrivée avec la fiche — `shadow/md` — et `shadow/lg` est désormais écrite en dur à deux endroits : le seuil annoncé ici est atteint |
+| ~~Les trois ombres~~ | — | **Réglé le 27/08.** Figma n'a pas de type « ombre » : chaque morceau est nommé seul et lié à la couche, et `npm run tokens` les recompose. Une couche de contact partagée, plus une diffusion par élévation — 16 variables |
 | Un fond lié pour la fiche | `background` de `.card` dans [Card.astro](src/design-system/components/Card.astro) | Le blanc de `334:1129` n'est lié à aucune variable, alors qu'il vaut exactement `color.bg.default` |
 | Une hauteur de média | `--card-media-height` dans [Card.astro](src/design-system/components/Card.astro) | 324 et 256 n'ont pas de token. Un troisième nombre ouvrirait le groupe |
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
@@ -130,7 +130,7 @@ groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double 
 aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
 fichiers se renvoient l'un à l'autre en commentaire.
 
-Les 128 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Les 144 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 

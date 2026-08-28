@@ -82,7 +82,7 @@ nomme, le composant n'a qu'une ligne à changer.
 | Ce qui manque | Ce qui le remplace en attendant | Écrit dans | État |
 |---|---|---|---|
 | `icon.size.*` | emprunt à `button.icon-size.*` | /icons → Icon | ouvert |
-| les ombres `shadow/md`, `shadow/lg` et `shadow/lg-invert` | `--card-shadow` (deux fois, deux ombres), `--carousel-item-shadow`, `--card-media-shadow` | /components → Card et Case Study Card | ouvert |
+| les ombres `shadow/md`, `shadow/lg` et `shadow/lg-invert` | — | /components → Card et Case Study Card | *réglé — 27/08, groupe `shadow` (16 variables)* |
 | une hauteur de média | `--card-media-height` — 324 et 256, sans token | /components → Card | ouvert |
 | une mesure de texte | `--intro-measure`, `--header-title-min` | /components → Intro | ouvert |
 | un cran à 90 pour le liseré | `--fold-peek` — `space.layout.96` est à 6 px, et l'écart déplacerait le liseré à chaque cran | /components → Case Study List | ouvert |

@@ -87,6 +87,31 @@
   /* ── Opacités — l’atténuation d’un objet, pas sa couleur ───────────────────── */
   --opacity-disabled:            0.5;
 
+  /* ── Ombres — les parties nommées, puis les ombres composées ───────────────── */
+  --shadow-contact-y:            1px;
+  --shadow-contact-blur:         2px;
+  --shadow-contact-spread:       0px;
+  --shadow-contact-color:        rgb(47 45 46 / 0.04);
+
+  --shadow-md-y:                 8px;
+  --shadow-md-blur:              24px;
+  --shadow-md-spread:            0px;
+  --shadow-md-color:             rgb(47 45 46 / 0.06);
+
+  --shadow-lg-y:                 22px;
+  --shadow-lg-blur:              9px;
+  --shadow-lg-spread:            -14px;
+  --shadow-lg-color:             rgb(47 45 46 / 0.1);
+
+  --shadow-lg-invert-y:          -30px;
+  --shadow-lg-invert-blur:       30px;
+  --shadow-lg-invert-spread:     -14px;
+  --shadow-lg-invert-color:      rgb(47 45 46 / 0.16);
+
+  --shadow-md:                   0 var(--shadow-md-y) var(--shadow-md-blur) var(--shadow-md-spread) var(--shadow-md-color), 0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+  --shadow-lg:                   0 var(--shadow-lg-y) var(--shadow-lg-blur) var(--shadow-lg-spread) var(--shadow-lg-color), 0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+  --shadow-lg-invert:            0 var(--shadow-lg-invert-y) var(--shadow-lg-invert-blur) var(--shadow-lg-invert-spread) var(--shadow-lg-invert-color), 0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+
   /* ── Typographie ───────────────────────────────────────────────────────────── */
   --font-family-heading:         "Poppins", system-ui, sans-serif;
   --font-family-body:            "Inter", system-ui, -apple-system, sans-serif;

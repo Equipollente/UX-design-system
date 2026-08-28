@@ -75,15 +75,15 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
 <style>
   .carousel {
     /* Deux valeurs que l'export Figma donne en dur : aucun token ne les porte.
-       La hauteur de la piste, et l'ombre des vignettes — la collection Design
-       tokens n'expose aucune variable d'ombre, seulement un style d'effet
-       shadow/lg. Signalé sur /design-system/components.
+       La hauteur de la piste, et l'ombre des vignettes. L'ombre est maintenant
+       un token — shadow/lg, recomposé depuis ses quatre parties nommées dans
+       Figma. La variable locale ne reste que pour donner un nom au rôle.
        442, c'est le Slot de Figma marges comprises (88:143) ; ses 16px de marge
        haute et basse laissent aux images les 410 qu'elles y mesurent. La hauteur
        est nommée pour la piste et non pour la vignette parce que c'est la piste
        qui la porte : l'image la remplit, elle n'en a pas en propre. */
     --carousel-height: 442px;
-    --carousel-item-shadow: 0 22px 9px -14px rgb(47 45 46 / 0.1), 0 2px 4px rgb(47 45 46 / 0.04);
+    --carousel-item-shadow: var(--shadow-lg);
 
     /* Le bloc de référence des flèches, qui sont posées par-dessus la piste :
        c'est sur sa hauteur que Figma les centre. Aucun `gap` en revanche — il ne

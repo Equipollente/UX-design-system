@@ -1,6 +1,6 @@
 # UX design system
 
-Le design system de [Judith Heckmann](https://github.com/Equipollente) — 128 tokens exportés de Figma et
+Le design system de [Judith Heckmann](https://github.com/Equipollente) — 144 tokens exportés de Figma et
 les composants qui en sont faits. La documentation est le site lui-même, et elle montre les
 composants en vrai plutôt qu'une copie de leur markup : si un composant change, la page change.
 
@@ -8,7 +8,7 @@ composants en vrai plutôt qu'une copie de leur markup : si un composant change,
 
 | | |
 | --- | --- |
-| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 100 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, mouvement, layout. Chaque valeur affichée est lue dans sa variable CSS. |
+| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 116 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, ombre, mouvement, layout. Chaque valeur affichée est lue dans sa variable CSS. |
 | [Composants](https://equipollente.github.io/UX-design-system/components) | Button, Tag, Nav, la fiche, et la carte d'étude de cas avec son en-tête et son carrousel. Doctrine d'usage, états, props. |
 | [Formulaire](https://equipollente.github.io/UX-design-system/formulaire) | FieldLabel — le libellé que tous les champs partagent — puis Select, Radio, Checkbox, Toggle, Text Area, Chip, Add Image et Edit Image Gallery. |
 

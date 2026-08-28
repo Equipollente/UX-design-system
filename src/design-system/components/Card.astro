@@ -125,9 +125,10 @@ const hasActions = Astro.slots.has('actions');
        --card-shadow porte le même nom que la variable locale de CaseStudyCard,
        qui n'est pas la même ombre. Les deux sont déclarées chez elles, sur
        l'élément qui les lit : une carte imbriquée dans l'autre ne peut donc pas
-       hériter de la mauvaise. */
-    --card-shadow: 0 8px 24px rgb(47 45 46 / 0.06), 0 1px 2px rgb(47 45 46 / 0.04);
-    --card-media-shadow: 0 22px 9px -14px rgb(47 45 46 / 0.1), 0 2px 4px rgb(47 45 46 / 0.04);
+       hériter de la mauvaise. C'est la seule raison pour laquelle elles existent
+       encore : ce qu'elles portent, maintenant, est un token. */
+    --card-shadow: var(--shadow-md);
+    --card-media-shadow: var(--shadow-lg);
 
     display: flex;
     gap: var(--space-2xl);

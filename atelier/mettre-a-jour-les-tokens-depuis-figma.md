@@ -52,8 +52,8 @@ C'est tout. Le script écrit `styles/tokens.css` et `data/tokens.json`, que tous
 **Le compte, qu'il affiche à la fin.** C'est le contrôle le plus simple, et il suffit :
 
 ```
-128 tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json
-  color 43, space 10, radius 4, control 3, border 2, opacity 1, shadow 0, font 27, ...
+144 tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json
+  color 43, space 10, radius 4, control 3, border 2, opacity 1, shadow 16, font 27, ...
 ```
 
 | Ce que tu lis | Ce que ça veut dire |
@@ -87,11 +87,14 @@ L'export ne transporte **que les variables**. Tout le reste du fichier Figma res
 
 | Ce qui ne part pas | Conséquence |
 |---|---|
-| Les **styles d'effet** — les quatre ombres | elles n'atteignent pas le code, et sont écrites en dur dans les composants. Pour qu'elles voyagent il faut nommer chaque morceau en variable et le lier au style |
-| Les **styles de texte** | leur interligne et leur interlettrage sont tapés à la main ; seules les variables voyagent |
+| Les **styles d'effet** — les quatre ombres | le style lui-même ne part pas ; ce sont ses **morceaux** qui voyagent, une fois nommés en variables et liés à la couche. C'est ce qui a été fait le 27/08 : décalage, flou, étendue et couleur pour chaque couche, et `npm run tokens` les remet bout à bout |
+| Les **styles de texte** | leur interligne et leur interlettrage sont tapés à la main, et ne peuvent pas être liés — voir [verifier-la-typographie.md](verifier-la-typographie.md) |
 | Les **composants et leurs mesures** | elles se lisent au cas par cas, quand on intègre |
 
-C'est la même règle à chaque fois : **si ce n'est pas une variable, ça ne sort pas de Figma.**
+C'est la même règle à chaque fois : **si ce n'est pas une variable, ça ne sort pas de Figma.** Quand
+une propriété n'a pas de type de variable — une ombre, par exemple — la parade est toujours la même :
+nommer ses morceaux, les lier au dessin, et laisser le script les recomposer. Le dessin et le code
+lisent alors la même valeur, et plus rien ne peut diverger.
 
 ## Après
 

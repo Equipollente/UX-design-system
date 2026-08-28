@@ -2104,6 +2104,276 @@
       }
     }
   },
+  "shadow": {
+    "contact": {
+      "y": {
+        "$type": "number",
+        "$value": 1,
+        "$description": "Vertical offset. The contact layer, shared by every shadow in the system. It is also shadow/sm on its own — the faintest lift there is. Tinted with the text ink, never black.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:2",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-y)"
+          }
+        }
+      },
+      "blur": {
+        "$type": "number",
+        "$value": 2,
+        "$description": "Blur radius. The contact layer, shared by every shadow in the system. It is also shadow/sm on its own — the faintest lift there is. Tinted with the text ink, never black.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:3",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-blur)"
+          }
+        }
+      },
+      "spread": {
+        "$type": "number",
+        "$value": 0,
+        "$description": "Spread. The contact layer, shared by every shadow in the system. It is also shadow/sm on its own — the faintest lift there is. Tinted with the text ink, never black.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:4",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-spread)"
+          }
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.18431372940540314,
+            0.1764705926179886,
+            0.18039216101169586
+          ],
+          "alpha": 0.03999999910593033,
+          "hex": "#2F2D2E"
+        },
+        "$description": "The contact layer, shared by every shadow in the system. It is also shadow/sm on its own — the faintest lift there is. Tinted with the text ink, never black. No shadow in this system has a horizontal offset, so none is named.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:5",
+          "com.figma.scopes": [
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-color)"
+          }
+        }
+      }
+    },
+    "md": {
+      "y": {
+        "$type": "number",
+        "$value": 8,
+        "$description": "Vertical offset. The bloom of the default card elevation. Composed with shadow/contact to make shadow/md.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:6",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-y)"
+          }
+        }
+      },
+      "blur": {
+        "$type": "number",
+        "$value": 24,
+        "$description": "Blur radius. The bloom of the default card elevation. Composed with shadow/contact to make shadow/md.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:7",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-blur)"
+          }
+        }
+      },
+      "spread": {
+        "$type": "number",
+        "$value": 0,
+        "$description": "Spread. The bloom of the default card elevation. Composed with shadow/contact to make shadow/md.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:8",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-spread)"
+          }
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.18431372940540314,
+            0.1764705926179886,
+            0.18039216101169586
+          ],
+          "alpha": 0.05999999865889549,
+          "hex": "#2F2D2E"
+        },
+        "$description": "The bloom of the default card elevation. Composed with shadow/contact to make shadow/md. No shadow in this system has a horizontal offset, so none is named.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:9",
+          "com.figma.scopes": [
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-color)"
+          }
+        }
+      }
+    },
+    "lg": {
+      "y": {
+        "$type": "number",
+        "$value": 22,
+        "$description": "Vertical offset. The bloom of the top elevation, for a dialog or a floating panel. The negative spread keeps it from creeping out sideways. Composed with shadow/contact to make shadow/lg.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:10",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-y)"
+          }
+        }
+      },
+      "blur": {
+        "$type": "number",
+        "$value": 9,
+        "$description": "Blur radius. The bloom of the top elevation, for a dialog or a floating panel. The negative spread keeps it from creeping out sideways. Composed with shadow/contact to make shadow/lg.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:11",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-blur)"
+          }
+        }
+      },
+      "spread": {
+        "$type": "number",
+        "$value": -14,
+        "$description": "Spread. The bloom of the top elevation, for a dialog or a floating panel. The negative spread keeps it from creeping out sideways. Composed with shadow/contact to make shadow/lg.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:12",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-spread)"
+          }
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.18431372940540314,
+            0.1764705926179886,
+            0.18039216101169586
+          ],
+          "alpha": 0.10000000149011612,
+          "hex": "#2F2D2E"
+        },
+        "$description": "The bloom of the top elevation, for a dialog or a floating panel. The negative spread keeps it from creeping out sideways. Composed with shadow/contact to make shadow/lg. No shadow in this system has a horizontal offset, so none is named.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:13",
+          "com.figma.scopes": [
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-color)"
+          }
+        }
+      }
+    },
+    "lg-invert": {
+      "y": {
+        "$type": "number",
+        "$value": -30,
+        "$description": "Vertical offset. The same top elevation, thrown upwards — for a panel that rises over what it covers. Composed with shadow/contact to make shadow/lg-invert.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:14",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-y)"
+          }
+        }
+      },
+      "blur": {
+        "$type": "number",
+        "$value": 30,
+        "$description": "Blur radius. The same top elevation, thrown upwards — for a panel that rises over what it covers. Composed with shadow/contact to make shadow/lg-invert.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:15",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-blur)"
+          }
+        }
+      },
+      "spread": {
+        "$type": "number",
+        "$value": -14,
+        "$description": "Spread. The same top elevation, thrown upwards — for a panel that rises over what it covers. Composed with shadow/contact to make shadow/lg-invert.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:16",
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-spread)"
+          }
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.18431372940540314,
+            0.1764705926179886,
+            0.18039216101169586
+          ],
+          "alpha": 0.1599999964237213,
+          "hex": "#2F2D2E"
+        },
+        "$description": "The same top elevation, thrown upwards — for a panel that rises over what it covers. Composed with shadow/contact to make shadow/lg-invert. No shadow in this system has a horizontal offset, so none is named.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:391:17",
+          "com.figma.scopes": [
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-color)"
+          }
+        }
+      }
+    }
+  },
   "$extensions": {
     "com.figma.modeName": "Paper"
   }

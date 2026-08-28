@@ -59,10 +59,10 @@ const classes = ['case-study-card', className].filter(Boolean).join(' ');
 <style>
   .case-study-card {
     /* L'ombre du composant Figma (88:131), portée vers le haut : la feuille se
-       détache de ce qui la précède, pas de ce qui la suit. Aucun token ne la
-       porte — la collection Design tokens n'expose pas les styles d'effet
-       shadow/lg-invert. Signalé sur /design-system/components. */
-    --card-shadow: 0 -30px 30px -14px rgb(47 45 46 / 0.16), 0 2px 4px rgb(47 45 46 / 0.04);
+       détache de ce qui la précède, pas de ce qui la suit. C'est shadow/lg-invert,
+       et elle est enfin un token. La variable locale ne reste que pour ne pas
+       hériter de celle de Card, qui porte le même nom sans être la même ombre. */
+    --card-shadow: var(--shadow-lg-invert);
 
     display: flex;
     flex-direction: column;

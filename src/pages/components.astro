@@ -980,13 +980,13 @@ const caseStudyListVars = [
         manque une liaison, pas un token.
       </p>
 
-      <p class="flag">
-        <strong>Les deux ombres sont des styles d'effet, pas des variables.</strong>
-        {' '}<code>shadow/md</code> pour la carte, <code>shadow/lg</code> pour l'image — et cette
-        seconde est mot pour mot celle des vignettes du carrousel, qui la porte déjà en dur sous le nom
-        {' '}<code>--carousel-item-shadow</code>. C'est la troisième ombre écrite en dur dans le système,
-        après celle-là et le <code>shadow/lg-invert</code> de la carte d'étude de cas : le seuil
-        annoncé pour les tokeniser est atteint.
+      <p class="section-note">
+        <strong>Les deux ombres sont des tokens.</strong> <code>shadow/md</code> pour la carte,
+        {' '}<code>shadow/lg</code> pour l'image — la même que les vignettes du carrousel, et
+        maintenant lue au même endroit par les deux. Figma n'ayant pas de type de variable « ombre »,
+        chaque morceau est nommé seul — décalage, flou, étendue, couleur — puis lié à la couche dans
+        le fichier. <code>npm run tokens</code> les remet bout à bout. Le dessin et le code lisent
+        donc la même valeur, et plus rien ne peut diverger.
       </p>
 
       <p class="flag">
@@ -1191,14 +1191,13 @@ const caseStudyListVars = [
         l'en-tête.
       </p>
 
-      <p class="flag">
-        <strong>Aucun token ne porte les ombres.</strong> Figma déclare deux styles d'effet,
-        {' '}<code>shadow/lg</code> sur les vignettes et <code>shadow/lg-invert</code> sur la carte, que la
-        collection <em>Design tokens</em> n'expose pas en variables. Les deux valeurs vivent donc en dur
-        dans les composants, hissées en <code>--card-shadow</code> et
-        {' '}<code>--carousel-item-shadow</code> — comme <code>--nav-home-size</code> dans le Nav. Le jour où
-        Figma les porte en variables, elles rejoignent <code>tokens/</code> et les composants n'ont
-        qu'une ligne à changer.
+      <p class="section-note">
+        <strong>Les ombres sont des tokens.</strong> <code>shadow/lg</code> sur les vignettes,
+        {' '}<code>shadow/lg-invert</code> sur la carte. Les variables locales
+        {' '}<code>--card-shadow</code> et <code>--carousel-item-shadow</code> restent, mais elles ne
+        portent plus de valeur : elles donnent un nom au rôle, et évitent qu'une carte imbriquée dans
+        une autre hérite de l'ombre du dessus — les deux composants emploient le même nom pour deux
+        ombres différentes.
       </p>
 
       <p class="flag">
