@@ -105,6 +105,12 @@ const cardProps = [
     'Les deux variantes de Figma. Verticale, l’image est en tête ; horizontale, elle occupe la moitié gauche.',
   ],
   ['title', 'string', '—', 'Le titre. La seule prop obligatoire.'],
+  [
+    'titleSize',
+    `'title' | 'heading'`,
+    'title',
+    'La taille du titre : title est celle d’un h2 — ce que Figma dessine — heading celle d’un h4. Sans rapport avec headingLevel, qui règle le rang.',
+  ],
   ['subtitle', 'string', '—', 'La ligne sous le titre.'],
   [
     'meta',
@@ -824,6 +830,58 @@ const caseStudyListVars = [
         système.
       </p>
 
+      <h3>Les deux tailles de titre</h3>
+      <p class="section-note">
+        <strong>Le titre descend d'un cran quand la carte n'est pas la chose la plus grosse de la
+        page.</strong> <code>titleSize="title"</code> est le défaut et la maquette : la taille d'un
+        {' '}<code>h2</code>, <code>2rem</code>. <code>titleSize="heading"</code> prend celle d'un
+        {' '}<code>h4</code>, <code>1.25rem</code> — pour une grille serrée, ou sous un titre de page
+        qui doit rester devant.
+        <br />
+        <strong>Seule la taille change.</strong> La police, la graisse, l'interligne et
+        l'interlettrage suivent d'eux-mêmes : l'interligne est un ratio et l'interlettrage est en
+        {' '}<code>em</code>, donc les deux se recalculent sur la nouvelle taille. Un titre en
+        {' '}<code>heading</code> est exactement un <code>h4</code> du système, et pas un titre de
+        carte rapetissé.
+        <br />
+        <strong>Ce n'est pas <code>headingLevel</code>.</strong> Le rang dit où le titre se range
+        dans le plan du document, la taille dit ce qu'on voit. Les deux sont restés séparés depuis
+        le début — une carte peut être un <code>h2</code> en petit, ou un <code>h4</code> en gros,
+        et rien dans le composant ne les lie.
+      </p>
+
+      <div class="demo demo-card">
+        <div class="card-stand">
+          <Card
+            title={cardDemo.title}
+            subtitle={cardDemo.subtitle}
+            meta={cardDemo.meta}
+            image={cardDemo.image}
+            headingLevel={3}
+            titleSize="heading"
+          >
+            <Fragment slot="tags-top">
+              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
+            <Fragment slot="tags">
+              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+            </Fragment>
+            <Fragment slot="actions">
+              <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">
+                {cardDemo.action.label}
+              </Button>
+            </Fragment>
+          </Card>
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>La bascule ne réécrit pas la taille du titre, elle repose
+        {' '}<code>--card-title-size</code> sur la carte.</strong> L'endroit qui décide reste donc
+        unique, et l'alias <code>card.title.size</code> sert enfin à ce pour quoi il avait été gardé :
+        être le point où la typographie d'une carte bouge sans emporter les titres de page.
+      </p>
+
       <h3>Les trois emplacements</h3>
       <p class="section-note">
         <strong>Les tags et les actions ne sont pas des props, ce sont des slots nommés</strong> — les
@@ -995,6 +1053,16 @@ const caseStudyListVars = [
         {' '}<code>Card</code>. Et la propriété qui commande les deux variantes s'appelle
         {' '}<code>Property 1</code>, ce qui ne dit rien de ce qu'elle fait : le code la nomme
         {' '}<code>orientation</code>. Les deux se renomment côté Figma.
+      </p>
+
+      <p class="flag">
+        <strong>La seconde taille de titre n'est pas dessinée.</strong> Le fichier ne connaît que
+        {' '}<code>heading/title</code> sur ce nœud — <code>334:1122</code>, lié à
+        {' '}<code>card/title/size</code> — et <code>titleSize="heading"</code> n'a donc aucun frame
+        qui le montre. C'est une décision du code, comme le passage en colonne sous 768px : la
+        maquette n'est pas en retard, elle n'a simplement jamais eu à trancher ce cas. Elle le
+        deviendrait le jour où une vue publie les deux tailles côte à côte — c'est ce jour-là qu'un
+        second frame vaudrait la peine, pas avant.
       </p>
 
       <p class="flag">

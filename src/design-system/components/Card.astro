@@ -19,6 +19,13 @@
 // code la nomme `orientation`. Le composant, lui, s'appelle « Cards » au
 // pluriel — un nom de tiroir, pas un nom d'objet.
 //
+// Le titre a deux tailles, et c'est la seule chose que Figma ne dessine pas :
+// `title` est celle d'un h2 — la maquette — et `heading` celle d'un h4, pour une
+// carte posée dans une grille serrée ou sous un titre de page qui doit rester
+// le plus gros. C'est une décision du code, comme le passage en colonne sous
+// 768px. Elle ne touche pas `headingLevel` : le rang et la taille restent deux
+// réglages séparés, et c'est ce que le composant promet depuis le début.
+//
 // Les tags occupent deux rangées, et rien d'autre ne les distingue que leur
 // place : `tags-top` passe avant le titre, `tags` reste sous les informations
 // secondaires. Le dessin des deux est le même — même rentrée, même écart, même
@@ -50,6 +57,12 @@ interface Props {
   /** Le rang du titre : il se range sous ce que la page porte déjà. Le rang ne
    *  change pas le dessin — la taille vient du composant, pas de la balise. */
   headingLevel?: 2 | 3 | 4 | 5;
+  /** La taille du titre, prise dans l'échelle : `title` est celle d'un h2 —
+   *  2rem, ce que Figma dessine — et `heading` celle d'un h4, 1.25rem. Elle ne
+   *  règle que la taille ; la police, la graisse, l'interligne et
+   *  l'interlettrage suivent d'eux-mêmes. Rien à voir avec `headingLevel`, qui
+   *  règle le rang : les deux restent indépendants, et c'est le contrat. */
+  titleSize?: 'title' | 'heading';
   class?: string;
   /** Le point de surcharge : --card-media-height, et rien d'autre. Déclarée
    *  parce qu'elle fait partie du contrat. */
@@ -63,12 +76,23 @@ const {
   meta,
   image,
   headingLevel = 2,
+  titleSize = 'title',
   class: className,
   ...rest
 } = Astro.props;
 
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5';
-const classes = ['card', `card-${orientation}`, className].filter(Boolean).join(' ');
+// Le défaut n'émet pas de classe : sa valeur est déjà celle que tokens.css pose
+// sur --card-title-size. Une classe qui la redéclarerait la recopierait, et il
+// faudrait dès lors la tenir à jour à deux endroits.
+const classes = [
+  'card',
+  `card-${orientation}`,
+  titleSize !== 'title' && `card-title-${titleSize}`,
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
 
 // Figma ne montre pas les emplacements vides (`displayEmptyByDefault: false`) :
 // une rangée sans contenu n'est pas une rangée vide, elle n'existe pas. Sans
@@ -211,6 +235,26 @@ const hasActions = Astro.slots.has('actions');
     margin: 0;
     font-size: var(--card-title-size);
     color: var(--card-title-color);
+  }
+
+  /* Le titre peut descendre d'un cran dans l'échelle : `heading` est la taille
+     d'un h4 — 1.25rem — là où `title` est celle d'un h2. La bascule ne
+     redéclare pas `font-size` sur .title ; elle repose --card-title-size sur la
+     carte, et c'est tout. Trois choses en découlent, et c'est pour elles que
+     c'est écrit ainsi :
+
+     l'endroit qui décide de la taille du titre reste unique, donc les deux
+     tailles ne peuvent pas diverger de dessin ; une valeur posée en `style` par
+     un appelant bat encore la classe, parce qu'une déclaration en ligne
+     l'emporte sur une règle ; et l'alias `card.title.size` sert enfin à ce pour
+     quoi il avait été gardé — être le point où la typographie d'une carte bouge
+     sans emporter les titres de page avec elle.
+
+     Rien d'autre n'est à écrire : l'interligne est un ratio (1.12) et
+     l'interlettrage est en em (-0,015), donc les deux suivent la taille. Un
+     titre en `heading` est exactement un h4 du système, ce qu'il doit être. */
+  .card-title-heading {
+    --card-title-size: var(--font-size-heading);
   }
 
   .subtitle {
