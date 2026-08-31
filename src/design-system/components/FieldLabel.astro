@@ -16,10 +16,14 @@
 // Le signal est porté par le champ lui-même — l'attribut `required`, que les
 // lecteurs d'écran annoncent. L'astérisque est donc `aria-hidden` : sans quoi
 // il serait lu deux fois, une fois en « étoile », une fois en « obligatoire ».
-// Et parce qu'il ne porte plus seul l'information, son rouge peut rester celui
-// du système : color/feedback/danger ne tient pas 4,5:1 en texte de corps, et
-// n'a pas à le tenir pour un signe redondant. Le formulaire qui s'en sert doit
-// en revanche ouvrir sur la phrase « Les champs marqués * sont obligatoires ».
+// Son rouge est celui du système, et il ne l'a pas toujours pu : quand
+// color/feedback/danger valait #D94A4A, il mesurait 4,18:1 sur blanc et ne
+// tenait pas le seuil du texte de corps — on l'admettait parce que le signe est
+// redondant. Le cran vaut maintenant #DC2626, soit 4,82:1 : la dérogation n'a
+// plus lieu d'être, et l'astérisque tient le seuil comme n'importe quel mot.
+// Il reste redondant pour l'autre raison, celle qui n'a pas bougé — être lu deux
+// fois. Le formulaire qui s'en sert doit en revanche ouvrir sur la phrase
+// « Les champs marqués * sont obligatoires ».
 
 interface Props {
   /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. */
@@ -66,6 +70,6 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
   .field-label-mark {
     /* L'écart au mot n'est pas encore écrit : aucune variable ne vaut cette
        fraction de cadratin. En attendant, l’astérisque est collé au libellé. */
-    color: var(--color-feedback-danger); /* #D94A4A */
+    color: var(--color-feedback-danger-500); /* #DC2626 */
   }
 </style>

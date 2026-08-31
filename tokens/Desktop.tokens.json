@@ -174,26 +174,76 @@
         }
       },
       "danger": {
-        "$type": "color",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.8509804010391235,
-            0.29019609093666077,
-            0.29019609093666077
-          ],
-          "alpha": 1,
-          "hex": "#D94A4A"
+        "500": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8627451062202454,
+              0.14901961386203766,
+              0.14901961386203766
+            ],
+            "alpha": 1,
+            "hex": "#DC2626"
+          },
+          "$description": "Wrong / negative examples, and the resting fill of the alert button. Now safe at body size on white (4.82:1), and carries white text at the same 4.82:1. On color/bg/section it falls to 3.86:1 — fill, icon, border or large text only there.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:3:8",
+            "com.figma.scopes": [
+              "ALL_FILLS",
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-feedback-danger-500)"
+            }
+          }
         },
-        "$description": "Wrong / negative examples. NOT a body-size text colour (4.18:1 on white). Safe as a fill, an icon, a border, or large text. Do not put small text on it in either direction.",
-        "$extensions": {
-          "com.figma.variableId": "VariableID:3:8",
-          "com.figma.scopes": [
-            "ALL_FILLS",
-            "STROKE"
-          ],
-          "com.figma.codeSyntax": {
-            "WEB": "var(--color-feedback-danger)"
+        "600": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.7254902124404907,
+              0.10980392247438431,
+              0.10980392247438431
+            ],
+            "alpha": 1,
+            "hex": "#B91C1C"
+          },
+          "$description": "Alert button, hover. White text on it reads 6.47:1. Not a surface for body text in the other direction.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:418:605",
+            "com.figma.scopes": [
+              "ALL_FILLS",
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-feedback-danger-600)"
+            }
+          }
+        },
+        "700": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.6000000238418579,
+              0.10588235408067703,
+              0.10588235408067703
+            ],
+            "alpha": 1,
+            "hex": "#991B1B"
+          },
+          "$description": "Alert button, pressed. White text on it reads 8.31:1. Not a surface for body text in the other direction.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:418:606",
+            "com.figma.scopes": [
+              "ALL_FILLS",
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-feedback-danger-700)"
+            }
           }
         }
       }

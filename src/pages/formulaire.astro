@@ -167,10 +167,14 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
       <p class="section-note">
         <strong>L'astérisque est redondant, et c'est voulu.</strong> Il est
         {' '}<code>aria-hidden</code> : sans quoi il serait annoncé deux fois, une fois en « étoile »,
-        une fois en « obligatoire ». Parce qu'il ne porte plus seul l'information, son rouge peut
-        rester celui du système — <code>color/feedback/danger</code> ne tient pas 4,5:1 en texte de
-        corps, et n'a pas à le tenir pour un signe redondant. En contrepartie, le formulaire qui s'en
-        sert doit ouvrir sur la phrase <em>« Les champs marqués * sont obligatoires »</em>.
+        une fois en « obligatoire ». En contrepartie, le formulaire qui s'en sert doit ouvrir sur la
+        phrase <em>« Les champs marqués * sont obligatoires »</em>.
+        <br />
+        Son rouge est celui du système, et il ne l'a pas toujours pu :
+        {' '}<code>color/feedback/danger</code> valait <code>#D94A4A</code>, soit 4,18:1 sur blanc,
+        et ne tenait pas le seuil du texte de corps — on l'admettait parce que le signe est
+        redondant. Le cran s'appelle maintenant <code>color/feedback/danger/500</code> et vaut
+        {' '}<code>#DC2626</code>, soit <strong>4,82:1</strong> : la dérogation n'a plus lieu d'être.
       </p>
 
       <div class="table-scroll">

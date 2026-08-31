@@ -66,12 +66,12 @@ const encres = [
   { cle: 'on-highlight', fond: 'celebrate' },
 ];
 
-const variants = ['primary', 'secondary'] as const;
+const variants = ['primary', 'secondary', 'alert'] as const;
 const sizes = ['sm', 'md', 'lg'] as const;
 const tagVariants = ['accent', 'lime', 'neutral', 'outline'] as const;
 
-// Les douze boutons : deux variantes × trois tailles × lien ou non. Les icônes
-// et le libellé sont posés par le script, dans les trois fentes que voici.
+// Les dix-huit boutons : trois variantes × trois tailles × lien ou non. Les
+// icônes et le libellé sont posés par le script, dans les trois fentes que voici.
 const boutons = variants.flatMap((variant) =>
   sizes.flatMap((size) => [
     { variant, size, lien: false },
@@ -378,6 +378,9 @@ import { withBase } from 'ux-design-system/lib/url';
               >
               <label
                 ><input type="radio" name="variant" value="secondary" /><span>secondary</span></label
+              >
+              <label
+                ><input type="radio" name="variant" value="alert" /><span>alert</span></label
               >
             </div>
           </fieldset>

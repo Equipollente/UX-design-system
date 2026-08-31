@@ -23,7 +23,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Composant | Nœud | Code |
 | --- | --- | --- |
 | Icon (les 20 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
-| Button (jeu de variantes) | [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) | [Button.astro](src/design-system/components/Button.astro) |
+| Button (un jeu de variantes par taille) | lg [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) · md [`334-1233`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1233) · sm [`334-1283`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1283) | [Button.astro](src/design-system/components/Button.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
 | Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |
@@ -89,6 +89,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | Un slot nommé pour la rangée de tags du haut | slot `tags-top` dans [Card.astro](src/design-system/components/Card.astro) | « Frame 6 » (`392:1075`, `392:1076`) est un frame, pas un slot : l'emplacement ne se remplit pas dans la maquette, et son nom est une décision du code |
 | Une hauteur de média | `--card-media-height` dans [Card.astro](src/design-system/components/Card.astro) | 324 et 256 n'ont pas de token. Un troisième nombre ouvrirait le groupe |
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
+| Un emploi pour la variante `Alert` | `<p class="flag">` du Button, sur /components | Elle est dessinée dans les trois tailles, mais la seule action destructive du système — le « supprimer » d'Edit Image Gallery, `355:1396` — est encore un `secondary`. C'est ce nœud-là qui doit changer de variante |
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
 `Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components. Les sept objets
@@ -131,7 +132,7 @@ groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double 
 aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
 fichiers se renvoient l'un à l'autre en commentaire.
 
-Les 144 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Les 146 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 
