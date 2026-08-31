@@ -119,7 +119,6 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
        27/08, une valeur qui n'a pas encore de nom. Signalé sur /components. */
     --modal-scrim: rgb(0 0 0 / 0.5);
 
-    display: flex;
     width: 360px;
     padding: var(--space-xl);
     flex-direction: column;
@@ -132,6 +131,13 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
     background: var(--color-bg-default);
     box-shadow: var(--shadow-lg);
     color: inherit;
+  }
+
+  /* Un <dialog> fermé garde son display:none natif — sans ce garde, .modal
+     l'écraserait et la boîte resterait visible en flux normal hors de son
+     panneau. Même règle que .panel[open] côté site consommateur. */
+  .modal[open] {
+    display: flex;
   }
 
   .modal::backdrop {
