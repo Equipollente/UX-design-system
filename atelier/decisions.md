@@ -70,19 +70,28 @@ plus étroit que le premier.
 `← ` [Tag.astro](../src/design-system/components/Tag.astro),
 [Button.astro](../src/design-system/components/Button.astro)
 
-## `Alert` est entrée avant son emploi, et c'est une dette
+## `Alert` est entrée avant son emploi — la dette a été honorée le jour même
 
-Elle déroge à la règle ci-dessus, et il faut que ce soit écrit plutôt que découvert. Le 31/08 la
-variante est intégrée pour l'action destructive du formulaire — sauf que la seule qui existe, le
-« supprimer » d'Edit Image Gallery, est encore un `secondary` dans Figma (`355:1396`). La vue qui
-la demande est donc décidée, pas dessinée : à ce jour `variant="alert"` n'a aucun appel dans le
+Elle dérogeait à la règle ci-dessus, et il fallait que ce soit écrit plutôt que découvert. Le 31/08
+la variante est intégrée pour l'action destructive du formulaire — sauf que la seule qui existe, le
+« supprimer » d'Edit Image Gallery, était encore un `secondary` dans Figma (`355:1396`). La vue qui
+la demandait était donc décidée, pas dessinée : `variant="alert"` n'avait alors aucun appel dans le
 dépôt, hors sa démonstration.
 
-Ce n'est pas un troisième chemin d'entrée. Si `355:1396` ne change pas de variante, c'est l'alerte
-qui doit ressortir, et non la règle qui doit s'élargir — sans quoi `Ghost` et `CTA` n'ont plus de
-raison d'attendre.
+Ce n'était pas un troisième chemin d'entrée. La condition de sortie était posée : si `355:1396` ne
+changeait pas de variante, c'était l'alerte qui devait ressortir, et non la règle s'élargir — sans
+quoi `Ghost` et `CTA` n'ont plus de raison d'attendre.
 
-`← 907d635`, [arbitrages.md](arbitrages.md)
+**La condition a été remplie le même jour.** Le nœud `418:1020` dessine le « supprimer » de son état
+`success` en `Alert`, `355:1396` a suivi, et
+[EditImageGallery.astro](../src/design-system/components/EditImageGallery.astro) passe le sien de
+`secondary` à `alert`. La variante a maintenant son emploi, et la règle n'a pas eu à bouger.
+
+Ce qui reste en vigueur ici n'est donc pas la dette mais **le fait qu'elle ait été écrite avant
+d'être honorée**. C'est ce qui rend la règle crédible : une exception qu'on note se referme, une
+exception qu'on tait devient le nouvel usage.
+
+`← 907d635`, `← 810a9b6`, [arbitrages.md](arbitrages.md)
 
 ## Un fond de bouton lit une rampe, par crans
 
