@@ -1,0 +1,188 @@
+---
+// Modal — une boîte centrée par-dessus la page, qui porte une icône, un titre,
+// un texte, puis une ou deux actions. Une confirmation, une alerte destructive,
+// un accusé de réception : le même gabarit, seule la variante change la
+// couleur du bouton principal et le nombre de boutons.
+//
+// Ce n'est pas un déclencheur : rien ici n'ouvre la boîte. Le site consommateur
+// appelle `document.getElementById(id).showModal()` sur son propre bouton — le
+// composant ne connaît aucun site, donc aucun trigger ne peut vivre ici.
+//
+// Figma 420:1223, un jeu de 4 variantes sous « Property 1 » : Layout (le
+// gabarit générique, textes de remplissage), Confirmation, Alert, Success. Les
+// trois dernières ne changent ni la structure ni le dessin — seulement la
+// couleur, l'icône, les mots et le nombre de boutons. Un seul composant piloté
+// par props les couvre toutes ; Layout ne devient jamais un composant à lui
+// seul, il est déjà ce fichier. `validation` (Confirmation) et `alert` (Alert)
+// portent toujours deux boutons ; `succes` (Success) n'en porte jamais qu'un —
+// c'est la variante qui tranche, pas la seule présence de `secondary`.
+//
+// <dialog> natif plutôt qu'un div-overlay maison : `::backdrop` donne le fond
+// noir sans qu'on ait à le peindre, Échap ferme sans script, et le focus est
+// piégé dans la boîte par le navigateur — rien de tout ça n'est à écrire ici
+// (conventions.md §8). Le bouton secondaire ferme lui aussi sans script : seul
+// `<button type="submit">` d'un `<form method="dialog">`, il appelle `close()`
+// tout seul. Le clic sur le fond ne ferme rien — ce n'est pas un geste que
+// WCAG demande, et l'ajouter coûterait le script qu'on vient d'éviter.
+//
+// L'icône se pose sur un cercle qui reste `color/bg/surface` quelle que soit la
+// variante, y compris `alert` : Figma peint un rose non lié à une variable sur
+// sa variante Alert, et Judith a tranché plutôt que de l'inventer — signalé
+// dans la doc, le code a raison. Seule l'icône rougit, sur
+// `color/feedback/danger/500`.
+
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  /** L'id du <dialog> — c'est par lui que le site consommateur appelle showModal(). */
+  id: string;
+  /** L'icône du cercle en tête. */
+  icon: IconName;
+  /**
+   * `validation` (deux boutons, principal en `primary`) ou `alert` (deux boutons,
+   * principal en `alert`, icône rouge) ou `succes` (un seul bouton — `secondary`
+   * est ignoré, même fourni).
+   */
+  variant?: 'validation' | 'alert' | 'succes';
+  /** Le rang du titre : il se range sous ce que la page porte déjà. Ne change pas le dessin. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
+  heading: string;
+  body: string;
+  /** Sans `href`, un bouton inerte — la même convention que Button et Card. */
+  primary: { label: string; href?: string };
+  /** Lu seulement hors de `succes` : cette variante n'a jamais de second bouton. */
+  secondary?: { label: string; href?: string };
+  /**
+   * Pose l'attribut HTML `open` — pour la doc uniquement : sans `.showModal()`,
+   * la boîte s'affiche en flux normal, pas dans l'état `:modal` du navigateur
+   * (donc sans `::backdrop`). Le site consommateur ouvre par script, jamais
+   * par cette prop.
+   */
+  open?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  icon,
+  variant = 'validation',
+  headingLevel = 2,
+  heading,
+  body,
+  primary,
+  secondary,
+  open,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+const headingId = `${id}-heading`;
+const classes = ['modal', variant === 'alert' && 'modal-alert', className].filter(Boolean).join(' ');
+// succes n'a jamais de second bouton, quoi que l'appelant lui passe : c'est la
+// variante qui tranche la structure, pas la seule présence de secondary.
+const showSecondary = variant !== 'succes' && Boolean(secondary);
+---
+
+<dialog id={id} class={classes} aria-labelledby={headingId} open={open} {...rest}>
+  <div class="icon-frame">
+    <Icon name={icon} size="md" />
+  </div>
+
+  <div class="content">
+    <Heading id={headingId} class="heading">{heading}</Heading>
+    <p class="body">{body}</p>
+  </div>
+
+  <form method="dialog" class="actions">
+    <Button variant={variant === 'alert' ? 'alert' : 'primary'} size="lg" href={primary.href}>
+      {primary.label}
+    </Button>
+    {
+      showSecondary && (
+        <Button type="submit" variant="secondary" size="lg" href={secondary!.href}>
+          {secondary!.label}
+        </Button>
+      )
+    }
+  </form>
+</dialog>
+
+<style>
+  .modal {
+    /* 10px sépare le texte du groupe de boutons dans Figma : ni --space-sm (8)
+       ni --space-md (12) ne tombe juste. Signalé sur /components. */
+    --modal-gap: 10px;
+    /* Aucune variable d'overlay dans la collection — comme les ombres avant le
+       27/08, une valeur qui n'a pas encore de nom. Signalé sur /components. */
+    --modal-scrim: rgb(0 0 0 / 0.5);
+
+    display: flex;
+    width: 360px;
+    padding: var(--space-xl);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-xl);
+
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-default);
+    box-shadow: var(--shadow-lg);
+    color: inherit;
+  }
+
+  .modal::backdrop {
+    background: var(--modal-scrim);
+  }
+
+  /* Le cercle ne fixe pas 56 en dur : le padding des deux côtés d'une icône à
+     24 (size="md") compose exactement la mesure de Figma, comme le point du
+     Radio ou le rembourrage d'AddImage. Le fond reste bg-surface quelle que
+     soit la variante — voir le pavé de tête. */
+  .icon-frame {
+    display: inline-flex;
+    padding: var(--space-lg);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-surface);
+    --icon-color: var(--color-accent-500);
+  }
+
+  .modal-alert .icon-frame {
+    --icon-color: var(--color-feedback-danger-500);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--modal-gap);
+    text-align: center;
+  }
+
+  /* Taille indépendante du rang, comme .title sur Card : le rang range le
+     titre sous ce que la page porte déjà, la taille reste celle de Figma. */
+  .heading {
+    margin: 0;
+    font-size: var(--font-size-heading);
+    color: var(--color-text-default);
+  }
+
+  /* Police, taille et interligne sont déjà ceux d'un <p> par défaut
+     (global.css) : seuls l'encre et le centrage sont propres à la modale.
+     La variable lue est color-neutral-700 — pas un token sémantique comme
+     text-muted (qui vaut neutral-600), mais celle que Figma lie réellement. */
+  .body {
+    margin: 0;
+    color: var(--color-neutral-700);
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--modal-gap);
+    width: 100%;
+  }
+</style>

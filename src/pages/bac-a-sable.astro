@@ -17,6 +17,7 @@ import Button from '../design-system/components/Button.astro';
 import Tag from '../design-system/components/Tag.astro';
 import Icon from '../design-system/components/Icon.astro';
 import Card from '../design-system/components/Card.astro';
+import Modal from '../design-system/components/Modal.astro';
 import { iconNames } from '../design-system/lib/icons';
 import tokens from '../design-system/data/tokens.json';
 // L'image de l'aperçu est un vrai asset de ce site : une carte sans image ne
@@ -69,6 +70,7 @@ const encres = [
 const variants = ['primary', 'secondary', 'alert'] as const;
 const sizes = ['sm', 'md', 'lg'] as const;
 const tagVariants = ['accent', 'lime', 'neutral', 'outline'] as const;
+const modalVariants = ['validation', 'alert', 'succes'] as const;
 
 // Les dix-huit boutons : trois variantes × trois tailles × lien ou non. Les
 // icônes et le libellé sont posés par le script, dans les trois fentes que voici.
@@ -135,6 +137,18 @@ const defautCarte = `<Card
   </Fragment>
 </Card>`;
 
+// Le ton par défaut ne s'écrit pas — même règle que variant="primary" sur
+// Button. Modal n'a pas d'enfants : la balise se ferme sur elle-même, comme
+// celle d'Icon.
+const defautModal = `<Modal
+  id="ma-modale"
+  icon="mail-edit"
+  heading="Envoyer le message ?"
+  body="Ta réponse partira à l’adresse du formulaire."
+  primary={{ label: "Envoyer" }}
+  secondary={{ label: "Annuler" }}
+/>`;
+
 const importStyles = `import 'ux-design-system/styles/tokens.css';
 import 'ux-design-system/styles/global.css';`;
 
@@ -170,6 +184,7 @@ import { withBase } from 'ux-design-system/lib/url';
         <li><a href="#atelier-tag">Tag</a></li>
         <li><a href="#atelier-icon">Icon</a></li>
         <li><a href="#atelier-card">Card</a></li>
+        <li><a href="#atelier-modal">Modal</a></li>
         <li><a href="#pannes">Quand ça ne marche pas</a></li>
       </ul>
     </nav>
@@ -939,6 +954,135 @@ import { withBase } from 'ux-design-system/lib/url';
           ))
         }
         {iconNames.map((n) => <span data-icone={n}><Icon name={n} /></span>)}
+      </div>
+    </section>
+
+    <!-- ── Modal ────────────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="modal" id="atelier-modal">
+      <h2>Modal</h2>
+      <p class="section-note">
+        Une boîte qui s'ouvre par-dessus la page. C'est le site qui l'ouvre, jamais cette page —
+        {' '}voir <a href={withBase('/components')}>Composants</a> pour <code>.showModal()</code>.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset>
+            <legend>Variante</legend>
+            <div class="choix">
+              {
+                modalVariants.map((v) => (
+                  <label>
+                    <input type="radio" name="variant" value={v} checked={v === 'validation'} />
+                    <span>{v}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="aide">
+              <code>alert</code> rougit l'icône et bascule le bouton principal dans sa propre
+              {' '}variante. <code>succes</code> n'a jamais qu'un bouton — c'est elle qui décide,
+              pas le champ « Bouton secondaire » plus bas.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="modal-icon">Icône</label></legend>
+            <select id="modal-icon" name="icon">
+              {iconNames.map((n) => <option value={n} selected={n === 'mail-edit'}>{n}</option>)}
+            </select>
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="modal-heading">Titre</label></legend>
+            <input
+              id="modal-heading"
+              type="text"
+              name="heading"
+              value="Envoyer le message ?"
+              autocomplete="off"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="modal-body">Texte</label></legend>
+            <input
+              id="modal-body"
+              type="text"
+              name="body"
+              value="Ta réponse partira à l’adresse du formulaire."
+              autocomplete="off"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend><label for="modal-primary">Bouton principal</label></legend>
+            <input id="modal-primary" type="text" name="primary" value="Envoyer" autocomplete="off" />
+          </fieldset>
+
+          <fieldset data-si="variant" data-sauf="succes">
+            <legend><label for="modal-secondary">Bouton secondaire</label></legend>
+            <input
+              id="modal-secondary"
+              type="text"
+              name="secondary"
+              value="Annuler"
+              autocomplete="off"
+            />
+            <p class="aide">Vide, la modale n'a plus qu'un bouton — comme le fait toujours <code>succes</code>.</p>
+          </fieldset>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le composant</p>
+          <div class="demo demo-modal" data-apercu>
+            {
+              modalVariants.map((v) => (
+                <div class:list={['pv', v === 'validation' && 'is-on']} data-cle={v}>
+                  <Modal
+                    id={`bac-a-sable-modal-${v}`}
+                    variant={v}
+                    icon="mail-edit"
+                    heading="Envoyer le message ?"
+                    body="Ta réponse partira à l’adresse du formulaire."
+                    primary={{ label: 'Envoyer' }}
+                    secondary={{ label: 'Annuler' }}
+                    open
+                  />
+                </div>
+              ))
+            }
+          </div>
+          <p class="aide">
+            Montrée ici avec l'attribut <code>open</code>, sans <code>.showModal()</code> — c'est
+            pour ça qu'aucun fond noir ne la recouvre. En vrai c'est <code>::backdrop</code> qui
+            le pose, gratuitement, dès qu'un site l'ouvre par script.
+          </p>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{entete('Modal')}</code></pre>
+            <p class="aide">
+              Si ton fichier a déjà un bloc <code>---</code>, n'y ajoute que la ligne d'<code>import</code>.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux la modale</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautModal}</code></pre>
+            <p class="aide" data-defauts></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="banque" data-banque aria-hidden="true">
+        {iconNames.map((n) => <span data-icone={n}><Icon name={n} size="md" /></span>)}
       </div>
     </section>
 
@@ -1715,6 +1859,84 @@ import { withBase } from 'ux-design-system/lib/url';
       };
     });
   }
+
+  // ── Modal ──────────────────────────────────────────────────────────────
+  // La variante change la couleur du bouton principal (primary ou alert) ET
+  // le nombre de boutons (succes n'en a qu'un, structurellement — pas de
+  // second <button> du tout dans son DOM). Une classe scopée d'Astro ne se
+  // rejoue pas après coup, donc les trois Modal sont entièrement pré-rendues,
+  // une par variante, comme les dix-huit Button plus haut. Le script ne fait
+  // que choisir laquelle montrer, puis y récrit l'icône et les mots.
+  const atelierModal = document.querySelector('[data-atelier="modal"]');
+  if (atelierModal) {
+    const banque = atelierModal.querySelector('[data-banque]');
+    const defauts = atelierModal.querySelector<HTMLElement>('[data-defauts]');
+
+    const icone = (nom: string) => {
+      const svg = banque?.querySelector(`[data-icone="${nom}"] svg`);
+      return svg ? [svg.cloneNode(true)] : [];
+    };
+
+    // Même règle que dans l'atelier Card : une valeur libre part dans un
+    // attribut, et un guillemet droit tapé dans le titre le fermerait.
+    const attr = (v: string) => v.replace(/"/g, '&quot;');
+
+    brancher(atelierModal, (d, apercu) => {
+      const variant = String(d.get('variant'));
+      const nomIcone = String(d.get('icon'));
+      const heading = String(d.get('heading') ?? '').trim();
+      const body = String(d.get('body') ?? '').trim();
+      const primaire = String(d.get('primary') ?? '').trim();
+      // succes n'a pas ce bouton, quoi que le champ contienne — le champ se
+      // masque déjà pour cette variante, mais sa valeur reste dans le
+      // formulaire tant qu'on ne l'a pas vidé à la main.
+      const secondaire = variant === 'succes' ? '' : String(d.get('secondary') ?? '').trim();
+
+      const vue = montrer(apercu, variant);
+
+      vue?.querySelector('.icon-frame')?.replaceChildren(...icone(nomIcone));
+
+      const titre = vue?.querySelector<HTMLElement>('.heading');
+      if (titre) titre.textContent = heading;
+      const texte = vue?.querySelector<HTMLElement>('.body');
+      if (texte) texte.textContent = body;
+
+      // Les deux boutons sont dans l'ordre du markup — le principal d'abord,
+      // le secondaire ensuite — et rien ne les distingue autrement dans le
+      // DOM rendu : ni l'un ni l'autre n'a de classe qui dise son rôle. Sur
+      // l'exemplaire succes, il n'y a tout simplement pas de second bouton :
+      // btnSecondaire vaut undefined, et la ligne suivante ne fait rien.
+      const [btnPrimaire, btnSecondaire] = [
+        ...(vue?.querySelectorAll<HTMLElement>('.actions .btn') ?? []),
+      ];
+      if (btnPrimaire) btnPrimaire.textContent = primaire;
+      if (btnSecondaire) {
+        btnSecondaire.textContent = secondaire;
+        // Vide, le bouton disparaît — comme le fera vraiment le composant :
+        // sans secondary, Modal ne le rend pas du tout.
+        btnSecondaire.style.display = secondaire ? '' : 'none';
+      }
+
+      const attrs = [
+        'id="ma-modale"',
+        `icon="${nomIcone}"`,
+        variant !== 'validation' ? `variant="${variant}"` : '',
+        `heading="${attr(heading)}"`,
+        `body="${attr(body)}"`,
+        `primary={{ label: "${attr(primaire)}" }}`,
+        secondaire ? `secondary={{ label: "${attr(secondaire)}" }}` : '',
+      ].filter(Boolean);
+
+      if (defauts) {
+        defauts.textContent =
+          variant === 'validation'
+            ? 'Ce qui est déjà le défaut ne s’écrit pas : variant="validation".'
+            : '';
+      }
+
+      return baliser('Modal', attrs, null);
+    });
+  }
 </script>
 
 <style>
@@ -1986,6 +2208,24 @@ import { withBase } from 'ux-design-system/lib/url';
 
   .carte-socle-horizontal {
     max-width: 768px;
+  }
+
+  /* ── L'atelier de la modale ────────────────────────────────────────────── */
+
+  /* Sans .showModal(), le <dialog> reste en position absolute par défaut du
+     navigateur mais ne compte pour aucune hauteur dans son parent — le cadre
+     recoit donc une hauteur et devient l'ancre de positionnement, et le
+     centrage inset:0 + margin:auto imite à la main ce que :modal ferait tout
+     seul en vrai. Même recette que sur /components. */
+  .demo-modal {
+    position: relative;
+    min-height: 420px;
+  }
+
+  .demo-modal :global(.modal) {
+    position: absolute;
+    inset: 0;
+    margin: auto;
   }
 
   /* Un emplacement est un réglage qui en contient d'autres : le cadre dit où il
