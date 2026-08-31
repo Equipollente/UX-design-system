@@ -47,6 +47,17 @@ Vocabulaire employé, et lui seul : 43 `color`, 10 `space`, 4 `radius`, 27 `font
 | 5 | Chip | [`351-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=351-273) | ✅ intégré | 27/08 |
 | 6 | Add Image | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) | ✅ intégré | 27/08 |
 | 7 | Edit Image Gallery | [`355-1396`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=355-1396) | ✅ intégré | 27/08 |
+| 8 | Text field | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | ✅ intégré | 31/08 |
+
+**Le huitième est arrivé quatre jours après les autres, et il était là depuis le début.** Le sprint
+avait relevé ses composants dans la plage `340`–`355` ; `forms/Field` est en `23`, dessiné bien
+avant, et il n'apparaissait ni dans les intégrés ni dans les non-intégrés de [LINKS.md](../LINKS.md).
+Personne ne l'a cherché parce que personne ne le croyait manquant — c'est le second nœud du fichier
+qu'on retrouve ainsi, après celui du Select. Le geste qui l'a fait sortir : chercher `field` dans les
+composants du fichier avant de conclure qu'un objet n'existe pas.
+
+Son seul écart de mesure était le rembourrage, 6 / 14, réglé le jour même par le geste du 27/08 —
+nœud redessiné à 12 / 16, aucune variable créée. Le tableau des substitutions reste donc vide.
 
 Le doublon de lien signalé entre Chip et Edit Image Gallery n'en était pas un : `355:1396` se lit
 sans difficulté, et c'est bien un composant distinct.

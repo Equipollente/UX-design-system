@@ -52,6 +52,11 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
 | Select | `340:933` | boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile | /formulaire → Select | ouvert |
 | Select | `340:933` | chevron de 20, quand le code prend les 24 de `button/icon-size/md` | /formulaire → Select | ouvert |
+| ~~Text field~~ | `23:29` | ~~rembourrage de 6 / 14, que rien ne lie : 14 n'existe que comme rayon, 6 n'existe pas~~ | /formulaire → Text field | *réglé — 31/08, nœud redessiné à 12 / 16 sur ses six variantes, lié aux deux `button/padding-*/sm` — aucune variable créée* |
+| Text field | `23:29` | **le nœud existait, et personne ne l'avait vu** — hors de la plage `340`–`355` relevée par le sprint, il n'était ni intégré ni listé | /formulaire → Text field | ouvert |
+| Text field | `23:29` | **ni état désactivé ni état d'erreur** ; `disabled` a pu s'écrire quand même (`opacity/disabled` existe), l'erreur non — elle demanderait une encre, un trait et un message | /formulaire → Text field | ouvert |
+| Text field | `23:29` | la variante `Multiline` dessine ce que Text Area fait déjà, avec son propre nœud et son compteur | /formulaire → Text field | ouvert |
+| Text field · Text Area · Select | `23:29` · `343:273` · `340:933` | trois champs voisins, trois survols : le premier change son trait, les deux autres leur fond | /formulaire → Text field | ouvert |
 | Text Area · Select | `343:273` · `340:933` | l'écart libellé ↔ champ | /formulaire → Text Area | *réglé — 27/08, `control/field-gap` = 5* |
 | Text Area | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Text Area | ouvert |
 | Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |
@@ -106,6 +111,7 @@ nomme, le composant n'a qu'une ligne à changer.
 | `Cards ` | `Card` | un pluriel avec une espace finale nomme un tiroir, pas un objet | ouvert |
 | `Property 1` | `orientation` | le nom de la propriété de variante ne dit pas ce qu'elle commande | ouvert |
 | `Modals` | `Modal` | un pluriel nomme un tiroir, pas un objet | ouvert |
+| `forms/Field` | `TextField` | `forms/` est un tiroir, et « field » désigne aussi le select et la zone de texte — c'est déjà le nom de la classe qui les enveloppe tous les trois | ouvert |
 | `Property 1` (sur `420:1223`) | `variant` | trois valeurs (`validation`/`alert`/`succes`), pas quatre : `Layout` est le gabarit générique de la maquette, jamais un contenu réel | assumé |
 
 ---
