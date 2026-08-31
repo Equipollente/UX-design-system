@@ -1323,7 +1323,13 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
     // Règle de démo assumée : les tentatives alternent plutôt que de dépendre
     // d'une vraie réponse serveur, qu'il n'y a pas ici.
     let tentative = 0;
+    let objectUrl: string | undefined;
 
+    const revokeObjectUrl = () => {
+      if (!objectUrl) return;
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = undefined;
+    };
     champ.addEventListener('change', () => {
       const fichier = champ.files?.[0];
       if (!fichier) return;
