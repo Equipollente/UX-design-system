@@ -2,23 +2,32 @@
 // EditImageGallery — les images déjà déposées, chacune avec de quoi la revoir ou
 // la retirer.
 //
-// Ce n'est pas AddImage : AddImage accepte un fichier, elle ne montre rien de ce
-// qui est entré. Ce n'est pas non plus un carrousel — un carrousel fait défiler
-// pour montrer, celle-ci étale pour laisser modifier. Et ce n'est pas une
-// galerie de consultation : chaque vignette porte deux actions, donc elle
-// appartient à un formulaire.
+// Ce n'est pas AddImage : cette liste montre PLUSIEURS images déjà validées,
+// après upload — pas UNE image en train de se déposer. AddImage couvre tout
+// le cycle d'UN emplacement, y compris son état `success`, qui dessine le même
+// motif qu'une vignette d'ici (image en fond, deux boutons superposés) pour un
+// seul emplacement plutôt que pour la liste qui en résulte une fois le
+// formulaire soumis. Les deux motifs sont volontairement proches et
+// volontairement dupliqués — pas de composant partagé, voir le pavé de tête
+// d'AddImage.astro pour le raisonnement. Ce n'est pas non plus un carrousel —
+// un carrousel fait défiler pour montrer, celle-ci étale pour laisser
+// modifier. Et ce n'est pas une galerie de consultation : chaque vignette
+// porte deux actions, donc elle appartient à un formulaire.
 //
 // Nœud Figma : 355:1396.
 //
-// Les deux boutons sont le Button du système, en `secondary` / `md` — c'est
-// exactement ce que le nœud instancie. Ils ne sont pas redessinés ici : une
-// vignette qui aurait ses propres boutons cesserait de suivre le système au
-// premier changement de bouton.
+// Les deux boutons sont le Button du système, en `md`. Ils ne sont pas
+// redessinés ici : une vignette qui aurait ses propres boutons cesserait de
+// suivre le système au premier changement de bouton.
 //
-// « supprimer » est un `submit` qui porte son `name` et sa `value` : le
-// formulaire sait donc laquelle retirer sans une ligne de JavaScript. « voir »
-// est un lien quand l'appelant donne une adresse, et disparaît sinon — un bouton
-// qui ne mène nulle part vaut moins que pas de bouton.
+// « supprimer » est en `alert` — la seule action destructive du système, et
+// c'est maintenant son seul emploi tenu (arbitrages.md, écart réglé). Le fond
+// passe de bg-surface à feedback-danger-500 : le voile noir que Figma ne
+// dessine pas manque encore moins, le bouton se détache franchement de la
+// photo. Il porte son `name` et sa `value` : le formulaire sait donc laquelle
+// retirer sans une ligne de JavaScript. « voir » reste en `secondary` — c'est
+// un lien quand l'appelant donne une adresse, et disparaît sinon, un bouton
+// qui ne mène nulle part valant moins que pas de bouton.
 //
 // Mesures : quand Figma ne lie aucune variable, on prend le token de la même
 // famille le plus proche, ou on compose deux tokens quand ils donnent la mesure
@@ -106,7 +115,7 @@ const classes = ['gallery', className].filter(Boolean).join(' ');
                 « supprimer » à la suite ne se distinguent pas autrement au
                 lecteur d'écran (WCAG 2.4.6 — un libellé décrit sa cible). */}
             <Button
-              variant="secondary"
+              variant="alert"
               size="md"
               type="submit"
               name={removeName}

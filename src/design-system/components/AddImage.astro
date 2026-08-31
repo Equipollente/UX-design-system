@@ -1,47 +1,65 @@
 ---
-// AddImage — la zone par laquelle une image entre dans un formulaire.
+// AddImage — le cycle complet d'un dépôt d'image dans un formulaire : le champ
+// qui l'accepte, sa progression, son échec, et l'image qu'il finit par tenir.
 //
-// Ce n'est pas un bouton : un bouton déclenche une action, celle-ci ouvre le
-// sélecteur de fichiers du système et rend un fichier au formulaire. Ce n'est pas
-// non plus une galerie — elle ne montre pas ce qui a été déposé, elle ne fait que
-// l'accepter. C'est EditImageGallery qui montre et qui retire.
+// Ce n'est pas un bouton : un bouton déclenche une action, l'état `add` ouvre
+// le sélecteur de fichiers du système et rend un fichier au formulaire. Ce
+// n'est plus vrai que « ça ne montre jamais ce qui a été déposé » : l'état
+// `success` montre l'image déposée, avec de quoi la revoir ou la retirer —
+// exactement ce que fait EditImageGallery, mais pour UNE image dans SON
+// emplacement plutôt que pour la liste de celles déjà validées. Un formulaire
+// qui dépose plusieurs images compose donc un AddImage par emplacement, et une
+// EditImageGallery pour la liste qui en résulte une fois le formulaire soumis ;
+// un AddImage seul suffit à représenter un unique emplacement du début à la
+// fin de son cycle.
 //
-// Nœud Figma : 343:315 — 4 variantes d'état.
+// Nœuds Figma : 343:315 (les 4 états d'interaction du champ — Default/Hover/
+// Focused/Disabled, toujours l'état `add`) et 418:1020, « Add Image process »
+// (les 4 étapes du cycle — State=add/in progress/fail/success). Les deux
+// coexistent dans le fichier ; le second enveloppe le premier pour son
+// premier état et ajoute les trois suivants.
 //
-// C'est un <input type="file"> et son <label>, et c'est ce qui lui permet de
-// fonctionner sans une ligne de JavaScript : cliquer la zone ouvre le sélecteur,
-// Entrée et la barre d'espace aussi. Le champ est déporté hors du cadre plutôt
-// que masqué — `display: none` le retirerait du parcours au clavier et de l'arbre
-// d'accessibilité, ce qui reviendrait à supprimer le contrôle pour n'en garder
-// que le dessin.
+// L'état `add` est un <input type="file"> et son <label>, et c'est ce qui lui
+// permet de fonctionner sans une ligne de JavaScript : cliquer la zone ouvre
+// le sélecteur, Entrée et la barre d'espace aussi. Les trois autres états ne
+// sont plus un contrôle : ce sont des rendus conditionnels, pilotés par les
+// props `state`, `progress`, `failMessage`, `image` — jamais par un script du
+// composant (aucun composant du système n'en porte par défaut). Le champ est
+// déporté hors du cadre plutôt que masqué en `add` — `display: none` le
+// retirerait du parcours au clavier et de l'arbre d'accessibilité.
 //
-// L'indication (« PNG, JPG up to 10 MB ») est liée au champ par
-// `aria-describedby` : elle est lue après le libellé, à l'entrée dans le contrôle,
-// et non comme un texte flottant que rien ne rattache.
+// `Props` est une union discriminée sur `state`, pas une interface plate : les
+// champs obligatoires divergent vraiment d'un état à l'autre (`label` pour
+// `add`, `failMessage` pour `fail`, `image` pour `success`), à la différence
+// du seul autre composant du dépôt piloté par une variante (Modal), où les
+// mêmes champs sont obligatoires quelle que soit la variante. Les rendre tous
+// optionnels aurait laissé passer un `state="fail"` sans message — une alerte
+// vide — ou un `state="add"` sans libellé — un champ sans nom accessible —
+// jusqu'en production. `npm run check` les refuse maintenant, comme il refuse
+// déjà un nom d'icône inconnu.
 //
 // Ce que Figma déclare et qui n'est pas ici :
-// — la taille de la zone (240 × 140) : aucune variable de mesure ne la porte. La
-//   zone se dimensionne donc sur son contenu, et c'est l'appelant qui lui donne
-//   sa largeur — ce qui est de toute façon ce qu'il faut pour une mise en page
-//   qui s'adapte ;
-// — le rembourrage vertical de 28 → `space-xl + space-xs` = 28, **exact** ;
-//   l'horizontal est `space/xl`, lié dans le nœud ;
-// — l'icône de 32 → `space/2xl` = 32, **exact** ;
-// — le trait → `border/width/default`. Le nœud le dessinait à 1,5, une épaisseur
-//   qu'il ne portait qu'ici et sur Add Folder ; il est redessiné à 1, celle du
-//   reste du système ;
-// — l'anneau de focus 2 → `border/width/focus` ;
-// — la couleur de l'icône : le nœud la lie à une variable d'une **autre
-//   bibliothèque**, étrangère à ce système. Ici l'icône est en `currentColor` et
-//   prend donc l'encre du libellé, ce qui est la règle du dépôt ;
-// — le glisser-déposer : il demanderait un script, et son absence n'est pas un
-//   échec — le clic et le clavier ouvrent tous deux le sélecteur.
+// — taille 240 × 140 non contrainte, padding 28/24 composé de tokens, icône
+//   32 = space/2xl, trait redessiné à 1, anneau de focus 2, couleur icône en
+//   currentColor, pas de glisser-déposer — ces écarts sont ceux de l'état
+//   `add`, inchangés ;
+// — la piste de progression ne fait pas 114 de large : comme la boîte
+//   elle-même, elle suit la largeur que l'appelant lui donne ;
+// — le nœud ne dessine aucun trait sur `fail` : repris tel quel, la boîte
+//   tient sur son seul fond plein.
 
 import Icon from './Icon.astro';
+import Button from './Button.astro';
 
-interface Props {
-  /** Lie le libellé au champ. Unique dans la page. */
+interface CommonProps {
   id: string;
+  /** Cache l'élément entier — le crochet que la démo de /formulaire togglera. */
+  hidden?: boolean;
+  class?: string;
+}
+
+interface AddStateProps extends CommonProps {
+  state?: 'add';
   /** Ce que la zone propose de faire. Un verbe : « Add image ». */
   label: string;
   /** Ce qu'elle accepte, en toutes lettres. Lu après le libellé, pas laissé flottant. */
@@ -53,44 +71,243 @@ interface Props {
   name?: string;
   required?: boolean;
   disabled?: boolean;
-  class?: string;
 }
 
-const {
-  id,
-  label,
-  hint,
-  accept,
-  multiple = false,
-  name,
-  required = false,
-  disabled = false,
-  class: className,
-  ...rest
-} = Astro.props;
+interface InProgressStateProps extends CommonProps {
+  state: 'in-progress';
+  /** Le mot affiché avant le pourcentage. */
+  progressLabel?: string;
+  /** La fraction déposée, 0 à 100. */
+  progress?: number;
+}
 
-const hintId = hint ? `${id}-hint` : undefined;
-const classes = ['add-image', className].filter(Boolean).join(' ');
+interface FailStateProps extends CommonProps {
+  state: 'fail';
+  /** Le message d'échec. */
+  failMessage: string;
+  /**
+   * Le bouton qui relance le dépôt. Sans `href`, un bouton inerte — c'est à
+   * l'appelant de lui donner un geste.
+   */
+  retry?: { label: string; href?: string };
+}
+
+interface SuccessStateProps extends CommonProps {
+  state: 'success';
+  /** L'image déjà déposée. */
+  image: {
+    id: string;
+    src: string;
+    alt: string;
+    href?: string;
+    width?: number;
+    height?: number;
+  };
+  /** Le mot du bouton qui ouvre l'image. */
+  viewLabel?: string;
+  /** Le mot du bouton qui la retire. */
+  removeLabel?: string;
+  /** Le `name` du bouton supprimer. Sa `value` est l'`id` de l'image. */
+  removeName?: string;
+}
+
+type Props = AddStateProps | InProgressStateProps | FailStateProps | SuccessStateProps;
+
+const props = Astro.props;
+const { id, class: className, hidden } = props;
+
+const boxClasses = ['add-image', className].filter(Boolean).join(' ');
+const transientClasses = ['add-image', className].filter(Boolean).join(' ');
+const failClasses = ['add-image', 'add-image-fail', className].filter(Boolean).join(' ');
+const successClasses = ['add-image-success', className].filter(Boolean).join(' ');
+
+// Un objet par état, ou `null` : c'est ce qui permet à `label`, `failMessage`
+// et `image` de rester obligatoires dans leur branche sans jamais rendre un
+// champ, une alerte ou une vignette vides.
+const add =
+  props.state === undefined || props.state === 'add'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          label,
+          hint,
+          accept,
+          multiple = false,
+          name,
+          required = false,
+          disabled = false,
+          ...rest
+        } = props;
+        return {
+          label,
+          hint,
+          hintId: hint ? `${id}-hint` : undefined,
+          accept,
+          multiple,
+          name,
+          required,
+          disabled,
+          rest,
+        };
+      })()
+    : null;
+
+const inProgress =
+  props.state === 'in-progress'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          progressLabel = 'téléchargement',
+          progress = 0,
+          ...rest
+        } = props;
+        return {
+          progressLabel,
+          clampedProgress: Math.min(100, Math.max(0, progress)),
+          labelId: `${id}-label`,
+          rest,
+        };
+      })()
+    : null;
+
+const fail =
+  props.state === 'fail'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          failMessage,
+          retry = { label: 'Recommencer' },
+          ...rest
+        } = props;
+        return { failMessage, retry, rest };
+      })()
+    : null;
+
+const success =
+  props.state === 'success'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          image,
+          viewLabel = 'voir',
+          removeLabel = 'supprimer',
+          removeName = 'remove',
+          ...rest
+        } = props;
+        return { image, viewLabel, removeLabel, removeName, rest };
+      })()
+    : null;
 ---
 
-<label class={classes} for={id} {...rest}>
-  <input
-    class="add-image-input"
-    type="file"
-    id={id}
-    name={name ?? id}
-    accept={accept}
-    multiple={multiple}
-    required={required}
-    disabled={disabled}
-    aria-describedby={hintId}
-  />
-  {/* L'icône double un mot écrit juste en dessous : elle est décorative, donc
-      sans `label` — sans quoi les lecteurs d'écran diraient la chose deux fois. */}
-  <Icon name="image-plus" class="add-image-icon" />
-  <span class="add-image-label">{label}</span>
-  {hint && <span class="add-image-hint" id={hintId}>{hint}</span>}
-</label>
+{
+  add && (
+    <label class={boxClasses} for={id} hidden={hidden} {...add.rest}>
+      <input
+        class="add-image-input"
+        type="file"
+        id={id}
+        name={add.name ?? id}
+        accept={add.accept}
+        multiple={add.multiple}
+        required={add.required}
+        disabled={add.disabled}
+        aria-describedby={add.hintId}
+      />
+      {/* L'icône double un mot écrit juste en dessous : elle est décorative, donc
+          sans `label` — sans quoi les lecteurs d'écran diraient la chose deux fois. */}
+      <Icon name="image-plus" class="add-image-icon" />
+      <span class="add-image-label">{add.label}</span>
+      {add.hint && (
+        <span class="add-image-hint" id={add.hintId}>
+          {add.hint}
+        </span>
+      )}
+    </label>
+  )
+}
+
+{
+  inProgress && (
+    <div id={id} class={transientClasses} hidden={hidden} {...inProgress.rest}>
+      <span class="add-image-progress-label" id={inProgress.labelId}>
+        {inProgress.progressLabel}
+      </span>
+      <div
+        class="add-image-progress-track"
+        role="progressbar"
+        aria-valuenow={inProgress.clampedProgress}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-labelledby={inProgress.labelId}
+        style={`--add-image-progress: ${inProgress.clampedProgress}%`}
+      >
+        <div class="add-image-progress-fill" />
+      </div>
+      <span class="add-image-progress-value">{inProgress.clampedProgress}%</span>
+    </div>
+  )
+}
+
+{
+  fail && (
+    <div id={id} class={failClasses} hidden={hidden} {...fail.rest}>
+      {/* `role="alert"` sur le message seul, pas sur toute la boîte : le
+          bouton qui suit ne doit pas être avalé par la région live. */}
+      <span class="add-image-fail-message" role="alert">
+        {fail.failMessage}
+      </span>
+      <Button variant="secondary" size="sm" href={fail.retry.href}>
+        {fail.retry.label}
+      </Button>
+    </div>
+  )
+}
+
+{
+  success && (
+    <div id={id} class={successClasses} hidden={hidden} {...success.rest}>
+      <img
+        class="add-image-success-image"
+        src={success.image.src}
+        alt={success.image.alt}
+        width={success.image.width}
+        height={success.image.height}
+      />
+      <div class="add-image-success-actions">
+        {success.image.href && (
+          <Button variant="secondary" size="md" href={success.image.href}>
+            {success.viewLabel}
+          </Button>
+        )}
+        {/* Le nom accessible dit de quelle image il s'agit — comme dans
+            EditImageGallery, dont ce bloc reprend le motif pour un seul
+            emplacement plutôt que pour une grille. */}
+        <Button
+          variant="alert"
+          size="md"
+          type="submit"
+          name={success.removeName}
+          value={success.image.id}
+          aria-label={`${success.removeLabel} — ${success.image.alt}`}
+        >
+          {success.removeLabel}
+        </Button>
+      </div>
+    </div>
+  )
+}
 
 <style>
   /* Le champ est déporté hors du cadre, pas masqué : il reste au clavier et dans
@@ -101,9 +318,10 @@ const classes = ['add-image', className].filter(Boolean).join(' ');
     clip-path: inset(50%);
   }
 
-  /* La zone. Son rayon, son rembourrage horizontal et l'écart de ses trois lignes
-     viennent du nœud, où ils sont liés. Sa taille, non : elle se dimensionne sur
-     son contenu et prend la largeur que l'appelant lui donne. */
+  /* La boîte, commune aux états `add`, `in-progress` et `fail`. Son rayon, son
+     rembourrage horizontal et l'écart de ses lignes viennent du nœud, où ils
+     sont liés. Sa taille, non : elle se dimensionne sur son contenu et prend
+     la largeur que l'appelant lui donne. */
   .add-image {
     display: flex;
     flex-direction: column;
@@ -117,14 +335,40 @@ const classes = ['add-image', className].filter(Boolean).join(' ');
     --icon-size: var(--space-2xl);
     border-radius: var(--radius-lg); /* 28 */
     text-align: center;
-    /* WCAG 2.5.5 — la zone entière est la cible, pas seulement son mot. */
+    border: var(--border-width-default) dashed var(--color-border-default);
+    background: var(--add-image-bg, var(--color-bg-surface));
+  }
+
+  /* Le curseur et le survol ne valent que pour la boîte qui contient le champ
+     réel — `in-progress` et `fail` ne sont pas cliquables. */
+  .add-image:has(.add-image-input) {
     cursor: pointer;
   }
 
-  /* — default — Le trait du nœud, et le fond qui détache la zone du blanc. */
-  .add-image {
-    border: var(--border-width-default) solid var(--color-border-default);
+  .add-image:has(.add-image-input):hover {
+    background: var(--add-image-bg-hover, var(--color-accent-100));
+  }
+
+  .add-image:has(.add-image-input):hover .add-image-label {
+    color: var(--color-accent-600);
+  }
+
+  /* — focused — L'anneau du système, porté par la zone : le champ étant hors du
+     cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
+  .add-image:has(.add-image-input:focus-visible) {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
+     tranche, et une zone désactivée ne doit pas prendre le survol. La zone entière
+     s'atténue, exactement comme le nœud le dessine : le libellé y garde son encre
+     par-dessous, et n'a donc plus à virer au gris pour dire « éteint ». */
+  .add-image:has(.add-image-input:disabled),
+  .add-image:has(.add-image-input:disabled):hover {
     background: var(--add-image-bg, var(--color-bg-surface));
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
   }
 
   .add-image-label {
@@ -147,31 +391,80 @@ const classes = ['add-image', className].filter(Boolean).join(' ');
     color: var(--color-text-muted);
   }
 
-  /* — hover — Le fond passe en accent/100 et le libellé en accent/600. L'icône
-     n'a rien à déclarer : en currentColor, elle suit le libellé. */
-  .add-image:hover {
-    background: var(--add-image-bg-hover, var(--color-accent-100));
+  .add-image-progress-label,
+  .add-image-progress-value,
+  .add-image-fail-message {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-ui);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-normal);
   }
 
-  .add-image:hover .add-image-label {
-    color: var(--color-accent-600);
+  .add-image-progress-label {
+    color: var(--color-text-muted);
   }
 
-  /* — focused — L'anneau du système, porté par la zone : le champ étant hors du
-     cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
-  .add-image:has(.add-image-input:focus-visible) {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+  .add-image-progress-value {
+    color: var(--color-text-default);
   }
 
-  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et une zone désactivée ne doit pas prendre le survol. La zone entière
-     s'atténue, exactement comme le nœud le dessine : le libellé y garde son encre
-     par-dessous, et n'a donc plus à virer au gris pour dire « éteint ». */
-  .add-image:has(.add-image-input:disabled),
-  .add-image:has(.add-image-input:disabled):hover {
-    background: var(--add-image-bg, var(--color-bg-surface));
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
+  /* La piste ne fait pas 114 de large dans le code : comme la boîte, elle suit
+     la largeur que l'appelant lui donne. Hauteur 8 = space/sm, exacte. */
+  .add-image-progress-track {
+    width: 100%;
+    height: var(--space-sm);
+    border-radius: var(--radius-pill);
+    background: var(--color-neutral-400);
+  }
+
+  .add-image-progress-fill {
+    height: 100%;
+    width: var(--add-image-progress, 0%);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-300);
+  }
+
+  /* — fail — Surcharge nommée d'après l'objet, comme --add-image-bg : le fond
+     plein remplace le fond surface. Le nœud ne dessine aucun trait sur cet
+     état — le fond plein suffit à détacher la boîte de la page. */
+  .add-image-fail {
+    background: var(--add-image-bg-fail, var(--color-accent-100));
+    border: none;
+  }
+
+  .add-image-fail-message {
+    color: var(--color-feedback-danger-500);
+  }
+
+  /* — success — plus de boîte pointillée : l'image tient toute la place, les
+     boutons flottent par-dessus. Même motif qu'une vignette d'EditImageGallery,
+     dupliqué et non partagé — voir le pavé de tête des deux fichiers. */
+  .add-image-success {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    height: calc(var(--space-layout-128) + var(--space-md)); /* 140, comme EditImageGallery */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .add-image-success-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .add-image-success-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
   }
 </style>

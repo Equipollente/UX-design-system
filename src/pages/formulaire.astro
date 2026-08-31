@@ -17,6 +17,9 @@ import {
   demoCheckboxOptions,
   demoChipOptions,
   demoAddImage,
+  demoAddImageFail,
+  demoAddImageProgress,
+  demoAddImageSuccess,
   demoGalleryImages,
 } from './_demo';
 
@@ -94,14 +97,23 @@ const chipProps = [
 ];
 
 const addImageProps = [
-  ['id', 'string', '—', 'Lie le libellé au champ. Unique dans la page.'],
-  ['label', 'string', '—', 'Ce que la zone propose de faire. Un verbe.'],
+  ['id', 'string', '—', 'Lie le libellé au champ en state="add". Unique dans la page.'],
+  ['label', 'string', '—', 'Ce que la zone propose de faire en state="add". Un verbe.'],
   ['hint', 'string', '—', 'Ce qu’elle accepte, en toutes lettres. Lu après le libellé, pas laissé flottant.'],
   ['accept', 'string', '—', 'Les types acceptés, au format de l’attribut natif.'],
   ['multiple', 'boolean', 'false', 'Autorise plusieurs fichiers en une fois.'],
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
   ['required', 'boolean', 'false', 'Rend le dépôt obligatoire.'],
   ['disabled', 'boolean', 'false', 'Grisé, et n’ouvre plus le sélecteur.'],
+  ['state', "'add' | 'in-progress' | 'fail' | 'success'", "'add'", 'L’étape du cycle de dépôt.'],
+  ['progressLabel', 'string', "'téléchargement'", 'Le mot affiché en state="in-progress", avant le pourcentage.'],
+  ['progress', 'number', '0', 'La fraction déposée, 0 à 100. N’a de sens qu’en state="in-progress".'],
+  ['failMessage', 'string', '—', 'Le message d’échec. N’a de sens qu’en state="fail".'],
+  ['retry', '{ label, href? }', "{ label: 'Recommencer' }", 'Le bouton qui relance en state="fail". Sans href, un bouton inerte.'],
+  ['image', '{ id, src, alt, href?, width?, height? }', '—', 'L’image déjà déposée, montrée en state="success".'],
+  ['viewLabel', 'string', "'voir'", 'Le mot du bouton qui ouvre l’image en state="success".'],
+  ['removeLabel', 'string', "'supprimer'", 'Le mot du bouton qui la retire en state="success".'],
+  ['removeName', 'string', "'remove'", 'Le name du bouton supprimer en state="success". Sa value est l’id de l’image.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
@@ -814,16 +826,18 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         <strong>Le chip a retrouvé son trait, et il se voit.</strong> C'était l'écart le plus coûteux
         du sprint : son fond est <code>bg/default</code>, le blanc de la page, et sans bordure un chip
         non retenu était littéralement invisible. <code>border/width/default</code> sur
-        {' '}<code>color/border/default</code> le détache.
+        {' '}<code>color/accent/300</code> le détache.
       </p>
 
-      <p class="flag">
-        <strong>Mais ce trait ne vaut que 1,28:1 sur le blanc.</strong> C'est la mesure de
-        {' '}<code>color/border/default</code>, écrite dans sa propre description, et vérifiée sur la
-        page. WCAG 1.4.11 demande <strong>3:1</strong> à la limite visible d'un contrôle : le chip se
-        voit, mais son trait n'y arrive pas. Aucune couleur de trait du système n'y arriverait —
-        {' '}<code>border/strong</code> vaut 1,29:1, et <code>neutral/500</code> 2,41:1. C'est une
-        couleur qu'il faut foncer dans Figma, pas une épaisseur.
+      <p class="section-note">
+        <strong>Le trait valait <code>color/border/default</code>, à 1,28:1 sur le blanc</strong> —
+        sous les 3:1 que WCAG 1.4.11 demande à la limite visible d'un contrôle. Aucune couleur de
+        trait nommée du système n'y arrivait — <code>border/strong</code> vaut 1,29:1, et
+        {' '}<code>neutral/500</code> 2,41:1 — donc le nœud est redessiné sur <code>accent/300</code>,
+        la première couleur de la rampe à dépasser le seuil, à 3,2:1. Seuls les états non
+        sélectionnés en dépendaient (Default, Hover, Disabled) ; Focused et les états sélectionnés
+        sont inchangés. <code>color/border/default</code> lui-même n'a pas bougé — ce qui le lit
+        ailleurs voit toujours 1,28:1.
       </p>
 
       <p class="section-note">
@@ -892,13 +906,17 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
       <h2>Add Image</h2>
 
       <p class="section-note">
-        <strong>Ce qu'elle est.</strong> La zone par laquelle une image entre dans un formulaire.
-        Nœud Figma <code>343:315</code>, quatre états.
+        <strong>Ce qu'elle est.</strong> Le cycle complet d'un dépôt d'image : le champ qui l'accepte,
+        sa progression, son échec, et l'image qu'il finit par tenir. Nœuds Figma
+        {' '}<code>343:315</code> (les quatre états d'interaction du champ) et <code>418:1020</code>
+        {' '}(les quatre étapes du cycle).
         <br />
-        <strong>Ce qu'elle n'est pas.</strong> Ni un bouton — un bouton déclenche une action,
-        celle-ci ouvre le sélecteur de fichiers du système et rend un fichier au formulaire — ni une
-        galerie : elle ne montre pas ce qui a été déposé, elle ne fait que l'accepter. C'est
-        {' '}<code>EditImageGallery</code> qui montre et qui retire.
+        <strong>Ce qu'elle n'est pas.</strong> Un bouton — un bouton déclenche une action, l'état
+        {' '}<code>add</code> ouvre le sélecteur de fichiers du système et rend un fichier au
+        formulaire. Ce n'est plus vrai qu'elle ne montre jamais ce qui a été déposé : l'état
+        {' '}<code>success</code> montre l'image, avec de quoi la revoir ou la retirer — exactement
+        ce que fait <code>EditImageGallery</code>, mais pour une image dans son emplacement plutôt
+        que pour la liste de celles déjà validées.
       </p>
 
       <p class="section-note">
@@ -944,6 +962,18 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
             accept={demoAddImage.accept}
             disabled
           />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">in-progress</p>
+          <AddImage id="depot-e" state="in-progress" progress={demoAddImageProgress} />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">fail</p>
+          <AddImage id="depot-f" state="fail" failMessage={demoAddImageFail} />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">success</p>
+          <AddImage id="depot-g" state="success" image={demoAddImageSuccess} />
         </div>
       </div>
 
@@ -1005,6 +1035,47 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         <strong>Le glisser-déposer n'est pas implémenté.</strong> Il demanderait un script, et son
         absence n'est pas un échec : le clic et le clavier ouvrent tous deux le sélecteur.
       </p>
+
+      <h3>Démo interactive</h3>
+
+      <p class="section-note">
+        Choisir un fichier fait vivre le cycle pour de vrai : le champ passe à
+        {' '}<code>in-progress</code>, puis à <code>fail</code> ou <code>success</code> en
+        alternance — une règle de démo assumée, il n'y a pas de vrai serveur derrière cette page. Le
+        script qui l'anime vit ici, sur <code>/formulaire</code>, jamais dans le composant : sans
+        lui le champ reste un <code>AddImage state="add"</code> ordinaire, entièrement fonctionnel.
+      </p>
+
+      <div class="demo" data-add-image-cycle>
+        <AddImage
+          id="depot-cycle-add"
+          label={demoAddImage.label}
+          hint={demoAddImage.hint}
+          accept={demoAddImage.accept}
+          data-cycle-add
+        />
+        <AddImage
+          id="depot-cycle-progress"
+          state="in-progress"
+          progress={0}
+          data-cycle-progress
+          hidden
+        />
+        <AddImage
+          id="depot-cycle-fail"
+          state="fail"
+          failMessage={demoAddImageFail}
+          data-cycle-fail
+          hidden
+        />
+        <AddImage
+          id="depot-cycle-success"
+          state="success"
+          image={demoAddImageSuccess}
+          data-cycle-success
+          hidden
+        />
+      </div>
     </section>
 
     <!-- ── Edit Image Gallery ──────────────────── -->
@@ -1015,17 +1086,17 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         <strong>Ce qu'elle est.</strong> Les images déjà déposées, chacune avec de quoi la revoir ou
         la retirer. Nœud Figma <code>355:1396</code>.
         <br />
-        <strong>Ce qu'elle n'est pas.</strong> Ni <code>AddImage</code> — qui accepte un fichier sans
-        rien montrer de ce qui est entré — ni un carrousel : un carrousel fait défiler pour montrer,
-        celle-ci étale pour laisser modifier. Et ce n'est pas une galerie de consultation : chaque
-        vignette porte deux actions, donc elle appartient à un formulaire.
+        <strong>Ce qu'elle n'est pas.</strong> Ni <code>AddImage</code> — qui couvre le cycle d'un
+        seul emplacement, du champ vide jusqu'à l'image tenue — ni un carrousel : un carrousel fait
+        défiler pour montrer, celle-ci étale pour laisser modifier. Et ce n'est pas une galerie de
+        consultation : chaque vignette porte deux actions, donc elle appartient à un formulaire.
       </p>
 
       <p class="section-note">
-        <strong>Les deux boutons sont le <code>Button</code> du système</strong>, en
-        {' '}<code>secondary</code> / <code>md</code> — exactement ce que le nœud instancie. Ils ne
-        sont pas redessinés ici : une vignette qui aurait ses propres boutons cesserait de suivre le
-        système au premier changement de bouton.
+        <strong>Les deux boutons sont le <code>Button</code> du système, en <code>md</code></strong>
+        {' '}— « voir » en <code>secondary</code>, « supprimer » en <code>alert</code>, la seule
+        variante d'action destructive. Ils ne sont pas redessinés ici : une vignette qui aurait ses
+        propres boutons cesserait de suivre le système au premier changement de bouton.
       </p>
 
       <p class="section-note">
@@ -1214,3 +1285,70 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
     white-space: nowrap;
   }
 </style>
+
+<script>
+  // Fait vivre le cycle d'AddImage (add → in-progress → fail/success) pour de
+  // vrai sur cette page — jamais dans le composant, qui reste un pur rendu
+  // conditionnel piloté par ses props (voir son pavé de tête). Sans ce
+  // script, `depot-cycle-add` reste un AddImage state="add" ordinaire.
+  document.querySelectorAll<HTMLElement>('[data-add-image-cycle]').forEach((cycle) => {
+    const ajout = cycle.querySelector<HTMLElement>('[data-cycle-add]');
+    const champ = ajout?.querySelector<HTMLInputElement>('.add-image-input');
+    const progression = cycle.querySelector<HTMLElement>('[data-cycle-progress]');
+    const piste = progression?.querySelector<HTMLElement>('.add-image-progress-track');
+    const valeur = progression?.querySelector<HTMLElement>('.add-image-progress-value');
+    const echec = cycle.querySelector<HTMLElement>('[data-cycle-fail]');
+    const reessayer = echec?.querySelector<HTMLButtonElement>('.btn');
+    const succes = cycle.querySelector<HTMLElement>('[data-cycle-success]');
+    const image = succes?.querySelector<HTMLImageElement>('.add-image-success-image');
+    if (!ajout || !champ || !progression || !piste || !valeur || !echec || !reessayer || !succes || !image) {
+      return;
+    }
+
+    const montrer = (cible: HTMLElement) => {
+      [ajout, progression, echec, succes].forEach((el) => (el.hidden = el !== cible));
+    };
+
+    // Règle de démo assumée : les tentatives alternent plutôt que de dépendre
+    // d'une vraie réponse serveur, qu'il n'y a pas ici.
+    let tentative = 0;
+    let objectUrl: string | undefined;
+
+    const revokeObjectUrl = () => {
+      if (!objectUrl) return;
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = undefined;
+    };
+    champ.addEventListener('change', () => {
+      const fichier = champ.files?.[0];
+      if (!fichier) return;
+      montrer(progression);
+      let pourcent = 0;
+      const minuteur = window.setInterval(() => {
+        pourcent = Math.min(100, pourcent + 10);
+        piste.style.setProperty('--add-image-progress', `${pourcent}%`);
+        piste.setAttribute('aria-valuenow', String(pourcent));
+        valeur.textContent = `${pourcent}%`;
+        if (pourcent === 100) {
+          window.clearInterval(minuteur);
+          tentative += 1;
+          if (tentative % 2 === 0) {
+            montrer(echec);
+          } else {
+            revokeObjectUrl();
+            objectUrl = URL.createObjectURL(fichier);
+            image.src = objectUrl;
+            image.alt = fichier.name;
+            montrer(succes);
+          }
+        }
+      }, 150);
+    });
+
+    reessayer.addEventListener('click', (evenement) => {
+      evenement.preventDefault();
+      champ.value = '';
+      montrer(ajout);
+    });
+  });
+</script>

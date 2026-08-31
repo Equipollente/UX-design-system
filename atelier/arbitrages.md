@@ -43,7 +43,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Système** | — | **aucune famille de mesures pour la géométrie d'un contrôle** — 18, 22, 5 | /formulaire | *réglé — 27/08, groupe `control`* |
 | **Système** | — | **aucune famille d'épaisseurs de trait** (1 · 1,5 · 2) | /formulaire | *réglé — 27/08, groupe `border`* |
 | **Système** | — | **aucune échelle d'opacité** (0,4 · 0,5 · 0,6) | /formulaire | *réglé — 27/08, groupe `opacity`* |
-| **Chip** | `351:273` | **son trait ne vaut que 1,28:1 sur le blanc** — WCAG 1.4.11 en demande 3 ; c'est une couleur à foncer, pas une épaisseur | /formulaire → Chip | ouvert |
+| ~~Chip~~ | `351:273` | ~~son trait ne vaut que 1,28:1 sur le blanc — WCAG 1.4.11 en demande 3~~ | /formulaire → Chip | *réglé — 31/08, trait des états non sélectionnés rebranché sur `color/accent/300` (3,2:1) ; `color/border/default` lui-même n'a pas bougé, toujours à 1,28:1 pour qui d'autre le lit* |
 | Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
 | Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
@@ -57,8 +57,11 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |
 | Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
+| ~~Add Image~~ | `343:315`, `418:1020` | ~~le nœud dessine aussi l'état `add` en trait pointillé ; le code le gardait plein~~ | /formulaire → Add Image | *réglé — 31/08, `add`/`in-progress`/`fail` partagent maintenant le même trait pointillé* |
+| ~~Add Image~~ | `419:1089` | ~~le trait de la boîte `fail` était écrit en `color/border/default`, qui vaut exactement la couleur de son propre fond `color/accent/100` — invisible en rendu normal~~ | /formulaire → Add Image | *réglé — 31/08, trait retiré côté Figma (`strokes = []`), aucune variable changée* |
+| ~~Add Image~~ | `419:1089` | ~~le message d'échec portait une coquille (« telechargement » sans accent)~~ | /formulaire → Add Image | *réglé — 31/08, texte corrigé côté Figma* |
 | Edit Image Gallery | `355:1396` | vignette de 189 × 140 : 140 se compose, 189 non — mais c'est un minimum que la grille étire, donc pas une mesure | /formulaire → Edit Image Gallery | *assumé* |
-| Edit Image Gallery | `355:1396` | son « supprimer » est un `secondary` : la variante `Alert` est dessinée dans les trois tailles et n'a aucun emploi | /components → Button | ouvert |
+| ~~Edit Image Gallery~~ | `355:1396` | ~~son « supprimer » est un `secondary` : la variante `Alert` est dessinée dans les trois tailles et n'a aucun emploi~~ | /components → Button | *réglé — 31/08, le nœud `418:1020` instancie `Alert` sur le même bouton* |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |
 | Section Header | `88:74` | l'eyebrow en Inter semibold contredit le `h6` du système | /components → Case Study Card | ouvert |
