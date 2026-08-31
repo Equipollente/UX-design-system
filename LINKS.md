@@ -42,7 +42,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Toggle (jeu de variantes) | [`340-912`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-912) | [Toggle.astro](src/design-system/components/Toggle.astro) |
 | Text Area (jeu de variantes) | [`343-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-273) | [TextArea.astro](src/design-system/components/TextArea.astro) |
 | Chip (jeu de variantes) | [`351-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=351-273) | [Chip.astro](src/design-system/components/Chip.astro) |
-| Add Image (jeu de variantes) | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) | [AddImage.astro](src/design-system/components/AddImage.astro) |
+| Add Image (jeu de variantes + cycle de dépôt) | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) · [`418-1020`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=418-1020) | [AddImage.astro](src/design-system/components/AddImage.astro) |
 | Edit Image Gallery | [`355-1396`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=355-1396) | [EditImageGallery.astro](src/design-system/components/EditImageGallery.astro) |
 | Modals (jeu de variantes) | [`420-1223`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=420-1223) | [Modal.astro](src/design-system/components/Modal.astro) |
 
@@ -96,7 +96,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | Un slot nommé pour la rangée de tags du haut | slot `tags-top` dans [Card.astro](src/design-system/components/Card.astro) | « Frame 6 » (`392:1075`, `392:1076`) est un frame, pas un slot : l'emplacement ne se remplit pas dans la maquette, et son nom est une décision du code |
 | Une hauteur de média | `--card-media-height` dans [Card.astro](src/design-system/components/Card.astro) | 324 et 256 n'ont pas de token. Un troisième nombre ouvrirait le groupe |
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
-| Un emploi pour la variante `Alert` | `<p class="flag">` du Button, sur /components | Elle est dessinée dans les trois tailles, mais la seule action destructive du système — le « supprimer » d'Edit Image Gallery, `355:1396` — est encore un `secondary`. C'est ce nœud-là qui doit changer de variante |
+| ~~Un emploi pour la variante `Alert`~~ | — | **Réglé — 31/08.** Le nœud `418:1020` (« Add Image process ») dessine le « supprimer » de son état `success` en `Alert` ; `EditImageGallery` (`355:1396`) suit, le sien passe de `secondary` à `alert` |
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
 `Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components. Les sept objets

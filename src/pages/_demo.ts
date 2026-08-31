@@ -157,6 +157,12 @@ export const demoGalleryImages = caseStudyImages.map((image, i) => ({
   height: image.height,
 }));
 
+// Les trois autres étapes du cycle d'AddImage (418:1020). Le message d'échec
+// est celui du nœud, coquille comprise — un texte de démo ne se corrige pas.
+export const demoAddImageFail = 'le telechargement a échoué';
+export const demoAddImageProgress = 62;
+export const demoAddImageSuccess = demoGalleryImages[0];
+
 // ── Modal, 420:1223 ──────────────────────────────────────────────────────────
 // « Property 1 » a 4 valeurs dans Figma : Layout (le gabarit, textes de
 // remplissage — pas montré ici), Confirmation, Alert, Success. Les mots des

@@ -57,8 +57,11 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |
 | Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
+| Add Image | `343:315` | le nœud dessine aussi l'état `add` en trait pointillé ; le code le garde plein, comme avant l'ajout du cycle | /formulaire → Add Image | ouvert |
+| Add Image | `419:1089` | le trait de la boîte `fail` est écrit en `color/border/default`, qui vaut exactement la couleur de son propre fond `color/accent/100` — invisible en rendu normal | /formulaire → Add Image | ouvert |
+| Add Image | `419:1089` | le message d'échec porte une coquille (« telechargement » sans accent) | /formulaire → Add Image | ouvert |
 | Edit Image Gallery | `355:1396` | vignette de 189 × 140 : 140 se compose, 189 non — mais c'est un minimum que la grille étire, donc pas une mesure | /formulaire → Edit Image Gallery | *assumé* |
-| Edit Image Gallery | `355:1396` | son « supprimer » est un `secondary` : la variante `Alert` est dessinée dans les trois tailles et n'a aucun emploi | /components → Button | ouvert |
+| ~~Edit Image Gallery~~ | `355:1396` | ~~son « supprimer » est un `secondary` : la variante `Alert` est dessinée dans les trois tailles et n'a aucun emploi~~ | /components → Button | *réglé — 31/08, le nœud `418:1020` instancie `Alert` sur le même bouton* |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |
 | Section Header | `88:74` | l'eyebrow en Inter semibold contredit le `h6` du système | /components → Case Study Card | ouvert |
