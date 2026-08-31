@@ -70,6 +70,37 @@ plus étroit que le premier.
 `← ` [Tag.astro](../src/design-system/components/Tag.astro),
 [Button.astro](../src/design-system/components/Button.astro)
 
+## `Alert` est entrée avant son emploi, et c'est une dette
+
+Elle déroge à la règle ci-dessus, et il faut que ce soit écrit plutôt que découvert. Le 31/08 la
+variante est intégrée pour l'action destructive du formulaire — sauf que la seule qui existe, le
+« supprimer » d'Edit Image Gallery, est encore un `secondary` dans Figma (`355:1396`). La vue qui
+la demande est donc décidée, pas dessinée : à ce jour `variant="alert"` n'a aucun appel dans le
+dépôt, hors sa démonstration.
+
+Ce n'est pas un troisième chemin d'entrée. Si `355:1396` ne change pas de variante, c'est l'alerte
+qui doit ressortir, et non la règle qui doit s'élargir — sans quoi `Ghost` et `CTA` n'ont plus de
+raison d'attendre.
+
+`← 907d635`, [arbitrages.md](arbitrages.md)
+
+## Un fond de bouton lit une rampe, par crans
+
+Le primaire lit `accent 500 / 600 / 700` — repos, survol, appui. L'alerte lit
+`feedback/danger 500 / 600 / 700`, et le secondaire `bg/surface`, puis `accent 100 / 200`.
+
+Deux arbitrages du 31/08 tombent sur la même règle. Le rouge du système était un rôle seul : il
+devient le cran 500 d'une rampe plutôt que de gagner deux voisins nommés `danger-hover` et
+`danger-pressed` — aucun autre token de la collection ne porte un état dans son nom. Et le survol
+du secondaire empruntait `bg/section`, dont le nom désigne le fond d'une région de page : un bouton
+qui se teinte avec un fond de section emprunte un mot qui dit autre chose que ce qu'il fait.
+
+Ce que la règle a coûté : renommer `danger` en `danger/500` a touché FieldLabel et deux pages. Ce
+qu'elle rend : une variante se lit sans dictionnaire, et le cran suivant existe déjà le jour où un
+quatrième état arrive.
+
+`← 907d635`
+
 ## La surcharge se fait par variable CSS, pas par variante de plus
 
 `--card-height`, `--intro-gap`, `--btn-bg` : le composant garde la valeur de Figma et accepte qu'un

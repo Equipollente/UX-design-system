@@ -71,8 +71,17 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     text-decoration: none;
   }
 
+  /*
+    La barre retombe à la ligne plutôt que de défiler. Un tableau de props qui déborde
+    s'annonce de lui-même — une colonne coupée se voit — et `.table-scroll` lui suffit ;
+    une barre de circulation, non : ses dernières destinations sortiraient du volet sans
+    que rien ne le dise. Sans `wrap`, les liens ne rentrent plus dès 320 px et poussaient
+    le document entier à défiler horizontalement. C'est déjà ce que `.docs-bar` fait de
+    son côté.
+  */
   ul {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-lg);
     margin: 0;
     padding: 0;
