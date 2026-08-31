@@ -17,7 +17,9 @@
   --color-border-focus:          var(--color-accent-500);
 
   --color-feedback-success:      #48A66B;
-  --color-feedback-danger:       #D94A4A;
+  --color-feedback-danger-500:   #DC2626;
+  --color-feedback-danger-600:   #B91C1C;
+  --color-feedback-danger-700:   #991B1B;
 
   --color-neutral-100:           #F3F2F5;
   --color-neutral-200:           #EDECEF;

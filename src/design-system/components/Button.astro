@@ -19,6 +19,13 @@
 // color/border/default sur le fond lavande du bouton — 1,28:1, là où WCAG 1.4.11
 // en demande 3 : c'est pourquoi personne ne l'a vu pendant si longtemps.
 //
+// L'alerte est la troisième variante, et la seule qui ne lise pas la rampe de
+// marque : ses trois fonds viennent de color/feedback/danger — 500 au repos, 600
+// au survol, 700 à l'appui, comme le primaire lit accent 500/600/700. Elle porte
+// une action destructive, et rien d'autre : un bouton rouge qui ne détruit rien
+// apprend à ne plus être lu. Les trois crans tiennent le libellé blanc à 4,8:1,
+// 6,5:1 et 8,3:1, tous au-dessus des 4,5:1 que WCAG 1.4.3 demande à 14 px.
+//
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
 // en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
@@ -27,7 +34,7 @@ import Icon from './Icon.astro';
 import type { IconName } from '../lib/icons';
 
 interface Props {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'alert';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   /** Nom d'une icône du système. Posée avant le label. */
@@ -148,6 +155,17 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-bg-hover: var(--color-accent-100);
     --btn-bg-active: var(--color-accent-200);
     color: var(--color-text-default);
+  }
+
+  /* L'action destructive, et elle seule. Contrairement au primaire, l'icône n'a
+     pas de teinte nommée : Figma la laisse en blanc pur, qui est exactement ce
+     que vaut color/text/on-accent. currentColor suffit donc, et l'icône suit le
+     libellé sans qu'on ait à la viser. */
+  .btn-alert {
+    --btn-bg: var(--color-feedback-danger-500);
+    --btn-bg-hover: var(--color-feedback-danger-600);
+    --btn-bg-active: var(--color-feedback-danger-700);
+    color: var(--color-text-on-accent);
   }
 
   .btn:hover:not(:disabled) {

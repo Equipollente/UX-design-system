@@ -46,6 +46,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Chip** | `351:273` | **son trait ne vaut que 1,28:1 sur le blanc** — WCAG 1.4.11 en demande 3 ; c'est une couleur à foncer, pas une épaisseur | /formulaire → Chip | ouvert |
 | Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
+| Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
@@ -57,6 +58,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
 | Edit Image Gallery | `355:1396` | vignette de 189 × 140 : 140 se compose, 189 non — mais c'est un minimum que la grille étire, donc pas une mesure | /formulaire → Edit Image Gallery | *assumé* |
+| Edit Image Gallery | `355:1396` | son « supprimer » est un `secondary` : la variante `Alert` est dessinée dans les trois tailles et n'a aucun emploi | /components → Button | ouvert |
 | Case Study Card | `88:131` ↔ `176:1248` | les deux ombres divergent, à réaligner | /components → Case Study Card | ouvert |
 | Case Study Card | `176:1248` | trois coquilles : « deployements », « langages », « Raoadmap » | /components → Case Study Card | ouvert |
 | Section Header | `88:74` | l'eyebrow en Inter semibold contredit le `h6` du système | /components → Case Study Card | ouvert |
