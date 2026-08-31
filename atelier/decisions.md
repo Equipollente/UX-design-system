@@ -118,6 +118,27 @@ battrait l'héritage et le point de surcharge ne servirait à rien.
 
 `← a1969b4`
 
+## Le dessin d'un champ est une recette de balise, pas un style de composant
+
+Text field, Text Area et Select écrivaient chacun les mêmes déclarations — police, encre, fond,
+trait, rayon, rembourrage — et divergeaient tout de même sur trois points. Le dessin est parti dans
+[global.css](../src/design-system/styles/global.css), à côté de celui du `h2` et du `p` : « tu n'as
+rien à écrire, c'est un champ ». C'est le raisonnement de `FieldLabel`, appliqué à la boîte au lieu
+du libellé — un fichier, et ce qui change là a déjà changé partout.
+
+Trois choses tiennent cette décision :
+
+- **La liste de types est celle de la prop `type` de TextField, mot pour mot.** Elle tient dehors
+  `checkbox`, `radio`, `file` et `range`, dont le dessin appartient à Checkbox, Radio, Toggle, Chip
+  et AddImage — une recette de champ les écraserait.
+- **`:where()` met la base à spécificité zéro.** Tout ce qui est déjà écrit ailleurs l'emporte, sans
+  dépendre de l'ordre des feuilles : les contrôles bruts du bac à sable gardent leur dessin.
+- **La recette habille, elle ne place pas.** La largeur d'un champ et la hauteur d'une zone de texte
+  restent au composant qui les monte ; une largeur imposée à la balise déborderait ailleurs.
+
+`global.css` était déjà la dépendance de fait des composants — `Card` compte sur lui pour la typo de
+son titre, et l'anneau de focus des champs y était écrit une quatrième fois, en double des trois.
+
 ## Les écarts avec la maquette se signalent, ils ne se corrigent pas en dur
 
 Le code suit le nœud Figma et écrit l'écart en `<p class="flag">`, avec son raisonnement. Corriger

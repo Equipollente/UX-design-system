@@ -322,11 +322,30 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         chose qui manque à ce champ pour être complet, et elle se dessine dans Figma.
       </p>
 
+      <p class="section-note">
+        <strong>Les trois champs se dessinent au même endroit.</strong> Police, encre, fond, trait,
+        rayon, rembourrage, hauteur, survol, état éteint : tout est écrit une fois dans
+        {' '}<code>global.css</code>, en recette de balise — à côté de celle du <code>h2</code> et du
+        {' '}<code>p</code>. Text field, Text Area et Select ne déclarent plus que leur place et ce
+        qui leur est propre : le chevron pour l'un, le compteur pour l'autre. Ce qui change là a
+        déjà changé pour les trois, comme <code>FieldLabel</code> le fait du libellé.
+      </p>
+
+      <p class="section-note">
+        <strong>Les trois survols n'en font plus qu'un, et c'est celui-ci.</strong> Le trait fonce en
+        {' '}<code>neutral/500</code>, le fond ne bouge pas. Text Area et Select grisaient le leur en
+        {' '}<code>neutral/100</code> — un cran qui ne se voit pas : <code>#F3F2F5</code> et
+        {' '}<code>#F3F0FF</code> ne diffèrent que par le canal bleu, 245 contre 255. Les deux nœuds
+        ont été redessinés sur celui-ci.
+      </p>
+
       <p class="flag">
-        <strong>Trois champs, trois survols.</strong> Celui-ci change son trait
-        {' '}(<code>neutral/500</code>), <code>Text Area</code> et <code>Select</code> changent leur
-        fond. Le code suit chaque nœud plutôt que de trancher à leur place, mais trois champs
-        voisins ne devraient pas réagir de trois façons.
+        <strong>La limite de la boîte ne se voit presque pas.</strong> Le trait
+        {' '}<code>border/default</code> vaut <strong>1,28:1</strong> sur le fond du champ, et ce fond
+        {' '}<strong>1,12:1</strong> sur le blanc de la page — WCAG 1.4.11 en demande 3 pour la limite
+        d'un contrôle. C'est exactement l'écart réglé sur le <code>Chip</code> le 31/08, en rebranchant
+        son trait sur <code>accent/300</code> (3,2:1) sans toucher à <code>border/default</code>, que
+        d'autres composants lisent. Le même geste est possible ici, sur les trois nœuds à la fois.
       </p>
     </section>
 
@@ -400,21 +419,24 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         </table>
       </div>
 
-      <p class="flag">
-        <strong>Ce champ ne porte aucun trait au repos, et c'est le nœud qui le dit.</strong> Sa
-        boîte n'a pas de contour, là où <code>Text Area</code> en a un de 1 — deux champs voisins,
-        dessinés différemment. Le fond <code>bg/surface</code> le détache tout de même du blanc de la
-        page, mais l'écart se tranche dans Figma.
+      <p class="section-note">
+        <strong>Ce champ porte enfin un trait au repos.</strong> Sa boîte n'en avait aucun, là où
+        Text field et Text Area en portaient un de 1 — trois champs voisins, deux dessins. Le nœud a
+        été redessiné, et ses quatre états lisent maintenant <code>border/default</code> : le même
+        trait que les deux autres, à la même épaisseur et du même côté. Le fond
+        {' '}<code>bg/surface</code>, lui, n'a pas changé.
       </p>
 
       <p class="flag">
-        <strong>36 de haut et 12 de rembourrage vertical ne tiennent pas ensemble.</strong> Le texte
-        du champ fait 14 à 120 %, soit 16,8 : 12 + 16,8 + 12 = <strong>40,8</strong>, et la boîte n'en
-        mesure que 36. Sur un <code>&lt;input&gt;</code> ça ne se voit pas — le navigateur centre le
-        texte et ignore le rembourrage. Sur un <code>&lt;select&gt;</code>, il coupe : les jambages de
-        « Choisir un pays » disparaissaient. Le code garde donc les 16 de côté et met le vertical à
-        zéro, la hauteur de 36 faisant seule le centrage. Deux gestes possibles dans Figma : porter la
-        boîte à 40,8, ou ramener le rembourrage vertical à 9,6.
+        <strong>36 de haut et 12 de rembourrage vertical ne tiennent pas ensemble</strong>, et les
+        deux champs d'une ligne le déclarent tous les deux. Le texte fait 14 à 120 %, soit 16,8 :
+        12 + 16,8 + 12 = <strong>40,8</strong>, et la boîte n'en mesure que 36. Sur un
+        {' '}<code>&lt;input&gt;</code> ça ne se voit pas — le navigateur centre le texte et ignore le
+        rembourrage. Sur un <code>&lt;select&gt;</code>, il coupe : les jambages de « Choisir un pays »
+        disparaissaient. La recette met donc le rembourrage vertical à zéro pour les deux, la hauteur
+        de 36 faisant seule le centrage. Deux gestes possibles dans Figma, sur <code>23:29</code>
+        comme sur <code>340:933</code> : porter la boîte à 40,8, ou ramener le rembourrage vertical
+        à 9,6.
       </p>
 
       <p class="flag">
@@ -888,6 +910,14 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         pareil. Le rembourrage aussi : le nœud a été redessiné sur les 12 / 16 du bouton, que le code
         écrivait déjà. La boîte porte enfin son trait, et le champ désactivé s'atténue au lieu de
         compter sur l'encre de son libellé.
+      </p>
+
+      <p class="section-note">
+        <strong>Son survol a changé, et il ne lui appartient plus.</strong> Le nœud grisait son fond
+        en <code>neutral/100</code> ; les trois champs foncent maintenant leur trait en
+        {' '}<code>neutral/500</code>, le geste que seul le nœud du champ texte dessinait.
+        {' '}<code>343:273</code> a été redessiné dessus, et son dessin vient désormais de la recette
+        que les trois partagent.
       </p>
 
       <p class="flag">
