@@ -6,7 +6,11 @@
 // la liste est close, on ne peut rien y écrire qui n'y soit pas.
 //
 // Le libellé n'est pas dessiné ici : il vient de FieldLabel, comme dans tous les
-// autres champs. C'est ce qui garantit qu'ils sont identiques.
+// autres champs. Le dessin de la boîte non plus — police, encre, fond, trait,
+// rayon, rembourrage, hauteur, survol, désactivé : tout est la recette de balise
+// de global.css, partagée mot pour mot avec Text field et Text Area. Ce fichier
+// ne déclare plus que la place du champ et ce qui lui est propre : le chevron,
+// et la place qu'il faut lui faire.
 //
 // Le <select> est natif. Un menu réécrit en div coûterait le clavier, la
 // recherche à la frappe, et la roulette du téléphone — pour un chevron dessiné
@@ -26,10 +30,19 @@
 // — écart au libellé → `control/field-gap` = 5 ;
 // — anneau de focus 2 → `border/width/focus`.
 //
-// ⚠️ Ce champ ne porte aucun trait au repos, et c'est le nœud qui le dit : sa
-// boîte n'a pas de contour, là où Text Area en a un de 1. Deux champs voisins
-// dessinés différemment — l'écart est ouvert dans arbitrages.md. Le fond
-// `bg/surface` détache tout de même la boîte du blanc de la page.
+// Le rembourrage vertical vaut 0 dans la recette, et ce n'est pas un oubli : la
+// boîte fait 36, la ligne 16,8 — les 12 du nœud n'y tiennent pas
+// (12 + 16,8 + 12 = 40,8). Un `select` coupe son texte à la boîte de contenu, et
+// les jambages de « pays » disparaissaient. Un `input` déclare les mêmes 12 sans
+// que ça se voie, le navigateur centrant son texte lui-même ; la recette les
+// remet à zéro pour les deux, et les deux champs d'une ligne s'écrivent ainsi de
+// la même façon. L'écart avec les deux nœuds reste ouvert dans arbitrages.md.
+//
+// Ce champ portait un fond sans trait, quand ses deux voisins avaient un trait
+// de 1 : le nœud a été redessiné, et les trois champs portent maintenant le même
+// `border/default`. Leur survol aussi est devenu le même — le trait qui fonce en
+// `neutral/500`, le geste que le nœud du champ texte dessinait déjà, plutôt que
+// le fond en `neutral/100` que celui-ci grisait sans que ça se voie.
 //
 // La liste ouverte n'est pas ici non plus : elle est dessinée par le système
 // d'exploitation, hors d'atteinte du CSS.
@@ -88,85 +101,35 @@ const classes = ['field', className].filter(Boolean).join(' ');
 </div>
 
 <style>
-  /* 5 — la mesure du nœud, la même que Text Area. */
+  /* 5 — la mesure du nœud, la même que Text field et Text Area. */
   .field {
     display: flex;
     flex-direction: column;
     gap: var(--control-field-gap);
   }
 
+  /* La boîte qui porte le chevron en absolu. */
   .field-control {
     position: relative;
     display: flex;
   }
 
-  /* La géométrie de la boîte et son encre — la même que Text Field, pour que deux
-     champs posés côte à côte s'écrivent pareil. Les fonds, eux, sont décidés plus
-     bas, état par état. */
+  /* Le select ne déclare que sa place et ce qui lui est propre. Tout son dessin
+     est la recette de balise de global.css, qu'il partage mot pour mot avec Text
+     field et Text Area. */
   select {
     display: flex;
-    border-radius: var(--radius-md);
     align-items: center;
-    align-self: stretch;
-    /* 32 + 4 = 36, la hauteur exacte du nœud. */
-    height: calc(var(--space-2xl) + var(--space-xs));
     width: 100%;
-    padding-inline: var(--button-padding-x-sm);
-    /* La place du chevron s'ajoute au padding droit : sans elle, une option longue
-       passerait dessous. */
+    /* La place du chevron s'ajoute au rembourrage droit de la recette : sans
+       elle, une option longue passerait dessous. */
     padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
-    /* Aucun rembourrage vertical, et ce n'est pas un oubli : la boîte fait 36, la
-       ligne 16,8 — les 12 du nœud n'y tiennent pas (12 + 16,8 + 12 = 40,8). Un
-       `select` coupe son texte à la boîte de contenu, et les jambages de « pays »
-       disparaissaient. Text Field déclare les mêmes 12 sans que ça se voie : sur un
-       `input`, le navigateur centre le texte lui-même et les ignore. Ici il faut le
-       dire. Écart ouvert dans arbitrages.md. */
-    padding-block: 0;
     /* Le chevron natif s'efface : c'est celui du système qui est posé dessus. */
     appearance: none;
-    /* La même encre que Text Field, ligne pour ligne : un contrôle natif reprend
-       la police du navigateur si on ne la lui donne pas, et deux champs voisins
-       ne s'écriraient pas dans le même caractère. */
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
-    letter-spacing: var(--font-letter-spacing-normal);
-    color: var(--color-text-default);
   }
 
-  /* — default — Les quatre états ne portent que leur fond : le nœud ne dessine
-     aucun contour sur ce champ-là. `border: none` est un mot-clé, pas une
-     valeur — il efface le contour gris que le navigateur pose de lui-même sur un
-     contrôle natif, et qui serait le seul trait à ne venir d'aucune variable. */
-  select {
-    border: none;
-    background: var(--color-bg-surface);
-  }
-
-  /* — hover — */
-  select:hover {
-    background: var(--color-neutral-100);
-  }
-
-  /* — focus — L'anneau n'est pas écrit ici : `global.css` le pose sur
-     `:focus-visible` pour tout le système, aux trois mêmes variables. Il
-     était recopié à l'identique dans les trois champs, sans que rien ne
-     l'exige. 2, la mesure du nœud. WCAG 2.4.7. */
-  select:focus {
-    background: var(--color-bg-surface);
-  }
-
-  /* — disabled — écrit en dernier : à spécificité égale, c'est l'ordre qui
-     tranche, et un champ désactivé ne doit pas prendre le survol. La boîte garde
-     son fond et s'atténue, comme le nœud le dessine. */
-  select:disabled {
-    background: var(--color-bg-surface);
-    opacity: var(--opacity-disabled);
-  }
-
-  /* Pas de couleur ici non plus : l'icône est en currentColor, elle prend donc
-     l'encre du champ quand celle-ci sera décidée. */
+  /* Pas de couleur ici : l'icône est en currentColor, elle prend donc l'encre du
+     champ — celle du texte au repos, celle de `neutral/400` quand il est éteint. */
   .field-chevron {
     position: absolute;
     right: var(--button-padding-x-sm);

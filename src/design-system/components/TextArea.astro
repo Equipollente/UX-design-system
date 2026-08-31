@@ -10,25 +10,37 @@
 //
 // Nœud Figma : 343:273 — 4 variantes d'état, plus `Show Count`.
 //
+// Le libellé vient de FieldLabel, comme dans tous les autres champs. Le dessin
+// de la boîte vient de global.css — police, encre, fond, trait, rayon,
+// rembourrage, survol, désactivé, et `resize: vertical`, qui vaut pour toute
+// zone de texte du système. La recette est partagée mot pour mot avec Text field
+// et Select ; ce fichier ne déclare plus que la place de la zone et son
+// compteur.
+//
 // Le <textarea> est natif, et celui-là se laisse habiller entièrement — c'est ce
 // qui le sépare de Radio, Checkbox et Toggle, dont le dessin appartient au
-// navigateur. Il porte donc `border: none` : un contrôle natif arrive avec un
-// contour gris que rien dans le système ne réclame, et le mot-clé l'efface sans
-// écrire de valeur.
+// navigateur, et c'est pourquoi la recette peut le prendre par sa balise.
 //
 // La hauteur passe par `rows`, et c'est délibéré. `rows` compte des lignes, pas
 // des pixels : la boîte se mesure alors sur sa propre typographie, et grandit
-// avec elle. Les 120 px du nœud n'ont de toute façon pas de variable.
+// avec elle. Les 120 px du nœud n'ont de toute façon pas de variable. C'est
+// aussi ce qui la sépare des deux champs d'une ligne, dont la recette fixe la
+// hauteur à 36.
 //
 // Toutes les mesures viennent du nœud, et aucune n'est approchée :
 // — rembourrage 12 / 16 → `button/padding-y/sm` et `button/padding-x/sm`. Le
 //   nœud disait 10 / 14 ; il a été redessiné sur ceux du bouton, pour que les
-//   deux champs se rembourrent pareil côte à côte ;
+//   trois champs se rembourrent pareil côte à côte ;
 // — écart entre libellé, boîte et compteur → `control/field-gap` = 5, la mesure
-//   que Text Area et Select portent tous deux ;
+//   que les trois champs portent ;
 // — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus` ;
 // — rayon → `radius/md`, lié dans le nœud ;
 // — hauteur 120 → `rows`, en lignes plutôt qu'en pixels : voir plus haut.
+//
+// Son survol a changé : le nœud grisait son fond en `neutral/100`, un cran qui
+// ne se voit pas sur `bg/surface` — les deux ne diffèrent que par le canal bleu,
+// 245 contre 255. Les trois champs foncent maintenant leur trait, le geste que
+// le nœud du champ texte dessinait déjà, et 343:273 a été redessiné dessus.
 //
 // Ce que Figma déclare et qui n'est pas ici :
 // — la casse `TITLE` du libellé : elle capitaliserait chaque mot du texte que
@@ -134,62 +146,19 @@ const classes = ['field', className].filter(Boolean).join(' ');
 }
 
 <style>
-  /* 5 — la mesure du nœud, et celle que Select emploie pour le même rapport. */
+  /* 5 — la mesure du nœud, et celle que Text field et Select emploient déjà. */
   .field {
     display: flex;
     flex-direction: column;
     gap: var(--control-field-gap);
   }
 
-  /* La boîte. Tout vient du système ; `rows` tient la hauteur, en lignes. */
+  /* La zone ne déclare que sa place. Tout son dessin est la recette de balise de
+     global.css, qu'elle partage mot pour mot avec Text field et Select. La
+     hauteur, elle, ne s'écrit pas du tout : c'est `rows` qui la tient, en lignes
+     plutôt qu'en pixels. */
   textarea {
     width: 100%;
-    /* 12 / 16, les mêmes que Select — et maintenant les mêmes que le nœud. */
-    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
-    border-radius: var(--radius-md);
-    /* La boîte ne s'élargit pas au-delà de sa colonne : un glissement horizontal
-       casserait la mise en page de tout ce qui l'entoure. Mot-clé, pas mesure. */
-    resize: vertical;
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
-    letter-spacing: var(--font-letter-spacing-normal);
-    color: var(--color-text-default);
-  }
-
-  /* — default — Le trait du nœud, enfin écrit. Il remplace le contour gris que
-     le navigateur pose de lui-même sur un contrôle natif : celui-là ne venait
-     d'aucune variable. */
-  textarea {
-    border: var(--border-width-default) solid var(--color-border-default);
-    background: var(--textarea-bg, var(--color-bg-surface));
-  }
-
-  /* — hover — */
-  textarea:hover {
-    background: var(--textarea-bg-hover, var(--color-neutral-100));
-  }
-
-  /* — focus — L'anneau n'est pas écrit ici : `global.css` le pose sur
-     `:focus-visible` pour tout le système, aux trois mêmes variables. Il
-     était recopié à l'identique dans les trois champs, sans que rien ne
-     l'exige. Le nœud, lui, épaissit sa bordure vers
-     l'intérieur ; l'anneau dit la même chose, à la même épaisseur, et sans
-     décaler le texte de la boîte. 2, la mesure du nœud. WCAG 2.4.7. */
-  textarea:focus {
-    background: var(--textarea-bg, var(--color-bg-surface));
-  }
-
-  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et un champ désactivé ne doit pas prendre le survol. La boîte garde
-     son fond et son trait, et s'atténue : c'est elle qui dit « éteint », plus
-     seulement l'encre de son libellé. */
-  textarea:disabled {
-    background: var(--textarea-bg, var(--color-bg-surface));
-    color: var(--color-neutral-400);
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
   }
 
   /* Le compteur. Il se range à droite, sous la boîte : c'est là que le regard

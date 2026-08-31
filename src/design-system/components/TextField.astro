@@ -10,7 +10,11 @@
 // part dans le système.
 //
 // Le libellé n'est pas dessiné ici : il vient de FieldLabel, comme dans tous les
-// autres champs. C'est ce qui garantit qu'ils sont identiques.
+// autres champs. Le dessin de la boîte non plus — police, encre, fond, trait,
+// rayon, rembourrage, hauteur, survol, désactivé : tout est la recette de balise
+// de global.css, partagée mot pour mot avec Text Area et Select. C'est ce qui
+// garantit que les trois champs sont identiques, et ce fichier ne déclare plus
+// que la place du sien.
 //
 // Nœud Figma : 23:29 — `forms/Field`, 6 variantes (Text · Multiline ×
 // Default · Hover · Focused). Il porte le nom d'un tiroir, `forms/`, et un nom
@@ -23,7 +27,8 @@
 // avant les autres. On a donc cru pendant tout un sprint que le système n'avait
 // pas de champ texte.
 //
-// Mesures :
+// Mesures — ce sont maintenant celles des trois champs, et elles vivent dans
+// global.css :
 // — hauteur 36 → `space/2xl + space/xs`, exactement comme Select ;
 // — rembourrage 12 / 16 → `button/padding-*/sm`, tel que le nœud le lie ;
 // — rayon 14 → `radius/md`, tel que le nœud le lie ;
@@ -35,17 +40,22 @@
 // système que comme rayon. Il a été redessiné à 12 / 16, ceux du bouton : c'est
 // le geste déjà fait sur Text Area le 27/08, et les trois champs s'espacent
 // maintenant pareil. Contre une hauteur fixe de 36, le rembourrage vertical ne
-// pousse rien — il dit seulement d'où le texte part.
+// pousse rien — le navigateur centre le texte d'un `input` lui-même. La recette
+// le remet tout de même à zéro : un `select`, lui, coupe ses jambages si on le
+// lui laisse, et les deux champs d'une ligne s'écrivent ainsi de la même façon.
+//
+// Le survol de ce champ — le trait qui fonce, `neutral/500` — est devenu celui
+// des trois. Il était le seul des trois nœuds à le dessiner ainsi ; les deux
+// autres grisaient leur fond d'un cran qui ne se voyait pas (`neutral/100` et
+// `bg/surface` ne diffèrent que par le canal bleu). Ils ont été redessinés sur
+// lui.
 //
 // ⚠️ Le nœud n'a ni état désactivé ni état d'erreur, et sa description dit
 // pourquoi : en inventer un reviendrait à inventer des couleurs. `disabled` est
-// pourtant écrit ici, parce que les six autres champs le portent et qu'il ne
-// tient qu'à `opacity/disabled`, qui existe déjà. L'erreur, elle, n'est pas
-// écrite : elle demanderait une encre, un trait et un message qui n'existent
+// pourtant écrit — dans la recette, pour les trois champs à la fois — parce
+// qu'il ne tient qu'à `opacity/disabled`, qui existe déjà. L'erreur, elle, n'est
+// pas écrite : elle demanderait une encre, un trait et un message qui n'existent
 // nulle part. Les deux écarts sont signalés dans la doc.
-//
-// ⚠️ Trois champs, trois survols : ce nœud change son trait, Text Area change
-// son fond, Select aussi. Le code suit chaque nœud, et l'écart est ouvert.
 
 import FieldLabel from './FieldLabel.astro';
 
@@ -109,62 +119,11 @@ const classes = ['field', className].filter(Boolean).join(' ');
     gap: var(--control-field-gap);
   }
 
-  /* La boîte. Tout vient du système. La hauteur est fixe — c'est elle qui aligne
-     le champ sur un bouton posé à côté, et c'est ce que dit la description du
-     nœud. 32 + 4 = 36. */
+  /* Le champ ne déclare que sa place. Tout son dessin est la recette de balise
+     de global.css, qu'il partage mot pour mot avec Text Area et Select : il n'y
+     a rien à écrire ici pour l'obtenir, et rien à changer ici pour le changer.
+     La largeur, elle, est du placement — la recette habille, elle ne place pas. */
   input {
     width: 100%;
-    height: calc(var(--space-2xl) + var(--space-xs));
-    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
-    letter-spacing: var(--font-letter-spacing-normal);
-    color: var(--color-text-default);
-  }
-
-  /* — default — Le trait du nœud. Il remplace le contour gris que le navigateur
-     pose de lui-même sur un contrôle natif : celui-là ne venait d'aucune
-     variable. */
-  input {
-    border: var(--border-width-default) solid var(--color-border-default);
-    background: var(--color-bg-surface);
-  }
-
-  /* — hover — Ce champ-là change son trait, quand ses deux voisins changent leur
-     fond. C'est ce que son nœud dessine, et le code ne tranche pas à sa place. */
-  input:hover {
-    border-color: var(--color-neutral-500);
-  }
-
-  /* — focus — L'anneau n'est pas écrit ici : `global.css` le pose sur
-     `:focus-visible` pour tout le système, aux trois mêmes variables. Il
-     était recopié à l'identique dans les trois champs, sans que rien ne
-     l'exige. Le nœud, lui, épaissit sa bordure vers
-     l'intérieur ; l'anneau dit la même chose, à la même épaisseur, et sans
-     décaler le texte de la boîte. 2, la mesure du nœud. WCAG 2.4.7. */
-  input:focus {
-    border-color: var(--color-border-default);
-  }
-
-  /* L'exemple s'écrit dans l'encre atténuée du système — celle du libellé
-     éteint. Le nœud n'en dessine pas : sans cette ligne, le gris serait celui du
-     navigateur, et il ne viendrait d'aucune variable. */
-  input::placeholder {
-    color: var(--color-text-muted);
-  }
-
-  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et un champ désactivé ne doit pas prendre le survol. La boîte garde
-     son fond et son trait, et s'atténue — comme Text Area, et pour la même
-     raison : c'est elle qui dit « éteint », plus seulement l'encre du libellé. */
-  input:disabled {
-    border-color: var(--color-border-default);
-    background: var(--color-bg-surface);
-    color: var(--color-neutral-400);
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
   }
 </style>
