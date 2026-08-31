@@ -1346,7 +1346,9 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
           if (tentative % 2 === 0) {
             montrer(echec);
           } else {
-            image.src = URL.createObjectURL(fichier);
+            revokeObjectUrl();
+            objectUrl = URL.createObjectURL(fichier);
+            image.src = objectUrl;
             image.alt = fichier.name;
             montrer(succes);
           }
