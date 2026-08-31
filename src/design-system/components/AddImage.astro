@@ -43,19 +43,10 @@
 //   32 = space/2xl, trait redessiné à 1, anneau de focus 2, couleur icône en
 //   currentColor, pas de glisser-déposer — ces écarts sont ceux de l'état
 //   `add`, inchangés ;
-// — le nœud dessine aussi l'état `add` en trait pointillé ; le code le garde
-//   plein, comme avant cette évolution — un écart pré-existant, remarqué en
-//   construisant les deux nouvelles boîtes (qui, elles, sont pointillées
-//   comme le nœud le demande), pas corrigé faute de demande sur cet état-là ;
 // — la piste de progression ne fait pas 114 de large : comme la boîte
 //   elle-même, elle suit la largeur que l'appelant lui donne ;
-// — le trait de la boîte `fail` est écrit en `color/border/default`, qui
-//   vaut exactement la couleur de son propre fond `color/accent/100` — donc
-//   invisible en rendu normal. À trancher dans Figma, pas une épaisseur à
-//   changer ;
-// — le message de `fail` reprend le mot du nœud tel quel, coquille comprise
-//   (« telechargement » sans accent) : c'est une prop, pas un texte à
-//   corriger en dur.
+// — le nœud ne dessine aucun trait sur `fail` : repris tel quel, la boîte
+//   tient sur son seul fond plein.
 
 import Icon from './Icon.astro';
 import Button from './Button.astro';
@@ -126,10 +117,8 @@ const props = Astro.props;
 const { id, class: className, hidden } = props;
 
 const boxClasses = ['add-image', className].filter(Boolean).join(' ');
-const transientClasses = ['add-image', 'add-image-transient', className].filter(Boolean).join(' ');
-const failClasses = ['add-image', 'add-image-transient', 'add-image-fail', className]
-  .filter(Boolean)
-  .join(' ');
+const transientClasses = ['add-image', className].filter(Boolean).join(' ');
+const failClasses = ['add-image', 'add-image-fail', className].filter(Boolean).join(' ');
 const successClasses = ['add-image-success', className].filter(Boolean).join(' ');
 
 // Un objet par état, ou `null` : c'est ce qui permet à `label`, `failMessage`
@@ -346,7 +335,7 @@ const success =
     --icon-size: var(--space-2xl);
     border-radius: var(--radius-lg); /* 28 */
     text-align: center;
-    border: var(--border-width-default) solid var(--color-border-default);
+    border: var(--border-width-default) dashed var(--color-border-default);
     background: var(--add-image-bg, var(--color-bg-surface));
   }
 
@@ -402,12 +391,6 @@ const success =
     color: var(--color-text-muted);
   }
 
-  /* — in-progress, fail — le nœud dessine les deux en trait pointillé, à la
-     différence de `add` (voir le pavé de tête). */
-  .add-image-transient {
-    border-style: dashed;
-  }
-
   .add-image-progress-label,
   .add-image-progress-value,
   .add-image-fail-message {
@@ -443,11 +426,11 @@ const success =
   }
 
   /* — fail — Surcharge nommée d'après l'objet, comme --add-image-bg : le fond
-     plein remplace le fond surface. Le trait hérité de .add-image reste écrit
-     en color/border/default, qui vaut exactement cette même couleur — voir le
-     pavé de tête, c'est un écart Figma, pas un oubli d'ici. */
+     plein remplace le fond surface. Le nœud ne dessine aucun trait sur cet
+     état — le fond plein suffit à détacher la boîte de la page. */
   .add-image-fail {
     background: var(--add-image-bg-fail, var(--color-accent-100));
+    border: none;
   }
 
   .add-image-fail-message {

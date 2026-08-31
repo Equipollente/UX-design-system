@@ -826,16 +826,18 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         <strong>Le chip a retrouvé son trait, et il se voit.</strong> C'était l'écart le plus coûteux
         du sprint : son fond est <code>bg/default</code>, le blanc de la page, et sans bordure un chip
         non retenu était littéralement invisible. <code>border/width/default</code> sur
-        {' '}<code>color/border/default</code> le détache.
+        {' '}<code>color/accent/300</code> le détache.
       </p>
 
-      <p class="flag">
-        <strong>Mais ce trait ne vaut que 1,28:1 sur le blanc.</strong> C'est la mesure de
-        {' '}<code>color/border/default</code>, écrite dans sa propre description, et vérifiée sur la
-        page. WCAG 1.4.11 demande <strong>3:1</strong> à la limite visible d'un contrôle : le chip se
-        voit, mais son trait n'y arrive pas. Aucune couleur de trait du système n'y arriverait —
-        {' '}<code>border/strong</code> vaut 1,29:1, et <code>neutral/500</code> 2,41:1. C'est une
-        couleur qu'il faut foncer dans Figma, pas une épaisseur.
+      <p class="section-note">
+        <strong>Le trait valait <code>color/border/default</code>, à 1,28:1 sur le blanc</strong> —
+        sous les 3:1 que WCAG 1.4.11 demande à la limite visible d'un contrôle. Aucune couleur de
+        trait nommée du système n'y arrivait — <code>border/strong</code> vaut 1,29:1, et
+        {' '}<code>neutral/500</code> 2,41:1 — donc le nœud est redessiné sur <code>accent/300</code>,
+        la première couleur de la rampe à dépasser le seuil, à 3,2:1. Seuls les états non
+        sélectionnés en dépendaient (Default, Hover, Disabled) ; Focused et les états sélectionnés
+        sont inchangés. <code>color/border/default</code> lui-même n'a pas bougé — ce qui le lit
+        ailleurs voit toujours 1,28:1.
       </p>
 
       <p class="section-note">
@@ -1032,19 +1034,6 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
       <p class="flag">
         <strong>Le glisser-déposer n'est pas implémenté.</strong> Il demanderait un script, et son
         absence n'est pas un échec : le clic et le clavier ouvrent tous deux le sélecteur.
-      </p>
-
-      <p class="flag">
-        <strong>Le trait de la boîte <code>fail</code> ne se voit pas.</strong> Il est écrit en
-        {' '}<code>color/border/default</code>, qui vaut exactement la couleur de son propre fond
-        {' '}<code>color/accent/100</code> — une seule et même valeur, pas un contraste faible. À
-        trancher dans Figma.
-      </p>
-
-      <p class="flag">
-        <strong>Le message d'échec porte la coquille du nœud.</strong> « le telechargement a
-        échoué », sans l'accent de <em>téléchargement</em> — repris tel quel, comme n'importe quel
-        autre mot que Figma donne à l'appelant.
       </p>
 
       <h3>Démo interactive</h3>

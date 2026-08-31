@@ -157,9 +157,8 @@ export const demoGalleryImages = caseStudyImages.map((image, i) => ({
   height: image.height,
 }));
 
-// Les trois autres étapes du cycle d'AddImage (418:1020). Le message d'échec
-// est celui du nœud, coquille comprise — un texte de démo ne se corrige pas.
-export const demoAddImageFail = 'le telechargement a échoué';
+// Les trois autres étapes du cycle d'AddImage (418:1020).
+export const demoAddImageFail = 'le téléchargement a échoué';
 export const demoAddImageProgress = 62;
 export const demoAddImageSuccess = demoGalleryImages[0];
 

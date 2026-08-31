@@ -20,14 +20,16 @@
 // C'est le premier de ce sprint dans ce cas.
 //
 // Le chip porte enfin son trait — `border/width/default` sur
-// `color/border/default`. C'est la ligne qui le détache du blanc de la page : son
+// `color/accent/300`. C'est la ligne qui le détache du blanc de la page : son
 // fond au repos est `bg/default`, et sans trait un chip non retenu était
 // littéralement invisible.
 //
-// ⚠️ `color/border/default` ne vaut que 1,28:1 sur le blanc — sa propre
-// description le dit, et le mesure. Le chip se voit donc, mais son trait n'atteint
-// pas les 3:1 que WCAG 1.4.11 demande à la limite d'un contrôle. Aucune couleur de
-// trait du système n'y arrive : c'est un arbitrage ouvert dans Figma.
+// Le trait valait `color/border/default` (1,28:1 sur blanc) ; aucune couleur de
+// trait nommée du système — `border/default` comme `border/strong` — n'atteint
+// les 3:1 que WCAG 1.4.11 demande à la limite d'un contrôle. `accent/300` est la
+// première couleur de la rampe à les dépasser (3,2:1) : le nœud est redessiné
+// dessus (Default/Hover/Disabled non sélectionnés — Focused et les états
+// sélectionnés n'en dépendaient pas).
 //
 // Le trait ajoute 2 px à la pastille, là où Figma le pose vers l'intérieur : un
 // chip se dimensionne sur son mot, sans largeur posée, donc rien ne peut le
@@ -96,7 +98,7 @@ const classes = ['chip', className].filter(Boolean).join(' ');
     justify-content: center;
     position: relative;
     padding: var(--space-sm) var(--space-lg); /* 8 / 16 — les liaisons du nœud */
-    border: var(--border-width-default) solid var(--color-border-default);
+    border: var(--border-width-default) solid var(--color-accent-300);
     border-radius: var(--radius-pill);
     font-family: var(--font-family-body); /* Inter */
     font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
