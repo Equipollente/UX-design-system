@@ -28,6 +28,16 @@
 // déporté hors du cadre plutôt que masqué en `add` — `display: none` le
 // retirerait du parcours au clavier et de l'arbre d'accessibilité.
 //
+// `Props` est une union discriminée sur `state`, pas une interface plate : les
+// champs obligatoires divergent vraiment d'un état à l'autre (`label` pour
+// `add`, `failMessage` pour `fail`, `image` pour `success`), à la différence
+// du seul autre composant du dépôt piloté par une variante (Modal), où les
+// mêmes champs sont obligatoires quelle que soit la variante. Les rendre tous
+// optionnels aurait laissé passer un `state="fail"` sans message — une alerte
+// vide — ou un `state="add"` sans libellé — un champ sans nom accessible —
+// jusqu'en production. `npm run check` les refuse maintenant, comme il refuse
+// déjà un nom d'icône inconnu.
+//
 // Ce que Figma déclare et qui n'est pas ici :
 // — taille 240 × 140 non contrainte, padding 28/24 composé de tokens, icône
 //   32 = space/2xl, trait redessiné à 1, anneau de focus 2, couleur icône en
@@ -50,11 +60,17 @@
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 
-interface Props {
-  /** Lie le libellé au champ en `state="add"`. Unique dans la page. */
+interface CommonProps {
   id: string;
-  /** Ce que la zone propose de faire en `state="add"`. Un verbe : « Add image ». N'a de sens que là. */
-  label?: string;
+  /** Cache l'élément entier — le crochet que la démo de /formulaire togglera. */
+  hidden?: boolean;
+  class?: string;
+}
+
+interface AddStateProps extends CommonProps {
+  state?: 'add';
+  /** Ce que la zone propose de faire. Un verbe : « Add image ». */
+  label: string;
   /** Ce qu'elle accepte, en toutes lettres. Lu après le libellé, pas laissé flottant. */
   hint?: string;
   /** Les types acceptés, au format de l'attribut natif : « image/png,image/jpeg ». */
@@ -64,27 +80,31 @@ interface Props {
   name?: string;
   required?: boolean;
   disabled?: boolean;
-  /** Cache l'élément entier — le crochet que la démo de /formulaire togglera. */
-  hidden?: boolean;
-  /**
-   * L'étape du cycle de dépôt. `add` est le champ natif ; les trois autres
-   * sont un rendu conditionnel piloté par les props ci-dessous — jamais par
-   * un script du composant.
-   */
-  state?: 'add' | 'in-progress' | 'fail' | 'success';
-  /** Le mot affiché pendant `state="in-progress"`, avant le pourcentage. */
+}
+
+interface InProgressStateProps extends CommonProps {
+  state: 'in-progress';
+  /** Le mot affiché avant le pourcentage. */
   progressLabel?: string;
-  /** La fraction déposée, 0 à 100. N'a de sens qu'en `state="in-progress"`. */
+  /** La fraction déposée, 0 à 100. */
   progress?: number;
-  /** Le message d'échec. N'a de sens qu'en `state="fail"`. */
-  failMessage?: string;
+}
+
+interface FailStateProps extends CommonProps {
+  state: 'fail';
+  /** Le message d'échec. */
+  failMessage: string;
   /**
-   * Le bouton qui relance le dépôt en `state="fail"`. Sans `href`, un bouton
-   * inerte — c'est à l'appelant de lui donner un geste.
+   * Le bouton qui relance le dépôt. Sans `href`, un bouton inerte — c'est à
+   * l'appelant de lui donner un geste.
    */
   retry?: { label: string; href?: string };
-  /** L'image déjà déposée, montrée en `state="success"`. */
-  image?: {
+}
+
+interface SuccessStateProps extends CommonProps {
+  state: 'success';
+  /** L'image déjà déposée. */
+  image: {
     id: string;
     src: string;
     alt: string;
@@ -92,40 +112,18 @@ interface Props {
     width?: number;
     height?: number;
   };
-  /** Le mot du bouton qui ouvre l'image en `state="success"`. */
+  /** Le mot du bouton qui ouvre l'image. */
   viewLabel?: string;
-  /** Le mot du bouton qui la retire en `state="success"`. */
+  /** Le mot du bouton qui la retire. */
   removeLabel?: string;
-  /** Le `name` du bouton supprimer en `state="success"`. Sa `value` est l'`id` de l'image. */
+  /** Le `name` du bouton supprimer. Sa `value` est l'`id` de l'image. */
   removeName?: string;
-  class?: string;
 }
 
-const {
-  id,
-  label,
-  hint,
-  accept,
-  multiple = false,
-  name,
-  required = false,
-  disabled = false,
-  state = 'add',
-  progressLabel = 'téléchargement',
-  progress = 0,
-  failMessage,
-  retry = { label: 'Recommencer' },
-  image,
-  viewLabel = 'voir',
-  removeLabel = 'supprimer',
-  removeName = 'remove',
-  class: className,
-  ...rest
-} = Astro.props;
+type Props = AddStateProps | InProgressStateProps | FailStateProps | SuccessStateProps;
 
-const hintId = hint ? `${id}-hint` : undefined;
-const progressLabelId = `${id}-label`;
-const clampedProgress = Math.min(100, Math.max(0, progress));
+const props = Astro.props;
+const { id, class: className, hidden } = props;
 
 const boxClasses = ['add-image', className].filter(Boolean).join(' ');
 const transientClasses = ['add-image', 'add-image-transient', className].filter(Boolean).join(' ');
@@ -133,29 +131,118 @@ const failClasses = ['add-image', 'add-image-transient', 'add-image-fail', class
   .filter(Boolean)
   .join(' ');
 const successClasses = ['add-image-success', className].filter(Boolean).join(' ');
+
+// Un objet par état, ou `null` : c'est ce qui permet à `label`, `failMessage`
+// et `image` de rester obligatoires dans leur branche sans jamais rendre un
+// champ, une alerte ou une vignette vides.
+const add =
+  props.state === undefined || props.state === 'add'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          label,
+          hint,
+          accept,
+          multiple = false,
+          name,
+          required = false,
+          disabled = false,
+          ...rest
+        } = props;
+        return {
+          label,
+          hint,
+          hintId: hint ? `${id}-hint` : undefined,
+          accept,
+          multiple,
+          name,
+          required,
+          disabled,
+          rest,
+        };
+      })()
+    : null;
+
+const inProgress =
+  props.state === 'in-progress'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          progressLabel = 'téléchargement',
+          progress = 0,
+          ...rest
+        } = props;
+        return {
+          progressLabel,
+          clampedProgress: Math.min(100, Math.max(0, progress)),
+          labelId: `${id}-label`,
+          rest,
+        };
+      })()
+    : null;
+
+const fail =
+  props.state === 'fail'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          failMessage,
+          retry = { label: 'Recommencer' },
+          ...rest
+        } = props;
+        return { failMessage, retry, rest };
+      })()
+    : null;
+
+const success =
+  props.state === 'success'
+    ? (() => {
+        const {
+          state: _state,
+          id: _id,
+          class: _class,
+          hidden: _hidden,
+          image,
+          viewLabel = 'voir',
+          removeLabel = 'supprimer',
+          removeName = 'remove',
+          ...rest
+        } = props;
+        return { image, viewLabel, removeLabel, removeName, rest };
+      })()
+    : null;
 ---
 
 {
-  state === 'add' && (
-    <label class={boxClasses} for={id} {...rest}>
+  add && (
+    <label class={boxClasses} for={id} hidden={hidden} {...add.rest}>
       <input
         class="add-image-input"
         type="file"
         id={id}
-        name={name ?? id}
-        accept={accept}
-        multiple={multiple}
-        required={required}
-        disabled={disabled}
-        aria-describedby={hintId}
+        name={add.name ?? id}
+        accept={add.accept}
+        multiple={add.multiple}
+        required={add.required}
+        disabled={add.disabled}
+        aria-describedby={add.hintId}
       />
       {/* L'icône double un mot écrit juste en dessous : elle est décorative, donc
           sans `label` — sans quoi les lecteurs d'écran diraient la chose deux fois. */}
       <Icon name="image-plus" class="add-image-icon" />
-      <span class="add-image-label">{label}</span>
-      {hint && (
-        <span class="add-image-hint" id={hintId}>
-          {hint}
+      <span class="add-image-label">{add.label}</span>
+      {add.hint && (
+        <span class="add-image-hint" id={add.hintId}>
+          {add.hint}
         </span>
       )}
     </label>
@@ -163,56 +250,56 @@ const successClasses = ['add-image-success', className].filter(Boolean).join(' '
 }
 
 {
-  state === 'in-progress' && (
-    <div id={id} class={transientClasses} {...rest}>
-      <span class="add-image-progress-label" id={progressLabelId}>
-        {progressLabel}
+  inProgress && (
+    <div id={id} class={transientClasses} hidden={hidden} {...inProgress.rest}>
+      <span class="add-image-progress-label" id={inProgress.labelId}>
+        {inProgress.progressLabel}
       </span>
       <div
         class="add-image-progress-track"
         role="progressbar"
-        aria-valuenow={clampedProgress}
+        aria-valuenow={inProgress.clampedProgress}
         aria-valuemin="0"
         aria-valuemax="100"
-        aria-labelledby={progressLabelId}
-        style={`--add-image-progress: ${clampedProgress}%`}
+        aria-labelledby={inProgress.labelId}
+        style={`--add-image-progress: ${inProgress.clampedProgress}%`}
       >
         <div class="add-image-progress-fill" />
       </div>
-      <span class="add-image-progress-value">{clampedProgress}%</span>
+      <span class="add-image-progress-value">{inProgress.clampedProgress}%</span>
     </div>
   )
 }
 
 {
-  state === 'fail' && (
-    <div id={id} class={failClasses} {...rest}>
+  fail && (
+    <div id={id} class={failClasses} hidden={hidden} {...fail.rest}>
       {/* `role="alert"` sur le message seul, pas sur toute la boîte : le
           bouton qui suit ne doit pas être avalé par la région live. */}
       <span class="add-image-fail-message" role="alert">
-        {failMessage}
+        {fail.failMessage}
       </span>
-      <Button variant="secondary" size="sm" href={retry.href}>
-        {retry.label}
+      <Button variant="secondary" size="sm" href={fail.retry.href}>
+        {fail.retry.label}
       </Button>
     </div>
   )
 }
 
 {
-  state === 'success' && image && (
-    <div id={id} class={successClasses} {...rest}>
+  success && (
+    <div id={id} class={successClasses} hidden={hidden} {...success.rest}>
       <img
         class="add-image-success-image"
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
+        src={success.image.src}
+        alt={success.image.alt}
+        width={success.image.width}
+        height={success.image.height}
       />
       <div class="add-image-success-actions">
-        {image.href && (
-          <Button variant="secondary" size="md" href={image.href}>
-            {viewLabel}
+        {success.image.href && (
+          <Button variant="secondary" size="md" href={success.image.href}>
+            {success.viewLabel}
           </Button>
         )}
         {/* Le nom accessible dit de quelle image il s'agit — comme dans
@@ -222,11 +309,11 @@ const successClasses = ['add-image-success', className].filter(Boolean).join(' '
           variant="alert"
           size="md"
           type="submit"
-          name={removeName}
-          value={image.id}
-          aria-label={`${removeLabel} — ${image.alt}`}
+          name={success.removeName}
+          value={success.image.id}
+          aria-label={`${success.removeLabel} — ${success.image.alt}`}
         >
-          {removeLabel}
+          {success.removeLabel}
         </Button>
       </div>
     </div>
