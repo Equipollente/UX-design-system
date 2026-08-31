@@ -156,3 +156,34 @@ export const demoGalleryImages = caseStudyImages.map((image, i) => ({
   width: image.width,
   height: image.height,
 }));
+
+// ── Modal, 420:1223 ──────────────────────────────────────────────────────────
+// « Property 1 » a 4 valeurs dans Figma : Layout (le gabarit, textes de
+// remplissage — pas montré ici), Confirmation, Alert, Success. Les mots des
+// trois autres viennent du nœud, mot pour mot — y compris la coquille de
+// l'Alert, signalée sur /components plutôt que corrigée en dur.
+export const modalConfirmationDemo = {
+  icon: 'book-open' as const,
+  variant: 'validation' as const,
+  heading: 'Enregistrer les modifications ?',
+  body: 'Les modifications apportées à cette série seront sauvegardées.',
+  primary: { label: 'Enregistrer' },
+  secondary: { label: 'Annuler' },
+};
+
+export const modalAlertDemo = {
+  icon: 'trash' as const,
+  variant: 'alert' as const,
+  heading: 'Supprimer la série ?',
+  body: 'Cette action est irréversible. Toutes les œuvres associées ne seront pas supprimer',
+  primary: { label: 'Supprimer' },
+  secondary: { label: 'Annuler' },
+};
+
+export const modalSuccessDemo = {
+  icon: 'check' as const,
+  variant: 'succes' as const,
+  heading: 'Modifications enregistrées !',
+  body: 'Les modifications apportées à cette série sont sauvegardées.',
+  primary: { label: 'revenir à la liste' },
+};

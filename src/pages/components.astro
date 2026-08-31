@@ -12,6 +12,7 @@ import CaseStudyHeader from '../design-system/components/CaseStudyHeader.astro';
 import CaseStudyCard from '../design-system/components/CaseStudyCard.astro';
 import Intro from '../design-system/components/Intro.astro';
 import CaseStudyList from '../design-system/components/CaseStudyList.astro';
+import Modal from '../design-system/components/Modal.astro';
 import tokens from '../design-system/data/tokens.json';
 // Les données de démonstration vivent à part : /templates/home montre les mêmes.
 import {
@@ -22,6 +23,9 @@ import {
   caseStudies,
   introDemo,
   cardDemo,
+  modalConfirmationDemo,
+  modalAlertDemo,
+  modalSuccessDemo,
 } from './_demo';
 
 const buttonTokens = tokens.filter((t) => t.group === 'button');
@@ -236,6 +240,33 @@ const caseStudyListVars = [
     '100svh',
     'La hauteur d’une couche. Ne se change que pour montrer la pile en réduction, comme ci-dessus.',
   ],
+];
+
+const modalProps = [
+  ['id', 'string', '—', 'L’id du <dialog> — c’est par lui que le site consommateur appelle showModal().'],
+  ['icon', 'IconName', '—', 'L’icône du cercle en tête.'],
+  [
+    'variant',
+    `'validation' | 'alert' | 'succes'`,
+    'validation',
+    'alert rougit l’icône et bascule le bouton principal en variante alert. succes n’a jamais qu’un bouton — secondary est ignoré.',
+  ],
+  [
+    'headingLevel',
+    '2 | 3 | 4 | 5 | 6',
+    '2',
+    'Le rang du titre, sous ce que la page porte déjà. Il ne change pas le dessin.',
+  ],
+  ['heading', 'string', '—', 'Le titre.'],
+  ['body', 'string', '—', 'Le texte, sous le titre.'],
+  ['primary', '{ label, href? }', '—', 'L’action principale. Sans href ⇒ <button> inerte.'],
+  [
+    'secondary',
+    '{ label, href? }',
+    '—',
+    'L’action secondaire. Absente ⇒ un seul bouton, le cas Success. Ferme la modale sans script — c’est le seul <button type="submit"> d’un <form method="dialog">.',
+  ],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
 ---
@@ -1786,6 +1817,139 @@ const caseStudyListVars = [
         et personne n'y touche pour faire tenir une géométrie.
       </p>
     </section>
+
+    <!-- ── Modal ────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Modal</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> Une boîte centrée par-dessus la page, avec une icône, un
+        titre, un texte, puis une ou deux actions — une confirmation, une alerte destructive, un
+        accusé de réception. Le ton et le nombre de boutons changent, jamais la structure.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Un déclencheur : rien ici n'ouvre la boîte. C'est au
+        site consommateur d'appeler <code>.showModal()</code> sur son propre bouton — la modale ne
+        connaît aucun site, donc aucun trigger ne peut vivre ici.
+        <br />
+        <span class="source">
+          Figma <code>420:1223</code>, un jeu de 4 variantes sous « Property 1 » — Layout (le
+          gabarit générique, non montré ici), Confirmation, Alert, Success.
+        </span>
+      </p>
+
+      <div class="demo demo-modal">
+        <Modal
+          id="demo-modal-confirmation"
+          open
+          icon={modalConfirmationDemo.icon}
+          variant={modalConfirmationDemo.variant}
+          heading={modalConfirmationDemo.heading}
+          body={modalConfirmationDemo.body}
+          primary={modalConfirmationDemo.primary}
+          secondary={modalConfirmationDemo.secondary}
+          headingLevel={3}
+        />
+      </div>
+
+      <h3>La variante <code>alert</code></h3>
+      <p class="section-note">
+        Seule l'icône rougit — sur <code>color/feedback/danger/500</code> — et le bouton principal
+        passe en variante <code>alert</code>. Le cercle, lui, reste <code>color/bg/surface</code>
+        {' '}comme en défaut : voir le premier <code>.flag</code> plus bas.
+      </p>
+
+      <div class="demo demo-modal">
+        <Modal
+          id="demo-modal-alert"
+          open
+          icon={modalAlertDemo.icon}
+          variant={modalAlertDemo.variant}
+          heading={modalAlertDemo.heading}
+          body={modalAlertDemo.body}
+          primary={modalAlertDemo.primary}
+          secondary={modalAlertDemo.secondary}
+          headingLevel={3}
+        />
+      </div>
+
+      <h3>La variante <code>succes</code>, un seul bouton</h3>
+      <p class="section-note">
+        Cette variante n'a jamais qu'un bouton — <code>secondary</code> est ignoré même fourni.
+        C'est le cas Success de Figma, un accusé de réception qui ne propose rien à annuler.
+      </p>
+
+      <div class="demo demo-modal">
+        <Modal
+          id="demo-modal-success"
+          open
+          icon={modalSuccessDemo.icon}
+          variant={modalSuccessDemo.variant}
+          heading={modalSuccessDemo.heading}
+          body={modalSuccessDemo.body}
+          primary={modalSuccessDemo.primary}
+          headingLevel={3}
+        />
+      </div>
+
+      <p class="demo-note">
+        Les trois modales sont montrées ouvertes (<code>open</code>), sans <code>.showModal()</code>
+        {' '}ni script sur cette page — c'est pour ça qu'aucun fond noir ne les recouvre ici : un
+        <code>&lt;dialog open&gt;</code> posé à la main n'entre pas dans l'état <code>:modal</code>
+        {' '}du navigateur, seul <code>.showModal()</code> le fait. Le fond à 50 % existe bien dans le
+        composant — voir son <code>::backdrop</code> — et se voit dès qu'un site l'ouvre pour de bon.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              modalProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ce que la maquette ne dit pas</h3>
+
+      <p class="flag">
+        <strong>Le code a raison.</strong> Le cercle d'icône de la variante Alert est peint en rose
+        dans Figma, sans qu'aucune variable ne le lie — une vraie valeur en dur côté maquette. Le
+        code garde <code>color/bg/surface</code> sur les deux tons plutôt que d'inventer une
+        couleur : c'est une décision assumée avec Judith, pas un écart à arbitrer.
+      </p>
+
+      <p class="flag">
+        <strong>L'écart entre le texte et les boutons n'a pas de token.</strong> Figma le dessine à
+        {' '}<code>10px</code> ; ni <code>--space-sm</code> (8) ni <code>--space-md</code> (12) ne
+        tombe juste. La valeur reste en dur, dans <code>--modal-gap</code>, comme
+        {' '}<code>--card-shadow</code> et <code>--fold-peek</code> avant elle.
+      </p>
+
+      <p class="flag">
+        <strong>Le fond noir n'a pas de token non plus.</strong> Aucune variable
+        {' '}<code>overlay</code> ou <code>scrim</code> n'existe dans la collection. La valeur —
+        {' '}<code>rgb(0 0 0 / 0.5)</code> — reste en dur dans <code>--modal-scrim</code>, en
+        attendant que Figma la nomme.
+      </p>
+
+      <p class="flag">
+        <strong>Une coquille, reproduite telle quelle.</strong> Le corps de la modale Alert dit
+        {' '}« Toutes les œuvres associées ne seront pas supprimer » — la maquette l'écrit ainsi
+        {' '}(<code>420:1229</code>), et le mot pour mot vaut aussi pour ses fautes : à corriger côté
+        Figma, pas dans le code.
+      </p>
+    </section>
   </main>
 </DocsLayout>
 
@@ -1813,6 +1977,25 @@ const caseStudyListVars = [
      surface lavande, comme le carrousel et ses flèches blanches. */
   .demo-card {
     background: var(--color-bg-surface);
+  }
+
+  /* La modale est blanche sur un cadre blanc, comme la carte : même remède,
+     la surface lavande. Sans .showModal(), le <dialog> reste en position
+     absolute par défaut du navigateur mais ne compte pour aucune hauteur dans
+     son parent — le cadre s'écraserait et la boîte déborderait sur la suite.
+     Le cadre reçoit donc une hauteur et devient l'ancre de positionnement ;
+     le centrage inset:0 + margin:auto imite à la main ce que :modal ferait
+     tout seul en vrai, uniquement pour cette démo statique. */
+  .demo-modal {
+    position: relative;
+    min-height: 420px;
+    background: var(--color-bg-surface);
+  }
+
+  .demo-modal :global(.modal) {
+    position: absolute;
+    inset: 0;
+    margin: auto;
   }
 
   /* La carte prend la largeur qu'on lui donne — c'est la page qui décide. Ces

@@ -91,6 +91,8 @@ nomme, le composant n'a qu'une ligne à changer.
 | une mesure de texte | `--intro-measure`, `--header-title-min` | /components → Intro | ouvert |
 | un cran à 90 pour le liseré | `--fold-peek` — `space.layout.96` est à 6 px, et l'écart déplacerait le liseré à chaque cran | /components → Case Study List | ouvert |
 | un cran à 33 et un à 10 | `--space-2xl` et `--space-md`, les crans voisins | /components → Case Study Card | ouvert |
+| un écart à 10 entre le texte et les boutons d'une modale | `--modal-gap` — ni `space.sm` (8) ni `space.md` (12) ne tombe juste | /components → Modal | ouvert |
+| un fond pour le `::backdrop` d'une modale | `--modal-scrim` — `rgb(0 0 0 / 0.5)`, aucune variable `overlay`/`scrim` dans la collection | /components → Modal | ouvert |
 
 ## Nommage
 
@@ -100,6 +102,8 @@ nomme, le composant n'a qu'une ligne à changer.
 | `Section.Intro` | `Intro` | `Section.` est une convention de rangement du fichier | assumé |
 | `Cards ` | `Card` | un pluriel avec une espace finale nomme un tiroir, pas un objet | ouvert |
 | `Property 1` | `orientation` | le nom de la propriété de variante ne dit pas ce qu'elle commande | ouvert |
+| `Modals` | `Modal` | un pluriel nomme un tiroir, pas un objet | ouvert |
+| `Property 1` (sur `420:1223`) | `variant` | trois valeurs (`validation`/`alert`/`succes`), pas quatre : `Layout` est le gabarit générique de la maquette, jamais un contenu réel | assumé |
 
 ---
 

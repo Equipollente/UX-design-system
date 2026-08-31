@@ -44,6 +44,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Chip (jeu de variantes) | [`351-273`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=351-273) | [Chip.astro](src/design-system/components/Chip.astro) |
 | Add Image (jeu de variantes) | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) | [AddImage.astro](src/design-system/components/AddImage.astro) |
 | Edit Image Gallery | [`355-1396`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=355-1396) | [EditImageGallery.astro](src/design-system/components/EditImageGallery.astro) |
+| Modals (jeu de variantes) | [`420-1223`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=420-1223) | [Modal.astro](src/design-system/components/Modal.astro) |
 
 La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
 
@@ -59,7 +60,13 @@ de tiroir et un nom vide ne désignent pas un objet. Les deux renommages sont à
 Attention à la confusion : trois autres composants de la page portent le préfixe `Cards/` et ne sont
 pas celui-là — ils sont toujours dans la liste des non-intégrés, plus bas.
 
-Troisième décalage, tranché dans l'autre sens : la variante `Lime` du Tag consomme la rampe
+Même geste sur le jeu `420:1223` : Figma l'appelle « Modals », au pluriel, le code le nomme
+`Modal`. Sa propriété de variante, « Property 1 », devient `variant` dans le code, et prend trois
+valeurs — `validation`, `alert`, `succes` — là où Figma en montre quatre : le quatrième,
+« Layout », est le gabarit générique de la maquette, pas un cas de contenu réel, et ne devient
+jamais une valeur de prop.
+
+Quatrième décalage, tranché dans l'autre sens : la variante `Lime` du Tag consomme la rampe
 `highlight`. Le code a gardé `lime` pour que la prop se recoupe avec le fichier, et écrit donc un nom
 de couleur pour lire un nom de rôle. C'est la variante qu'il faut renommer — ligne ouverte dans
 [arbitrages.md](atelier/arbitrages.md).
