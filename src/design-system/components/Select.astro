@@ -20,7 +20,8 @@
 //
 // Mesures :
 // — hauteur 36 → `space/2xl + space/xs`, exact ;
-// — rembourrage 12 / 16 → `button/padding-*/sm`, exact, tel que le nœud le lie ;
+// — rembourrage 16 de côté → `button/padding-x/sm`, exact, tel que le nœud le lie.
+//   Les 12 du haut et du bas, eux, ne tiennent pas dans une boîte de 36 : voir plus bas ;
 // — chevron 20 → `button/icon-size/sm` ;
 // — écart au libellé → `control/field-gap` = 5 ;
 // — anneau de focus 2 → `border/width/focus`.
@@ -110,10 +111,17 @@ const classes = ['field', className].filter(Boolean).join(' ');
     /* 32 + 4 = 36, la hauteur exacte du nœud. */
     height: calc(var(--space-2xl) + var(--space-xs));
     width: 100%;
-    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
+    padding-inline: var(--button-padding-x-sm);
     /* La place du chevron s'ajoute au padding droit : sans elle, une option longue
        passerait dessous. */
     padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+    /* Aucun rembourrage vertical, et ce n'est pas un oubli : la boîte fait 36, la
+       ligne 16,8 — les 12 du nœud n'y tiennent pas (12 + 16,8 + 12 = 40,8). Un
+       `select` coupe son texte à la boîte de contenu, et les jambages de « pays »
+       disparaissaient. Text Field déclare les mêmes 12 sans que ça se voie : sur un
+       `input`, le navigateur centre le texte lui-même et les ignore. Ici il faut le
+       dire. Écart ouvert dans arbitrages.md. */
+    padding-block: 0;
     /* Le chevron natif s'efface : c'est celui du système qui est posé dessus. */
     appearance: none;
     /* La même encre que Text Field, ligne pour ligne : un contrôle natif reprend

@@ -54,6 +54,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
 | Select | `340:933` | boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile | /formulaire → Select | ouvert |
 | Select | `340:933` | chevron de 20, quand le code prend les 24 de `button/icon-size/md` | /formulaire → Select | ouvert |
+| Select · Text field | `340:933` · `23:29` | boîte de 36 et rembourrage vertical de 12 s'excluent : 12 + 16,8 + 12 = 40,8 | /formulaire → Select | ouvert |
 | ~~Text field~~ | `23:29` | ~~rembourrage de 6 / 14, que rien ne lie : 14 n'existe que comme rayon, 6 n'existe pas~~ | /formulaire → Text field | *réglé — 31/08, nœud redessiné à 12 / 16 sur ses six variantes, lié aux deux `button/padding-*/sm` — aucune variable créée* |
 | Text field | `23:29` | **le nœud existait, et personne ne l'avait vu** — hors de la plage `340`–`355` relevée par le sprint, il n'était ni intégré ni listé | /formulaire → Text field | ouvert |
 | Text field | `23:29` | **ni état désactivé ni état d'erreur** ; `disabled` a pu s'écrire quand même (`opacity/disabled` existe), l'erreur non — elle demanderait une encre, un trait et un message | /formulaire → Text field | ouvert |
