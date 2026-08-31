@@ -3,6 +3,7 @@
 // d'abord, puisque tous les champs le partagent, les champs ensuite.
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import FieldLabel from '../design-system/components/FieldLabel.astro';
+import TextField from '../design-system/components/TextField.astro';
 import Select from '../design-system/components/Select.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
@@ -27,6 +28,20 @@ const labelProps = [
   ['for', 'string', '—', 'L’id du champ que ce libellé nomme. C’est ce qui les lie.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque. Le champ doit porter required de son côté.'],
   ['disabled', 'boolean', 'false', 'L’encre passe en muted. Le champ doit porter disabled de son côté.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const textFieldProps = [
+  ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
+  ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
+  ['type', "'text' | 'email' | 'tel' | 'url' | 'search'", "'text'", 'Ce que le champ accepte. Les types d’une seule ligne, et eux seuls.'],
+  ['value', 'string', '—', 'Le texte déjà saisi.'],
+  ['placeholder', 'string', '—', 'Un exemple, pas une consigne : il disparaît à la première frappe.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
+  ['maxlength', 'number', '—', 'La limite de caractères. Ici elle ne compte rien : c’est Text Area qui a le compteur.'],
+  ['autocomplete', 'string', '—', 'Ce que le navigateur a le droit de proposer. Un nom, une adresse, un code.'],
+  ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
+  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
@@ -209,6 +224,110 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ── Text field ────────────────────────────────────── -->
+    <section>
+      <h2>Text field</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Une ligne où quelqu'un tape du texte — un nom, une adresse,
+        un sujet. Ce que le système ne peut pas proposer d'avance. Nœud Figma <code>23:29</code>,
+        six variantes.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni <code>Text Area</code>, qui est la même chose sur
+        plusieurs lignes et qui compte ses caractères ; ni <code>Select</code>, dont la liste est
+        close ; ni un champ à suggestions — la liste qui s'ouvrirait dessous n'existe nulle part
+        dans le système.
+      </p>
+
+      <p class="section-note">
+        <strong>Le système a cru pendant tout un sprint qu'il n'avait pas de champ texte.</strong>
+        Le sprint du 27/08 a relevé les neuf composants de formulaire de la plage
+        {' '}<code>340</code>–<code>355</code> ; celui-ci est en <code>23</code>, dessiné bien avant
+        les autres, et il est resté invisible — ni dans les intégrés, ni dans la liste des
+        non-intégrés. Sa description disait pourtant l'essentiel : il partage ses
+        {' '}<strong>36 px</strong> de haut avec le bouton, pour que les deux se posent au même
+        niveau côte à côte.
+      </p>
+
+      <p class="section-note">
+        Son libellé vient de <code>FieldLabel</code>, comme celui de tous les autres champs.
+        {' '}<code>type</code> ne prend que les types d'une seule ligne : un champ qui accepterait
+        {' '}<code>textarea</code> ne serait plus celui-ci.
+      </p>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">default — sur son invite</p>
+          <TextField id="sujet-a" label="Sujet" placeholder="Ce dont tu veux parler" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">required</p>
+          <TextField id="sujet-b" label="Sujet" placeholder="Ce dont tu veux parler" required />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">rempli — type="email"</p>
+          <TextField id="sujet-c" label="Adresse e-mail" type="email" value="bonjour@exemple.fr" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + required</p>
+          <TextField id="sujet-d" label="Sujet" placeholder="Ce dont tu veux parler" required disabled />
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            textFieldProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Le rembourrage du nœud valait 6 / 14, que rien ne liait.</strong> 14 n'existe dans
+        le système que comme rayon, et 6 n'existe pas du tout. Le nœud a été redessiné à
+        {' '}<strong>12 / 16</strong>, les deux <code>button/padding-*/sm</code> — le geste déjà fait
+        sur <code>Text Area</code> le 27/08. Les trois champs s'espacent maintenant pareil. Contre
+        une hauteur fixe de 36, le rembourrage vertical ne pousse rien : il dit seulement d'où le
+        texte part.
+      </p>
+
+      <p class="flag">
+        <strong>La variante <code>Multiline</code> n'est pas implémentée.</strong> Elle dessine ce
+        que <code>Text Area</code> fait déjà, avec son propre nœud et son compteur. Deux composants
+        pour une même chose se sépareraient au premier changement — c'est celui qui a le compteur
+        qui reste.
+      </p>
+
+      <p class="flag">
+        <strong>Le nœud n'a ni état désactivé ni état d'erreur</strong>, et sa description dit
+        pourquoi : en inventer un reviendrait à inventer des couleurs. <code>disabled</code> est
+        pourtant écrit, parce que les six autres champs le portent et qu'il ne tient qu'à
+        {' '}<code>opacity/disabled</code>, qui existe déjà. L'erreur, elle, ne l'est pas : elle
+        demanderait une encre, un trait et un message qui n'existent nulle part. C'est la seule
+        chose qui manque à ce champ pour être complet, et elle se dessine dans Figma.
+      </p>
+
+      <p class="flag">
+        <strong>Trois champs, trois survols.</strong> Celui-ci change son trait
+        {' '}(<code>neutral/500</code>), <code>Text Area</code> et <code>Select</code> changent leur
+        fond. Le code suit chaque nœud plutôt que de trancher à leur place, mais trois champs
+        voisins ne devraient pas réagir de trois façons.
+      </p>
     </section>
 
     <!-- ── Select ────────────────────────────────────────── -->

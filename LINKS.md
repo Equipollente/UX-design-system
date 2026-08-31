@@ -36,6 +36,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Case Study List | [`222-814`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-814) | [CaseStudyList.astro](src/design-system/components/CaseStudyList.astro) |
 | Page HP (la pile en situation, 3 états) | [`222-1168`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-1168) | [templates/home.astro](src/pages/templates/home.astro) |
 | FieldLabel | — (spécifié en conversation) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
+| Text field (jeu de variantes) | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | [TextField.astro](src/design-system/components/TextField.astro) |
 | Select (jeu de variantes) | [`340-933`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-933) | [Select.astro](src/design-system/components/Select.astro) |
 | Radio (jeu de variantes) | [`340-879`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-879) | [Radio.astro](src/design-system/components/Radio.astro) |
 | Checkbox (jeu de variantes) | [`340-842`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-842) | [Checkbox.astro](src/design-system/components/Checkbox.astro) |
@@ -70,6 +71,18 @@ Quatrième décalage, tranché dans l'autre sens : la variante `Lime` du Tag con
 `highlight`. Le code a gardé `lime` pour que la prop se recoupe avec le fichier, et écrit donc un nom
 de couleur pour lire un nom de rôle. C'est la variante qu'il faut renommer — ligne ouverte dans
 [arbitrages.md](atelier/arbitrages.md).
+
+Cinquième décalage, et il porte deux noms d'un coup : Figma appelle le champ texte `forms/Field`.
+`forms/` est un nom de tiroir, comme le `Section.` d'Intro ; `Field` désigne n'importe quel champ —
+le select et la zone de texte compris — et c'est déjà le nom de la classe qui les enveloppe tous les
+trois. Le code l'appelle `TextField`. Renommage à trancher côté Figma, ligne ouverte dans
+[arbitrages.md](atelier/arbitrages.md).
+
+**Ce nœud est resté invisible pendant tout le sprint des formulaires.** Il n'était ni dans le tableau
+ci-dessus, ni dans la liste des non-intégrés : le sprint du 27/08 avait relevé les neuf composants de
+la plage `340`–`355`, et celui-ci est en `23`, dessiné bien avant les autres. On a donc cru pendant
+tout un sprint que le système n'avait pas de champ texte une ligne. Son rembourrage valait 6 / 14,
+que rien ne liait : il a été redessiné à 12 / 16 le 31/08, comme Text Area l'avait été le 27.
 
 La page **HP** porte trois frames de 1280 × 834 qui sont trois états de défilement, pas trois
 écrans : `45-388` au repos, `222-907` la première carte montée, `222-1042` la seconde par-dessus.
