@@ -99,8 +99,9 @@ const classes = ['field', className].filter(Boolean).join(' ');
     display: flex;
   }
 
-  /* La géométrie de la boîte, et rien d'autre. L'encre viendra avec les
-     variables du champ ; les fonds, eux, sont déjà décidés plus bas. */
+  /* La géométrie de la boîte et son encre — la même que Text Field, pour que deux
+     champs posés côte à côte s'écrivent pareil. Les fonds, eux, sont décidés plus
+     bas, état par état. */
   select {
     display: flex;
     border-radius: var(--radius-md);
@@ -115,6 +116,15 @@ const classes = ['field', className].filter(Boolean).join(' ');
     padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
     /* Le chevron natif s'efface : c'est celui du système qui est posé dessus. */
     appearance: none;
+    /* La même encre que Text Field, ligne pour ligne : un contrôle natif reprend
+       la police du navigateur si on ne la lui donne pas, et deux champs voisins
+       ne s'écriraient pas dans le même caractère. */
+    font-family: var(--font-family-body); /* Inter */
+    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--font-weight-medium); /* 500 */
+    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--font-letter-spacing-normal);
+    color: var(--color-text-default);
   }
 
   /* — default — Les quatre états ne portent que leur fond : le nœud ne dessine
