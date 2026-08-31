@@ -23,6 +23,7 @@ import menuRight from '../icons/menu-right.svg';
 import plus from '../icons/plus.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
+import save from '../icons/save.svg';
 import trash from '../icons/trash.svg';
 
 export const icons = {
@@ -45,6 +46,7 @@ export const icons = {
   'plus': plus,
   'quote-down': quoteDown,
   'route': route,
+  'save': save,
   'trash': trash,
 } as const;
 
