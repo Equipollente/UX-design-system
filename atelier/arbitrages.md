@@ -46,6 +46,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Chip** | `351:273` | **son trait ne vaut que 1,28:1 sur le blanc** — WCAG 1.4.11 en demande 3 ; c'est une couleur à foncer, pas une épaisseur | /formulaire → Chip | ouvert |
 | Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
+| Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
