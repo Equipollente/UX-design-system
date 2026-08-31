@@ -18,6 +18,13 @@ import Tag from '../design-system/components/Tag.astro';
 import Icon from '../design-system/components/Icon.astro';
 import Card from '../design-system/components/Card.astro';
 import Modal from '../design-system/components/Modal.astro';
+import TextField from '../design-system/components/TextField.astro';
+import Select from '../design-system/components/Select.astro';
+import TextArea from '../design-system/components/TextArea.astro';
+import Radio from '../design-system/components/Radio.astro';
+import Checkbox from '../design-system/components/Checkbox.astro';
+import Toggle from '../design-system/components/Toggle.astro';
+import Chip from '../design-system/components/Chip.astro';
 import { iconNames } from '../design-system/lib/icons';
 import tokens from '../design-system/data/tokens.json';
 // L'image de l'aperçu est un vrai asset de ce site : une carte sans image ne
@@ -149,6 +156,91 @@ const defautModal = `<Modal
   secondary={{ label: "Annuler" }}
 />`;
 
+// ── L'atelier du formulaire ────────────────────────────────────────────────
+// Les sept types qu'on peut poser dans une pile. L'ordre est celui de
+// /formulaire, et il est aussi celui des imports que le code produit.
+const typesChamp = [
+  { cle: 'TextField', nom: 'Champ texte' },
+  { cle: 'Select', nom: 'Select' },
+  { cle: 'TextArea', nom: 'Zone de texte' },
+  { cle: 'Radio', nom: 'Radio (groupe)' },
+  { cle: 'Checkbox', nom: 'Case à cocher' },
+  { cle: 'Toggle', nom: 'Interrupteur' },
+  { cle: 'Chip', nom: 'Chips (groupe)' },
+];
+
+// Les deux mots que le script ira remplacer dans les clones. Un exemplaire ne
+// peut pas partir avec un libellé vide : un texte vide n'a pas de nœud, et il
+// n'y aurait rien à remplacer.
+const SENTINELLE = '⟨libellé⟩';
+const SENTINELLE_CHOIX = '⟨choix⟩';
+
+// Deux états seulement changent la structure d'un champ : l'astérisque, qui est
+// un élément, et le désactivé, qui change la classe du libellé. Le reste — le
+// libellé, l'invite, les choix, la valeur — est du texte et des attributs, qu'on
+// pose sur le clone. Quatre exemplaires suffisent donc par type, et deux pour
+// Radio, Toggle et Chip, qui n'ont pas de `required`.
+const combos = [
+  { r: false, d: false },
+  { r: true, d: false },
+  { r: false, d: true },
+  { r: true, d: true },
+];
+const combosEteint = [false, true];
+const cleChamp = (t: string, r: boolean, d: boolean) => `${t}|${r ? 'r' : '-'}|${d ? 'd' : '-'}`;
+
+// Le formulaire de départ : un champ texte et un select. C'est le plus court
+// exemple qui montre les deux façons dont un champ se remplit — on écrit, ou on
+// choisit. Sans JavaScript, c'est ce qui reste à l'écran, et c'est du code juste.
+const defautFormulaireEntete = `---
+import TextField from 'ux-design-system/components/TextField.astro';
+import Select from 'ux-design-system/components/Select.astro';
+---`;
+
+const defautFormulaire = `<TextField id="ton-nom" label="Ton nom" required />
+
+<Select
+  id="sujet"
+  label="Sujet"
+  options={['Devis', 'Question', 'Autre']}
+/>`;
+
+// Le troisième morceau ne dépend d'aucun réglage : il est écrit ici une fois
+// pour toutes, et le script n'a pas à le réécrire. Ses quatre règles sont
+// recopiées dans le `<style>` de la page, qui s'en sert pour l'aperçu — c'est ce
+// qui fait que ce qu'on voit est le résultat de ce qu'on copie.
+const defautFormulaireCss = `/* À poser sur ce qui entoure les champs — ton <form>, ou le <div>
+   qui les groupe. */
+.mes-champs {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* Un groupe de radios ou de chips. Le fieldset ne sert qu'à porter le
+   nom du groupe : son cadre natif s'efface, le système n'en dessine
+   aucun. */
+.mes-champs fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.mes-champs legend {
+  margin-bottom: var(--control-field-gap);
+  padding: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-tight);
+  color: var(--color-text-default);
+}
+
+.mes-choix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+}`;
+
 const importStyles = `import 'ux-design-system/styles/tokens.css';
 import 'ux-design-system/styles/global.css';`;
 
@@ -167,10 +259,11 @@ import { withBase } from 'ux-design-system/lib/url';
     <h6>Design system</h6>
     <h1>Bac à sable</h1>
     <p class="lead">
-      Cinq ateliers. Dans chacun : les réglages à gauche, la chose en vrai au milieu, et le code en
-      dessous — en deux morceaux qui se copient séparément, parce qu'ils vont à deux endroits
-      différents du fichier. Rien à lire avant de commencer : on touche un réglage, le code se réécrit.
-      Le dernier, la carte, va plus loin : on y pose des composants dans un composant.
+      Sept ateliers. Dans chacun : les réglages à gauche, la chose en vrai au milieu, et le code en
+      dessous — en morceaux qui se copient séparément, parce qu'ils ne vont pas au même endroit du
+      fichier. Rien à lire avant de commencer : on touche un réglage, le code se réécrit. Les deux
+      derniers vont plus loin : la carte pose des composants dans un composant, et le formulaire en
+      empile une suite qu'on ordonne.
     </p>
     <p class="section-note">
       Ce que tu vois n'est pas une image, c'est la chose elle-même. Si l'aperçu est juste, le code
@@ -185,6 +278,7 @@ import { withBase } from 'ux-design-system/lib/url';
         <li><a href="#atelier-icon">Icon</a></li>
         <li><a href="#atelier-card">Card</a></li>
         <li><a href="#atelier-modal">Modal</a></li>
+        <li><a href="#atelier-formulaire">Un formulaire</a></li>
         <li><a href="#pannes">Quand ça ne marche pas</a></li>
       </ul>
     </nav>
@@ -1087,6 +1181,213 @@ import { withBase } from 'ux-design-system/lib/url';
     </section>
 
     <!-- ── Quand ça ne marche pas ───────────────────────────────────────── -->
+    <!-- ── Formulaire ───────────────────────────────────────────────────── -->
+    <section class="atelier" data-atelier="formulaire" id="atelier-formulaire">
+      <h2>Un formulaire</h2>
+      <p class="section-note">
+        Le seul atelier où l'on ne règle pas un objet mais une suite : on empile des champs, on les
+        ordonne, et le code sort en trois morceaux. Il ne fabrique pas le
+        {' '}<code>&lt;form&gt;</code> autour — l'envoi, son bouton et la phrase des obligatoires ne
+        sont pas des composants du système, et ils dépendent de ce que la page en fait.
+      </p>
+
+      <div class="etabli">
+        <form class="reglages" data-form>
+          <fieldset class="emplacement">
+            <legend>Les champs</legend>
+            <div class="rangs" data-liste="champs"></div>
+            <button class="ajouter" type="button" data-ajouter="champs">+ Ajouter un champ</button>
+            <p class="aide" data-vide></p>
+            <p class="aide">
+              L'ordre de la liste est celui du formulaire. L'identifiant de chaque champ se déduit
+              de son libellé — « Ton nom » donne <code>ton-nom</code> — et c'est lui qui lie le
+              libellé au champ. Deux libellés identiques donneraient deux fois le même
+              {' '}<code>id</code> : l'atelier le dit sous l'aperçu.
+            </p>
+          </fieldset>
+
+          <!-- Le modèle d'une rangée. La liste des types est rendue par Astro, pour
+               qu'elle vienne du système et non d'une copie tenue à la main dans le
+               script. Le script n'en fait que des clones. -->
+          <template data-modele="champ">
+            <div class="rang-slot rang-champ">
+              <select class="rang-type">
+                {typesChamp.map((t) => <option value={t.cle}>{t.nom}</option>)}
+              </select>
+              <input class="rang-texte" type="text" value="" autocomplete="off" />
+              <input class="rang-choix" type="text" value="" autocomplete="off" />
+              <label class="case rang-case-requis"
+                ><input class="rang-requis" type="checkbox" /><span>obligatoire</span></label
+              >
+              <label class="case"
+                ><input class="rang-eteint" type="checkbox" /><span>désactivé</span></label
+              >
+              <span class="rang-ordre">
+                <button class="deplacer" type="button" data-sens="-1">↑</button>
+                <button class="deplacer" type="button" data-sens="1">↓</button>
+                <button class="retirer" type="button">✕</button>
+              </span>
+            </div>
+          </template>
+
+          <!-- Le squelette d'un groupe. Il est rendu par Astro et cloné, comme tout
+               le reste : un fieldset fabriqué en JavaScript n'aurait pas la marque
+               de portée d'Astro, et les règles de la page ne l'atteindraient pas.
+               Ses deux classes sont celles du troisième morceau — ce qu'on voit ici
+               est ce que ce CSS produira. -->
+          <template data-modele="groupe">
+            <fieldset>
+              <legend></legend>
+              <div class="mes-choix"></div>
+            </fieldset>
+          </template>
+        </form>
+
+        <div class="sortie">
+          <p class="etiquette">Le formulaire</p>
+          <!-- La pile porte exactement la règle du troisième morceau : ce qu'on voit
+               ici est ce que le CSS copié donnera, et pas un espacement de doc. -->
+          <div class="demo demo-formulaire" data-apercu>
+            <div class="mes-champs" data-pile></div>
+          </div>
+          <p class="alerte" data-alerte hidden></p>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">1</span> Tout en haut du fichier</span>
+              <button class="copier" type="button" data-copier="entete">Copier</button>
+            </p>
+            <pre><code data-code="entete">{defautFormulaireEntete}</code></pre>
+            <p class="aide">
+              Une ligne par type de champ posé. Elle s'en va d'elle-même quand le dernier champ de
+              ce type quitte la liste.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">2</span> Là où tu veux les champs</span>
+              <button class="copier" type="button" data-copier="balise">Copier</button>
+            </p>
+            <pre><code data-code="balise">{defautFormulaire}</code></pre>
+            <p class="aide">
+              Les champs, et rien autour : à toi d'écrire le <code>&lt;form&gt;</code>, son bouton
+              d'envoi et la phrase <em>« Les champs marqués * sont obligatoires »</em> que
+              l'astérisque oblige. Un groupe de radios ou de chips, lui, garde son
+              {' '}<code>&lt;fieldset&gt;</code> : c'est ce qui porte le nom du groupe, et aucune
+              prop ne le remplace.
+            </p>
+          </div>
+
+          <div class="morceau">
+            <p class="etiquette">
+              <span><span class="rang">3</span> Dans le style de la page</span>
+              <button class="copier" type="button" data-copier="styles">Copier</button>
+            </p>
+            <pre><code data-code="styles">{defautFormulaireCss}</code></pre>
+            <p class="aide">
+              Le système n'a pas de composant « formulaire » : la mise en page revient à l'appelant,
+              et c'est voulu — un token partage une valeur, il ne partage pas une structure. Sans
+              cette règle, les champs se touchent.
+            </p>
+            <p class="aide">
+              Les cinq lignes de la <code>legend</code> sont d'un autre ordre : elles redessinent à
+              la main la typographie de <code>FieldLabel</code>, parce qu'aucun composant ne dessine
+              le nom d'un groupe. Une <code>legend</code> n'a pas de <code>for</code> — ce n'est pas
+              un libellé de champ, et <code>FieldLabel</code> ne peut pas la rendre. C'est un manque
+              du système, pas un choix.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- La banque : un exemplaire réel par type et par état structurel. On ne
+           peut pas pré-rendre toutes les combinaisons d'un formulaire — elles sont
+           infinies — mais on n'en a pas besoin. Deux choses seulement changent la
+           structure d'un champ : l'astérisque, qui est un élément, et l'état
+           désactivé, qui change la classe du libellé. Tout le reste — le libellé,
+           l'invite, les choix — est du texte et des attributs, qu'on pose sur le
+           clone. Ce qui est à l'écran est donc vraiment le composant. -->
+      <div class="banque" data-banque aria-hidden="true">
+        {
+          combos.map(({ r, d }) => (
+            <span data-champ={cleChamp('TextField', r, d)}>
+              <TextField
+                id={`bq-textfield-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
+                label={SENTINELLE}
+                placeholder=""
+                required={r}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combos.map(({ r, d }) => (
+            <span data-champ={cleChamp('Select', r, d)}>
+              <Select
+                id={`bq-select-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
+                label={SENTINELLE}
+                options={[SENTINELLE_CHOIX]}
+                required={r}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combos.map(({ r, d }) => (
+            <span data-champ={cleChamp('TextArea', r, d)}>
+              <TextArea
+                id={`bq-textarea-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
+                label={SENTINELLE}
+                required={r}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combos.map(({ r, d }) => (
+            <span data-champ={cleChamp('Checkbox', r, d)}>
+              <Checkbox
+                id={`bq-checkbox-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
+                label={SENTINELLE}
+                required={r}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combosEteint.map((d) => (
+            <span data-champ={cleChamp('Radio', false, d)}>
+              <Radio
+                id={`bq-radio-${d ? 'd' : 'n'}`}
+                name="bq-radio"
+                label={SENTINELLE}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combosEteint.map((d) => (
+            <span data-champ={cleChamp('Toggle', false, d)}>
+              <Toggle id={`bq-toggle-${d ? 'd' : 'n'}`} label={SENTINELLE} disabled={d} />
+            </span>
+          ))
+        }
+        {
+          combosEteint.map((d) => (
+            <span data-champ={cleChamp('Chip', false, d)}>
+              <Chip id={`bq-chip-${d ? 'd' : 'n'}`} label={SENTINELLE} disabled={d} />
+            </span>
+          ))
+        }
+      </div>
+    </section>
+
     <section id="pannes">
       <h2>Quand ça ne marche pas</h2>
       <p class="section-note">
@@ -1937,6 +2238,420 @@ import { withBase } from 'ux-design-system/lib/url';
       return baliser('Modal', attrs, null);
     });
   }
+  // ── Un formulaire ──────────────────────────────────────────────────────
+  // Le seul atelier qui compose. Les six autres règlent un objet et montrent la
+  // combinaison pré-rendue qui lui correspond ; ici la combinaison n'existe pas
+  // d'avance — un formulaire est une suite, et une suite ne se pré-rend pas.
+  //
+  // Ce qui la remplace : la banque tient un exemplaire réel par type et par état
+  // structurel, et le script en clone ce qu'il faut. Les deux seuls états qui
+  // changent la structure d'un champ sont l'astérisque, qui est un élément, et le
+  // désactivé, qui change la classe du libellé. Le reste est du texte et des
+  // attributs. On ne fabrique donc jamais un champ en JavaScript : on copie celui
+  // qu'Astro a rendu, et on y écrit les mots.
+  const atelierFormulaire = document.querySelector('[data-atelier="formulaire"]');
+  if (atelierFormulaire) {
+    const banque = atelierFormulaire.querySelector('[data-banque]');
+    const pile = atelierFormulaire.querySelector<HTMLElement>('[data-pile]');
+    const form = atelierFormulaire.querySelector<HTMLFormElement>('[data-form]');
+    const vide = atelierFormulaire.querySelector<HTMLElement>('[data-vide]');
+    const alerte = atelierFormulaire.querySelector<HTMLElement>('[data-alerte]');
+
+    // Le mot que le frontmatter pose dans le libellé de chaque exemplaire, et que
+    // le script vient remplacer. Un exemplaire ne peut pas partir avec un libellé
+    // vide : un texte vide n'a pas de nœud, et il n'y aurait rien à remplacer. Le
+    // second mot de la banque, celui de l'option du select, n'a pas besoin d'être
+    // connu ici : cette option-là sert de modèle et on la clone.
+    const SENTINELLE = '⟨libellé⟩';
+
+    // Les sept types, et tout ce que le script a besoin de savoir d'eux. `requis`
+    // dit si le composant accepte `required` — Radio, Toggle et Chip ne l'ont pas.
+    // `groupe` dit qu'un seul réglage produit plusieurs balises, et qu'il leur faut
+    // un fieldset : c'est la legend qui porte le nom du groupe, aucune prop ne le
+    // fait. `liste` dit que le champ se nourrit d'une suite de choix.
+    const TYPES = {
+      TextField: { liste: false, requis: true, groupe: false },
+      Select: { liste: true, requis: true, groupe: false },
+      TextArea: { liste: false, requis: true, groupe: false },
+      Radio: { liste: true, requis: false, groupe: true },
+      Checkbox: { liste: false, requis: true, groupe: false },
+      Toggle: { liste: false, requis: false, groupe: false },
+      Chip: { liste: true, requis: false, groupe: true },
+    } as const;
+    type Type = keyof typeof TYPES;
+    const ORDRE = Object.keys(TYPES) as Type[];
+
+    // Ce qu'une rangée neuve propose. Ce ne sont pas des libellés de remplissage :
+    // ils sont là pour être remplacés, et le focus part dessus pour que la première
+    // frappe les efface. Ils servent aussi à savoir, quand on change le type d'une
+    // rangée, si le libellé a été touché — s'il ne l'a pas été, il suit le type.
+    const DEPART: Record<Type, { libelle: string; choix: string }> = {
+      TextField: { libelle: 'Ton nom', choix: '' },
+      Select: { libelle: 'Sujet', choix: 'Devis, Question, Autre' },
+      TextArea: { libelle: 'Ton message', choix: '' },
+      Radio: { libelle: 'Format de l’échange', choix: 'Visio, Téléphone' },
+      Checkbox: { libelle: 'J’accepte d’être recontacté', choix: '' },
+      Toggle: { libelle: 'Recevoir les nouvelles', choix: '' },
+      Chip: { libelle: 'Sujets qui t’intéressent', choix: 'Recherche, Design system, Accessibilité' },
+    };
+    const LIBELLES_DEPART = new Set(ORDRE.map((t) => DEPART[t].libelle));
+    const CHOIX_DEPART = new Set(ORDRE.map((t) => DEPART[t].choix));
+
+    // L'identifiant tombe du libellé : c'est ce qui lie le libellé au champ, et le
+    // seul moyen de ne pas demander deux fois la même chose. Les accents partent —
+    // un id n'est pas un mot, c'est une clé.
+    const slug = (s: string) =>
+      s
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    const rangs = () => [
+      ...atelierFormulaire.querySelectorAll<HTMLElement>('[data-liste="champs"] .rang-slot'),
+    ];
+
+    type Champ = {
+      type: Type;
+      libelle: string;
+      choix: string[];
+      requis: boolean;
+      eteint: boolean;
+      id: string;
+    };
+
+    const lire = (): Champ[] =>
+      rangs().map((r, i) => {
+        const type = (r.querySelector('.rang-type') as HTMLSelectElement).value as Type;
+        const libelle = (r.querySelector('.rang-texte') as HTMLInputElement).value.trim();
+        const choix = (r.querySelector('.rang-choix') as HTMLInputElement).value
+          .split(',')
+          .map((m) => m.trim())
+          .filter(Boolean);
+        const requis =
+          TYPES[type].requis && (r.querySelector('.rang-requis') as HTMLInputElement).checked;
+        const eteint = (r.querySelector('.rang-eteint') as HTMLInputElement).checked;
+        return { type, libelle, choix, requis, eteint, id: slug(libelle) || `champ-${i + 1}` };
+      });
+
+    // ── Les rangées : ajouter, ordonner, supprimer ──
+
+    // Chaque rangée porte son rang dans son nom accessible : sans ça, six contrôles
+    // identiques s'annoncent six fois pareil et rien ne les distingue au clavier
+    // (WCAG 2.4.6). Le rang se refait à chaque mouvement, sinon il ment dès le
+    // premier déplacement. Les deux flèches des extrémités se désactivent plutôt
+    // que de ne rien faire — un bouton qui ne fait rien est pire qu'absent.
+    const numeroter = () => {
+      const liste = rangs();
+      liste.forEach((r, i) => {
+        const n = i + 1;
+        const nommer = (sel: string, texte: string) =>
+          r.querySelector(sel)?.setAttribute('aria-label', texte);
+        nommer('.rang-type', `Type du champ ${n}`);
+        nommer('.rang-texte', `Libellé du champ ${n}`);
+        nommer('.rang-choix', `Choix du champ ${n}, séparés par des virgules`);
+        nommer('.rang-requis', `Champ ${n} obligatoire`);
+        nommer('.rang-eteint', `Champ ${n} désactivé`);
+        nommer('[data-sens="-1"]', `Monter le champ ${n}`);
+        nommer('[data-sens="1"]', `Descendre le champ ${n}`);
+        nommer('.retirer', `Supprimer le champ ${n}`);
+        const haut = r.querySelector<HTMLButtonElement>('[data-sens="-1"]');
+        const bas = r.querySelector<HTMLButtonElement>('[data-sens="1"]');
+        if (haut) haut.disabled = i === 0;
+        if (bas) bas.disabled = i === liste.length - 1;
+      });
+    };
+
+    // Le formulaire se réécoute lui-même : ajouter, déplacer ou retirer une rangée
+    // n'est pas une saisie, donc rien ne se déclencherait sans ça.
+    const rafraichir = () => form?.dispatchEvent(new Event('input', { bubbles: true }));
+
+    const ajouter = (type: Type) => {
+      const modele = atelierFormulaire.querySelector<HTMLTemplateElement>('[data-modele="champ"]');
+      const ou = atelierFormulaire.querySelector('[data-liste="champs"]');
+      if (!modele || !ou) return;
+      ou.append(modele.content.cloneNode(true));
+      const rangee = rangs().at(-1);
+      if (!rangee) return;
+      (rangee.querySelector('.rang-type') as HTMLSelectElement).value = type;
+      (rangee.querySelector('.rang-texte') as HTMLInputElement).value = DEPART[type].libelle;
+      (rangee.querySelector('.rang-choix') as HTMLInputElement).value = DEPART[type].choix;
+    };
+
+    for (const bouton of atelierFormulaire.querySelectorAll<HTMLButtonElement>('[data-ajouter]')) {
+      bouton.addEventListener('click', () => {
+        ajouter('TextField');
+        numeroter();
+        rafraichir();
+        // Le focus va sur le libellé qu'on vient de créer, et son mot de départ est
+        // sélectionné : la première frappe l'efface, et au clavier il serait
+        // autrement à retrouver.
+        const champ = rangs().at(-1)?.querySelector<HTMLInputElement>('.rang-texte');
+        champ?.focus();
+        champ?.select();
+      });
+    }
+
+    atelierFormulaire.addEventListener('click', (e) => {
+      const bouton = (e.target as HTMLElement).closest<HTMLButtonElement>('.deplacer, .retirer');
+      if (!bouton) return;
+      const rangee = bouton.closest<HTMLElement>('.rang-slot');
+      const dans = rangee?.parentElement;
+      if (!rangee || !dans) return;
+
+      if (bouton.classList.contains('retirer')) {
+        const suivantes = rangs();
+        const place = suivantes.indexOf(rangee);
+        rangee.remove();
+        numeroter();
+        rafraichir();
+        // Le focus disparaîtrait avec le bouton qui le portait, et repartirait en
+        // haut du document. Il se pose sur la rangée qui a pris la place, ou à
+        // défaut sur « Ajouter » (WCAG 2.4.3).
+        const reste = rangs();
+        const cible =
+          (reste[place] ?? reste.at(-1))?.querySelector<HTMLElement>('.retirer') ??
+          atelierFormulaire.querySelector<HTMLElement>('[data-ajouter]');
+        cible?.focus();
+        return;
+      }
+
+      const sens = Number(bouton.dataset.sens);
+      const voisin =
+        sens < 0
+          ? (rangee.previousElementSibling as HTMLElement | null)
+          : (rangee.nextElementSibling as HTMLElement | null);
+      if (!voisin) return;
+      if (sens < 0) dans.insertBefore(rangee, voisin);
+      else dans.insertBefore(voisin, rangee);
+      numeroter();
+      rafraichir();
+      // Le focus suit la rangée déplacée, pas la position. Si elle vient d'atteindre
+      // une extrémité, le bouton qu'on tenait est désormais désactivé et ne peut
+      // plus le porter : il passe à celui d'en face, qui reste vivant.
+      const oppose = rangee.querySelector<HTMLButtonElement>(
+        `[data-sens="${sens < 0 ? '1' : '-1'}"]`,
+      );
+      (bouton.disabled ? oppose : bouton)?.focus();
+    });
+
+    // Changer le type d'une rangée fait suivre son libellé et ses choix, mais
+    // seulement s'ils n'ont pas été touchés. Un mot écrit à la main ne se perd
+    // jamais — c'est la seule règle qui rende ce raccourci acceptable.
+    atelierFormulaire.addEventListener('change', (e) => {
+      const type = (e.target as HTMLElement).closest<HTMLSelectElement>('.rang-type');
+      const rangee = type?.closest('.rang-slot');
+      if (!type || !rangee) return;
+      const nouveau = type.value as Type;
+      const libelle = rangee.querySelector<HTMLInputElement>('.rang-texte');
+      const choix = rangee.querySelector<HTMLInputElement>('.rang-choix');
+      if (libelle && LIBELLES_DEPART.has(libelle.value.trim())) {
+        libelle.value = DEPART[nouveau].libelle;
+      }
+      if (choix && CHOIX_DEPART.has(choix.value.trim())) choix.value = DEPART[nouveau].choix;
+      // Ce gestionnaire est posé sur la section, celui de brancher() sur le
+      // formulaire : l'événement traverse le second en premier, et le code aurait
+      // donc été réécrit avec l'ancien libellé. Un tour de plus le remet d'aplomb.
+      rafraichir();
+    });
+
+    // ── Les exemplaires clonés de la banque ──
+    const cle = (t: Type, r: boolean, d: boolean) =>
+      `${t}|${TYPES[t].requis && r ? 'r' : '-'}|${d ? 'd' : '-'}`;
+
+    const exemplaire = (t: Type, r: boolean, d: boolean) => {
+      const src = banque?.querySelector(`[data-champ="${cle(t, r, d)}"]`)?.firstElementChild;
+      return src ? (src.cloneNode(true) as HTMLElement) : null;
+    };
+
+    // Le libellé se remplace par son texte, pas par son nom de classe : on cherche
+    // le nœud de texte qui porte la sentinelle. Viser `.field-label` ou
+    // `.chip-text` marcherait aujourd'hui, mais ces noms appartiennent aux
+    // composants — ils peuvent changer sans que cette page le sache.
+    const poserTexte = (racine: Element, sentinelle: string, texte: string) => {
+      const marche = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT);
+      let n: Node | null;
+      while ((n = marche.nextNode())) {
+        if (n.nodeValue?.trim() === sentinelle) {
+          n.nodeValue = texte;
+          return;
+        }
+      }
+    };
+
+    // Un clone porte l'id de son exemplaire. Deux champs le partageraient, et le
+    // libellé du second désignerait le premier : c'est le lien `for` qu'on répare
+    // ici, pas une décoration.
+    const nommer = (el: HTMLElement, id: string, name: string) => {
+      const ctrl = el.querySelector<HTMLInputElement>('input, select, textarea');
+      if (ctrl) {
+        ctrl.id = id;
+        ctrl.name = name;
+      }
+      for (const l of el.querySelectorAll('label[for]')) l.setAttribute('for', id);
+    };
+
+    const poser = (c: Champ) => {
+      if (TYPES[c.type].groupe) {
+        // Le groupe est un fieldset parce que rien d'autre ne peut porter son nom :
+        // aucune prop de Radio ni de Chip ne le fait. C'est la seule balise que cet
+        // atelier ajoute de lui-même, dans l'aperçu comme dans le code — et les deux
+        // montrent donc la même chose. Elle se clone au lieu de se fabriquer : un
+        // élément créé en JavaScript n'a pas la marque de portée d'Astro, et les
+        // règles de la page ne l'atteindraient pas.
+        const modele = atelierFormulaire.querySelector<HTMLTemplateElement>(
+          '[data-modele="groupe"]',
+        );
+        const groupe = modele?.content.firstElementChild?.cloneNode(true) as HTMLElement | undefined;
+        const legende = groupe?.querySelector('legend');
+        const dedans = groupe?.querySelector('.mes-choix');
+        if (!groupe || !legende || !dedans) return null;
+        legende.textContent = c.libelle;
+        c.choix.forEach((mot, i) => {
+          const el = exemplaire(c.type, false, c.eteint);
+          if (!el) return;
+          poserTexte(el, SENTINELLE, mot);
+          nommer(el, `${c.id}-${slug(mot) || i + 1}`, c.id);
+          dedans.append(el);
+        });
+        return groupe;
+      }
+
+      const el = exemplaire(c.type, c.requis, c.eteint);
+      if (!el) return null;
+      poserTexte(el, SENTINELLE, c.libelle);
+      nommer(el, c.id, c.id);
+
+      if (c.type === 'Select') {
+        // Les options sont du HTML nu, et c'est le composant qui les a rendues :
+        // on clone la sienne autant de fois qu'il y a de choix plutôt que d'en
+        // fabriquer une.
+        const select = el.querySelector('select');
+        const modele = select?.querySelector('option');
+        if (select && modele) {
+          select.replaceChildren(
+            ...c.choix.map((mot) => {
+              const o = modele.cloneNode(true) as HTMLOptionElement;
+              o.value = mot;
+              o.textContent = mot;
+              return o;
+            }),
+          );
+        }
+      }
+      return el;
+    };
+
+    // ── Le code ──
+    // Une valeur libre part dans un attribut : un guillemet droit tapé dans un
+    // libellé fermerait l'attribut et casserait le code copié.
+    const attr = (v: string) => v.replace(/"/g, '&quot;');
+    // Dans `options={[...]}`, c'est une chaîne JavaScript en apostrophes qu'on
+    // écrit : c'est l'apostrophe droite qu'il faut échapper, pas le guillemet.
+    const chaine = (v: string) => `'${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+
+    const decaler = (bloc: string) =>
+      bloc
+        .split('\n')
+        .map((l) => (l ? '  ' + l : ''))
+        .join('\n');
+
+    const baliseChamp = (c: Champ) => {
+      const a = [`id="${c.id}"`, `label="${attr(c.libelle)}"`];
+      if (c.type === 'Select') a.push(`options={[${c.choix.map(chaine).join(', ')}]}`);
+      if (c.requis) a.push('required');
+      if (c.eteint) a.push('disabled');
+      return baliser(c.type, a, null);
+    };
+
+    const blocGroupe = (c: Champ) => {
+      const dedans: string[] = [];
+      c.choix.forEach((mot, i) => {
+        const a = [`id="${c.id}-${slug(mot) || i + 1}"`, `name="${c.id}"`, `label="${attr(mot)}"`];
+        if (c.eteint) a.push('disabled');
+        dedans.push(decaler(baliser(c.type, a, null)));
+      });
+      return [
+        '<fieldset>',
+        `  <legend>${c.libelle}</legend>`,
+        '  <div class="mes-choix">',
+        ...dedans.map(decaler),
+        '  </div>',
+        '</fieldset>',
+      ].join('\n');
+    };
+
+    // L'état de départ est celui que le frontmatter a déjà écrit dans les deux
+    // blocs de code : sans JavaScript on lit ce code-là, avec JavaScript on
+    // manipule ce formulaire-ci, et les deux disent la même chose. La case du
+    // premier champ est donc cochée ici aussi.
+    ajouter('TextField');
+    ajouter('Select');
+    const premier = rangs()[0]?.querySelector<HTMLInputElement>('.rang-requis');
+    if (premier) premier.checked = true;
+    numeroter();
+
+    brancher(atelierFormulaire, () => {
+      const champs = lire();
+
+      // Les réglages qui ne concernent pas le type choisi disparaissent. Ils sont
+      // par rangée, donc `conditionner()` ne peut rien pour eux : il raisonne sur
+      // le formulaire entier.
+      for (const r of rangs()) {
+        const t = (r.querySelector('.rang-type') as HTMLSelectElement).value as Type;
+        const choix = r.querySelector<HTMLElement>('.rang-choix');
+        const requis = r.querySelector<HTMLElement>('.rang-case-requis');
+        if (choix) choix.hidden = !TYPES[t].liste;
+        if (requis) requis.hidden = !TYPES[t].requis;
+      }
+
+      pile?.replaceChildren(
+        ...champs.map((c) => poser(c)).filter((el): el is HTMLElement => Boolean(el)),
+      );
+
+      if (vide) {
+        vide.textContent = champs.length
+          ? ''
+          : 'Aucun champ : la pile est vide, et le code avec elle.';
+      }
+
+      // Les deux seules erreurs que ce constructeur peut produire, et elles
+      // viennent toutes deux de ce qu'on a écrit, pas d'un réglage.
+      if (alerte) {
+        const compte = new Map<string, number>();
+        for (const c of champs) compte.set(c.id, (compte.get(c.id) ?? 0) + 1);
+        const doubles = [...compte].filter(([, n]) => n > 1).map(([id]) => id);
+        const creux = champs.filter((c) => TYPES[c.type].liste && !c.choix.length);
+        const dits: string[] = [];
+        if (doubles.length) {
+          dits.push(
+            `Deux champs portent le même identifiant (${doubles.join(', ')}) : leurs libellés donnent le même mot, et le second libellé désignerait le premier champ.`,
+          );
+        }
+        if (creux.length) {
+          dits.push(
+            `${creux.length === 1 ? 'Un champ n’a' : `${creux.length} champs n’ont`} aucun choix à proposer : la liste séparée par des virgules est vide.`,
+          );
+        }
+        alerte.textContent = dits.join(' ');
+        alerte.hidden = dits.length === 0;
+      }
+
+      const poses = ORDRE.filter((t) => champs.some((c) => c.type === t));
+      const entete = poses.length
+        ? `---\n${poses
+            .map((t) => `import ${t} from 'ux-design-system/components/${t}.astro';`)
+            .join('\n')}\n---`
+        : '---\n---';
+
+      const balise = champs
+        .map((c) => (TYPES[c.type].groupe ? blocGroupe(c) : baliseChamp(c)))
+        .join('\n\n');
+
+      return { entete, balise };
+    });
+  }
 </script>
 
 <style>
@@ -2278,7 +2993,8 @@ import { withBase } from 'ux-design-system/lib/url';
   /* 44px : la hauteur que le système donne à son plus petit bouton, et le
      minimum de WCAG 2.5.5. Une croix de suppression est la dernière cible qu'on
      a intérêt à rendre difficile à viser. */
-  .retirer {
+  .retirer,
+  .deplacer {
     flex: none;
     width: var(--button-height-sm);
     height: var(--button-height-sm);
@@ -2291,7 +3007,8 @@ import { withBase } from 'ux-design-system/lib/url';
     cursor: pointer;
   }
 
-  .retirer:hover {
+  .retirer:hover,
+  .deplacer:hover:not(:disabled) {
     background: var(--color-bg-section);
   }
 
@@ -2315,6 +3032,7 @@ import { withBase } from 'ux-design-system/lib/url';
   }
 
   .retirer:focus-visible,
+  .deplacer:focus-visible,
   .ajouter:focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
@@ -2395,5 +3113,79 @@ import { withBase } from 'ux-design-system/lib/url';
 
   .panne p {
     margin-bottom: var(--space-sm);
+  }
+  /* ── L'atelier du formulaire ───────────────────────────────────────────── */
+
+  /* Une pile de champs n'est pas un objet posé au milieu d'un cadre : elle prend
+     la largeur qu'on lui donne, comme elle le fera dans la page qui la reçoit. */
+  .demo-formulaire {
+    display: block;
+  }
+
+  /* Ces quatre règles sont celles du troisième morceau, mot pour mot. Elles sont
+     ici pour que l'aperçu soit le résultat du CSS qu'on copie, et non un
+     espacement de doc qui lui ressemblerait. Si l'une bouge, l'autre bouge. */
+  .mes-champs {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .mes-champs fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .mes-champs legend {
+    margin-bottom: var(--control-field-gap);
+    padding: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-tight);
+    color: var(--color-text-default);
+  }
+
+  .mes-choix {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+  }
+
+  /* La rangée d'un champ porte plus de contrôles que celle d'un tag : le type,
+     le libellé et les choix prennent chacun leur ligne — dans une colonne de
+     réglages, les mettre côte à côte les réduirait à quelques caractères. */
+  .rang-champ .rang-type,
+  .rang-champ .rang-choix {
+    flex: 1 1 100%;
+    width: auto;
+    min-width: 0;
+  }
+
+  .rang-champ .case {
+    flex: 0 1 auto;
+  }
+
+  /* Un réglage qui ne concerne pas le type choisi ne se grise pas : il s'en va.
+     `.case` est en flex, et `hidden` seul ne suffirait pas à l'effacer. */
+  .case[hidden] {
+    display: none;
+  }
+
+  /* Les trois boutons se rangent au bout de la rangée : deux flèches d'ordre et
+     la croix. L'ordre compte dans un formulaire — c'est la seule liste de cette
+     page dont la suite des rangées est une donnée et pas un rangement. */
+  .rang-ordre {
+    display: flex;
+    flex: none;
+    gap: var(--space-xs);
+    margin-left: auto;
+  }
+
+  /* Une flèche qui ne peut plus rien faire reste lisible mais ne se propose
+     plus : c'est l'atténuation du système, et le curseur le dit aussi. */
+  .deplacer:disabled {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
   }
 </style>

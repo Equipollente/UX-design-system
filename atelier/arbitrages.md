@@ -43,6 +43,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Système** | — | **aucune famille de mesures pour la géométrie d'un contrôle** — 18, 22, 5 | /formulaire | *réglé — 27/08, groupe `control`* |
 | **Système** | — | **aucune famille d'épaisseurs de trait** (1 · 1,5 · 2) | /formulaire | *réglé — 27/08, groupe `border`* |
 | **Système** | — | **aucune échelle d'opacité** (0,4 · 0,5 · 0,6) | /formulaire | *réglé — 27/08, groupe `opacity`* |
+| **Système** | — | **rien ne dessine le nom d'un groupe de champs** : une `legend` n'a pas de `for`, FieldLabel ne peut donc pas la rendre, et l'atelier du formulaire redéfinit sa typographie à la main | /bac-à-sable → Un formulaire | ouvert |
 | ~~Chip~~ | `351:273` | ~~son trait ne vaut que 1,28:1 sur le blanc — WCAG 1.4.11 en demande 3~~ | /formulaire → Chip | *réglé — 31/08, trait des états non sélectionnés rebranché sur `color/accent/300` (3,2:1) ; `color/border/default` lui-même n'a pas bougé, toujours à 1,28:1 pour qui d'autre le lit* |
 | Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
