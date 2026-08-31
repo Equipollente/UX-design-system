@@ -408,6 +408,16 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
       </p>
 
       <p class="flag">
+        <strong>36 de haut et 12 de rembourrage vertical ne tiennent pas ensemble.</strong> Le texte
+        du champ fait 14 à 120 %, soit 16,8 : 12 + 16,8 + 12 = <strong>40,8</strong>, et la boîte n'en
+        mesure que 36. Sur un <code>&lt;input&gt;</code> ça ne se voit pas — le navigateur centre le
+        texte et ignore le rembourrage. Sur un <code>&lt;select&gt;</code>, il coupe : les jambages de
+        « Choisir un pays » disparaissaient. Le code garde donc les 16 de côté et met le vertical à
+        zéro, la hauteur de 36 faisant seule le centrage. Deux gestes possibles dans Figma : porter la
+        boîte à 40,8, ou ramener le rembourrage vertical à 9,6.
+      </p>
+
+      <p class="flag">
         <strong>La boîte est passée de 44 à 36.</strong> Le code prenait
         {' '}<code>button/height/sm</code>, choisi pour tenir une cible tactile de 44 px — WCAG 2.5.5,
         niveau AAA. À 36 la cible reste conforme au niveau AA, qui en demande 24, mais le champ ne se
