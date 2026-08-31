@@ -117,6 +117,98 @@ pre {
   outline-offset: var(--button-focus-offset);
 }
 
+/* Les champs. Le dessin d'un champ est une recette de balise, au même titre que
+ * celle d'un h2 : il n'y a rien à écrire dans le composant pour l'obtenir. Text
+ * field, Text Area et Select l'écrivaient chacun de leur côté — les mêmes six
+ * déclarations de typographie, trois fois, et trois boîtes qui divergeaient sans
+ * que rien ne l'ait décidé.
+ *
+ * La liste de types est celle de la prop `type` de TextField, mot pour mot. Elle
+ * tient dehors `checkbox`, `radio`, `file` et `range` : leur dessin appartient à
+ * Checkbox, Radio, Toggle, Chip et AddImage, qui posent tous `appearance: none`
+ * et leur propre géométrie, et qu'une recette de champ écraserait.
+ *
+ * `:where()` met la base à spécificité zéro : un composant qui doit s'en écarter
+ * l'emporte toujours, sans dépendre de l'ordre des feuilles. Les états, eux,
+ * gardent leur spécificité normale — ils doivent battre la base.
+ *
+ * Cette recette habille, elle ne place pas. La largeur d'un champ et la hauteur
+ * d'une zone de texte restent au composant qui les monte : une largeur imposée
+ * à la balise déborderait sur les contrôles en ligne de l'atelier.
+ */
+:where(
+    input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']),
+    select,
+    textarea
+  ) {
+  font-family: var(--font-family-body); /* Inter */
+  font-size: var(--font-size-ui); /* 0.875rem — les 14 des nœuds */
+  font-weight: var(--font-weight-medium); /* 500 */
+  line-height: var(--font-line-height-snug); /* 1.2 — les 120 % des nœuds */
+  letter-spacing: var(--font-letter-spacing-normal);
+  color: var(--color-text-default);
+  background: var(--color-bg-surface);
+  /* Le trait remplace le contour gris que le navigateur pose de lui-même sur un
+   * contrôle natif, et qui ne venait d'aucune variable. */
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--radius-md); /* 14 */
+  padding: var(--button-padding-y-sm) var(--button-padding-x-sm); /* 12 / 16 */
+}
+
+/* Les champs d'une ligne partagent leur hauteur avec le bouton — 32 + 4 = 36 —
+ * pour que les deux se posent au même niveau côte à côte.
+ *
+ * Leur rembourrage vertical retombe à 0, et ce n'est pas un oubli : la boîte
+ * fait 36, la ligne 16,8, et 12 + 16,8 + 12 = 40,8. Sur un `<input>` ça ne se
+ * voit pas, le navigateur centre le texte et ignore le rembourrage ; sur un
+ * `<select>` il coupe, et les jambages de « Choisir un pays » disparaissent.
+ * C'est la hauteur qui fait seule le centrage. L'écart avec les deux nœuds est
+ * signalé dans la doc. */
+:where(
+    input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']),
+    select
+  ) {
+  height: calc(var(--space-2xl) + var(--space-xs)); /* 36 */
+  padding-block: 0;
+}
+
+/* L'exemple s'écrit dans l'encre atténuée du système — celle du libellé éteint.
+ * Aucun nœud ne le dessine : sans cette ligne le gris serait celui du
+ * navigateur, et il ne viendrait d'aucune variable. */
+:where(input, textarea)::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* La zone de texte ne s'élargit pas au-delà de sa colonne : un glissement
+ * horizontal casserait la mise en page de tout ce qui l'entoure. Mot-clé, pas
+ * mesure. */
+:where(textarea) {
+  resize: vertical;
+}
+
+/* — survol — Le trait fonce, le fond ne bouge pas. Les trois champs réagissaient
+ * de trois façons ; c'est le geste que Figma dessine déjà sur le champ texte, et
+ * il l'emporte parce qu'il se voit : `neutral/100` sur `bg/surface` ne diffère
+ * que par le canal bleu, 245 contre 255. */
+input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):hover,
+select:hover,
+textarea:hover {
+  border-color: var(--color-neutral-500);
+}
+
+/* — désactivé — écrit après le survol : à spécificité égale c'est l'ordre qui
+ * tranche, et un champ éteint ne doit pas réagir à la souris. La boîte garde son
+ * fond et son trait et s'atténue — c'est elle qui dit « éteint », plus seulement
+ * l'encre de son libellé. */
+input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):disabled,
+select:disabled,
+textarea:disabled {
+  border-color: var(--color-border-default);
+  color: var(--color-neutral-400);
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
 ::selection {
   background: var(--color-accent-100);
   color: var(--color-text-default);

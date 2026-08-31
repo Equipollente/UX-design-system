@@ -45,7 +45,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Système** | — | **aucune échelle d'opacité** (0,4 · 0,5 · 0,6) | /formulaire | *réglé — 27/08, groupe `opacity`* |
 | **Système** | — | **rien ne dessine le nom d'un groupe de champs** : une `legend` n'a pas de `for`, FieldLabel ne peut donc pas la rendre, et l'atelier du formulaire redéfinit sa typographie à la main | /bac-à-sable → Un formulaire | ouvert |
 | ~~Chip~~ | `351:273` | ~~son trait ne vaut que 1,28:1 sur le blanc — WCAG 1.4.11 en demande 3~~ | /formulaire → Chip | *réglé — 31/08, trait des états non sélectionnés rebranché sur `color/accent/300` (3,2:1) ; `color/border/default` lui-même n'a pas bougé, toujours à 1,28:1 pour qui d'autre le lit* |
-| Select | `340:933` | pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment | /formulaire → Select | ouvert |
+| ~~Select~~ | `340:933` | ~~pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment~~ | /formulaire → Select | *réglé — 31/08, dans Figma seul, les quatre états portent `border/default`* |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
 | Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
 | Button | `21:47` · `334:1233` · `334:1283` | le survol du secondaire ne bougeait pas en lg et md, et empruntait `bg/section` en sm | — | *réglé — 31/08, dans Figma seul* |
@@ -59,7 +59,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Text field | `23:29` | **le nœud existait, et personne ne l'avait vu** — hors de la plage `340`–`355` relevée par le sprint, il n'était ni intégré ni listé | /formulaire → Text field | ouvert |
 | Text field | `23:29` | **ni état désactivé ni état d'erreur** ; `disabled` a pu s'écrire quand même (`opacity/disabled` existe), l'erreur non — elle demanderait une encre, un trait et un message | /formulaire → Text field | ouvert |
 | Text field | `23:29` | la variante `Multiline` dessine ce que Text Area fait déjà, avec son propre nœud et son compteur | /formulaire → Text field | ouvert |
-| Text field · Text Area · Select | `23:29` · `343:273` · `340:933` | trois champs voisins, trois survols : le premier change son trait, les deux autres leur fond | /formulaire → Text field | ouvert |
+| ~~Text field · Text Area · Select~~ | `23:29` · `343:273` · `340:933` | ~~trois champs voisins, trois survols : le premier change son trait, les deux autres leur fond~~ | /formulaire → Text field | *réglé — 31/08, dans Figma seul, les trois foncent leur trait en `neutral/500`* |
+| Text field · Text Area · Select | `23:29` · `343:273` · `340:933` | le trait de la boîte ne vaut que 1,28:1 sur son fond, et le fond 1,12:1 sur le blanc — WCAG 1.4.11 en demande 3 | /formulaire → Text field | ouvert |
 | Text Area · Select | `343:273` · `340:933` | l'écart libellé ↔ champ | /formulaire → Text Area | *réglé — 27/08, `control/field-gap` = 5* |
 | Text Area | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Text Area | ouvert |
 | Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |

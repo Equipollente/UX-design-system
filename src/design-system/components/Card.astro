@@ -330,6 +330,7 @@ const hasActions = Astro.slots.has('actions');
   .card-horizontal {
     flex-direction: row;
     align-items: stretch;
+    min-width: 560px;
   }
 
   /* Les deux colonnes remplissent la carte : l'image et le bloc de contenu font
@@ -360,15 +361,13 @@ const hasActions = Astro.slots.has('actions');
     justify-content: center;
   }
 
-  /* Figma borne la carte horizontale entre 560 et 768 de large : en dessous,
-     deux colonnes ne tiennent plus. Le dépôt laisse la largeur à la page — un
-     composant qui se borne lui-même déciderait à sa place — donc la carte
-     bascule en colonne au seul point de rupture du système, qui est aussi
-     l'endroit où le plancher de 560 cesse d'être tenable. Figma ne dessine pas
-     ce cas : c'est une décision du code, comme le padding mobile de la carte
-     d'étude de cas. */
-  @media (max-width: 767px) {
+  /* La carte horizontale garde son dessin tant qu'elle conserve au moins 560px
+     de largeur utile. En dessous, la lecture devient trop étroite dans le
+     format à deux colonnes, et il vaut mieux revenir à la version verticale
+     sans toucher à la grille globale — 2 colonnes puis 1 colonne. */
+  @container (max-width: 560px) {
     .card-horizontal {
+      min-width: 0;
       flex-direction: column;
     }
 
