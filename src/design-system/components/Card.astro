@@ -330,7 +330,7 @@ const hasActions = Astro.slots.has('actions');
   .card-horizontal {
     flex-direction: row;
     align-items: stretch;
-    min-width: 560px;
+    container-type: inline-size;
   }
 
   /* Les deux colonnes remplissent la carte : l'image et le bloc de contenu font
@@ -367,7 +367,6 @@ const hasActions = Astro.slots.has('actions');
      sans toucher à la grille globale — 2 colonnes puis 1 colonne. */
   @container (max-width: 560px) {
     .card-horizontal {
-      min-width: 0;
       flex-direction: column;
     }
 
