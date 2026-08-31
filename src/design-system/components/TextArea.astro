@@ -171,17 +171,14 @@ const classes = ['field', className].filter(Boolean).join(' ');
     background: var(--textarea-bg-hover, var(--color-neutral-100));
   }
 
-  /* — focus — L'anneau du système, en `outline` : il se pose par-dessus sans
-     rien déplacer autour de lui. Le nœud, lui, épaissit sa bordure vers
+  /* — focus — L'anneau n'est pas écrit ici : `global.css` le pose sur
+     `:focus-visible` pour tout le système, aux trois mêmes variables. Il
+     était recopié à l'identique dans les trois champs, sans que rien ne
+     l'exige. Le nœud, lui, épaissit sa bordure vers
      l'intérieur ; l'anneau dit la même chose, à la même épaisseur, et sans
      décaler le texte de la boîte. 2, la mesure du nœud. WCAG 2.4.7. */
   textarea:focus {
     background: var(--textarea-bg, var(--color-bg-surface));
-  }
-
-  textarea:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui

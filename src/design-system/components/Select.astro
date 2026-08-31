@@ -149,15 +149,12 @@ const classes = ['field', className].filter(Boolean).join(' ');
     background: var(--color-neutral-100);
   }
 
-  /* — focus — L'anneau du système, en `outline` : il se pose par-dessus sans
-     rien déplacer autour de lui. 2, la mesure du nœud. WCAG 2.4.7. */
+  /* — focus — L'anneau n'est pas écrit ici : `global.css` le pose sur
+     `:focus-visible` pour tout le système, aux trois mêmes variables. Il
+     était recopié à l'identique dans les trois champs, sans que rien ne
+     l'exige. 2, la mesure du nœud. WCAG 2.4.7. */
   select:focus {
     background: var(--color-bg-surface);
-  }
-
-  select:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
   }
 
   /* — disabled — écrit en dernier : à spécificité égale, c'est l'ordre qui
