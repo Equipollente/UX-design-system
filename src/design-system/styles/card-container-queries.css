@@ -1,0 +1,19 @@
+/* Container queries for responsive card layout.
+   These are in a separate global stylesheet because Astro's CSS scoping
+   does not properly compile @container rules within scoped <style> blocks. */
+
+@container (max-width: 560px) {
+  .card-horizontal {
+    flex-direction: column;
+  }
+
+  .card-horizontal .media {
+    flex: 1 1 auto;
+    height: var(--card-media-height, 256px);
+    min-height: 0;
+  }
+
+  .card-horizontal .body {
+    flex: 0 0 auto;
+  }
+}
