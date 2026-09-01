@@ -1,4 +1,6 @@
 ---
+import '../styles/card-container-queries.css';
+
 // Card — une fiche qui présente une chose : son image, une rangée de tags, son
 // titre, son sous-titre, une ligne d'informations secondaires, puis deux autres
 // emplacements libres — une seconde rangée de tags et les actions.
@@ -361,25 +363,4 @@ const hasActions = Astro.slots.has('actions');
     justify-content: center;
   }
 
-  /* La carte horizontale garde son dessin tant qu'elle conserve au moins 560px
-     de largeur utile. En dessous, la lecture devient trop étroite dans le
-     format à deux colonnes, et il vaut mieux revenir à la version verticale
-     sans toucher à la grille globale — 2 colonnes puis 1 colonne. */
-  @container (max-width: 560px) {
-    .card-horizontal {
-      flex-direction: column;
-    }
-
-    /* En colonne il n'y a plus de texte en face pour donner sa hauteur à
-       l'image : elle redevient une taille écrite, comme dans la verticale. */
-    .card-horizontal .media {
-      flex: 1 1 auto;
-      height: var(--card-media-height, 256px);
-      min-height: 0;
-    }
-
-    .card-horizontal .body {
-      flex: 0 0 auto;
-    }
-  }
 </style>
