@@ -3,18 +3,18 @@
    does not properly compile @container rules within scoped <style> blocks. */
 
 @container (max-width: 560px) {
-  .card-container .card-horizontal {
+  .card-horizontal {
     flex-direction: column;
   }
 
-  .card-container .card-horizontal .media {
+  .card-horizontal .media {
     flex: 0 0 auto;
     height: var(--card-media-height, 256px);
     min-height: 0;
     width: 100%;
   }
 
-  .card-container .card-horizontal .body {
+  .card-horizontal .body {
     flex: 0 0 auto;
     width: 100%;
   }
