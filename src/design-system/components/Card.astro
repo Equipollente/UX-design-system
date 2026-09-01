@@ -104,53 +104,55 @@ const hasTags = Astro.slots.has('tags');
 const hasActions = Astro.slots.has('actions');
 ---
 
-<article class={classes} {...rest}>
-  {
-    image && (
-      <img
-        class="media"
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        loading="lazy"
-        decoding="async"
-      />
-    )
-  }
-
-  <div class="body">
+<div class="card-container">
+  <article class={classes} {...rest}>
     {
-      hasTagsTop && (
-        <div class="tags">
-          <slot name="tags-top" />
-        </div>
+      image && (
+        <img
+          class="media"
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          loading="lazy"
+          decoding="async"
+        />
       )
     }
 
-    <div class="text">
-      <Heading class="title">{title}</Heading>
-      {subtitle && <p class="subtitle">{subtitle}</p>}
-      {meta && <p class="meta">{meta}</p>}
+    <div class="body">
+      {
+        hasTagsTop && (
+          <div class="tags">
+            <slot name="tags-top" />
+          </div>
+        )
+      }
+
+      <div class="text">
+        <Heading class="title">{title}</Heading>
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+        {meta && <p class="meta">{meta}</p>}
+      </div>
+
+      {
+        hasTags && (
+          <div class="tags">
+            <slot name="tags" />
+          </div>
+        )
+      }
+
+      {
+        hasActions && (
+          <div class="actions">
+            <slot name="actions" />
+          </div>
+        )
+      }
     </div>
-
-    {
-      hasTags && (
-        <div class="tags">
-          <slot name="tags" />
-        </div>
-      )
-    }
-
-    {
-      hasActions && (
-        <div class="actions">
-          <slot name="actions" />
-        </div>
-      )
-    }
-  </div>
-</article>
+  </article>
+</div>
 
 <style>
   .card {
@@ -186,6 +188,10 @@ const hasActions = Astro.slots.has('actions');
     background: var(--color-bg-default);
     border-radius: var(--radius-md);
     box-shadow: var(--card-shadow);
+  }
+
+  .card-container {
+    container-type: inline-size;
   }
 
   /* L'image remplit la place qu'on lui donne dans les deux sens, et c'est la
@@ -332,7 +338,6 @@ const hasActions = Astro.slots.has('actions');
   .card-horizontal {
     flex-direction: row;
     align-items: stretch;
-    container-type: inline-size;
   }
 
   /* Les deux colonnes remplissent la carte : l'image et le bloc de contenu font
@@ -350,16 +355,18 @@ const hasActions = Astro.slots.has('actions');
      minimum et non une taille. Sans lui, une carte réduite à son titre
      écraserait son image sur deux lignes de texte. */
   .card-horizontal .media {
-    flex: 1 1 0;
+    flex: 0 1 50%;
     min-width: 0;
+    width: 50%;
     height: auto;
     min-height: var(--card-media-height, 256px);
     align-self: stretch;
   }
 
   .card-horizontal .body {
-    flex: 1 1 0;
+    flex: 0 1 50%;
     min-width: 0;
+    width: 50%;
     justify-content: center;
   }
 
