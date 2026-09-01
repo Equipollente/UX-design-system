@@ -104,55 +104,53 @@ const hasTags = Astro.slots.has('tags');
 const hasActions = Astro.slots.has('actions');
 ---
 
-<div class="card-container">
-  <article class={classes} {...rest}>
+<article class={classes} {...rest}>
+  {
+    image && (
+      <img
+        class="media"
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+
+  <div class="body">
     {
-      image && (
-        <img
-          class="media"
-          src={image.src}
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          loading="lazy"
-          decoding="async"
-        />
+      hasTagsTop && (
+        <div class="tags">
+          <slot name="tags-top" />
+        </div>
       )
     }
 
-    <div class="body">
-      {
-        hasTagsTop && (
-          <div class="tags">
-            <slot name="tags-top" />
-          </div>
-        )
-      }
-
-      <div class="text">
-        <Heading class="title">{title}</Heading>
-        {subtitle && <p class="subtitle">{subtitle}</p>}
-        {meta && <p class="meta">{meta}</p>}
-      </div>
-
-      {
-        hasTags && (
-          <div class="tags">
-            <slot name="tags" />
-          </div>
-        )
-      }
-
-      {
-        hasActions && (
-          <div class="actions">
-            <slot name="actions" />
-          </div>
-        )
-      }
+    <div class="text">
+      <Heading class="title">{title}</Heading>
+      {subtitle && <p class="subtitle">{subtitle}</p>}
+      {meta && <p class="meta">{meta}</p>}
     </div>
-  </article>
-</div>
+
+    {
+      hasTags && (
+        <div class="tags">
+          <slot name="tags" />
+        </div>
+      )
+    }
+
+    {
+      hasActions && (
+        <div class="actions">
+          <slot name="actions" />
+        </div>
+      )
+    }
+  </div>
+</article>
 
 <style>
   .card {
@@ -188,10 +186,6 @@ const hasActions = Astro.slots.has('actions');
     background: var(--color-bg-default);
     border-radius: var(--radius-md);
     box-shadow: var(--card-shadow);
-  }
-
-  .card-container {
-    container-type: inline-size;
   }
 
   /* L'image remplit la place qu'on lui donne dans les deux sens, et c'est la
