@@ -4,18 +4,18 @@
 
 @container (max-width: 560px) {
   .card-horizontal {
-    flex-direction: column;
+    flex-direction: column !important;
   }
 
   .card-horizontal .media {
-    flex: 0 0 auto;
-    height: var(--card-media-height, 256px);
-    min-height: 0;
-    width: 100%;
+    flex: 0 0 auto !important;
+    height: var(--card-media-height, 256px) !important;
+    min-height: 0 !important;
+    width: 100% !important;
   }
 
   .card-horizontal .body {
-    flex: 0 0 auto;
-    width: 100%;
+    flex: 0 0 auto !important;
+    width: 100% !important;
   }
 }
