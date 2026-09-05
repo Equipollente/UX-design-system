@@ -44,6 +44,7 @@ const GROUP_TITLES = {
   button: 'Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13)',
   card: 'Carte — la taille et l’encre de ses trois lignes de texte',
   nav: 'Nav — la hauteur de la barre, lue par les pages qui se calent dessous',
+  ratio: 'Rapports — les formes des images',
   layout: 'Layout — métadonnées de mode Figma, informatives',
 };
 
@@ -119,6 +120,7 @@ function toCss(token) {
   if (path.startsWith('motion.duration.')) return `${value}ms`; // Figma stocke le nombre nu
   if (path === 'layout.Root Font Size') return `${value}px`;
   if (path.startsWith('layout.')) return String(value);
+  if (path.startsWith('ratio.')) return String(value);
   // Figma stocke une opacité en pourcentage, exactement comme un interligne — et
   // pour la même raison : c'est ce que la liaison de variable attend côté dessin.
   // Une variable à 0,5 y vaudrait un demi pour cent. Elle se divise donc ici, et

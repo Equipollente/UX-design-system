@@ -1,6 +1,6 @@
 # UX design system
 
-Le design system de [Judith Heckmann](https://github.com/Equipollente) — 146 tokens exportés de Figma et
+Le design system de [Judith Heckmann](https://github.com/Equipollente) — 149 tokens exportés de Figma et
 les composants qui en sont faits. La documentation est le site lui-même, et elle montre les
 composants en vrai plutôt qu'une copie de leur markup : si un composant change, la page change.
 
@@ -8,8 +8,8 @@ composants en vrai plutôt qu'une copie de leur markup : si un composant change,
 
 | | |
 | --- | --- |
-| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 116 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, ombre, mouvement, layout. Chaque valeur affichée est lue dans sa variable CSS. |
-| [Composants](https://equipollente.github.io/UX-design-system/components) | Button, Tag, Nav, la fiche, la carte d'étude de cas avec son en-tête et son carrousel, et la modale. Doctrine d'usage, états, props. |
+| [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 121 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, ombre, mouvement, ratio et layout. Chaque valeur affichée est lue dans sa variable CSS. |
+| [Composants](https://equipollente.github.io/UX-design-system/components) | Button, Tag, Nav, CardDefault, la fiche, la carte d'étude de cas avec son en-tête et son carrousel, et la modale. Doctrine d'usage, états, props. |
 | [Formulaire](https://equipollente.github.io/UX-design-system/formulaire) | FieldLabel — le libellé que tous les champs partagent — puis Text field, Select, Radio, Checkbox, Toggle, Text Area, Chip, Add Image et Edit Image Gallery. |
 
 ## La source de vérité est Figma
@@ -31,7 +31,7 @@ liste tenue à la main.
 
 ```
 src/design-system/     le système
-  components/          affichage : Button, Card, Carousel, CaseStudyCard,
+  components/          affichage : Button, Card, CardDefault, Carousel, CaseStudyCard,
                        CaseStudyHeader, CaseStudyList, Icon, Intro, Modal, Nav, Tag
                        formulaire : FieldLabel, TextField, Select, Radio, Checkbox,
                        Toggle, TextArea, Chip, AddImage, EditImageGallery

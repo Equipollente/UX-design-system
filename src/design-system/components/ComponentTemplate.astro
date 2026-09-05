@@ -1,0 +1,41 @@
+---
+// Ce commentaire documentaire ouvre le fichier : il explique ce que l'objet
+// est, ce qu'il n'est pas et, lorsqu'il est connu, son nœud Figma.
+// Le composant fournit un cadre et un emplacement pour son contenu. Il n'est
+// pas une carte métier : un composant spécialisé doit porter les données et
+// les règles propres à son objet.
+// Figma : nœud à renseigner lorsque la maquette de cette carte est identifiée.
+
+// Les imports de composants, d'icônes ou de types se placent dans le frontmatter.
+// Le frontmatter est exécuté côté serveur et ne devient pas du JavaScript client.
+
+// Cette interface décrit le contrat public du composant. Astro et TypeScript
+// signalent ainsi les props manquantes ou les valeurs qui ne sont pas prévues.
+interface Props {
+	/** Classe fournie par le contexte qui utilise la carte. */
+	class?: string;
+	/** Surcharge ponctuelle documentée par le composant appelant. */
+	style?: string;
+}
+
+// La destructuration applique les valeurs par défaut et sépare les attributs
+// connus des attributs HTML complémentaires à transmettre à la racine.
+const { class: className, ...rest } = Astro.props;
+
+// La classe de base identifie l'objet ; la classe reçue en prop permet au
+// contexte de l'étendre sans modifier le composant.
+const classes = ['card-default', className].filter(Boolean).join(' ');
+---
+
+<!-- Le template décrit le HTML rendu par le composant. -->
+<!-- L'élément racine reçoit les attributs complémentaires et les classes. -->
+<article class={classes} {...rest}>
+	<!-- Le slot accueille le contenu fourni entre <CardDefault> et </CardDefault>. -->
+	<slot />
+</article>
+
+<!-- Les styles propres au composant se placent ici ; ils sont scopés par Astro. -->
+<!-- Les valeurs visuelles doivent être reliées aux tokens du design system. -->
+<style>
+	/* Les règles de dessin seront ajoutées après validation de la maquette Figma. */
+</style>

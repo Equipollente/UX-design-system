@@ -1,0 +1,315 @@
+---
+// CardDefault — l'unité répétée d'une page liste en grille. Une carte vaut un
+// item : elle affiche ses données et mène à sa page de détail. Elle est
+// responsive par elle-même — c'est elle qui décide de son agencement, la page
+// ne pose que ses colonnes.
+//
+// Ce n'est pas la grille, et elle ignore combien de colonnes l'entourent. Ce
+// n'est pas une carte métier : ses noms de props sont neutres et aucun site
+// consommateur n'est connu d'ici. Ce n'est pas Card : le jeu de variantes
+// d'orientation 334:1129 est un autre objet, et rien ne se partage entre eux.
+//
+// Figma 451:1004. Quatre symboles, un par palier, d'arborescence identique :
+// il n'y a qu'un markup, et le responsive est entièrement du CSS.
+//
+// Le clic ne se déclare pas, il se déduit. Slot `actions` rempli : seuls ses
+// boutons sont cliquables. Slot vide : la carte entière mène au détail. Les
+// deux ne peuvent pas coexister — une surface cliquable qui couvre la carte
+// passe au-dessus des boutons et les rend inatteignables, souris et clavier.
+// Conséquence : quand la carte est cliquable, les slots de tags n'acceptent
+// rien d'interactif, pour la même raison.
+//
+// Figma ne dessine ni le survol ni le focus, et il en faudra deux jeux — une
+// carte à actions ne doit rien promettre. Les trois premiers paliers utilisent
+// les ratios Figma ; le quatrième suit la hauteur de ses informations.
+
+type HeadingLevel = 2 | 3 | 4 | 5 | 6;
+
+interface Props {
+  /** Le titre de l'item. C'est lui qui porte le lien quand la carte est cliquable. */
+  title: string;
+  subtitle?: string;
+  /** La ligne d'informations secondaires, sous le sous-titre. */
+  meta?: string;
+  /**
+   * La page de détail. Attendu si et seulement si le slot `actions` est vide :
+   * sinon, c'est un bouton du slot qui mène quelque part.
+   */
+  href?: string;
+  /** Chemin de l'image de l'item. L'appelant applique `withBase()`, pas la carte. */
+  image?: string;
+  /** Ce que dit la voix de synthèse de l'image de l'item. Attendu avec elle. */
+  imageAlt?: string;
+  /** Image affichée quand l'item n'en a pas. Décorative, donc muette. */
+  fallbackImage?: string;
+  /** Le rang du titre se range sous ce que la page porte déjà ; il ne dessine rien. */
+  headingLevel?: HeadingLevel;
+  class?: string;
+  style?: string;
+}
+
+const {
+  title,
+  subtitle,
+  meta,
+  href,
+  image,
+  imageAlt,
+  fallbackImage,
+  headingLevel = 3,
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+
+// `has()` répond de la présence du slot, pas d'un contenu visible : un conteneur
+// passé vide donnerait une carte ni cliquable ni actionnable, sans rien signaler.
+const hasActions = Astro.slots.has('actions');
+const hasTagsTop = Astro.slots.has('tags-top');
+const hasTagsBottom = Astro.slots.has('tags-bottom');
+
+if (hasActions && href) {
+  throw new Error(
+    "CardDefault : `href` et le slot `actions` s'excluent. Une carte à actions n'est pas cliquable dans son ensemble.",
+  );
+}
+
+if (!hasActions && !href) {
+  throw new Error(
+    'CardDefault : une carte sans slot `actions` doit recevoir `href` — sinon elle ne mène nulle part.',
+  );
+}
+
+if (image && imageAlt === undefined) {
+  throw new Error(
+    "CardDefault : `image` demande `imageAlt`. Seul l'appelant sait ce que l'image montre.",
+  );
+}
+
+const Heading = `h${headingLevel}` as const;
+const imageSrc = image ?? fallbackImage;
+// Le repli est du décor : il ne s'énonce pas. Une carte sans photo doit se lire
+// comme une carte sans photo.
+const imageAltText = image ? imageAlt : '';
+const cardVariant = hasActions ? 'actions' : href ? 'link' : 'default';
+---
+
+<!-- Les deux régions de Figma 451:1004, et leurs noms — le reste vient ensuite. -->
+<article
+  class:list={['card-default', className]}
+  data-card-variant={cardVariant}
+  style={style}
+  {...rest}
+>
+	<div class="card-layout">
+		{imageSrc && (
+			<div class="card-img">
+				<img
+					src={imageSrc}
+					alt={imageAltText}
+					loading="lazy"
+					decoding="async"
+					referrerpolicy="no-referrer"
+				/>
+			</div>
+		)}
+	<div class="card-info">
+		{hasTagsTop && (
+			<div class="card-tags">
+				<slot name="tags-top" />
+			</div>
+		)}
+		<div class="card-text">
+			<Heading class="card-title">
+				{href ? <a class="card-link" href={href}>{title}</a> : title}
+			</Heading>
+			{subtitle && <p class="card-subtitle">{subtitle}</p>}
+			{meta && <p class="card-meta">{meta}</p>}
+		</div>
+		{hasTagsBottom && (
+			<div class="card-tags">
+				<slot name="tags-bottom" />
+			</div>
+		)}
+		{hasActions && (
+			<div class="card-actions">
+				<slot name="actions" />
+			</div>
+		)}
+		</div>
+	</div>
+</article>
+
+<style>
+	.card-default {
+		/* La carte mesure sa propre largeur : les paliers de Figma sont des largeurs
+		   de carte, pas de fenêtre. C'est la seule chose qu'elle sait de sa mise en page.
+		   Le rembourrage vit un cran plus bas : une requête mesure l'intérieur de la
+		   boîte, et il décalerait chaque palier de sa valeur. */
+		container-type: inline-size;
+	}
+
+	/* Un conteneur ne se voit pas lui-même : une requête `@container` ne peut pas
+	   styler l'élément qui la porte. L'agencement vit donc un cran plus bas. */
+	.card-layout {
+		display: grid;
+		gap: var(--space-lg);
+		padding: var(--space-xl);
+		border-radius: var(--radius-md);
+		background: var(--color-bg-default);
+		box-shadow:
+			0 var(--shadow-md-y) var(--shadow-md-blur) var(--shadow-md-spread) var(--shadow-md-color),
+			0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+	}
+
+	/* Les variantes sont explicites : cela évite de dépendre d'un `:has()` pour
+	   décider si la carte est cliquable, actionnable ou passive. La carte garde le même
+	   contrat métier, mais les styles se déclenchent sur un attribut stable. */
+	.card-default[data-card-variant='link'] {
+		position: relative;
+	}
+
+	/* Seule la carte entièrement cliquable promet un survol de sa surface. Les
+	   cartes à actions laissent leurs boutons porter leurs propres états. */
+	.card-default[data-card-variant='link']:hover .card-layout {
+		border: var(--border-width-default) solid var(--color-border-default);
+		box-shadow:
+			0 var(--shadow-lg-y) var(--shadow-lg-blur) var(--shadow-lg-spread) var(--shadow-lg-color),
+			0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+	}
+
+	/* La surface cliquable couvre la carte entière, mais le nom accessible reste
+	   celui du titre : le lien s'étend par un pseudo-élément plutôt que d'envelopper
+	   le contenu. Il ne coexiste jamais avec le slot d'actions — il les recouvrirait. */
+	.card-default[data-card-variant='link'] .card-link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.card-link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	/* L'anneau se dessine sur la carte et non sur le titre : c'est la carte qu'on
+	   active. WCAG 2.4.11 — la cible focalisée doit être visible en entier. */
+	.card-default[data-card-variant='link']:focus-within {
+		outline: var(--border-width-focus) solid var(--color-border-focus);
+		outline-offset: var(--space-xs);
+	}
+
+	.card-link:focus-visible {
+		outline: none;
+	}
+
+	.card-info {
+		display: grid;
+		gap: var(--space-xl);
+		padding: var(--space-lg) 0;
+	}
+
+	/* Le cadre décide de la forme, l'image la remplit sans se déformer. Les deux
+		mesures sont hissées en variables locales : elles lisent les ratios Figma
+		pour les paliers empilés, puis cèdent la hauteur au contenu au quatrième. */
+	.card-img {
+		aspect-ratio: var(--card-img-ratio, var(--ratio-square));
+		width: 100%;
+		min-width: 0;
+		overflow: hidden;
+		border-radius: var(--radius-sm);
+		border: var(--border-width-default) solid var(--color-border-strong);
+	}
+
+	.card-img img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* Les seuils 224, 338 et 561 sont les bornes structurelles des `width range`
+	   de Figma 451:1004 : 0–223, 224–337, 338–560 et 561+. Ce ne sont pas des
+	   valeurs de design réutilisables, donc elles restent documentées ici plutôt
+	   que d'entrer dans les tokens. */
+	@container (min-width: 224px) {
+		.card-img {
+			--card-img-ratio: var(--ratio-portrait);
+		}
+	}
+
+	@container (min-width: 338px) {
+		.card-img {
+			--card-img-ratio: var(--ratio-landscape);
+		}
+	}
+
+	/* Seul le quatrième palier change la direction : l'image passe à gauche. */
+	@container (min-width: 561px) {
+		.card-layout {
+			position: relative;
+			grid-template-columns: 254px minmax(0, 1fr);
+		}
+
+		.card-img {
+			position: absolute;
+			inset-block: var(--space-xl);
+			inset-inline-start: var(--space-xl);
+			inset-inline-end: auto;
+			aspect-ratio: var(--ratio-portrait);
+			width: auto;
+			height: auto;
+			min-width: 254px;
+			max-height: calc(100% - (2 * var(--space-xl)));
+		}
+
+		.card-info {
+			grid-column: 2;
+			min-width: 0;
+			align-self: start;
+		}
+	}
+
+	.card-text {
+		display: grid;
+		padding: 0;
+		gap: var(--space-xs);
+		align-self: stretch;
+	}
+
+	/* La carte n'a prise que sur le conteneur du slot : les styles scopés d'Astro
+	   ne descendent pas dans un Tag ni dans un Button. C'est donc le flux qui
+	   range ce qu'on lui donne, jamais un sélecteur qui viserait l'objet reçu. */
+	.card-tags,
+	.card-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+		padding: 0;
+	}
+
+	.card-actions {
+		justify-content: flex-end;
+	}
+
+	/* Les trois lignes ont leurs propres tokens : c'est le système qui décide de
+	   leur taille et de leur encre, pas la carte. */
+	.card-title {
+		margin: 0;
+		font-family: var(--font-family-heading);
+		font-size: var(--card-title-size);
+		color: var(--card-title-color);
+	}
+
+	.card-subtitle {
+		margin: 0;
+		font-size: var(--card-subtitle-size);
+		color: var(--card-subtitle-color);
+	}
+
+	.card-meta {
+		margin: 0;
+		font-size: var(--card-meta-size);
+		color: var(--card-meta-color);
+	}
+</style>

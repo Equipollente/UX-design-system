@@ -5,6 +5,7 @@ import { withBase } from '../design-system/lib/url';
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
 import Tag from '../design-system/components/Tag.astro';
+import CardDefault from '../design-system/components/CardDefault.astro';
 import Nav from '../design-system/components/Nav.astro';
 import Carousel from '../design-system/components/Carousel.astro';
 import Card from '../design-system/components/Card.astro';
@@ -23,6 +24,7 @@ import {
   caseStudies,
   introDemo,
   cardDemo,
+  cardDefaultWorks,
   modalConfirmationDemo,
   modalAlertDemo,
   modalSuccessDemo,
@@ -141,6 +143,19 @@ const cardProps = [
   ],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
   ['style', 'string', '—', 'Le point de surcharge : --card-media-height, et rien d’autre.'],
+];
+
+const cardDefaultProps = [
+  ['title', 'string', '—', 'Le titre de l’item. Obligatoire. Avec un href, il porte le lien de la carte.'],
+  ['subtitle', 'string', '—', 'La ligne descriptive sous le titre. Absente ⇒ la ligne n’est pas rendue.'],
+  ['meta', 'string', '—', 'L’information secondaire sous le sous-titre. Absente ⇒ la ligne n’est pas rendue.'],
+  ['href', 'string', '—', 'La page de détail. Attendue quand le slot actions est absent ; interdite avec actions.'],
+  ['image', 'string', '—', 'Chemin de l’image de l’item. L’appelant applique withBase().'],
+  ['imageAlt', 'string', '—', 'Texte alternatif de l’image de l’item. Obligatoire avec image.'],
+  ['fallbackImage', 'string', '—', 'Image de repli fournie par l’appelant. Elle reste décorative.'],
+  ['headingLevel', '2 | 3 | 4 | 5 | 6', '3', 'Rang HTML du titre. Il ne change pas le dessin.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+  ['style', 'string', '—', 'Style transmis à la carte racine.'],
 ];
 
 // Les deux emplacements. Ce ne sont pas des props : ce sont les slots nommés de
@@ -800,6 +815,148 @@ const modalProps = [
           </p>
         </li>
       </ul>
+    </section>
+
+    <!-- ── CardDefault ───────────────────────────────────────────────────── -->
+    <section id="card-default-demo">
+      <h2>CardDefault</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'elle est.</strong> L'unité répétée d'une page liste en grille : elle affiche
+        l'image, les données et les emplacements de tags ou d'actions d'un item. Elle décide elle-même
+        de son agencement selon la largeur de la carte, puis devient entièrement cliquable quand le
+        slot <code>actions</code> est absent.
+        <br />
+        <strong>Ce qu'elle n'est pas.</strong> Ni la grille qui pose les colonnes, ni une carte métier,
+        ni un conteneur générique dont tout le contenu viendrait de l'extérieur. Les textes, les liens,
+        les images et les états propres à la page restent des données fournies par l'appelant.
+        <br />
+        <span class="source">
+          Figma <code>451:1004</code>. La carte réagit à sa propre largeur avec quatre paliers de
+          container query ; le quatrième utilise une image portrait dont la hauteur suit les informations.
+        </span>
+      </p>
+
+      <h3>Deux comportements, trois slots</h3>
+      <p class="section-note">
+        Sans <code>actions</code>, le titre porte un lien qui couvre toute la carte ; avec
+        <code>actions</code>, seuls les boutons sont interactifs. Les conteneurs
+        <code>tags-top</code>, <code>tags-bottom</code> et <code>actions</code> disparaissent quand
+        leur slot est absent.
+      </p>
+
+      <div class="demo demo-card-default">
+        <CardDefault
+          title={cardDefaultWorks[0].title}
+          subtitle={cardDefaultWorks[0].description}
+          meta={String(cardDefaultWorks[0].creationYear)}
+          image={cardDefaultWorks[0].image}
+          imageAlt={cardDefaultWorks[0].imageAlt}
+          href="#card-default-demo"
+        >
+          <Tag slot="tags-top" variant="accent">
+            {cardDefaultWorks[0].status.replace('_', ' ')}
+          </Tag>
+          <Fragment slot="tags-bottom">
+            {cardDefaultWorks[0].techniques.map((technique) => <Tag>{technique}</Tag>)}
+          </Fragment>
+        </CardDefault>
+
+        <CardDefault
+          title={cardDefaultWorks[9].title}
+          subtitle={cardDefaultWorks[9].description}
+          meta={String(cardDefaultWorks[9].creationYear)}
+          fallbackImage={withBase('/images/case-study/rubika-roadmap.jpg')}
+        >
+          <Fragment slot="actions">
+            <Button variant="secondary" size="sm">Editer</Button>
+            <Button variant="alert" size="sm" icon="trash">Supprimer</Button>
+          </Fragment>
+        </CardDefault>
+      </div>
+
+      <h3>Grille et paliers responsive</h3>
+      <p class="section-note">
+        La grille appartient à la page : elle pose ses colonnes et transmet seulement la largeur
+        disponible à chaque carte. Les œuvres CSV exposent volontairement des titres, descriptions,
+        images et listes de techniques de longueurs variées. Redimensionnez chaque carte pour
+        observer ses quatre paliers ; la grille ne les connaît pas.
+      </p>
+
+      <div class="demo demo-card-default-grid">
+        {cardDefaultWorks.map((work) => (
+          <CardDefault
+            title={work.title}
+            subtitle={work.description}
+            meta={String(work.creationYear)}
+            image={work.image}
+            imageAlt={work.imageAlt}
+            href="#card-default-demo"
+          >
+            <Tag slot="tags-top" variant="accent">{work.status.replace('_', ' ')}</Tag>
+            {work.techniques.length > 0 && (
+              <Fragment slot="tags-bottom">
+                {work.techniques.map((technique) => <Tag>{technique}</Tag>)}
+              </Fragment>
+            )}
+          </CardDefault>
+        ))}
+      </div>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              cardDefaultProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Slots</h3>
+      <p class="section-note">
+        <strong><code>tags-top</code></strong> ouvre la rangée au-dessus du titre ; absent, elle
+        disparaît sans laisser d’espace. <strong><code>tags-bottom</code></strong> ouvre la rangée
+        sous les informations ; absent, aucun conteneur n’est rendu. <strong><code>actions</code>
+        </strong> ouvre les actions à droite ; absent, la carte entière devient le lien porté par
+        <code>href</code>. Les trois slots sont indépendants et conditionnels.
+      </p>
+
+      <h3>Tokens</h3>
+      <p class="section-note">
+        CardDefault lit les tokens <code>card.*</code> pour ses trois lignes de texte. Les ratios
+        d'image et les seuils de largeur restent respectivement des tokens <code>ratio.*</code> et
+        des bornes structurelles de container query ; ils ne sont pas recopiés dans cette page.
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Token</th><th>Valeur CSS</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              cardTokens.map((token) => (
+                <tr>
+                  <td><code>{token.name}</code></td>
+                  <td><code>{token.css}</code></td>
+                  <td>{token.description}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- ── Card ─────────────────────────────────────────────────────────── -->
@@ -1967,6 +2124,19 @@ const modalProps = [
      très basse — ne suffirait pas à l'en détacher. Elle se montre donc sur la
      surface lavande, comme le carrousel et ses flèches blanches. */
   .demo-card {
+    background: var(--color-bg-surface);
+  }
+
+  .demo-card-default-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-xl);
+    background: var(--color-bg-surface);
+  }
+
+  .demo-card-default {
+    display: grid;
+    gap: var(--space-xl);
     background: var(--color-bg-surface);
   }
 
