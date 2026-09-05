@@ -198,6 +198,11 @@
   /* ── Nav — la hauteur de la barre, lue par les pages qui se calent dessous ─── */
   --nav-height:                  88px;
 
+  /* ── Rapports — les formes des images ──────────────────────────────────────── */
+  --ratio-square:                1;
+  --ratio-portrait:              0.6669999957084656;
+  --ratio-landscape:             1.777999997138977;
+
   /* ── Layout — métadonnées de mode Figma, informatives ──────────────────────── */
   --layout-device:               desktop;
   --layout-device-width:         1200;

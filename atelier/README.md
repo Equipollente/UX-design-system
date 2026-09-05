@@ -45,11 +45,14 @@ que de le recopier.
 |---|---|
 | [brief.md](brief.md) | **le point de départ** : les quatre lignes d'un ordre de travail |
 | [conventions.md](conventions.md) | avant d'écrire une ligne de composant |
+| [coder-un-composant.md](coder-un-composant.md) | le workflow Astro pour coder un composant réutilisable |
+| [workflow-agent-composant-astro.md](workflow-agent-composant-astro.md) | les consignes d'exécution pour l'agent IA |
 | [ajouter-un-composant.md](ajouter-un-composant.md) | un nœud Figma devient un `.astro` |
 | [modifier-un-composant.md](modifier-un-composant.md) | on touche à un composant existant |
 | [ajouter-une-icone-ou-un-token.md](ajouter-une-icone-ou-un-token.md) | la source Figma a bougé |
 | [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md) | le chemin complet, de la variable changée à la page qui l'affiche |
 | [verifier-la-typographie.md](verifier-la-typographie.md) | un interligne ou un interlettrage a bougé — les deux familles que Figma ne sait pas lier |
+| [points-a-verifier.md](points-a-verifier.md) | la checklist des points ouverts et des validations à refaire avant de fermer une intervention |
 | [decisions.md](decisions.md) | « pourquoi c'est fait comme ça ? » |
 | [arbitrages.md](arbitrages.md) | on ouvre Figma pour trancher |
 

@@ -107,6 +107,102 @@ export const cardDemo = {
   action: caseStudyDemo.action,
 };
 
+// Données fournies pour tester CardDefault avec des titres, descriptions et
+// images de longueurs différentes. Elles restent dans la page de démonstration,
+// jamais dans le design system.
+export const cardDefaultWorks = [
+  {
+    title: 'Nager dans le bonheur',
+    description: 'Une petite nageuse, quelques paillettes et des mots qui font du bien',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: ['gouache', 'encre', 'papier_mache'],
+    image: 'https://drive.google.com/thumbnail?id=14ongVtldZFkLtB2IT-Op4bu0l4m2e8dZ&sz=w1760',
+    imageAlt: "Vue principale fictive de l'œuvre Lignes de fuite 01",
+  },
+  {
+    title: 'Broken record',
+    description: 'Parce qu’on peut être un peu cassé et rester la chanson préférée de quelqu’un',
+    creationYear: 2026,
+    status: 'in_progress',
+    techniques: ['aquarelle', 'acrylique', 'peinture_bombe', 'crayon_graphite', 'assemblage'],
+    image: 'https://drive.google.com/thumbnail?id=1I4-_biqhyEr2VQLN6n5Y-3pwNxt6irDO&sz=w1760',
+    imageAlt: "Vue de détail fictive de l'œuvre Lignes de fuite 01",
+  },
+  {
+    title: 'Rewind',
+    description: 'Une petite boîte pour rembobiner les souvenirs en musique.',
+    creationYear: 2026,
+    status: 'in_progress',
+    techniques: ['acrylique', 'collage'],
+    image: 'https://drive.google.com/thumbnail?id=1LP1vSBz9qXsEgehUwsUqlduMbCcUARar&sz=w1760',
+    imageAlt: "Vue de détail fictive de l'œuvre Lignes de fuite 01",
+  },
+  {
+    title: 'Matchbox ballet',
+    description: 'Quand les sorcières troquent leurs balais pour le ballet',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: ['assemblage', 'soudure'],
+    image: 'https://drive.google.com/thumbnail?id=1HjYs4r83ZA8u5NkgHh7AaokpnIplH48r&sz=w2000',
+    imageAlt: 'Gemini_Generated_Image_mdl7fdmdl7fdmdl7.jpg',
+  },
+  {
+    title: "Devine combien je t'aime",
+    description: 'Une petite boîte, une grande déclaration d’amour',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: [],
+    image: 'https://drive.google.com/thumbnail?id=1DVoQXtbSTNENG7BZ1TUq7gWqYSRsE8kp&sz=w2000',
+    imageAlt: 'IMG-20260506-WA0004.jpg',
+  },
+  {
+    title: 'Petits coeurs de poche',
+    description: 'Des coeurs minuscules à glisser dans sa poche pour avoir toujours un peu d’amour sur soi',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: ['photocopie'],
+    image: 'https://drive.google.com/thumbnail?id=1cCK5YaQM_1nyGOvNdwIdnH-K_XTAeJXT&sz=w2000',
+    imageAlt: '20251007_112254.jpg',
+  },
+  {
+    title: 'Poupées vaudoo de poche',
+    description: 'À emporter partout pour conjurer les petits tracas du quotidien et autres emmerdements minuscules',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: [],
+    image: 'https://drive.google.com/thumbnail?id=1-L-nrFLLeMCXj8EhnwWNWXtJm1hMnIdd&sz=w2000',
+    imageAlt: 'Gemini_Generated_Image_b7em9cb7em9cb7em.jpg',
+  },
+  {
+    title: 'Liberté, égalité.... Jean Paul Gaultier !',
+    description: 'Une petite boîte pour un grand slogan. Détourner les codes de la mode pour célébrer la liberté, l’égalité et le droit d’être soi même.',
+    creationYear: 2025,
+    status: 'in_progress',
+    techniques: ['peinture_bombe', 'fusain'],
+    image: 'https://drive.google.com/thumbnail?id=1vmzbCow9BsWw2nki0ffao1XZfx7dFHeM&sz=w2000',
+    imageAlt: 'Gemini_Generated_Image_7o6r227o6r227o6r.jpg',
+  },
+  {
+    title: 'Voyage voyage',
+    description: 'Un bateau minuscule pour partir très loin, même en restant chez soi.',
+    creationYear: 2026,
+    status: 'in_progress',
+    techniques: [],
+    image: 'https://drive.google.com/thumbnail?id=1UqUJELI3mPs7Y9HOc-UhAbpd-jRcKSCg&sz=w2000',
+    imageAlt: '112.jpg',
+  },
+  {
+    title: 'Fête de poche',
+    description: 'Une fête miniature à déplier, à installer et à célébrer. Même pour rien. Surtout pour rien.',
+    creationYear: 2026,
+    status: 'in_progress',
+    techniques: [],
+    image: 'https://drive.google.com/thumbnail?id=14ndAJEWrwhsMo2iRbQZOKRsUopDcAKwT&sz=w2000',
+    imageAlt: '8336.jpg',
+  },
+];
+
 // ── Les champs de /formulaire ────────────────────────────────────────────────
 // Figma ne donne qu'un libellé témoin — « Radio label » — et un témoin ne fait
 // pas un groupe : un radio ne se juge que contre ses voisins. Les mots ci-dessous

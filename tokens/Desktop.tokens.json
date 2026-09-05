@@ -2424,6 +2424,47 @@
       }
     }
   },
+  "ratio": {
+    "square": {
+      "$type": "number",
+      "$value": 1,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:453:1143",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "--ratio-square"
+        }
+      }
+    },
+    "portrait": {
+      "$type": "number",
+      "$value": 0.6669999957084656,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:453:1145",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--ratio-portrait)"
+        }
+      }
+    },
+    "landscape": {
+      "$type": "number",
+      "$value": 1.777999997138977,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:453:1146",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--ratio-landscape)"
+        }
+      }
+    }
+  },
   "$extensions": {
     "com.figma.modeName": "Desktop"
   }
