@@ -11,6 +11,7 @@ import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
 import check from '../icons/check.svg';
 import chevronDown from '../icons/chevron-down.svg';
+import chevronTop from '../icons/chevron-top.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
 import close from '../icons/close.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
@@ -34,6 +35,7 @@ export const icons = {
   'box-plus': boxPlus,
   'check': check,
   'chevron-down': chevronDown,
+  'chevron-top': chevronTop,
   'circle-face-content': circleFaceContent,
   'close': close,
   'corner-right-down': cornerRightDown,
