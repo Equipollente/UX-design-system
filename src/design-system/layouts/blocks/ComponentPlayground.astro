@@ -1,0 +1,208 @@
+---
+import Tabs from '../../components/tabs/Tabs.astro';
+import TabList from '../../components/tabs/TabList.astro';
+import TabButton from '../../components/tabs/TabButton.astro';
+import TabPanel from '../../components/tabs/TabPanel.astro';
+
+interface Props {
+  /** Code Astro correspondant au rendu fourni par le slot `preview`. */
+  code?: string;
+  /** Préfixe unique utilisé par les identifiants accessibles du Playground. */
+  id?: string;
+}
+
+const { code, id = 'playground' } = Astro.props;
+const visualisationTabId = `${id}-visualisation-tab`;
+const visualisationPanelId = `${id}-visualisation-panel`;
+const codeTabId = `${id}-code-tab`;
+const codePanelId = `${id}-code-panel`;
+---
+
+<section data-slot="Playground" data-playground id={id} aria-labelledby={`${id}-title`}>
+  <header class="playground-header">
+    <h2 id={`${id}-title`}>Playground</h2>
+    <p>Une frame pour paramétrer chaque composant lié au composant documenté.</p>
+  </header>
+
+  <div class="playground-frame">
+    <div class="playground-controls">
+      <slot name="controls" />
+    </div>
+
+    <div class="playground-preview" aria-live="polite">
+      <h3>Rendu en direct</h3>
+      <Tabs>
+        <TabList label="Rendu du composant">
+          <TabButton id={visualisationTabId} controls={visualisationPanelId} selected>
+            Visualisation
+          </TabButton>
+          <TabButton id={codeTabId} controls={codePanelId}>
+            Code
+          </TabButton>
+        </TabList>
+
+        <TabPanel id={visualisationPanelId} labelledby={visualisationTabId}>
+          <div class="demo-frame">
+            <slot name="preview" />
+          </div>
+        </TabPanel>
+
+        <TabPanel id={codePanelId} labelledby={codeTabId} hidden>
+          <pre><code data-playground-code>{code}</code></pre>
+        </TabPanel>
+      </Tabs>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-playground]').forEach((playground) => {
+    playground.querySelectorAll<HTMLElement>('[data-playground-toggle]').forEach((toggle) => {
+      const name = toggle.dataset.playgroundToggle;
+      const input = toggle.querySelector<HTMLInputElement>('input');
+      if (!name || !input) return;
+
+      const targets = playground.querySelectorAll<HTMLElement>(
+        `[data-playground-options="${name}"], [data-playground-preview="${name}"]`,
+      );
+
+      const update = () => {
+        const visible = input.checked;
+        targets.forEach((target) => {
+          target.hidden = !visible;
+          target.style.display = visible ? '' : 'none';
+        });
+      };
+
+      input.addEventListener('change', update);
+      update();
+    });
+  });
+</script>
+
+<style>
+  [data-slot='Playground'] {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .playground-header {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: var(--font-size-title);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-heading);
+  }
+
+  p {
+    color: var(--color-text-muted);
+  }
+
+  .playground-frame {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+    gap: var(--space-xl);
+    width: 100%;
+    min-width: 0;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-surface);
+  }
+
+  .playground-controls,
+  .playground-preview {
+    min-width: 0;
+  }
+
+  .playground-controls {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: var(--space-xs);
+  }
+
+  .playground-preview {
+    position: sticky;
+    top: var(--space-xl);
+  }
+
+  .playground-controls :global(form) {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .playground-controls :global(fieldset) {
+    display: grid;
+    gap: var(--space-md);
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--space-lg);
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-default);
+  }
+
+  .playground-controls :global(legend) {
+    padding-inline: var(--space-xs);
+    color: var(--color-text-default);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-tight);
+  }
+
+  .playground-controls :global([data-playground-group] .btn) {
+    --btn-h: var(--button-height-sm);
+    --btn-px: var(--button-padding-x-sm);
+    --btn-gap: var(--button-gap-sm);
+    --btn-icon: var(--button-icon-size-sm);
+    --btn-min-w: var(--button-min-width-sm);
+  }
+
+  .playground-preview {
+    width: 100%;
+  }
+
+  .demo-frame {
+    width: 100%;
+    min-height: 12rem;
+    padding: var(--space-xl);
+    background: var(--color-bg-default);
+  }
+
+  pre {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 767px) {
+    .playground-frame {
+      grid-template-columns: 1fr;
+    }
+
+    .playground-controls {
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0;
+    }
+
+    .playground-preview {
+      position: static;
+      top: auto;
+    }
+  }
+</style>
