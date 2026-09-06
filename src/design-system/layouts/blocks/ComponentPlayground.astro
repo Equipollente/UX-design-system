@@ -239,29 +239,27 @@ const htmlPanelId = `${id}-html-panel`;
   .playground-frame {
     display: grid;
     grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-    align-items: start;
+    grid-template-rows: minmax(0, 1fr);
     gap: var(--space-xl);
     width: 100%;
+    max-height: 800px;
     min-width: 0;
     padding: var(--space-xl);
     border-radius: var(--radius-md);
     background: var(--color-bg-surface);
+    overflow: hidden;
   }
 
   .playground-controls,
   .playground-preview {
     min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
   }
 
   .playground-controls {
-    max-height: 70vh;
-    overflow-y: auto;
     padding-right: var(--space-xs);
-  }
-
-  .playground-preview {
-    position: sticky;
-    top: var(--space-xl);
   }
 
   .playground-controls :global(form) {
@@ -319,17 +317,19 @@ const htmlPanelId = `${id}-html-panel`;
   @media (max-width: 767px) {
     .playground-frame {
       grid-template-columns: 1fr;
+      grid-template-rows: none;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .playground-controls,
+    .playground-preview {
+      height: auto;
+      overflow-y: visible;
     }
 
     .playground-controls {
-      max-height: none;
-      overflow-y: visible;
       padding-right: 0;
-    }
-
-    .playground-preview {
-      position: static;
-      top: auto;
     }
   }
 </style>
