@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../design-system/layouts/BaseLayout.astro';
+import Tabs from '../../design-system/components/tabs/Tabs.astro';
+import TabList from '../../design-system/components/tabs/TabList.astro';
+import TabButton from '../../design-system/components/tabs/TabButton.astro';
+import TabPanel from '../../design-system/components/tabs/TabPanel.astro';
+
+---
+
+<BaseLayout title="Dev — Tabs">
+  <h1>Tabs</h1>
+
+    <h2>Base</h2>
+    <Tabs>
+      <TabList label="Exemple de base">
+        <TabButton id="tab-1" controls="panel-1" selected>Onglet 1</TabButton>
+        <TabButton id="tab-2" controls="panel-2">Onglet 2</TabButton>
+        <TabButton id="tab-3" controls="panel-3">Onglet 3</TabButton>
+      </TabList>
+      <TabPanel id="panel-1" labelledby="tab-1"><p>Panneau 1.</p></TabPanel>
+      <TabPanel id="panel-2" labelledby="tab-2" hidden><p>Panneau 2.</p></TabPanel>
+      <TabPanel id="panel-3" labelledby="tab-3" hidden><p>Panneau 3.</p></TabPanel>
+    </Tabs>
+
+    <h2>Contenu long</h2>
+    <Tabs>
+      <TabList label="Exemple avec contenu long">
+        <TabButton data-slot id="tab-l1" controls="panel-l1" selected>Un onglet avec un titre très très long pour voir</TabButton>
+        <TabButton id="tab-l2" controls="panel-l2">Court</TabButton>
+      </TabList>
+      <TabPanel id="panel-l1" labelledby="tab-l1">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+      </TabPanel>
+      <TabPanel id="panel-l2" labelledby="tab-l2" hidden>
+       <p>Bref.</p>
+      </TabPanel>
+    </Tabs>
+
+    <h2>Deux instances sur la même page</h2>
+    <Tabs>
+      <TabList label="Instance A">
+        <TabButton id="tab-a1" controls="panel-a1" selected>A1</TabButton>
+        <TabButton id="tab-a2" controls="panel-a2">A2</TabButton>
+      </TabList>
+      <TabPanel id="panel-a1" labelledby="tab-a1"><p>A1.</p></TabPanel>
+      <TabPanel id="panel-a2" labelledby="tab-a2" hidden><p>A2.</p></TabPanel>
+    </Tabs>
+    <Tabs>
+      <TabList label="Instance B">
+        <TabButton id="tab-b1" controls="panel-b1" selected>B1</TabButton>
+        <TabButton id="tab-b2" controls="panel-b2">B2</TabButton>
+      </TabList>
+      <TabPanel id="panel-b1" labelledby="tab-b1"><p>B1.</p></TabPanel>
+      <TabPanel id="panel-b2" labelledby="tab-b2" hidden><p>B2.</p></TabPanel>
+    </Tabs>
+</BaseLayout>
