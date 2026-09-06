@@ -1,0 +1,208 @@
+---
+// CardDefault — composition de carte de liste pour les nouveaux consommateurs.
+// La carte possède la structure et le comportement de lien ; son contenu arrive
+// par slots afin que l'image, le texte, les tags et les actions restent composables.
+// Figma : 451:1004.
+
+import Card from './Card.astro';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'article'> {
+  /** La page de détail. Obligatoire sans slot actions, interdite avec actions. */
+  href?: string;
+}
+
+const {
+  href,
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+
+const hasActions = Astro.slots.has('actions');
+const hasImage = Astro.slots.has('image');
+const hasTagsTop = Astro.slots.has('tags-top');
+const hasTagsBottom = Astro.slots.has('tags-bottom');
+const hasText = Astro.slots.has('default');
+
+if (!hasText) {
+  throw new Error('CardDefault : le slot par défaut doit recevoir un CardText.');
+}
+
+if (hasActions && href) {
+  throw new Error(
+    "CardDefault : `href` et le slot `actions` s'excluent. Une carte à actions n'est pas cliquable dans son ensemble.",
+  );
+}
+
+if (!hasActions && !href) {
+  throw new Error(
+    'CardDefault : une carte sans slot `actions` doit recevoir `href` — sinon elle ne mène nulle part.',
+  );
+}
+
+const cardVariant = hasActions ? 'actions' : 'link';
+---
+
+<article
+  class:list={['card-default', className]}
+  data-slot="card-default"
+  data-card-variant={cardVariant}
+  data-card-layout={hasImage ? 'with-image' : 'text-only'}
+  style={style}
+  {...rest}
+>
+  <Card class="card-layout">
+    {hasImage && (
+      <div class="card-img">
+        <slot name="image" />
+      </div>
+    )}
+
+    <div class="card-info">
+      {hasTagsTop && (
+        <slot name="tags-top" />
+      )}
+
+      <div class="cards-card-text">
+        {
+          href ? (
+            <a class="cards-card-link" href={href}>
+              <slot />
+            </a>
+          ) : (
+            <slot />
+          )
+        }
+      </div>
+
+      {hasTagsBottom && (
+        <slot name="tags-bottom" />
+      )}
+
+      {hasActions && (
+        <slot name="actions" />
+      )}
+    </div>
+  </Card>
+</article>
+
+<style>
+  .card-default {
+    container-type: inline-size;
+  }
+
+  .card-layout {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .card-default[data-card-variant='link'] {
+    position: relative;
+  }
+
+  .card-default[data-card-variant='link']:hover .card-layout {
+    border: var(--border-width-default) solid var(--color-border-default);
+    box-shadow:
+      0 var(--shadow-lg-y) var(--shadow-lg-blur) var(--shadow-lg-spread) var(--shadow-lg-color),
+      0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+  }
+
+  .card-default[data-card-variant='link'] .cards-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .cards-card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card-default[data-card-variant='link']:focus-within {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--space-xs);
+  }
+
+  .cards-card-link:focus-visible {
+    outline: none;
+  }
+
+  .card-info {
+    display: grid;
+    gap: var(--space-xl);
+    padding: var(--space-lg) 0;
+  }
+
+  .card-img {
+    /* 176px est la hauteur du palier 0–223 de Figma 451:1004. Les autres
+       paliers passent à un ratio afin que le cadre reste stable. */
+    height: 176px;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: var(--border-width-default) solid var(--color-border-strong);
+  }
+
+  @container (min-width: 224px) {
+    /* Bornes structurelles des quatre width ranges de Figma 451:1004. */
+    .card-img {
+      height: auto;
+      aspect-ratio: var(--ratio-portrait);
+    }
+  }
+
+  @container (min-width: 338px) {
+    .card-img {
+      aspect-ratio: var(--ratio-landscape);
+    }
+  }
+
+  @container (min-width: 561px) {
+    /* Le palier 561+ place l'image portrait dans une colonne de 254px,
+       comme le symbole Figma 451:1004. */
+    .card-default[data-card-layout='with-image'] .card-layout {
+      position: relative;
+      grid-template-columns: 254px minmax(0, 1fr);
+    }
+
+    .card-default[data-card-layout='with-image'] .card-img {
+      position: absolute;
+      inset-block: var(--space-xl);
+      inset-inline-start: var(--space-xl);
+      inset-inline-end: auto;
+      aspect-ratio: var(--ratio-portrait);
+      width: auto;
+      height: auto;
+      min-width: 254px;
+      max-height: calc(100% - (2 * var(--space-xl)));
+    }
+
+    .card-default[data-card-layout='with-image'] .card-info {
+      grid-column: 2;
+      min-width: 0;
+      align-self: start;
+    }
+  }
+
+    /* Sous 768px, le code repasse la composition en colonne pour que le palier
+      horizontal ne force jamais une largeur illisible sur téléphone. */
+    @media (max-width: 767px) {
+    .card-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .card-img {
+      position: static;
+      width: 100%;
+      height: auto;
+      min-width: 0;
+      max-height: none;
+    }
+
+    .card-info {
+      grid-column: auto;
+    }
+  }
+</style>

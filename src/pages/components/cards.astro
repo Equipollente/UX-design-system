@@ -1,0 +1,478 @@
+---
+import { withBase } from '../../design-system/lib/url';
+import ComponentPageLayout from '../../design-system/layouts/ComponentPageLayout.astro';
+import Button from '../../design-system/components/Button.astro';
+import Tag from '../../design-system/components/Tag.astro';
+import Card from '../../design-system/components/cards/Card.astro';
+import CardDefault from '../../design-system/components/cards/CardDefault.astro';
+import CardActions from '../../design-system/components/cards/CardActions.astro';
+import CardImage from '../../design-system/components/cards/CardImage.astro';
+import CardTags from '../../design-system/components/cards/CardTags.astro';
+import CardText from '../../design-system/components/cards/CardText.astro';
+import { works } from '../../data/works';
+import { firstMediaByWorkId } from '../../data/work-media';
+import { componentPageGroups } from '../_component-pages';
+
+const sidebarGroups = componentPageGroups.map((group) => ({
+  ...group,
+  items: [...group.items, { label: 'Cards', href: withBase('/components/cards') }],
+}));
+
+const formatPrice = (work: (typeof works)[number]) => {
+  const price = work.status === 'sold' ? work.soldPriceEur : work.salePriceEur;
+  return price === undefined ? 'Prix non renseigne' : `${price} EUR`;
+};
+---
+
+<ComponentPageLayout
+  title="Cards — UX design system"
+  description="Suivi d'implementation de la nouvelle famille Cards."
+  sidebarId="cards-page-sidebar"
+  sidebarTitle="UX design system"
+  sidebarGroups={sidebarGroups}
+  current={withBase('/components/cards')}
+  sidebarLabel="Navigation des composants"
+>
+  <div class="cards-page">
+    <header class="page-header">
+      <p class="eyebrow">Etape 1 · primitive Card</p>
+      <h1>Cards</h1>
+      <p>
+        Cette page montre la primitive neutre <code>cards/Card.astro</code> et la composition
+        <code>CardDefault.astro</code>.
+      </p>
+    </header>
+
+    <section aria-labelledby="status-title" class="status-section">
+      <h2 id="status-title">Etat d'avancement</h2>
+      <ul class="status-list">
+        <li><strong>Base</strong> : structure et container queries en place.</li>
+        <li><strong>Slots</strong> : image, tags haut, texte, tags bas et actions ordonnes.</li>
+        <li><strong>Interactions</strong> : mode lien et mode actions separes.</li>
+        <li><strong>Termine</strong> : CardText est integre au slot texte.</li>
+        <li><strong>Termine</strong> : CardImage gere l'image informative et le fallback decoratif.</li>
+        <li><strong>Termine</strong> : CardTags et CardActions portent leurs regions.</li>
+        <li><strong>Termine</strong> : Card est le cadre neutre et composable.</li>
+        <li><strong>A venir</strong> : l'assemblage final de CardDefault autour de Card.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="validation-title" class="validation-section">
+      <div class="section-heading">
+        <p class="eyebrow">Parcours de validation</p>
+        <h2 id="validation-title">Ce qu'il faut vérifier</h2>
+        <p>
+          Chaque cas possède un identifiant stable pour faciliter l'inspection du DOM et la revue
+          visuelle.
+        </p>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Cas</th><th>Composition</th><th>Attendu</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>primitive-empty</code></td><td><code>Card</code></td><td>Cadre seul, aucun enfant imposé, aucun lien.</td></tr>
+            <tr><td><code>primitive-text</code></td><td><code>Card + CardText</code></td><td>Le cadre accueille librement le texte.</td></tr>
+            <tr><td><code>default-complete</code></td><td><code>CardDefault</code> complet</td><td>Image, texte, tags et lien dans l'ordre prévu.</td></tr>
+            <tr><td><code>default-text-only</code></td><td><code>CardDefault + CardText</code></td><td>Aucune colonne ni région image vide.</td></tr>
+            <tr><td><code>default-actions</code></td><td><code>CardDefault + CardActions</code></td><td>Boutons interactifs, aucun lien global.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="csv-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Donnees CSV</p>
+        <h2 id="csv-title">Works rendus dans CardDefault</h2>
+        <p>
+          Ces cartes sont generees depuis <code>src/data/works.csv</code>. La famille Cards
+          ne connait pas le CSV : la page transforme chaque ligne en props et slots.
+        </p>
+      </div>
+
+      <div class="works-grid">
+        {works.map((work) => (
+          <CardDefault href={`#work-${work.id}`}>
+            <CardText
+              title={work.title}
+              subtitle={work.techniques.length > 0 ? work.techniques.join(' · ') : 'Techniques non renseignees'}
+              meta={`${work.creationYear} · ${work.sizeCategory} · ${formatPrice(work)}`}
+              headingLevel={3}
+            />
+            {firstMediaByWorkId.get(work.id) && (
+              <CardImage
+                slot="image"
+                src={firstMediaByWorkId.get(work.id)?.url}
+                alt={firstMediaByWorkId.get(work.id)?.alt}
+              />
+            )}
+            <CardTags slot="tags-top">
+              <Tag variant={work.status === 'available' ? 'lime' : 'neutral'}>{work.status}</Tag>
+            </CardTags>
+            {work.supports.length > 0 && (
+              <CardTags slot="tags-bottom">
+                {work.supports.map((support) => <Tag>{support}</Tag>)}
+              </CardTags>
+            )}
+          </CardDefault>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="primitive-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Primitive neutre</p>
+        <h2 id="primitive-title">Card sans contenu imposé</h2>
+        <p>
+          La primitive fournit uniquement le cadre. Aucun enfant n'est obligatoire et aucun lien
+          n'est déduit.
+        </p>
+      </div>
+
+      <div class="demo-frame" data-test-case="primitive-empty">
+        <Card />
+      </div>
+
+      <div class="demo-frame" data-test-case="primitive-text">
+        <Card>
+          <CardText
+            title="Card composee comme un lego"
+            subtitle="Le cadre ne connait pas le contenu qu'il accueille."
+            meta="Card"
+            headingLevel={3}
+          />
+        </Card>
+      </div>
+    </section>
+
+    <section aria-labelledby="link-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Mode link</p>
+        <h2 id="link-title">Carte cliquable</h2>
+        <p>
+          Sans slot <code>actions</code>, <code>href</code> rend la carte cliquable. Les regions
+          de tags sont composees avec <code>CardTags</code>.
+        </p>
+      </div>
+
+      <div class="demo-frame" data-test-case="default-complete">
+        <CardDefault href="#actions-demo">
+          <CardText
+            title="Nager dans le bonheur"
+            subtitle="Une petite nageuse, quelques paillettes et des mots qui font du bien."
+            meta="2025"
+            headingLevel={3}
+          />
+          <CardImage
+            slot="image"
+            src={withBase('/images/case-study/rubika-roadmap.jpg')}
+            alt="Exemple d'image de projet"
+            width={1200}
+            height={800}
+          />
+          <CardTags slot="tags-top">
+            <Tag variant="accent">En cours</Tag>
+          </CardTags>
+          <CardTags slot="tags-bottom">
+            <Tag>Gouache</Tag>
+            <Tag>Encre</Tag>
+          </CardTags>
+        </CardDefault>
+
+        <CardDefault href="#text-only-title">
+          <CardText
+            title="Carte avec image de repli"
+            subtitle="Le fallback est decoratif quand aucune image principale n'est fournie."
+            meta="CardImage"
+            headingLevel={3}
+          />
+          <CardImage
+            slot="image"
+            fallback={withBase('/images/case-study/rubika-roadmap.jpg')}
+          />
+        </CardDefault>
+      </div>
+
+      <h3>Props de CardImage</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Defaut</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>src</code></td><td><code>string</code></td><td>—</td><td>URL de l'image informative principale.</td></tr>
+            <tr><td><code>alt</code></td><td><code>string</code></td><td>—</td><td>Texte alternatif requis pour une image informative.</td></tr>
+            <tr><td><code>fallback</code></td><td><code>string</code></td><td>—</td><td>URL de repli, rendue decorative si src est absent.</td></tr>
+            <tr><td><code>decorative</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Rend l'image principale muette.</td></tr>
+            <tr><td><code>width</code></td><td><code>number</code></td><td>—</td><td>Dimension intrinseque de l'image.</td></tr>
+            <tr><td><code>height</code></td><td><code>number</code></td><td>—</td><td>Dimension intrinseque de l'image.</td></tr>
+            <tr><td><code>class</code></td><td><code>string</code></td><td>—</td><td>Classe appliquee a l'image.</td></tr>
+            <tr><td><code>style</code></td><td><code>string</code></td><td>—</td><td>Attribut de style transmis a l'image.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="regions-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Regions</p>
+        <h2 id="regions-title">CardTags et CardActions</h2>
+        <p>
+          Ces composants organisent le contenu de leur slot sans remplacer <code>Tag</code> ni
+          <code>Button</code>. La carte a actions ne porte aucun lien global.
+        </p>
+      </div>
+
+      <h3>Props de CardTags et CardActions</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Defaut</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>class</code></td><td><code>string</code></td><td>—</td><td>Classe appliquee a la region.</td></tr>
+            <tr><td><code>style</code></td><td><code>string</code></td><td>—</td><td>Attribut de style transmis a la region.</td></tr>
+            <tr><td><code>default</code></td><td>slot</td><td>obligatoire</td><td>Tags ou boutons fournis par l'appelant.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="text-only-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Composition minimale</p>
+        <h2 id="text-only-title">Carte avec CardText uniquement</h2>
+        <p>
+          Cette composition ne fournit ni image, ni tags, ni actions. Le texte reste le slot
+          obligatoire et <code>href</code> rend la carte cliquable.
+        </p>
+      </div>
+
+      <div class="demo-frame" data-test-case="default-text-only">
+        <CardDefault href="#text-only-title">
+          <CardText
+            title="Une carte sans média"
+            subtitle="La structure s'adapte sans réserver d'espace aux régions absentes."
+            meta="Composition minimale"
+            headingLevel={3}
+          />
+        </CardDefault>
+      </div>
+    </section>
+
+    <section aria-labelledby="text-states-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">CardText</p>
+        <h2 id="text-states-title">Les trois combinaisons de contenu</h2>
+        <p>
+          Le titre est obligatoire. Le sous-titre et la meta disparaissent sans laisser d'element
+          vide ni d'espace reserve lorsqu'ils sont absents.
+        </p>
+      </div>
+
+      <div class="text-states">
+        <CardDefault href="#text-states-title">
+          <CardText title="Titre seul" headingLevel={3} />
+        </CardDefault>
+        <CardDefault href="#text-states-title">
+          <CardText title="Titre et sous-titre" subtitle="Une ligne descriptive optionnelle." headingLevel={3} />
+        </CardDefault>
+        <CardDefault href="#text-states-title">
+          <CardText
+            title="Titre, sous-titre et meta"
+            subtitle="Une ligne descriptive optionnelle."
+            meta="Information secondaire"
+            headingLevel={3}
+          />
+        </CardDefault>
+      </div>
+
+      <h3>Props de CardText</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Defaut</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Titre obligatoire.</td></tr>
+            <tr><td><code>subtitle</code></td><td><code>string</code></td><td>—</td><td>Ligne descriptive optionnelle.</td></tr>
+            <tr><td><code>meta</code></td><td><code>string</code></td><td>—</td><td>Information secondaire optionnelle.</td></tr>
+            <tr><td><code>headingLevel</code></td><td><code>2 | 3 | 4 | 5 | 6</code></td><td><code>3</code></td><td>Rang HTML du titre, sans changer sa taille.</td></tr>
+            <tr><td><code>titleSize</code></td><td><code>'title' | 'heading'</code></td><td><code>'title'</code></td><td>Taille visuelle indépendante du rang HTML.</td></tr>
+            <tr><td><code>class</code></td><td><code>string</code></td><td>—</td><td>Classe appliquée à la racine du composant.</td></tr>
+            <tr><td><code>style</code></td><td><code>string</code></td><td>—</td><td>Attribut de style transmis à la racine.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="actions-title" class="demo-section">
+      <div class="section-heading">
+        <p class="eyebrow">Mode actions</p>
+        <h2 id="actions-title">Carte actionnable</h2>
+        <p>
+          Avec le slot <code>actions</code>, la carte ne porte pas de lien global. Les boutons
+          restent les seules surfaces interactives.
+        </p>
+      </div>
+
+      <div class="demo-frame" data-test-case="default-actions">
+        <CardDefault>
+          <CardText
+            title="Projet sans lien global"
+            subtitle="Les actions sont independantes du conteneur de la carte."
+            meta="2026"
+            headingLevel={3}
+          />
+          <CardActions slot="actions">
+            <Button variant="secondary" size="sm">Editer</Button>
+            <Button variant="alert" size="sm">Supprimer</Button>
+          </CardActions>
+        </CardDefault>
+      </div>
+    </section>
+  </div>
+</ComponentPageLayout>
+
+<style>
+  .cards-page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-xl) var(--space-4xl);
+  }
+
+  .page-header,
+  .section-heading {
+    max-width: 48rem;
+  }
+
+  .page-header {
+    margin-block-end: var(--space-3xl);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-text-accent);
+    font-size: var(--font-size-ui);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-block-start: 0;
+  }
+
+  h1 {
+    margin-block-end: var(--space-md);
+  }
+
+  h2 {
+    margin-block-end: var(--space-sm);
+  }
+
+  .page-header > p:last-child,
+  .section-heading > p:last-child {
+    max-width: 42rem;
+    margin-block-end: 0;
+    color: var(--color-text-muted);
+  }
+
+  .status-section,
+  .validation-section,
+  .demo-section {
+    padding-block: var(--space-2xl);
+    border-block-start: var(--border-width-default) solid var(--color-border-default);
+  }
+
+  .status-list {
+    display: grid;
+    gap: var(--space-sm);
+    margin: 0;
+    padding-inline-start: var(--space-xl);
+  }
+
+  .demo-section {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .demo-frame {
+    min-width: 0;
+    padding: var(--space-xl);
+    background: var(--color-bg-section);
+    overflow-x: auto;
+  }
+
+  .demo-frame[data-test-case='primitive-empty'] :global([data-slot='card']) {
+    min-height: 8rem;
+  }
+
+  .demo-frame :global(.card-default) {
+    width: min(100%, 812px);
+    margin: 0 auto;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-lg);
+  }
+
+  .works-grid :global(.card-default) {
+    min-width: 0;
+  }
+
+  .text-states {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .text-states :global(.card-default) {
+    min-width: 0;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: var(--space-sm) var(--space-md);
+    border-block-end: var(--border-width-default) solid var(--color-border-default);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-ui);
+  }
+
+  @media (max-width: 767px) {
+    .text-states {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cards-page {
+      padding-inline: var(--space-xl);
+    }
+
+    .demo-frame {
+      padding: var(--space-lg);
+    }
+  }
+</style>

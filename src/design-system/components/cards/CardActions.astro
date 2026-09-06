@@ -1,0 +1,25 @@
+---
+// CardActions — région d'actions d'une carte.
+// Il organise les Button reçus sans remplacer le composant Button. Figma : 451:1019.
+
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+
+const { class: className, slot: _slot, ...rest } = Astro.props as Props & { slot?: string };
+const classes = ['cards-actions', className].filter(Boolean).join(' ');
+---
+
+<div data-slot="card-actions" class={classes} {...rest}>
+  <slot />
+</div>
+
+<style>
+  .cards-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-xs);
+    min-width: 0;
+  }
+</style>

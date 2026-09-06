@@ -1,0 +1,76 @@
+---
+// CardText — contenu textuel réutilisable d'une carte.
+// Le composant ne connaît pas le lien de la carte : CardDefault contrôle ce
+// comportement autour de son slot. Figma : 451:1012.
+
+import type { HTMLAttributes } from 'astro/types';
+
+type HeadingLevel = 2 | 3 | 4 | 5 | 6;
+
+interface Props extends HTMLAttributes<'div'> {
+  title: string;
+  subtitle?: string;
+  meta?: string;
+  headingLevel?: HeadingLevel;
+  titleSize?: 'title' | 'heading';
+}
+
+const {
+  title,
+  subtitle,
+  meta,
+  headingLevel = 3,
+  titleSize = 'title',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+const classes = [
+  'card-text-content',
+  titleSize !== 'title' && 'card-text-heading',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<div data-slot="card-text" class={classes} {...rest}>
+  <Heading class="cards-text-title">{title}</Heading>
+  {subtitle && <p class="cards-text-subtitle">{subtitle}</p>}
+  {meta && <p class="cards-text-meta">{meta}</p>}
+</div>
+
+<style>
+  .card-text-content {
+    display: grid;
+    gap: var(--space-xs);
+    min-width: 0;
+  }
+
+  .cards-text-title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--card-title-size);
+    color: var(--card-title-color);
+  }
+
+  .cards-text-subtitle,
+  .cards-text-meta {
+    margin: 0;
+  }
+
+  .cards-text-subtitle {
+    font-size: var(--card-subtitle-size);
+    color: var(--card-subtitle-color);
+  }
+
+  .cards-text-meta {
+    font-size: var(--card-meta-size);
+    color: var(--card-meta-color);
+  }
+
+  .card-text-content:global(.card-text-heading) {
+    --card-title-size: var(--font-size-heading);
+  }
+</style>

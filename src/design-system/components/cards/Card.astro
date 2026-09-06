@@ -1,0 +1,30 @@
+---
+// Card — primitive UI neutre de la famille Cards.
+// Elle fournit uniquement le cadre visuel et accepte zéro ou plusieurs enfants.
+// Les comportements métier et les régions spécialisées appartiennent aux compositions.
+
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+
+const { class: className, ...rest } = Astro.props;
+const classes = ['cards-card', className].filter(Boolean).join(' ');
+---
+
+<div data-slot="card" class={classes} {...rest}>
+  <slot />
+</div>
+
+<style>
+  .cards-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-default);
+    box-shadow:
+      0 var(--shadow-md-y) var(--shadow-md-blur) var(--shadow-md-spread) var(--shadow-md-color),
+      0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
+  }
+</style>

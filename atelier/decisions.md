@@ -118,6 +118,26 @@ battrait l'héritage et le point de surcharge ne servirait à rien.
 
 `← a1969b4`
 
+## Les cartes sont des primitives composables identifiables par `data-slot`
+
+La famille Cards sépare la primitive neutre et les compositions spécialisées. `Card` porte uniquement
+le cadre UI et accepte zéro ou plusieurs enfants ; `CardDefault` compose ce cadre pour le cas de carte
+de liste et peut porter ses règles de lien et responsive. `CardImage`, `CardText`, `CardTags` et
+`CardActions` portent chacun leur propre région et acceptent les attributs HTML complémentaires.
+
+Chaque primitive expose un `data-slot` stable (`card`, `card-image`, `card-text`, `card-tags`,
+`card-actions`). Cela rend la composition inspectable et donne aux futurs composants une convention
+à suivre sans dépendre de noms de classes ou d'un framework CSS.
+
+Cette décision reprend le principe de composition du dossier Card de
+[fulldotdev/ui](https://github.com/fulldotdev/ui/tree/main/src/components/ui/card), mais pas sa
+dépendance à Tailwind : ici les styles restent scopés dans Astro et lisent les tokens du système.
+Une nouvelle région comme `CardHeader` ou `CardFooter`, ou une nouvelle composition, n'entre que
+lorsqu'une vue réelle et un contrat Figma la justifient. `Card` ne déduit jamais un lien de la présence
+d'un enfant : le comportement interactif appartient à la composition qui le demande.
+
+`← improvement-component-card-default`
+
 ## Le dessin d'un champ est une recette de balise, pas un style de composant
 
 Text field, Text Area et Select écrivaient chacun les mêmes déclarations — police, encre, fond,
