@@ -5,7 +5,11 @@ import { withBase } from '../design-system/lib/url';
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
 import Tag from '../design-system/components/Tag.astro';
-import CardDefault from '../design-system/components/CardDefault.astro';
+import CardDefault from '../design-system/components/cards/CardDefault.astro';
+import CardActions from '../design-system/components/cards/CardActions.astro';
+import CardImage from '../design-system/components/cards/CardImage.astro';
+import CardTags from '../design-system/components/cards/CardTags.astro';
+import CardText from '../design-system/components/cards/CardText.astro';
 import Nav from '../design-system/components/Nav.astro';
 import Carousel from '../design-system/components/Carousel.astro';
 import Card from '../design-system/components/Card.astro';
@@ -146,14 +150,7 @@ const cardProps = [
 ];
 
 const cardDefaultProps = [
-  ['title', 'string', '—', 'Le titre de l’item. Obligatoire. Avec un href, il porte le lien de la carte.'],
-  ['subtitle', 'string', '—', 'La ligne descriptive sous le titre. Absente ⇒ la ligne n’est pas rendue.'],
-  ['meta', 'string', '—', 'L’information secondaire sous le sous-titre. Absente ⇒ la ligne n’est pas rendue.'],
-  ['href', 'string', '—', 'La page de détail. Attendue quand le slot actions est absent ; interdite avec actions.'],
-  ['image', 'string', '—', 'Chemin de l’image de l’item. L’appelant applique withBase().'],
-  ['imageAlt', 'string', '—', 'Texte alternatif de l’image de l’item. Obligatoire avec image.'],
-  ['fallbackImage', 'string', '—', 'Image de repli fournie par l’appelant. Elle reste décorative.'],
-  ['headingLevel', '2 | 3 | 4 | 5 | 6', '3', 'Rang HTML du titre. Il ne change pas le dessin.'],
+  ['href', 'string', '—', 'La page de détail. Obligatoire sans actions ; interdite avec actions.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
   ['style', 'string', '—', 'Style transmis à la carte racine.'],
 ];
@@ -166,7 +163,7 @@ const cardSlots = [
     'La rangée de tags au-dessus du titre, avant tout le texte.',
   ],
   [
-    'tags',
+    'tags-bottom',
     'La seconde rangée, sous les informations secondaires. Figma n’accepte que des Tag dans les deux — le code ne peut pas l’imposer, la doctrine le dit.',
   ],
   [
@@ -822,14 +819,14 @@ const modalProps = [
       <h2>CardDefault</h2>
 
       <p class="section-note">
-        <strong>Ce qu'elle est.</strong> L'unité répétée d'une page liste en grille : elle affiche
-        l'image, les données et les emplacements de tags ou d'actions d'un item. Elle décide elle-même
-        de son agencement selon la largeur de la carte, puis devient entièrement cliquable quand le
-        slot <code>actions</code> est absent.
+        <strong>Ce qu'elle est.</strong> Une composition de carte de liste : elle assemble la primitive
+        <code>Card</code>, le texte, l'image, les tags et les actions. Elle décide de son agencement
+        selon la largeur de la carte et devient entièrement cliquable quand le slot <code>actions</code>
+        est absent.
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni la grille qui pose les colonnes, ni une carte métier,
-        ni un conteneur générique dont tout le contenu viendrait de l'extérieur. Les textes, les liens,
-        les images et les états propres à la page restent des données fournies par l'appelant.
+        ni la primitive neutre : les textes, les liens, les images et les états propres à la page restent
+        des données fournies par l'appelant.
         <br />
         <span class="source">
           Figma <code>451:1004</code>. La carte réagit à sa propre largeur avec quatre paliers de
@@ -846,32 +843,37 @@ const modalProps = [
       </p>
 
       <div class="demo demo-card-default">
-        <CardDefault
-          title={cardDefaultWorks[0].title}
-          subtitle={cardDefaultWorks[0].description}
-          meta={String(cardDefaultWorks[0].creationYear)}
-          image={cardDefaultWorks[0].image}
-          imageAlt={cardDefaultWorks[0].imageAlt}
-          href="#card-default-demo"
-        >
-          <Tag slot="tags-top" variant="accent">
-            {cardDefaultWorks[0].status.replace('_', ' ')}
-          </Tag>
-          <Fragment slot="tags-bottom">
+        <CardDefault href="#card-default-demo">
+          <CardText
+            title={cardDefaultWorks[0].title}
+            subtitle={cardDefaultWorks[0].description}
+            meta={String(cardDefaultWorks[0].creationYear)}
+            headingLevel={3}
+          />
+          <CardImage
+            slot="image"
+            src={cardDefaultWorks[0].image}
+            alt={cardDefaultWorks[0].imageAlt}
+          />
+          <CardTags slot="tags-top">
+            <Tag variant="accent">{cardDefaultWorks[0].status.replace('_', ' ')}</Tag>
+          </CardTags>
+          <CardTags slot="tags-bottom">
             {cardDefaultWorks[0].techniques.map((technique) => <Tag>{technique}</Tag>)}
-          </Fragment>
+          </CardTags>
         </CardDefault>
 
-        <CardDefault
-          title={cardDefaultWorks[9].title}
-          subtitle={cardDefaultWorks[9].description}
-          meta={String(cardDefaultWorks[9].creationYear)}
-          fallbackImage={withBase('/images/case-study/rubika-roadmap.jpg')}
-        >
-          <Fragment slot="actions">
+        <CardDefault>
+          <CardText
+            title={cardDefaultWorks[9].title}
+            subtitle={cardDefaultWorks[9].description}
+            meta={String(cardDefaultWorks[9].creationYear)}
+            headingLevel={3}
+          />
+          <CardActions slot="actions">
             <Button variant="secondary" size="sm">Editer</Button>
             <Button variant="alert" size="sm" icon="trash">Supprimer</Button>
-          </Fragment>
+          </CardActions>
         </CardDefault>
       </div>
 
@@ -885,19 +887,23 @@ const modalProps = [
 
       <div class="demo demo-card-default-grid">
         {cardDefaultWorks.map((work) => (
-          <CardDefault
-            title={work.title}
-            subtitle={work.description}
-            meta={String(work.creationYear)}
-            image={work.image}
-            imageAlt={work.imageAlt}
-            href="#card-default-demo"
-          >
-            <Tag slot="tags-top" variant="accent">{work.status.replace('_', ' ')}</Tag>
+          <CardDefault href="#card-default-demo">
+            <CardText
+              title={work.title}
+              subtitle={work.description}
+              meta={String(work.creationYear)}
+              headingLevel={3}
+            />
+            {work.image && (
+              <CardImage slot="image" src={work.image} alt={work.imageAlt} />
+            )}
+            <CardTags slot="tags-top" >
+              <Tag variant="accent">{work.status.replace('_', ' ')}</Tag>
+            </CardTags>
             {work.techniques.length > 0 && (
-              <Fragment slot="tags-bottom">
+              <CardTags slot="tags-bottom">
                 {work.techniques.map((technique) => <Tag>{technique}</Tag>)}
-              </Fragment>
+              </CardTags>
             )}
           </CardDefault>
         ))}

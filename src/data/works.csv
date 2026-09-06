@@ -1,0 +1,10 @@
+id,seriesId,title,creationYear,techniques,supports,sizeCategory,status,salePriceEur,soldPriceEur,createdAt,updatedAt,revision
+1d9d2f84-1f58-4d8d-8ca6-6ab4db6d5d2f,a72c2a32-f95a-45f1-bf6e-c64a26b7c4cc,Lignes de fuite 01,2024,gouache|encre|papier_mache,papier|carton|materiau_recuperation,small,available,25,,2026-01-15T10:00:00Z,2026-08-31T18:21:01.127Z,5
+5bb2b0ff-4d4a-4771-b8dc-d91864d44d8d,84ec3563-ad43-45f0-ae17-16d286ff71cb,Lignes de fuite 02,2023,aquarelle|acrylique|peinture_bombe|crayon_graphite|assemblage,papier|papier_maroufle,medium,gifted,,,2026-02-18T09:30:00Z,2026-08-31T22:37:54.575Z,13
+b3d6cf9a-4157-4b88-ab64-7e8b6d9d2a14,21d52c74-878f-4864-a711-b7bb07bf2101,Poussière lumineuse 01,2025,acrylique|collage,toile|toile_chassis_bois,large,available,850,,2026-03-04T15:45:00Z,2026-03-04T15:45:00Z,1
+f4d95a75-5ef4-4a5d-97bc-23f48b1091fd,84ec3563-ad43-45f0-ae17-16d286ff71cb,Forme libre sans série,2026,assemblage|soudure,metal|materiau_recuperation,medium,available,240,,2026-07-20T12:00:00Z,2026-08-31T13:45:38.357Z,2
+2cb6e351-2550-4584-8363-0fa040ceae0e,,ds,2024,,,small,gifted,,,2026-08-31T13:41:44.883Z,2026-08-31T21:42:19.719Z,3
+fbf50bf7-ec62-4c18-9a52-335fb2a464ff,e8492d59-0a88-4fad-aecc-9bce162a230a,test,2024,photocopie,,medium,gifted,,,2026-08-31T14:05:49.773Z,2026-08-31T19:11:52.327Z,4
+fcc82bc8-265f-49ae-8a6f-d11f5c891064,e8492d59-0a88-4fad-aecc-9bce162a230a,ss,2025,,,small,available,10,,2026-08-31T14:09:44.424Z,2026-08-31T19:13:55.190Z,3
+d3559ffa-310c-4b1f-9924-8d530f88ee53,e8492d59-0a88-4fad-aecc-9bce162a230a,-èè,2024,peinture_bombe|fusain,,large,sold,,25,2026-08-31T16:36:55.805Z,2026-08-31T21:44:34.361Z,3
+154424f4-ce47-4260-9c66-4d8e88f8c6e6,,Nager dans le bonheur,2025,,,small,available,15,,2026-09-01T08:17:45.306Z,2026-09-01T08:23:02.988Z,2

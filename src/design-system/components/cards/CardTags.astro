@@ -1,0 +1,24 @@
+---
+// CardTags — région de tags d'une carte.
+// Il organise les Tag reçus sans remplacer le composant Tag. Figma : 451:1009.
+
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+
+const { class: className, slot: _slot, ...rest } = Astro.props as Props & { slot?: string };
+const classes = ['cards-tags', className].filter(Boolean).join(' ');
+---
+
+<div data-slot="card-tags" class={classes} {...rest}>
+  <slot />
+</div>
+
+<style>
+  .cards-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    min-width: 0;
+  }
+</style>
