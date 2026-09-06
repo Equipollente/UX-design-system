@@ -16,6 +16,8 @@ const visualisationTabId = `${id}-visualisation-tab`;
 const visualisationPanelId = `${id}-visualisation-panel`;
 const codeTabId = `${id}-code-tab`;
 const codePanelId = `${id}-code-panel`;
+const htmlTabId = `${id}-html-tab`;
+const htmlPanelId = `${id}-html-panel`;
 ---
 
 <section data-slot="Playground" data-playground id={id} aria-labelledby={`${id}-title`}>
@@ -39,6 +41,9 @@ const codePanelId = `${id}-code-panel`;
           <TabButton id={codeTabId} controls={codePanelId}>
             Code
           </TabButton>
+          <TabButton id={htmlTabId} controls={htmlPanelId}>
+            HTML
+          </TabButton>
         </TabList>
 
         <TabPanel id={visualisationPanelId} labelledby={visualisationTabId}>
@@ -50,12 +55,116 @@ const codePanelId = `${id}-code-panel`;
         <TabPanel id={codePanelId} labelledby={codeTabId} hidden>
           <pre><code data-playground-code>{code}</code></pre>
         </TabPanel>
+
+        <TabPanel id={htmlPanelId} labelledby={htmlTabId} hidden>
+          <pre><code data-playground-html></code></pre>
+        </TabPanel>
       </Tabs>
     </div>
   </div>
 </section>
 
 <script>
+  const VOID_ELEMENTS = new Set([
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr',
+  ]);
+
+  // Astro-cid et data-attributes internes au Playground : sans valeur pour
+  // un consommateur qui copie-colle le rendu sur un autre site.
+  function stripInternalAttributes(html: string): string {
+    return html
+      .replace(/\s+data-astro-cid-[a-z0-9]+(="[^"]*")?/gi, '')
+      .replace(/\s+data-[a-z-]*playground[a-z-]*(="[^"]*")?/gi, '');
+  }
+
+  // Ré-indente un innerHTML brut : lisible, pas un vrai parseur HTML.
+  function prettyPrintHtml(html: string): string {
+    const withBreaks = stripInternalAttributes(html).replace(/>\s*</g, '>\n<').trim();
+    if (!withBreaks) return '';
+    let indent = 0;
+    return withBreaks
+      .split('\n')
+      .map((raw) => raw.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const isClosingTag = /^<\//.test(line);
+        const isComment = /^<!--/.test(line);
+        const isSelfClosing = /\/>$/.test(line);
+        const isInlinePair = /^<[^>]+>.*<\/[^>]+>$/.test(line);
+        const tagName = line.match(/^<\/?([a-zA-Z0-9-]+)/)?.[1]?.toLowerCase();
+        const isVoid = tagName ? VOID_ELEMENTS.has(tagName) : false;
+
+        if (isClosingTag) indent = Math.max(indent - 1, 0);
+        const rendered = `${'  '.repeat(indent)}${line}`;
+        if (!isClosingTag && !isComment && !isSelfClosing && !isVoid && !isInlinePair) {
+          indent += 1;
+        }
+        return rendered;
+      })
+      .join('\n');
+  }
+
+  // Une règle Astro scopée porte un data-astro-cid-* en plus du sélecteur
+  // écrit par l'auteur ; on le retire pour que la règle s'applique par classe
+  // seule, comme sur un site qui n'a pas la chaîne de build Astro.
+  function stripCidFromSelector(cssText: string): string | null {
+    const cleaned = cssText.replace(/\[data-astro-cid-[a-z0-9]+\]/gi, '').trim();
+    const selector = cleaned.slice(0, cleaned.indexOf('{')).trim();
+    return selector ? cleaned : null;
+  }
+
+  // Styles scopés Astro : chaque composant rendu porte un data-astro-cid-*,
+  // on récupère dans les feuilles de style les règles qui le référencent —
+  // celles du composant documenté et de ceux qu'il compose — puis on les
+  // rend portables (sélecteur nettoyé de son data-astro-cid).
+  function collectScopedStyles(root: HTMLElement): string {
+    const cids = new Set<string>();
+    root.querySelectorAll('*').forEach((el) => {
+      Array.from(el.attributes).forEach((attr) => {
+        if (/^data-astro-cid-/.test(attr.name)) cids.add(attr.name);
+      });
+    });
+    if (cids.size === 0) return '';
+
+    const seen = new Set<string>();
+    const rules: string[] = [];
+
+    const visit = (rule: CSSRule): string | null => {
+      if (rule instanceof CSSMediaRule) {
+        const inner = Array.from(rule.cssRules)
+          .map(visit)
+          .filter((entry): entry is string => Boolean(entry));
+        return inner.length ? `@media ${rule.media.mediaText} {\n  ${inner.join('\n  ')}\n}` : null;
+      }
+      const selectorText = (rule as CSSStyleRule).selectorText;
+      if (!selectorText) return null;
+      if (!Array.from(cids).some((cid) => selectorText.includes(cid))) return null;
+      return stripCidFromSelector(rule.cssText);
+    };
+
+    Array.from(document.styleSheets).forEach((sheet) => {
+      let cssRules: CSSRuleList;
+      try {
+        cssRules = sheet.cssRules;
+      } catch {
+        return; // feuille cross-origin (polices, etc.), inaccessible
+      }
+      Array.from(cssRules).forEach((rule) => {
+        const cleaned = visit(rule);
+        if (cleaned && !seen.has(cleaned)) {
+          seen.add(cleaned);
+          rules.push(cleaned);
+        }
+      });
+    });
+    return rules.join('\n\n');
+  }
+
+  const TOKENS_NOTICE =
+    '/* Ce composant utilise les variables du design system (styles/tokens.css). ' +
+    "Importez ce fichier — les valeurs ne sont volontairement pas recopiées ici. */";
+
   document.querySelectorAll<HTMLElement>('[data-playground]').forEach((playground) => {
     playground.querySelectorAll<HTMLElement>('[data-playground-toggle]').forEach((toggle) => {
       const name = toggle.dataset.playgroundToggle;
@@ -76,6 +185,26 @@ const codePanelId = `${id}-code-panel`;
 
       input.addEventListener('change', update);
       update();
+    });
+
+    const demoFrame = playground.querySelector<HTMLElement>('.demo-frame');
+    const htmlOutput = playground.querySelector<HTMLElement>('[data-playground-html]');
+    if (!demoFrame || !htmlOutput) return;
+
+    const updateHtmlTab = () => {
+      const html = prettyPrintHtml(demoFrame.innerHTML);
+      const styles = collectScopedStyles(demoFrame);
+      htmlOutput.textContent = styles
+        ? `${html}\n\n${TOKENS_NOTICE}\n\n${styles}`
+        : html;
+    };
+
+    updateHtmlTab();
+    new MutationObserver(updateHtmlTab).observe(demoFrame, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true,
     });
   });
 </script>
