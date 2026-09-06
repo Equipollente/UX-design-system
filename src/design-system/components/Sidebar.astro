@@ -1,0 +1,455 @@
+---
+import Icon from './Icon.astro';
+
+// Sidebar — la navigation verticale d'une interface de documentation. Elle
+// reçoit son titre, ses groupes et ses liens ; elle ne connait aucune page
+// propre au design system qui l'utilise.
+//
+// Ce n'est pas Nav : Nav est une navigation horizontale. Ce n'est pas non plus
+// le layout d'une page : la sidebar expose uniquement son contrat de navigation.
+// Figma 487:7865.
+
+type SidebarItem = {
+  label: string;
+  href: string;
+};
+
+type SidebarGroup = {
+  label: string;
+  items: SidebarItem[];
+};
+
+interface Props {
+  /** Le nom affiche dans l'en-tete de la sidebar. */
+  title: string;
+  /** Les groupes et leurs liens, fournis par la vue appelante. */
+  groups: SidebarGroup[];
+  /** Identifiant unique de cette instance, utilise par les relations ARIA. */
+  id: string;
+  /** Le chemin courant, utilise pour identifier l'item actif. */
+  current?: string;
+  /** Le niveau des titres de groupes dans la page appelante. */
+  groupHeadingLevel?: 2 | 3 | 4 | 5 | 6;
+  /** Le nom accessible du landmark de navigation. */
+  label?: string;
+  /** Classe de mise en page fournie par l'appelant. */
+  class?: string;
+  /** Surcharge locale de mise en page fournie par l'appelant. */
+  style?: string;
+}
+
+// Les attributs restants sont transmis au conteneur racine uniquement : ils
+// permettent au layout d'ajouter un identifiant, des attributs data-* ou une
+// relation ARIA sans exposer ces details aux elements internes.
+const {
+  title,
+  groups,
+  id,
+  current,
+  groupHeadingLevel = 2,
+  label = 'Navigation principale',
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+
+const PanelHeading = `h${groupHeadingLevel}` as const;
+const panelId = `${id}-panel`;
+
+---
+
+<!-- La structure statique precede les styles et le comportement mobile. Nav n'est
+  pas reutilise : il decrit la navigation horizontale du site consommateur.
+  Les items sont des liens de navigation, pas des actions : Button ne convient
+  donc pas. Icon est utilise uniquement par le controle mobile defini dans
+  Figma 491:7941. Les liens sont
+  rendus directement : sans JavaScript, la navigation reste accessible et
+  aucune version large n'est masquee par le composant. -->
+<div
+  class:list={['sidebar', className]}
+  style={style}
+  id={id}
+  data-sidebar
+  data-sidebar-state="open"
+  {...rest}
+>
+  <header class="sidebar-mobile-header">
+    <p>{title}</p>
+    <button
+      class="sidebar-toggle"
+      type="button"
+      data-sidebar-toggle
+      aria-expanded="false"
+      aria-controls={panelId}
+      aria-label="Ouvrir la navigation"
+      hidden
+    >
+      <span data-sidebar-icon="open"><Icon name="menu-right" /></span>
+      <span data-sidebar-icon="close" hidden><Icon name="close" /></span>
+    </button>
+  </header>
+
+  <button
+    class="sidebar-backdrop"
+    type="button"
+    data-sidebar-backdrop
+    data-sidebar-state="closed"
+    aria-label="Fermer la navigation"
+    hidden
+  ></button>
+
+  <aside
+    id={panelId}
+    class="sidebar-panel"
+    data-sidebar-panel
+    data-sidebar-state="open"
+  >
+    <nav aria-label={label} data-sidebar-nav>
+      <header class="sidebar-header" data-sidebar-header>
+        <p>{title}</p>
+      </header>
+
+      <div class="sidebar-content">
+        {
+          groups.map((group, groupIndex) => {
+            const headingId = `${id}-group-${groupIndex}`;
+
+            return (
+              <section class="sidebar-group" aria-labelledby={headingId} data-sidebar-group>
+                <PanelHeading class="sidebar-group-heading" id={headingId}>{group.label}</PanelHeading>
+                <ul>
+                  {group.items.map((item) => (
+                    <li>
+                      <a
+                        href={item.href}
+                        aria-current={item.href === current ? 'page' : undefined}
+                        data-sidebar-link
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })
+        }
+      </div>
+    </nav>
+  </aside>
+</div>
+
+<style>
+  .sidebar {
+    display: block;
+    width: 100%;
+    /* Echelle locale necessaire a la superposition mobile : le composant doit
+       garder le voile derriere le panneau et le controle au-dessus. */
+    --sidebar-z-backdrop: 0;
+    --sidebar-z-panel: 1;
+    --sidebar-z-header: 2;
+  }
+
+  .sidebar-panel {
+    display: block;
+    box-sizing: border-box;
+    background: var(--color-bg-surface);
+    color: var(--color-text-default);
+    font-family: var(--font-family-body);
+  }
+
+  .sidebar-panel[hidden],
+  [data-sidebar-toggle][hidden],
+  [data-sidebar-backdrop][hidden],
+  [data-sidebar-icon][hidden] {
+    display: none;
+  }
+
+  .sidebar-panel {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar-panel::-webkit-scrollbar {
+    display: none;
+  }
+
+  nav {
+    width: 100%;
+  }
+
+  .sidebar-header {
+    padding: var(--space-2xl) var(--space-xl) var(--space-lg);
+  }
+
+  .sidebar-header p {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--color-text-default);
+  }
+
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+    padding: 0 var(--space-xl) var(--space-2xl);
+  }
+
+  .sidebar-group {
+    margin: 0;
+  }
+
+  .sidebar-group-heading {
+    margin: 0;
+    padding: var(--space-lg);
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-subheading);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--color-text-default);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    padding: var(--space-md) var(--space-lg) var(--space-md) var(--space-2xl);
+    border-radius: var(--radius-md);
+    color: var(--color-text-default);
+    font-size: var(--font-size-body);
+    line-height: var(--font-line-height-body);
+    text-decoration: none;
+    transition:
+      background-color var(--motion-duration-quick) var(--motion-easing-standard),
+      color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  a:hover,
+  a:focus-visible,
+  a[aria-current='page'] {
+    background: var(--color-bg-section);
+  }
+
+  a[aria-current='page'] {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .sidebar-mobile-header {
+    display: none;
+  }
+
+  .sidebar-mobile-header p {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--color-text-default);
+  }
+
+  /* Sous 768px, le panneau sort du flux et se prepare a recevoir son etat
+     ouvert/ferme a l'etape du comportement mobile. Il reste visible tant que
+     JavaScript ne lui fournit pas encore cet etat. */
+  @media (min-width: 768px) {
+    .sidebar-panel {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      inline-size: calc(var(--space-layout-128) + var(--space-layout-128));
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      z-index: var(--sidebar-z-panel);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sidebar-panel {
+      position: fixed;
+      inset: 0;
+      inline-size: 100%;
+      max-inline-size: 100%;
+      z-index: var(--sidebar-z-panel);
+      overflow-y: auto;
+      padding-block-start: var(--space-layout-96);
+    }
+
+    .sidebar-panel .sidebar-header {
+      display: none;
+    }
+
+    .sidebar-mobile-header {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      inline-size: 100%;
+      box-sizing: border-box;
+      z-index: var(--sidebar-z-header);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--color-bg-surface);
+    }
+
+    [data-sidebar-backdrop] {
+      position: fixed;
+      inset: 0;
+      z-index: var(--sidebar-z-backdrop);
+    }
+
+    [data-sidebar-toggle] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      padding: 0 var(--button-padding-x-md);
+      border: 0;
+      border-radius: var(--button-radius);
+      background: var(--color-bg-surface);
+      color: var(--color-text-default);
+      cursor: pointer;
+      min-inline-size: var(--button-min-width-sm);
+      min-block-size: var(--button-height-sm);
+      transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
+    }
+
+    [data-sidebar-toggle]:hover,
+    [data-sidebar-toggle]:focus-visible {
+      background: var(--color-bg-section);
+    }
+  }
+</style>
+
+<script>
+  const sidebars = document.querySelectorAll<HTMLElement>('[data-sidebar]');
+  const burgerButtons = document.querySelectorAll<HTMLButtonElement>('[data-sidebar-toggle]');
+  const backdrops = document.querySelectorAll<HTMLElement>('[data-sidebar-backdrop]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-sidebar-link]');
+  const mobileQuery = window.matchMedia('(max-width: 767px)');
+
+  const openSidebar = (sidebar: HTMLElement) => {
+    const panel = sidebar.querySelector<HTMLElement>('[data-sidebar-panel]');
+    const toggle = sidebar.querySelector<HTMLButtonElement>('[data-sidebar-toggle]');
+    const backdrop = sidebar.querySelector<HTMLElement>('[data-sidebar-backdrop]');
+    const openIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="open"]');
+    const closeIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="close"]');
+
+    sidebar.dataset.sidebarState = 'open';
+    panel?.removeAttribute('hidden');
+    panel?.setAttribute('data-sidebar-state', 'open');
+    toggle?.setAttribute('aria-expanded', 'true');
+    toggle?.setAttribute('aria-label', 'Fermer la navigation');
+    openIcon?.setAttribute('hidden', '');
+    closeIcon?.removeAttribute('hidden');
+
+    if (mobileQuery.matches) {
+      backdrop?.removeAttribute('hidden');
+      backdrop?.setAttribute('data-sidebar-state', 'open');
+    } else {
+      backdrop?.setAttribute('hidden', '');
+      backdrop?.setAttribute('data-sidebar-state', 'closed');
+    }
+  };
+
+  const closeSidebar = (sidebar: HTMLElement, restoreFocus = false) => {
+    const panel = sidebar.querySelector<HTMLElement>('[data-sidebar-panel]');
+    const toggle = sidebar.querySelector<HTMLButtonElement>('[data-sidebar-toggle]');
+    const backdrop = sidebar.querySelector<HTMLElement>('[data-sidebar-backdrop]');
+    const openIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="open"]');
+    const closeIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="close"]');
+
+    sidebar.dataset.sidebarState = 'closed';
+    panel?.setAttribute('hidden', '');
+    panel?.setAttribute('data-sidebar-state', 'closed');
+    backdrop?.setAttribute('hidden', '');
+    backdrop?.setAttribute('data-sidebar-state', 'closed');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Ouvrir la navigation');
+    openIcon?.removeAttribute('hidden');
+    closeIcon?.setAttribute('hidden', '');
+
+    if (restoreFocus) toggle?.focus();
+  };
+
+  burgerButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const sidebar = button.closest<HTMLElement>('[data-sidebar]');
+      if (!sidebar) return;
+      if (button.getAttribute('aria-expanded') === 'true') {
+        closeSidebar(sidebar, true);
+      } else {
+        openSidebar(sidebar);
+      }
+    });
+  });
+
+  backdrops.forEach((backdrop) => {
+    backdrop.addEventListener('click', () => {
+      const sidebar = backdrop.closest<HTMLElement>('[data-sidebar]');
+      if (sidebar) closeSidebar(sidebar);
+    });
+  });
+
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      const sidebar = link.closest<HTMLElement>('[data-sidebar]');
+      if (sidebar && mobileQuery.matches) closeSidebar(sidebar);
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !mobileQuery.matches) return;
+
+    sidebars.forEach((sidebar) => {
+      if (sidebar.dataset.sidebarState === 'open') {
+        event.preventDefault();
+        closeSidebar(sidebar, true);
+      }
+    });
+  });
+
+  const prepareMobileSidebar = (sidebar: HTMLElement) => {
+    const panel = sidebar.querySelector<HTMLElement>('[data-sidebar-panel]');
+    const toggle = sidebar.querySelector<HTMLButtonElement>('[data-sidebar-toggle]');
+    const backdrop = sidebar.querySelector<HTMLElement>('[data-sidebar-backdrop]');
+    const openIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="open"]');
+    const closeIcon = sidebar.querySelector<HTMLElement>('[data-sidebar-icon="close"]');
+
+    sidebar.dataset.sidebarState = 'closed';
+    panel?.setAttribute('hidden', '');
+    panel?.setAttribute('data-sidebar-state', 'closed');
+    backdrop?.setAttribute('hidden', '');
+    backdrop?.setAttribute('data-sidebar-state', 'closed');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Ouvrir la navigation');
+    toggle?.removeAttribute('hidden');
+    openIcon?.removeAttribute('hidden');
+    closeIcon?.setAttribute('hidden', '');
+  };
+
+  const syncSidebarWithViewport = () => {
+    if (mobileQuery.matches) {
+      sidebars.forEach(prepareMobileSidebar);
+    } else {
+      sidebars.forEach((sidebar) => openSidebar(sidebar));
+    }
+  };
+
+  if (mobileQuery.matches) {
+    sidebars.forEach(prepareMobileSidebar);
+  }
+
+  mobileQuery.addEventListener('change', syncSidebarWithViewport);
+</script>

@@ -1,0 +1,31 @@
+---
+import ComponentPageLayout from '../../design-system/layouts/ComponentPageLayout.astro';
+import { withBase } from '../../design-system/lib/url';
+import { componentPageGroups, componentPages } from '../_component-pages';
+
+export function getStaticPaths() {
+  return componentPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+const { slug } = Astro.params;
+const { page } = Astro.props;
+const current = withBase(`/components/${slug}`);
+---
+
+<ComponentPageLayout
+  title={page.title}
+  description={page.description}
+  sidebarId="component-pages-sidebar"
+  sidebarTitle="UX design system"
+  sidebarGroups={componentPageGroups}
+  current={current}
+  sidebarLabel="Navigation des composants"
+>
+  <header>
+    <h1>{page.title}</h1>
+    <p>{page.description}</p>
+  </header>
+</ComponentPageLayout>
