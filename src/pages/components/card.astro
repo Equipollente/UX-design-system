@@ -1,0 +1,411 @@
+---
+import ComponentDetailLayout from '../../design-system/layouts/ComponentDetailLayout.astro';
+import PlaygroundButtons from '../../design-system/layouts/blocks/PlaygroundButtons.astro';
+import PlaygroundImage from '../../design-system/layouts/blocks/PlaygroundImage.astro';
+import PlaygroundTags from '../../design-system/layouts/blocks/PlaygroundTags.astro';
+import PlaygroundText from '../../design-system/layouts/blocks/PlaygroundText.astro';
+import Button from '../../design-system/components/Button.astro';
+import CardActions from '../../design-system/components/cards/CardActions.astro';
+import CardDefault from '../../design-system/components/cards/CardDefault.astro';
+import CardImage from '../../design-system/components/cards/CardImage.astro';
+import CardTags from '../../design-system/components/cards/CardTags.astro';
+import CardText from '../../design-system/components/cards/CardText.astro';
+import Icon from '../../design-system/components/Icon.astro';
+import Select from '../../design-system/components/Select.astro';
+import Tag from '../../design-system/components/Tag.astro';
+import TextField from '../../design-system/components/TextField.astro';
+import { withBase } from '../../design-system/lib/url';
+import { iconNames } from '../../design-system/lib/icons';
+import { componentPageGroups } from '../_component-pages';
+
+const title = 'Card';
+const description = 'Primitive UI neutre de la famille Cards. Elle fournit le cadre visuel et accepte zéro ou plusieurs enfants. Les comportements métier appartiennent aux compositions.';
+const current = withBase('/components/card');
+
+const cardExample = {
+  title: 'Nager dans le bonheur',
+  subtitle: 'Une petite nageuse, quelques paillettes et des mots qui font du bien.',
+  meta: '2025',
+  headingLevel: 3,
+  imagePath: '/images/case-study/rubika-roadmap.jpg',
+  imageAlt: "Exemple d'image de projet",
+  imageWidth: 1200,
+  imageHeight: 800,
+  status: 'En cours',
+  tags: ['Gouache', 'Encre'],
+  editLabel: 'Modifier',
+  viewLabel: 'Voir le projet',
+} as const;
+
+const cardCode = `---
+import Button from '../../design-system/components/Button.astro';
+import CardActions from '../../design-system/components/cards/CardActions.astro';
+import CardDefault from '../../design-system/components/cards/CardDefault.astro';
+import CardImage from '../../design-system/components/cards/CardImage.astro';
+import CardTags from '../../design-system/components/cards/CardTags.astro';
+import CardText from '../../design-system/components/cards/CardText.astro';
+import Tag from '../../design-system/components/Tag.astro';
+import { withBase } from '../../design-system/lib/url';
+---
+
+<CardDefault>
+  <CardText
+    title="${cardExample.title}"
+    subtitle="${cardExample.subtitle}"
+    meta="${cardExample.meta}"
+    headingLevel={${cardExample.headingLevel}}
+  />
+  <CardImage
+    slot="image"
+    src={withBase('${cardExample.imagePath}')}
+    alt="${cardExample.imageAlt}"
+    width={${cardExample.imageWidth}}
+    height={${cardExample.imageHeight}}
+  />
+  <CardTags slot="tags-top">
+    <Tag variant="accent">${cardExample.status}</Tag>
+  </CardTags>
+  <CardTags slot="tags-bottom">
+${cardExample.tags.map((tag) => `    <Tag>${tag}</Tag>`).join('\n')}
+  </CardTags>
+  <CardActions slot="actions">
+    <Button variant="secondary">${cardExample.editLabel}</Button>
+    <Button>${cardExample.viewLabel}</Button>
+  </CardActions>
+</CardDefault>`;
+---
+
+<ComponentDetailLayout
+  title={title}
+  description={description}
+  code={cardCode}
+  sidebarGroups={componentPageGroups}
+  current={current}
+>
+  <div slot="overview">
+    <CardDefault>
+      <CardText
+        title={cardExample.title}
+        subtitle={cardExample.subtitle}
+        meta={cardExample.meta}
+        headingLevel={cardExample.headingLevel}
+      />
+      <CardImage
+        slot="image"
+        src={withBase(cardExample.imagePath)}
+        alt={cardExample.imageAlt}
+        width={cardExample.imageWidth}
+        height={cardExample.imageHeight}
+      />
+      <CardTags slot="tags-top">
+        <Tag variant="accent">{cardExample.status}</Tag>
+      </CardTags>
+      <CardTags slot="tags-bottom">
+        {cardExample.tags.map((tag) => <Tag>{tag}</Tag>)}
+      </CardTags>
+      <CardActions slot="actions">
+        <Button variant="secondary">{cardExample.editLabel}</Button>
+        <Button>{cardExample.viewLabel}</Button>
+      </CardActions>
+    </CardDefault>
+  </div>
+
+  <div slot="playground-controls">
+    <form class="card-playground-form" data-card-playground>
+      <PlaygroundButtons
+        id="actions"
+        actions={[
+          { label: cardExample.editLabel, variant: 'secondary', icon: 'arrow-narrow-right' },
+          { label: cardExample.viewLabel, variant: 'primary' },
+        ]}
+      />
+      <TextField
+        id="card-playground-href"
+        name="card-href"
+        label="Lien (si aucun bouton)"
+        value="/exemple"
+      />
+      <PlaygroundTags
+        id="tags-top"
+        tags={[{ label: cardExample.status, variant: 'accent' }]}
+      />
+      <PlaygroundTags
+        id="tags-bottom"
+        tags={cardExample.tags.map((label) => ({ label, variant: 'outline' as const }))}
+      />
+      <PlaygroundText id="text">
+        <Select
+          id="card-playground-title-size"
+          name="text-title-size"
+          label="Taille du titre"
+          options={['title', 'heading']}
+          value="title"
+        />
+        <TextField id="card-playground-title" name="text-title" label="Titre" value={cardExample.title} />
+        <TextField id="card-playground-subtitle" name="text-subtitle" label="Sous-titre" value={cardExample.subtitle} />
+        <TextField id="card-playground-meta" name="text-meta" label="Meta" value={cardExample.meta} />
+      </PlaygroundText>
+      <PlaygroundImage id="image">
+        <TextField
+          id="card-playground-image-alt"
+          name="image-alt"
+          label="Texte alternatif"
+          value={cardExample.imageAlt}
+        />
+      </PlaygroundImage>
+    </form>
+  </div>
+
+  <div slot="playground">
+    <CardDefault data-card-playground-preview>
+      <CardText
+        data-playground-preview="text"
+        title={cardExample.title}
+        subtitle={cardExample.subtitle}
+        meta={cardExample.meta}
+        headingLevel={cardExample.headingLevel}
+        titleSize="title"
+      />
+      <CardImage
+        slot="image"
+        data-playground-preview="image"
+        src={withBase(cardExample.imagePath)}
+        alt={cardExample.imageAlt}
+        width={cardExample.imageWidth}
+        height={cardExample.imageHeight}
+      />
+      <CardTags slot="tags-top" data-playground-preview="tags-top">
+        <Tag variant="accent">{cardExample.status}</Tag>
+      </CardTags>
+      <CardTags slot="tags-bottom" data-playground-preview="tags-bottom">
+        {cardExample.tags.map((tag) => <Tag>{tag}</Tag>)}
+      </CardTags>
+      <CardActions slot="actions" data-playground-preview="actions">
+        <Button variant="secondary">{cardExample.editLabel}</Button>
+        <Button>{cardExample.viewLabel}</Button>
+      </CardActions>
+    </CardDefault>
+  </div>
+</ComponentDetailLayout>
+
+<div data-card-action-icons aria-hidden="true" hidden>
+  {iconNames.map((icon) => (
+    <span data-card-action-icon={icon}><Icon name={icon} /></span>
+  ))}
+</div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-card-playground]');
+  const preview = document.querySelector<HTMLElement>('[data-card-playground-preview]');
+
+  if (form && preview) {
+    const code = document.querySelector<HTMLElement>('[data-playground-code]');
+    const actionList = form.querySelector<HTMLElement>('[data-playground-button-list]');
+    const actionsRegion = preview.querySelector<HTMLElement>('[data-slot="card-actions"]');
+    const tagGroups = ['tags-top', 'tags-bottom'].map((id) => ({
+      id,
+      list: form.querySelector<HTMLElement>(`[data-playground-toggle="${id}"]`)?.closest<HTMLElement>('[data-playground-group]')
+        ?.querySelector<HTMLElement>('[data-playground-tag-list]'),
+      region: preview.querySelector<HTMLElement>(`[data-playground-preview="${id}"]`),
+    }));
+    const textControls = form.querySelector<HTMLElement>('[data-playground-group="text"]');
+    const imageControls = form.querySelector<HTMLElement>('[data-playground-group="image"]');
+    const imageElement = preview.querySelector<HTMLImageElement>('[data-playground-preview="image"]');
+    const imageFrame = imageElement?.closest<HTMLElement>('.card-img');
+    const title = preview.querySelector<HTMLElement>('[data-slot="card-text"] h3, [data-slot="card-text"] h2');
+    const textContent = preview.querySelector<HTMLElement>('[data-slot="card-text"]');
+    const cardTextWrapper = textContent?.parentElement ?? null;
+    const subtitle = preview.querySelector<HTMLElement>('.cards-text-subtitle');
+    const meta = preview.querySelector<HTMLElement>('.cards-text-meta');
+    const iconBank = document.querySelector<HTMLElement>('[data-card-action-icons]');
+    const actionRows = () =>
+      Array.from(actionList?.querySelectorAll<HTMLElement>('[data-playground-button-row]') ?? []);
+    const actionValues = () =>
+      actionRows().map((row) => ({
+        label: row.querySelector<HTMLInputElement>('input[name="action-label"]')?.value ?? '',
+        variant: row.querySelector<HTMLSelectElement>('select[name="action-variant"]')?.value ?? 'primary',
+        icon: row.querySelector<HTMLSelectElement>('select[name="action-icon"]')?.value ?? '',
+      }));
+    const tagValues = (list?: HTMLElement | null) =>
+      Array.from(list?.querySelectorAll<HTMLElement>('[data-playground-tag-row]') ?? []).map((row) => ({
+        label: row.querySelector<HTMLInputElement>('input[name="tag-label"]')?.value ?? '',
+        variant: row.querySelector<HTMLSelectElement>('select[name="tag-variant"]')?.value ?? 'outline',
+      }));
+
+    const renderActions = (actions: ReturnType<typeof actionValues>) => {
+      if (!actionsRegion) return;
+      const template = actionsRegion.querySelector<HTMLButtonElement>('.btn');
+      if (!template) return;
+
+      while (actionsRegion.children.length < actions.length) {
+        actionsRegion.append(template.cloneNode(true));
+      }
+      while (actionsRegion.children.length > actions.length) {
+        actionsRegion.lastElementChild?.remove();
+      }
+
+      actions.forEach(({ label, variant, icon }, index) => {
+        const button = actionsRegion.children[index] as HTMLButtonElement;
+        button.className = `btn btn-${variant} btn-md`;
+        button.type = 'button';
+        button.replaceChildren(document.createTextNode(label));
+        if (icon && iconBank) {
+          const iconSource = Array.from(iconBank.querySelectorAll<HTMLElement>('[data-card-action-icon]'))
+            .find((candidate) => candidate.dataset.cardActionIcon === icon);
+          const iconElement = iconSource?.querySelector<SVGElement>('svg.icon')?.cloneNode(true);
+          if (iconElement instanceof SVGElement) {
+            iconElement.setAttribute('aria-hidden', 'true');
+            button.append(iconElement);
+          }
+        }
+      });
+    };
+
+    const renderTags = (region: HTMLElement | null | undefined, tags: ReturnType<typeof tagValues>) => {
+      if (!region) return;
+      const template = region.querySelector<HTMLElement>('.tag');
+      if (!template) return;
+
+      while (region.children.length < tags.length) {
+        region.append(template.cloneNode(true));
+      }
+      while (region.children.length > tags.length) {
+        region.lastElementChild?.remove();
+      }
+
+      tags.forEach(({ label, variant }, index) => {
+        const tag = region.children[index] as HTMLElement;
+        tag.className = `tag tag-${variant}`;
+        tag.textContent = label;
+      });
+    };
+
+    const update = () => {
+      const checked = (name: string) => (form.elements.namedItem(name) as HTMLInputElement).checked;
+      const hasActions = checked('actions');
+      const hasImage = checked('image');
+      const actions = actionValues();
+      const tagsTop = tagValues(tagGroups[0].list);
+      const tagsBottom = tagValues(tagGroups[1].list);
+      const textValue = (name: string) =>
+        textControls?.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${name}"]`)?.value ?? '';
+      const titleSize = textValue('text-title-size') || 'title';
+      const imageAlt = imageControls?.querySelector<HTMLInputElement>('[name="image-alt"]')?.value ?? '';
+      const hrefValue = form.querySelector<HTMLInputElement>('[name="card-href"]')?.value || '/exemple';
+      renderActions(actions);
+      renderTags(tagGroups[0].region, tagsTop);
+      renderTags(tagGroups[1].region, tagsBottom);
+      if (title) title.textContent = textValue('text-title');
+      if (textContent) textContent.classList.toggle('card-text-heading', titleSize === 'heading');
+      if (subtitle) {
+        subtitle.textContent = textValue('text-subtitle');
+        subtitle.hidden = textValue('text-subtitle').length === 0;
+      }
+      if (meta) {
+        meta.textContent = textValue('text-meta');
+        meta.hidden = textValue('text-meta').length === 0;
+      }
+      if (imageElement) imageElement.alt = imageAlt;
+      if (imageFrame) {
+        imageFrame.hidden = !hasImage;
+        imageFrame.style.display = hasImage ? '' : 'none';
+      }
+      if (actionsRegion) {
+        actionsRegion.hidden = !hasActions;
+        actionsRegion.style.display = hasActions ? '' : 'none';
+      }
+
+      // Sans boutons, CardDefault bascule en carte-lien : on simule ici le
+      // même changement de variante que le composant ferait au rendu serveur.
+      preview.dataset.cardVariant = hasActions ? 'actions' : 'link';
+      let linkWrapper = cardTextWrapper?.querySelector<HTMLAnchorElement>('.cards-card-link') ?? null;
+      if (!hasActions) {
+        if (!linkWrapper && cardTextWrapper && textContent) {
+          linkWrapper = document.createElement('a');
+          linkWrapper.className = 'cards-card-link';
+          // Sans le data-astro-cid-* de CardDefault, les styles scopés (dont
+          // l'overlay ::after qui rend toute la carte cliquable) ne s'appliqueraient pas.
+          Array.from(preview.attributes).forEach((attr) => {
+            if (/^data-astro-cid-/.test(attr.name)) linkWrapper!.setAttribute(attr.name, attr.value);
+          });
+          cardTextWrapper.insertBefore(linkWrapper, textContent);
+          linkWrapper.append(textContent);
+        }
+        if (linkWrapper) linkWrapper.href = hrefValue;
+      } else if (linkWrapper && cardTextWrapper) {
+        cardTextWrapper.append(...Array.from(linkWrapper.childNodes));
+        linkWrapper.remove();
+      }
+
+      if (code) {
+        const lines = [
+          '---',
+          "import Button from '../../design-system/components/Button.astro';",
+          "import CardActions from '../../design-system/components/cards/CardActions.astro';",
+          "import CardDefault from '../../design-system/components/cards/CardDefault.astro';",
+          "import CardImage from '../../design-system/components/cards/CardImage.astro';",
+          "import CardTags from '../../design-system/components/cards/CardTags.astro';",
+          "import CardText from '../../design-system/components/cards/CardText.astro';",
+          "import Tag from '../../design-system/components/Tag.astro';",
+          "import { withBase } from '../../design-system/lib/url';",
+          '---',
+          '',
+          hasActions ? '<CardDefault>' : `<CardDefault href="${hrefValue}">`,
+          '  <CardText',
+          `    title="${textValue('text-title')}"`,
+          `    subtitle="${textValue('text-subtitle')}"`,
+          `    meta="${textValue('text-meta')}"`,
+          '    headingLevel={3}',
+          `    titleSize="${titleSize}"`,
+          '  />',
+        ];
+
+        if (checked('image')) {
+          lines.push(
+            '  <CardImage',
+            '    slot="image"',
+            "    src={withBase('/images/case-study/rubika-roadmap.jpg')}",
+            `    alt="${imageAlt}"`,
+            '    width={1200}',
+            '    height={800}',
+            '  />',
+          );
+        }
+
+        if (checked('tags-top')) {
+          lines.push(
+            '  <CardTags slot="tags-top">',
+            ...tagsTop.flatMap(({ label, variant }) => [`    <Tag variant="${variant}">${label}</Tag>`]),
+            '  </CardTags>',
+          );
+        }
+
+        if (checked('tags-bottom')) {
+          lines.push(
+            '  <CardTags slot="tags-bottom">',
+            ...tagsBottom.map(({ label, variant }) => `    <Tag variant="${variant}">${label}</Tag>`),
+            '  </CardTags>',
+          );
+        }
+
+        if (hasActions) {
+          lines.push('  <CardActions slot="actions">');
+          actions.forEach(({ label, variant, icon }) => {
+            const iconEnd = icon ? ` iconEnd="${icon}"` : '';
+            lines.push(`    <Button variant="${variant}" size="md"${iconEnd}>${label}</Button>`);
+          });
+          lines.push('  </CardActions>');
+        }
+
+        lines.push('</CardDefault>');
+        code.textContent = lines.join('\n');
+      }
+    };
+
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    update();
+  }
+</script>
+
+
