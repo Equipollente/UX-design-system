@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../design-system/layouts/BaseLayout.astro';
+import Sidebar from '../design-system/components/Sidebar.astro';
+import { withBase } from '../design-system/lib/url';
+
+const current = withBase('/components');
+
+const groups = [
+  {
+    label: 'Foundations',
+    items: [
+      { label: 'Couleurs', href: withBase('/foundations') },
+      { label: 'Typographie', href: withBase('/foundations#typography') },
+      { label: 'Espacements', href: withBase('/foundations#spacing') },
+    ],
+  },
+  {
+    label: 'Composants',
+    items: [
+      { label: 'Boutons', href: withBase('/components#button') },
+      { label: 'Cards', href: current },
+      { label: 'Forms', href: withBase('/formulaire') },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Sidebar - demonstration">
+  <div class="sidebar-demo">
+    <Sidebar
+      title="UX design system"
+      groups={groups}
+      id="sidebar-demo"
+      current={current}
+      label="Navigation de demonstration"
+    />
+
+    <main>
+      <h1>Sidebar</h1>
+      <p>Page temporaire pour verifier la structure HTML et l'item courant.</p>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .sidebar-demo {
+    display: block;
+    padding: var(--space-2xl);
+    padding-inline-start: calc(var(--space-layout-128) + var(--space-layout-128));
+  }
+
+  main {
+    padding: var(--space-2xl);
+  }
+
+  @media (max-width: 767px) {
+    .sidebar-demo {
+      display: block;
+      padding-inline-start: 0;
+      padding-block-start: var(--space-layout-96);
+    }
+
+    main {
+      padding: var(--space-2xl) var(--space-xl);
+    }
+  }
+</style>

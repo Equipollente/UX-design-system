@@ -1,0 +1,81 @@
+---
+// Layout des pages dediees aux composants. Il compose le shell HTML existant
+// avec la sidebar de documentation et laisse chaque page fournir son contenu.
+//
+// Ce n'est pas DocsLayout : celui-ci conserve la barre de documentation actuelle.
+// Ce layout ne connait aucun composant documente ; il recoit la navigation en props.
+
+import type { ComponentProps } from 'astro/types';
+import BaseLayout from './BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+type SidebarProps = ComponentProps<typeof Sidebar>;
+
+interface Props {
+  title: string;
+  description?: string;
+  sidebarId: SidebarProps['id'];
+  sidebarTitle: SidebarProps['title'];
+  sidebarGroups: SidebarProps['groups'];
+  current?: SidebarProps['current'];
+  sidebarLabel?: SidebarProps['label'];
+  sidebarClass?: SidebarProps['class'];
+  sidebarStyle?: SidebarProps['style'];
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  sidebarId,
+  sidebarTitle,
+  sidebarGroups,
+  current,
+  sidebarLabel,
+  sidebarClass,
+  sidebarStyle,
+  class: className,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class:list={['component-page', className]}>
+    <Sidebar
+      id={sidebarId}
+      title={sidebarTitle}
+      groups={sidebarGroups}
+      current={current}
+      label={sidebarLabel}
+      class={sidebarClass}
+      style={sidebarStyle}
+    />
+
+    <main>
+      <slot />
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .component-page {
+    display: grid;
+    grid-template-columns: calc(var(--space-layout-128) + var(--space-layout-128)) minmax(0, 1fr);
+    min-block-size: 100vh;
+  }
+
+  main {
+    min-inline-size: 0;
+    padding: var(--space-2xl);
+  }
+
+  @media (max-width: 767px) {
+    .component-page {
+      display: block;
+      padding-block-start: var(--space-layout-96);
+    }
+
+    main {
+      padding: var(--space-2xl) var(--space-xl);
+    }
+  }
+</style>
