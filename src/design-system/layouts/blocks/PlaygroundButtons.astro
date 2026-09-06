@@ -1,0 +1,140 @@
+---
+import Button from '../../components/Button.astro';
+import Select from '../../components/Select.astro';
+import TextField from '../../components/TextField.astro';
+import Toggle from '../../components/Toggle.astro';
+import { iconNames } from '../../lib/icons';
+
+interface Action {
+  label: string;
+  variant?: 'primary' | 'secondary' | 'alert';
+  icon?: string;
+}
+
+interface Props {
+  id: string;
+  actions?: Action[];
+}
+
+const { id, actions = [] } = Astro.props;
+const actionRows = actions.length > 0 ? actions : [{ label: 'Nouvelle action', variant: 'primary' as const }];
+---
+
+<fieldset data-playground-group="buttons">
+  <legend>Buttons</legend>
+  <Toggle id={`${id}-toggle`} name={id} label="Afficher les boutons" checked data-playground-toggle={id} />
+  <div data-playground-options={id}>
+    <div class="playground-button-list" data-playground-button-list>
+      {actionRows.map((action, index) => (
+        <div class="playground-button-row" data-playground-button-row>
+          <TextField
+            id={`${id}-label-${index + 1}`}
+            name="action-label"
+            label="Libellé"
+            value={action.label}
+          />
+          <div class="playground-button-options">
+            <Select
+              id={`${id}-variant-${index + 1}`}
+              name="action-variant"
+              label="Variante"
+              options={['primary', 'secondary', 'alert']}
+              value={action.variant ?? 'primary'}
+            />
+            <Select
+              id={`${id}-icon-${index + 1}`}
+              name="action-icon"
+              label="Icône"
+              options={['', ...iconNames]}
+              value={action.icon ?? ''}
+            />
+            <Button type="button" variant="secondary" size="sm" icon="close" data-remove-action aria-label="Supprimer ce bouton" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <template data-playground-button-template>
+      <div class="playground-button-row" data-playground-button-row>
+        <TextField id={`${id}-label-template`} name="action-label" label="Libellé" value="Nouveau bouton" />
+        <div class="playground-button-options">
+          <Select id={`${id}-variant-template`} name="action-variant" label="Variante" options={['primary', 'secondary', 'alert']} value="primary" />
+          <Select id={`${id}-icon-template`} name="action-icon" label="Icône" options={['', ...iconNames]} value="" />
+          <Button type="button" variant="secondary" size="sm" icon="close" data-remove-action aria-label="Supprimer ce bouton" />
+        </div>
+      </div>
+    </template>
+    <Button type="button" variant="secondary" size="sm" data-add-action>Ajouter un bouton</Button>
+  </div>
+</fieldset>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-playground-group="buttons"]').forEach((group) => {
+    const list = group.querySelector<HTMLElement>('[data-playground-button-list]');
+    const template = group.querySelector<HTMLTemplateElement>('[data-playground-button-template]');
+    if (!list || !template) return;
+
+    const rows = () => Array.from(list.querySelectorAll<HTMLElement>('[data-playground-button-row]'));
+    const notify = () => list.dispatchEvent(new Event('input', { bubbles: true }));
+
+    group.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const remove = target.closest<HTMLElement>('[data-remove-action]');
+      const add = target.closest<HTMLElement>('[data-add-action]');
+
+      if (remove) {
+        if (rows().length > 1) remove.closest<HTMLElement>('[data-playground-button-row]')?.remove();
+        notify();
+        return;
+      }
+
+      if (add) {
+        const fragment = template.content.cloneNode(true) as DocumentFragment;
+        const row = fragment.querySelector<HTMLElement>('[data-playground-button-row]');
+        if (!row) return;
+
+        const index = rows().length + 1;
+        row.querySelectorAll<HTMLElement>('[id]').forEach((control) => {
+          const oldId = control.id;
+          const newId = `${oldId}-${index}`;
+          control.id = newId;
+          row.querySelector<HTMLLabelElement>(`label[for="${oldId}"]`)?.setAttribute('for', newId);
+        });
+        list.append(fragment);
+        notify();
+      }
+    });
+  });
+</script>
+
+<style>
+  .playground-button-list {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .playground-button-row {
+    display: grid;
+    gap: var(--space-md);
+    padding-block-start: var(--space-md);
+    border-block-start: var(--border-width-default) solid var(--color-border-default);
+  }
+
+  .playground-button-row:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .playground-button-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 767px) {
+    .playground-button-options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

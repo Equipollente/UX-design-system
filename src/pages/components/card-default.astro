@@ -1,0 +1,43 @@
+---
+import ComponentDetailLayout from '../../design-system/layouts/ComponentDetailLayout.astro';
+import CardDefault from '../../design-system/components/CardDefault.astro';
+import { withBase } from '../../design-system/lib/url';
+import { componentPageGroups } from '../_component-pages';
+
+const title = 'CardDefault';
+const description = "L'unité répétée d'une page liste en grille. Une carte affiche ses données et mène à sa page de détail. Elle est responsive par elle-même.";
+const current = withBase('/components/card-default');
+
+const cardCode = `<CardDefault
+  title="Titre du composant"
+  subtitle="Sous-titre"
+  meta="Métadonnées"
+  image="/images/example.jpg"
+  imageAlt="Description"
+  href="/detail"
+/>`;
+---
+
+<ComponentDetailLayout
+  title={title}
+  description={description}
+  code={cardCode}
+  sidebarGroups={componentPageGroups}
+  current={current}
+>
+  <div slot="overview">
+    <CardDefault
+      title="Titre du composant"
+      subtitle="Sous-titre optionnel"
+      meta="Métadonnées"
+      image={withBase('/images/case-study/etapes-01.jpg')}
+      imageAlt="Exemple de carte"
+      href="#"
+    />
+  </div>
+
+  <div slot="playground">
+    <p>Playground CardDefault à développer</p>
+  </div>
+</ComponentDetailLayout>
+

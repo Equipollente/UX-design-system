@@ -1,0 +1,47 @@
+---
+import ComponentPageLayout from './ComponentPageLayout.astro';
+import ComponentIntroduction from './blocks/ComponentIntroduction.astro';
+import ComponentOverview from './blocks/ComponentOverview.astro';
+import ComponentPlayground from './blocks/ComponentPlayground.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  code?: string;
+  sidebarGroups: any[];
+  current: string;
+}
+
+const {
+  title,
+  description,
+  code,
+  sidebarGroups,
+  current,
+} = Astro.props;
+---
+
+<ComponentPageLayout
+  title={title}
+  description={description}
+  sidebarId="component-pages-sidebar"
+  sidebarTitle="UX design system"
+  sidebarGroups={sidebarGroups}
+  current={current}
+  sidebarLabel="Navigation des composants"
+>
+  <div slot="header">
+    <ComponentIntroduction title={title} description={description} />
+  </div>
+
+  <div slot="content">
+    <ComponentOverview code={code}>
+      <slot name="overview" />
+    </ComponentOverview>
+
+    <ComponentPlayground id="component-playground" code={code}>
+      <slot name="playground-controls" slot="controls" />
+      <slot name="playground" slot="preview" />
+    </ComponentPlayground>
+  </div>
+</ComponentPageLayout>

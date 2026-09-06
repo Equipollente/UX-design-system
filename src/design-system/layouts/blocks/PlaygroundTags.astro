@@ -1,0 +1,139 @@
+---
+import Button from '../../components/Button.astro';
+import Select from '../../components/Select.astro';
+import TextField from '../../components/TextField.astro';
+import Toggle from '../../components/Toggle.astro';
+
+interface TagItem {
+  label: string;
+  variant?: 'accent' | 'lime' | 'neutral' | 'outline';
+}
+
+interface Props {
+  id: string;
+  tags?: TagItem[];
+}
+
+const { id, tags = [] } = Astro.props;
+const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outline' as const }];
+---
+
+<fieldset data-playground-group="tags">
+  <legend>Tags</legend>
+  <Toggle id={`${id}-toggle`} name={id} label="Afficher les tags" checked data-playground-toggle={id} />
+  <div data-playground-options={id}>
+    <div class="playground-tag-list" data-playground-tag-list>
+      {tagRows.map((tag, index) => (
+        <div class="playground-tag-row" data-playground-tag-row>
+          <TextField id={`${id}-label-${index + 1}`} name="tag-label" label="Libellé" value={tag.label} />
+          <div class="playground-tag-options">
+            <Select id={`${id}-variant-${index + 1}`} name="tag-variant" label="Variante" options={['accent', 'lime', 'neutral', 'outline']} value={tag.variant ?? 'outline'} />
+            <Button type="button" variant="secondary" icon="close" data-remove-tag aria-label="Supprimer ce tag" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <template data-playground-tag-template>
+      <div class="playground-tag-row" data-playground-tag-row>
+        <TextField id={`${id}-label-template`} name="tag-label" label="Libellé" value="Nouveau tag" />
+        <div class="playground-tag-options">
+          <Select id={`${id}-variant-template`} name="tag-variant" label="Variante" options={['accent', 'lime', 'neutral', 'outline']} value="outline" />
+          <Button type="button" variant="secondary" icon="close" data-remove-tag aria-label="Supprimer ce tag" />
+        </div>
+      </div>
+    </template>
+    <Button type="button" variant="secondary" data-add-tag>Ajouter un tag</Button>
+  </div>
+</fieldset>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-playground-group="tags"]').forEach((group) => {
+    const list = group.querySelector<HTMLElement>('[data-playground-tag-list]');
+    const template = group.querySelector<HTMLTemplateElement>('[data-playground-tag-template]');
+    if (!list || !template) return;
+
+    const rows = () => Array.from(list.querySelectorAll<HTMLElement>('[data-playground-tag-row]'));
+    const notify = () => list.dispatchEvent(new Event('input', { bubbles: true }));
+
+    group.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const remove = target.closest<HTMLElement>('[data-remove-tag]');
+      const add = target.closest<HTMLElement>('[data-add-tag]');
+
+      if (remove) {
+        if (rows().length > 1) remove.closest<HTMLElement>('[data-playground-tag-row]')?.remove();
+        notify();
+        return;
+      }
+
+      if (add) {
+        const fragment = template.content.cloneNode(true) as DocumentFragment;
+        const row = fragment.querySelector<HTMLElement>('[data-playground-tag-row]');
+        if (!row) return;
+
+        const index = rows().length + 1;
+        row.querySelectorAll<HTMLElement>('[id]').forEach((control) => {
+          const oldId = control.id;
+          const newId = `${oldId}-${index}`;
+          control.id = newId;
+          row.querySelector<HTMLLabelElement>(`label[for="${oldId}"]`)?.setAttribute('for', newId);
+        });
+        list.append(fragment);
+        notify();
+      }
+    });
+  });
+</script>
+
+<style>
+  [data-playground-group='tags'] {
+    display: grid;
+    gap: var(--space-md);
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--space-lg);
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-default);
+  }
+
+  legend {
+    padding-inline: var(--space-xs);
+    color: var(--color-text-default);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-tight);
+  }
+
+  .playground-tag-list {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .playground-tag-row {
+    display: grid;
+    gap: var(--space-md);
+    padding-block-start: var(--space-md);
+    border-block-start: var(--border-width-default) solid var(--color-border-default);
+  }
+
+  .playground-tag-row:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .playground-tag-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 767px) {
+    .playground-tag-options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -24,12 +24,28 @@ La page **Components** rassemble actuellement tous les composants, leurs démons
 propriétés et leurs détails techniques dans une même longue vue. La maquette de la nouvelle page
 est identifiée, mais son contenu et la répartition exacte des informations ne sont pas encore fixés.
 
+## Architecture
+
+**Layout** : `component-page-layout.astro` — contient deux slots :
+- `header` : en-tête du composant (titre, description, navigation)
+- `content` : zone de démonstration et sections détaillées du composant
+
+**Blocks** : un nouveau dossier `src/design-system/layouts/blocks/` regroupe les templates de
+sections réutilisables pour chaque page de composant (démo interactive, code, propriétés, etc.).
+Chaque bloc peut être importé et composé librement dans le slot `content`.
+
 ## Attendu
 
 Une page totalement redesignée et reproductible pour chaque composant. Elle doit reprendre la base
 Figma, donner accès à la navigation du système, permettre de basculer entre visualisation et code,
 et accueillir progressivement le contenu propre à chaque composant. `CardDefault` sert à valider
 le modèle avant de le généraliser.
+
+**Structurellement** :
+- `component-page-layout.astro` fournit la structure générale via deux slots (`header` et `content`)
+- `src/design-system/layouts/blocks/` contient les templates de section réutilisables
+- Chaque page de composant (ex. `card-default.astro`) compose le layout et remplit ses slots
+- Les blocs sont indépendants et composables, permettant chaque page d'évoluer sans refonte globale
 
 ## Ne pas toucher
 
