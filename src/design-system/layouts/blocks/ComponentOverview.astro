@@ -1,0 +1,58 @@
+---
+import Tabs from '../../components/tabs/Tabs.astro';
+import TabList from '../../components/tabs/TabList.astro';
+import TabButton from '../../components/tabs/TabButton.astro';
+import TabPanel from '../../components/tabs/TabPanel.astro';
+
+interface Props {
+  code?: string;
+}
+
+const { code } = Astro.props;
+---
+
+<div data-slot="Overview">
+    <h2>Overview</h2>
+
+    <Tabs>
+        <TabList label="Aperçu du composant">
+            <TabButton id="overview-visualisation-tab" controls="overview-visualisation-panel" selected>
+                Visualisation
+            </TabButton>
+            <TabButton id="overview-code-tab" controls="overview-code-panel">
+                Code
+            </TabButton>
+        </TabList>
+
+        <TabPanel id="overview-visualisation-panel" labelledby="overview-visualisation-tab">
+            <div class="demo-frame">
+                <slot />
+            </div>
+        </TabPanel>
+
+        <TabPanel id="overview-code-panel" labelledby="overview-code-tab" hidden>
+            <pre><code>{code}</code></pre>
+        </TabPanel>
+    </Tabs>
+</div>
+
+
+
+<style>
+    h2 {
+        font-size: var(--font-size-title);
+    }
+    .demo-frame {
+        align-self: stretch;
+        width: 100%;
+        background-color: var(--color-bg-surface);
+    }
+
+    pre {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+</style>

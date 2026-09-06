@@ -1,5 +1,10 @@
 ---
 import ComponentPageLayout from '../../design-system/layouts/ComponentPageLayout.astro';
+import ComponentIntroduction from '../../design-system/layouts/blocks/ComponentIntroduction.astro';
+import ComponentOverview from '../../design-system/layouts/blocks/ComponentOverview.astro';
+import ComponentPlayground from '../../design-system/layouts/blocks/ComponentPlayground.astro';
+import Card from '../../design-system/components/cards/Card.astro';
+import CardDefault from '../../design-system/components/CardDefault.astro';
 import { withBase } from '../../design-system/lib/url';
 import { componentPageGroups, componentPages } from '../_component-pages';
 
@@ -13,6 +18,27 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const { page } = Astro.props;
 const current = withBase(`/components/${slug}`);
+
+// Contenu différent selon le slug
+let cardCode = '';
+let example: any = null;
+
+if (slug === 'card') {
+  cardCode = `<Card>
+  <div>Contenu personnalisé</div>
+</Card>`;
+  example = 'card';
+} else if (slug === 'card-default') {
+  cardCode = `<CardDefault
+  title="Titre du composant"
+  subtitle="Sous-titre"
+  meta="Métadonnées"
+  image="/images/example.jpg"
+  imageAlt="Description"
+  href="/detail"
+/>`;
+  example = 'card-default';
+}
 ---
 
 <ComponentPageLayout
@@ -24,8 +50,35 @@ const current = withBase(`/components/${slug}`);
   current={current}
   sidebarLabel="Navigation des composants"
 >
-  <header>
-    <h1>{page.title}</h1>
-    <p>{page.description}</p>
-  </header>
+  <div slot="header">
+    <ComponentIntroduction title={page.title} description={page.description} />
+  </div>
+
+  <div slot="content">
+    <ComponentOverview code={cardCode}>
+      {example === 'card' && (
+        <Card>
+          <div style="padding: var(--spacing-md);">
+            <h3>Contenu de la card</h3>
+            <p>Card est une primitive neutre qui accepte n'importe quel contenu.</p>
+          </div>
+        </Card>
+      )}
+
+      {example === 'card-default' && (
+        <CardDefault
+          title="Titre du composant"
+          subtitle="Sous-titre optionnel"
+          meta="Métadonnées"
+          image={withBase('/images/case-study/etapes-01.jpg')}
+          imageAlt="Exemple de carte"
+          href="#"
+        />
+      )}
+    </ComponentOverview>
+
+    <ComponentPlayground id="component-playground">
+      <p>Playground à remplir pour {page.title}</p>
+    </ComponentPlayground>
+  </div>
 </ComponentPageLayout>

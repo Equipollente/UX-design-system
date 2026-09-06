@@ -1,0 +1,19 @@
+---
+import Toggle from '../../components/Toggle.astro';
+
+interface Props {
+  id: string;
+  label?: string;
+}
+
+const { id, label = 'Afficher le texte' } = Astro.props;
+---
+
+<fieldset data-playground-group="text">
+  <legend>Text</legend>
+  <Toggle id={`${id}-toggle`} name={id} label={label} checked data-playground-toggle={id} />
+
+  <div data-playground-options={id}>
+    <slot />
+  </div>
+</fieldset>
