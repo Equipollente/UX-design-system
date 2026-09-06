@@ -256,6 +256,12 @@ const htmlPanelId = `${id}-html-panel`;
     min-height: 0;
     height: 100%;
     overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .playground-controls::-webkit-scrollbar,
+  .playground-preview::-webkit-scrollbar {
+    display: none;
   }
 
   .playground-controls {
