@@ -1,0 +1,62 @@
+---
+// TabButton — un onglet de la TabList.
+// Bouton (pas un lien) : il change ce qui s'affiche, il ne navigue pas.
+// `controls` doit reprendre l'`id` du TabPanel associé ;
+// le TabPanel doit à son tour reprendre l'`id` du TabButton dans son `labelledby`.
+
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'button'> {
+  /** `id` du TabPanel que cet onglet affiche. */
+  controls: string;
+  /** Onglet affiché au chargement. Un seul TabButton `selected` par Tabs. */
+  selected?: boolean;
+}
+
+const { controls, selected = false, id, class: className, ...rest } = Astro.props;
+const classes = ['tabs-tab', className].filter(Boolean).join(' ');
+---
+<button
+  data-slot="tab-button"
+  type="button"
+  role="tab"
+  id={id}
+  aria-selected={selected}
+  aria-controls={controls}
+  tabindex={selected ? 0 : -1}
+  class={classes}
+  {...rest}
+>
+  <slot />
+</button>
+
+<style>
+  .tabs-tab {
+    /* position+z-index propres au bouton : le style scopé de TabList ne peut pas
+       atteindre les enfants slottés — c'est ici que l'onglet passe au-dessus de la pastille. */
+    position: relative;
+    z-index: 1;
+    padding: var(--space-md);
+    justify-content: center;
+    align-items: center;
+    gap: var(--button-gap-sm);
+    border-radius: var(--radius-lg);
+    border: none;
+    /* La pastille (fond visible de l'onglet actif) est portée par TabList :
+       le bouton reste transparent dans les deux états. */
+    background: transparent;
+  }
+
+  .tabs-tab:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  button.tabs-tab {
+    color: var(--color-text-default);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+// TabPanel — le contenu associé à un TabButton.
+// Porte à la fois la région accessible (role="tabpanel") et le conteneur du contenu.
+// `labelledby` doit reprendre l'`id` du TabButton associé.
+// Visible par défaut ; passer `hidden` à tous les panneaux sauf celui
+// du TabButton `selected`. tabindex="0" garde le panneau lisible au clavier.
+
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** `id` du TabButton qui affiche ce panneau. */
+  labelledby: string;
+}
+
+const { labelledby, id, class: className, ...rest } = Astro.props;
+const classes = ['tabs-tabpanel', className].filter(Boolean).join(' ');
+---
+
+<div
+  data-slot="tab-panel"
+  role="tabpanel"
+  id={id}
+  aria-labelledby={labelledby}
+  tabindex="0"
+  class={classes}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  .tabs-tabpanel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    align-self: stretch;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-neutral-400);
+    background: var(--color-neutral-100);
+  }
+
+  /* display:flex ci-dessus écrase le display:none implicite de `hidden` : on le rétablit. */
+  .tabs-tabpanel[hidden] {
+    display: none;
+  }
+
+  .tabs-tabpanel:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+</style>

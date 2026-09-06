@@ -1,0 +1,54 @@
+---
+// TabList — la liste des onglets d'un composant Tabs.
+// Ne contient que des TabButton. Le label est obligatoire :
+// c'est lui qui nomme la région pour les technologies d'assistance.
+
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** Nom de la liste d'onglets, lu par les lecteurs d'écran. */
+  label: string;
+}
+
+const { label, class: className, ...rest } = Astro.props;
+const classes = ['tabs-tablist', className].filter(Boolean).join(' ');
+---
+
+<div data-slot="tab-list" role="tablist" aria-label={label} class={classes} {...rest}>
+  <slot />
+</div>
+
+<style>
+  /* La pastille (fond de l'onglet actif) est un ::before du conteneur, positionné
+     par --pill-x/--pill-w que pose le script. Une seule pastille ⇒ elle peut glisser
+     d'un onglet à l'autre, ce qu'un fond par bouton ne permet pas. */
+  .tabs-tablist {
+    position: relative;
+    display: inline-flex;
+    padding: var(--space-sm);
+    align-items: center;
+    gap: var(--button-gap-sm);
+    border-radius: var(--radius-pill);
+    background: var(--color-neutral-100);
+  }
+
+  .tabs-tablist::before {
+    content: '';
+    position: absolute;
+    top: var(--space-sm);
+    bottom: var(--space-sm);
+    left: var(--pill-x, 0);
+    z-index: 0;
+    width: var(--pill-w, 0);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-default);
+    opacity: var(--pill-on, 0);
+    /* On anime `left` et `width` (pas `transform`) : les deux ancrent la pastille
+       au bord gauche du conteneur, sans oscillation d'interpolation. */
+    transition:
+      left var(--motion-duration-default) var(--motion-easing-enter),
+      width var(--motion-duration-default) var(--motion-easing-enter),
+      opacity var(--motion-duration-quick) var(--motion-easing-enter);
+  }
+</style>    
+
