@@ -161,9 +161,7 @@ const htmlPanelId = `${id}-html-panel`;
     return rules.join('\n\n');
   }
 
-  const TOKENS_NOTICE =
-    '/* Ce composant utilise les variables du design system (styles/tokens.css). ' +
-    "Importez ce fichier — les valeurs ne sont volontairement pas recopiées ici. */";
+  const TOKENS_IMPORT = "import 'ux-design-system/styles/tokens.css';";
 
   document.querySelectorAll<HTMLElement>('[data-playground]').forEach((playground) => {
     playground.querySelectorAll<HTMLElement>('[data-playground-toggle]').forEach((toggle) => {
@@ -195,8 +193,8 @@ const htmlPanelId = `${id}-html-panel`;
       const html = prettyPrintHtml(demoFrame.innerHTML);
       const styles = collectScopedStyles(demoFrame);
       htmlOutput.textContent = styles
-        ? `${html}\n\n${TOKENS_NOTICE}\n\n${styles}`
-        : html;
+        ? `${TOKENS_IMPORT}\n\n${html}\n\n${styles}`
+        : `${TOKENS_IMPORT}\n\n${html}`;
     };
 
     updateHtmlTab();
