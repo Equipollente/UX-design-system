@@ -1,0 +1,22 @@
+---
+---
+
+<div data-slot="popover">
+  <button data-slot="popover-trigger" type="button">
+    Ouvrir
+  </button>
+
+  <div data-slot="popover-content" hidden>
+    <p>Contenu du Popover</p>
+
+    <button data-slot="popover-close" type="button">
+      Fermer
+    </button>
+  </div>
+</div>
+
+<script>
+  import { create } from '@data-slot/popover';
+
+  const controllers = create();
+</script>

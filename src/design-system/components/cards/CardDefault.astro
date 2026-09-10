@@ -137,9 +137,11 @@ const cardVariant = hasActions ? 'actions' : 'link';
   }
 
   .card-img {
-    /* 176px est la hauteur du palier 0–223 de Figma 451:1004. Les autres
-       paliers passent à un ratio afin que le cadre reste stable. */
-    height: 176px;
+     /* Le palier 0–223 de Figma 451:1004 est carré. Les paliers suivants
+       passent au portrait puis au paysage. */
+     width: 100%;
+     height: auto;
+     aspect-ratio: var(--ratio-square);
     min-width: 0;
     overflow: hidden;
     border-radius: var(--radius-sm);
@@ -170,38 +172,13 @@ const cardVariant = hasActions ? 'actions' : 'link';
 
     .card-default[data-card-layout='with-image'] .card-img {
       position: static;
-      aspect-ratio: var(--ratio-portrait);
       width: 100%;
       height: auto;
+      aspect-ratio: auto;
       min-width: 0;
+      min-height: 0;
       max-height: none;
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    .card-default[data-card-layout='with-image'] .card-info {
-      grid-column: 2;
-      grid-row: 1;
-      min-width: 0;
-      align-self: start;
-    }
-  }
-
-  /* Repli pour les navigateurs ou feuilles de style qui ne prennent pas en
-     compte la requête de conteneur sur la page publiée. */
-  @media (min-width: 768px) {
-    .card-default[data-card-layout='with-image'] .card-layout {
-      position: relative;
-      grid-template-columns: 254px minmax(0, 1fr);
-    }
-
-    .card-default[data-card-layout='with-image'] .card-img {
-      position: static;
-      aspect-ratio: var(--ratio-portrait);
-      width: 100%;
-      height: auto;
-      min-width: 0;
-      max-height: none;
+      align-self: stretch;
       grid-column: 1;
       grid-row: 1;
     }

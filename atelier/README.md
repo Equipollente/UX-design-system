@@ -48,6 +48,7 @@ que de le recopier.
 | [coder-un-composant.md](coder-un-composant.md) | le workflow Astro pour coder un composant réutilisable |
 | [workflow-agent-composant-astro.md](workflow-agent-composant-astro.md) | les consignes d'exécution pour l'agent IA |
 | [ajouter-un-composant.md](ajouter-un-composant.md) | un nœud Figma devient un `.astro` |
+| [creer-un-composant-avec-data-slot.md](creer-un-composant-avec-data-slot.md) | un comportement DataSlot devient un composant Astro |
 | [ajouter-une-page-composant.md](ajouter-une-page-composant.md) | un composant confirmé devient une page `/components/<slug>` |
 | [bilan-redesign-design-system-interface.md](bilan-redesign-design-system-interface.md) | le bilan daté de la refonte des pages et du playground |
 | [modifier-un-composant.md](modifier-un-composant.md) | on touche à un composant existant |
