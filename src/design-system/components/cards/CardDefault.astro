@@ -94,6 +94,7 @@ const cardVariant = hasActions ? 'actions' : 'link';
 
   .card-layout {
     display: grid;
+    grid-template-columns: 1fr;
     gap: var(--space-lg);
   }
 
@@ -186,9 +187,9 @@ const cardVariant = hasActions ? 'actions' : 'link';
     }
   }
 
-    /* Sous 768px, le code repasse la composition en colonne pour que le palier
-      horizontal ne force jamais une largeur illisible sur téléphone. */
-    @media (max-width: 767px) {
+  /* Sous 768px, le code repasse la composition en colonne pour que le palier
+     horizontal ne force jamais une largeur illisible sur téléphone. */
+  @container (max-width: 767px) {
     .card-layout {
       grid-template-columns: 1fr;
     }
