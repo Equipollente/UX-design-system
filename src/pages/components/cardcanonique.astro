@@ -6,7 +6,14 @@ import CardDefault from '../../design-system/components/cards/CardDefault.astro'
 import CardImage from '../../design-system/components/cards/CardImage.astro';
 import CardTags from '../../design-system/components/cards/CardTags.astro';
 import CardText from '../../design-system/components/cards/CardText.astro';
+import Icon from '../../design-system/components/Icon.astro';
+import PlaygroundButtons from '../../design-system/layouts/blocks/PlaygroundButtons.astro';
+import PlaygroundImage from '../../design-system/layouts/blocks/PlaygroundImage.astro';
+import PlaygroundTags from '../../design-system/layouts/blocks/PlaygroundTags.astro';
+import PlaygroundText from '../../design-system/layouts/blocks/PlaygroundText.astro';
+import TextField from '../../design-system/components/TextField.astro';
 import Tag from '../../design-system/components/Tag.astro';
+import { iconNames } from '../../design-system/lib/icons';
 import { withBase } from '../../design-system/lib/url';
 import { componentPageGroups } from '../_component-pages';
 
@@ -89,18 +96,60 @@ import { withBase } from '../../design-system/lib/url';
   </div>
 
   <div slot="playground-controls">
-    <p>La composition est reglee par ses slots : texte, image, tags et actions.</p>
+    <PlaygroundText id="text">
+      <TextField id="cardcanonique-playground-title" name="text-title" label="Titre" value="Carte avec actions" />
+      <TextField
+        id="cardcanonique-playground-subtitle"
+        name="text-subtitle"
+        label="Sous-titre"
+        value="Les actions sont distinctes du lien de la carte."
+      />
+      <TextField id="cardcanonique-playground-meta" name="text-meta" label="Meta" value="Exemple" />
+    </PlaygroundText>
+    <PlaygroundTags id="tags-top" tags={[{ label: 'En cours', variant: 'accent' }]} />
+    <PlaygroundTags
+      id="tags-bottom"
+      tags={[{ label: 'Gouache', variant: 'outline' }, { label: 'Encre', variant: 'outline' }]}
+    />
+    <PlaygroundButtons
+      id="actions"
+      actions={[
+        { label: 'Modifier', variant: 'secondary' },
+        { label: 'Voir le projet', variant: 'primary' },
+      ]}
+    />
+    <PlaygroundImage id="image">
+      <TextField
+        id="cardcanonique-playground-image-alt"
+        name="image-alt"
+        label="Texte alternatif"
+        value="Exemple d'image de projet"
+      />
+    </PlaygroundImage>
   </div>
 
   <div slot="playground">
-    <CardDefault href="#card-detail">
+    <CardDefault>
       <CardText
-        title="Carte lien"
-        subtitle="Sans slot actions, toute la carte mène au détail."
+        data-playground-preview="text"
+        title="Carte avec actions"
+        subtitle="Les actions sont distinctes du lien de la carte."
         meta="Exemple"
       />
+      <CardTags slot="tags-top" data-playground-preview="tags-top">
+        <Tag variant="accent">En cours</Tag>
+      </CardTags>
+      <CardTags slot="tags-bottom" data-playground-preview="tags-bottom">
+        <Tag>Gouache</Tag>
+        <Tag>Encre</Tag>
+      </CardTags>
+      <CardActions slot="actions" data-playground-preview="actions">
+        <Button variant="secondary">Modifier</Button>
+        <Button>Voir le projet</Button>
+      </CardActions>
       <CardImage
         slot="image"
+        data-playground-preview="image"
         src={image}
         alt="Exemple d'image de projet"
         width={1200}
@@ -109,3 +158,192 @@ import { withBase } from '../../design-system/lib/url';
     </CardDefault>
   </div>
 </ComponentDetailLayout>
+
+<div data-card-action-icons aria-hidden="true" hidden>
+  {iconNames.map((icon) => (
+    <span data-card-action-icon={icon}><Icon name={icon} /></span>
+  ))}
+</div>
+
+<script>
+  const playground = document.querySelector<HTMLElement>('[data-playground]');
+  const textControls = playground?.querySelector<HTMLElement>('[data-playground-group="text"]');
+  const textPreview = playground?.querySelector<HTMLElement>('[data-playground-preview="text"]');
+  const topTagsControls = playground?.querySelector<HTMLElement>('[data-playground-toggle="tags-top"]')?.closest<HTMLElement>('[data-playground-group="tags"]');
+  const bottomTagsControls = playground?.querySelector<HTMLElement>('[data-playground-toggle="tags-bottom"]')?.closest<HTMLElement>('[data-playground-group="tags"]');
+  const topTagsPreview = playground?.querySelector<HTMLElement>('[data-playground-preview="tags-top"]');
+  const bottomTagsPreview = playground?.querySelector<HTMLElement>('[data-playground-preview="tags-bottom"]');
+  const actionsControls = playground?.querySelector<HTMLElement>('[data-playground-group="buttons"]');
+  const actionsPreview = playground?.querySelector<HTMLElement>('[data-playground-preview="actions"]');
+  const imageControls = playground?.querySelector<HTMLElement>('[data-playground-group="image"]');
+  const imagePreview = playground?.querySelector<HTMLImageElement>('[data-playground-preview="image"]');
+  const code = playground?.querySelector<HTMLElement>('[data-playground-code]');
+
+  if (textControls && textPreview && topTagsControls && bottomTagsControls && topTagsPreview && bottomTagsPreview && actionsControls && actionsPreview && imageControls && imagePreview) {
+    const title = textPreview.querySelector<HTMLElement>('h2, h3');
+    const subtitle = textPreview.querySelector<HTMLElement>('.cards-text-subtitle');
+    const meta = textPreview.querySelector<HTMLElement>('.cards-text-meta');
+    const value = (name: string) =>
+      textControls.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '';
+    const codeValue = (name: string) =>
+      value(name).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r?\n/g, ' ');
+    const tagValues = (controls: HTMLElement) =>
+      Array.from(controls.querySelectorAll<HTMLElement>('[data-playground-tag-row]')).map((row) => ({
+        label: row.querySelector<HTMLInputElement>('[name="tag-label"]')?.value ?? '',
+        variant: row.querySelector<HTMLSelectElement>('[name="tag-variant"]')?.value ?? 'outline',
+      }));
+    const tagsEnabled = (controls: HTMLElement, id: string) =>
+      controls.querySelector<HTMLInputElement>(`[data-playground-toggle="${id}"] input`)?.checked ?? false;
+    const actionValues = () =>
+      Array.from(actionsControls.querySelectorAll<HTMLElement>('[data-playground-button-row]')).map((row) => ({
+        label: row.querySelector<HTMLInputElement>('[name="action-label"]')?.value ?? '',
+        variant: row.querySelector<HTMLSelectElement>('[name="action-variant"]')?.value ?? 'primary',
+        icon: row.querySelector<HTMLSelectElement>('[name="action-icon"]')?.value ?? '',
+      }));
+    const actionsEnabled = () =>
+      actionsControls.querySelector<HTMLInputElement>('[data-playground-toggle="actions"] input')?.checked ?? false;
+    const imageEnabled = () =>
+      imageControls.querySelector<HTMLInputElement>('[data-playground-toggle="image"] input')?.checked ?? false;
+    const imageAlt = () =>
+      imageControls.querySelector<HTMLInputElement>('[name="image-alt"]')?.value ?? '';
+
+    const renderTags = (controls: HTMLElement, preview: HTMLElement) => {
+      const tags = tagValues(controls);
+      const template = preview.querySelector<HTMLElement>('.tag');
+      if (!template) return;
+
+      while (preview.children.length < tags.length) {
+        preview.append(template.cloneNode(true));
+      }
+      while (preview.children.length > tags.length) {
+        preview.lastElementChild?.remove();
+      }
+
+      tags.forEach(({ label, variant }, index) => {
+        const tag = preview.children[index] as HTMLElement;
+        tag.className = `tag tag-${variant}`;
+        tag.textContent = label;
+      });
+    };
+
+    const updateCode = () => {
+      if (!code) return;
+      code.textContent = code.textContent
+        ?.replace(/^    title=".*"$/m, `    title="${codeValue('text-title')}"`)
+        .replace(/^    subtitle=".*"$/m, `    subtitle="${codeValue('text-subtitle')}"`)
+        .replace(/^    meta=".*"$/m, `    meta="${codeValue('text-meta')}"`)
+        .replace(
+          /\n  <CardTags slot="tags-top">[\s\S]*?<\/CardTags>/,
+          tagsEnabled(topTagsControls, 'tags-top')
+            ? `\n  <CardTags slot="tags-top">\n${tagValues(topTagsControls)
+                .map(({ label, variant }) => `    <Tag variant="${variant}">${label}</Tag>`)
+                .join('\n')}\n  </CardTags>`
+            : '',
+        )
+        .replace(
+          /\n  <CardTags slot="tags-bottom">[\s\S]*?<\/CardTags>/,
+          tagsEnabled(bottomTagsControls, 'tags-bottom')
+            ? `\n  <CardTags slot="tags-bottom">\n${tagValues(bottomTagsControls)
+                .map(({ label, variant }) => `    <Tag variant="${variant}">${label}</Tag>`)
+                .join('\n')}\n  </CardTags>`
+            : '',
+        )
+        .replace(
+          /\n  <CardActions slot="actions">[\s\S]*?<\/CardActions>/,
+          actionsEnabled()
+            ? `\n  <CardActions slot="actions">\n${actionValues()
+                .map(({ label, variant, icon }) => `    <Button variant="${variant}"${icon ? ` iconEnd="${icon}"` : ''}>${label}</Button>`)
+                .join('\n')}\n  </CardActions>`
+            : '',
+        )
+        .replace(
+          /\n  <CardImage[\s\S]*?\n  \/>/,
+          imageEnabled()
+            ? `\n  <CardImage\n    slot="image"\n    src={withBase('/images/case-study/rubika-roadmap.jpg')}\n    alt="${imageAlt().replace(/"/g, '\\"')}"\n    width={1200}\n    height={800}\n  />`
+            : '',
+        );
+    };
+
+    const renderActions = () => {
+      const actions = actionValues();
+      const template = actionsPreview.querySelector<HTMLButtonElement>('.btn');
+      const iconBank = document.querySelector<HTMLElement>('[data-card-action-icons]');
+      if (!template) return;
+
+      while (actionsPreview.children.length < actions.length) {
+        actionsPreview.append(template.cloneNode(true));
+      }
+      while (actionsPreview.children.length > actions.length) {
+        actionsPreview.lastElementChild?.remove();
+      }
+
+      actions.forEach(({ label, variant, icon }, index) => {
+        const button = actionsPreview.children[index] as HTMLButtonElement;
+        button.className = `btn btn-${variant} btn-md`;
+        button.type = 'button';
+        button.replaceChildren(document.createTextNode(label));
+        if (icon && iconBank) {
+          const iconSource = Array.from(iconBank.querySelectorAll<HTMLElement>('[data-card-action-icon]'))
+            .find((candidate) => candidate.dataset.cardActionIcon === icon);
+          const iconElement = iconSource?.querySelector<SVGElement>('svg.icon')?.cloneNode(true);
+          if (iconElement instanceof SVGElement) {
+            iconElement.setAttribute('aria-hidden', 'true');
+            button.append(iconElement);
+          }
+        }
+      });
+    };
+
+    const updateText = () => {
+      if (title) title.textContent = value('text-title');
+      if (subtitle) {
+        subtitle.textContent = value('text-subtitle');
+        subtitle.hidden = value('text-subtitle').length === 0;
+      }
+      if (meta) {
+        meta.textContent = value('text-meta');
+        meta.hidden = value('text-meta').length === 0;
+      }
+      updateCode();
+    };
+
+    const updateTags = () => {
+      renderTags(topTagsControls, topTagsPreview);
+      renderTags(bottomTagsControls, bottomTagsPreview);
+      updateCode();
+    };
+
+    const updateActions = () => {
+      renderActions();
+      updateCode();
+    };
+
+    const updateImage = () => {
+      const enabled = imageEnabled();
+      const imageFrame = imagePreview.closest<HTMLElement>('.card-img');
+      imagePreview.alt = imageAlt();
+      imagePreview.hidden = !enabled;
+      imagePreview.style.display = enabled ? '' : 'none';
+      if (imageFrame) {
+        imageFrame.hidden = !enabled;
+        imageFrame.style.display = enabled ? '' : 'none';
+      }
+      updateCode();
+    };
+
+    textControls.addEventListener('input', updateText);
+    textControls.addEventListener('change', updateText);
+    topTagsControls.addEventListener('input', updateTags);
+    topTagsControls.addEventListener('change', updateTags);
+    bottomTagsControls.addEventListener('input', updateTags);
+    bottomTagsControls.addEventListener('change', updateTags);
+    actionsControls.addEventListener('input', updateActions);
+    actionsControls.addEventListener('change', updateActions);
+    imageControls.addEventListener('input', updateImage);
+    imageControls.addEventListener('change', updateImage);
+    updateText();
+    updateTags();
+    updateActions();
+    updateImage();
+  }
+</script>
