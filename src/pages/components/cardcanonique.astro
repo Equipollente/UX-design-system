@@ -4,37 +4,48 @@ import Button from '../../design-system/components/Button.astro';
 import CardActions from '../../design-system/components/cards/CardActions.astro';
 import CardDefault from '../../design-system/components/cards/CardDefault.astro';
 import CardImage from '../../design-system/components/cards/CardImage.astro';
+import CardTags from '../../design-system/components/cards/CardTags.astro';
 import CardText from '../../design-system/components/cards/CardText.astro';
 import Tag from '../../design-system/components/Tag.astro';
 import { withBase } from '../../design-system/lib/url';
 import { componentPageGroups } from '../_component-pages';
 
-const title = 'CardDefault';
-const description = "L'unité répétée d'une page liste en grille. Une carte affiche ses données et mène à sa page de détail. Elle est responsive par elle-même.";
-const current = withBase('/components/card-default');
+const title = 'CardDefault canonique';
+const description = 'La composition canonique de la famille Cards. Le contenu arrive par slots et la carte gere elle-meme ses paliers responsive.';
+const current = withBase('/components/cardcanonique');
+const image = withBase('/images/case-study/rubika-roadmap.jpg');
 
-const cardCode = `---
+const code = `---
 import Button from '../../design-system/components/Button.astro';
 import CardActions from '../../design-system/components/cards/CardActions.astro';
 import CardDefault from '../../design-system/components/cards/CardDefault.astro';
 import CardImage from '../../design-system/components/cards/CardImage.astro';
+import CardTags from '../../design-system/components/cards/CardTags.astro';
 import CardText from '../../design-system/components/cards/CardText.astro';
+import Tag from '../../design-system/components/Tag.astro';
 import { withBase } from '../../design-system/lib/url';
 ---
 
 <CardDefault>
   <CardText
-    title="Titre du composant"
-    subtitle="Sous-titre optionnel"
-    meta="Métadonnées"
+    title="Nager dans le bonheur"
+    subtitle="Une petite nageuse, quelques paillettes et des mots qui font du bien."
+    meta="2025"
   />
   <CardImage
     slot="image"
-    src={withBase('/images/case-study/etapes-01.jpg')}
-    alt="Exemple de carte"
+    src={withBase('/images/case-study/rubika-roadmap.jpg')}
+    alt="Exemple d'image de projet"
     width={1200}
     height={800}
   />
+  <CardTags slot="tags-top">
+    <Tag variant="accent">En cours</Tag>
+  </CardTags>
+  <CardTags slot="tags-bottom">
+    <Tag>Gouache</Tag>
+    <Tag>Encre</Tag>
+  </CardTags>
   <CardActions slot="actions">
     <Button variant="secondary">Modifier</Button>
     <Button>Voir le projet</Button>
@@ -45,24 +56,31 @@ import { withBase } from '../../design-system/lib/url';
 <ComponentDetailLayout
   title={title}
   description={description}
-  code={cardCode}
+  code={code}
   sidebarGroups={componentPageGroups}
   current={current}
 >
   <div slot="overview">
     <CardDefault>
       <CardText
-        title="Titre du composant"
-        subtitle="Sous-titre optionnel"
-        meta="Métadonnées"
+        title="Nager dans le bonheur"
+        subtitle="Une petite nageuse, quelques paillettes et des mots qui font du bien."
+        meta="2025"
       />
       <CardImage
         slot="image"
-        src={withBase('/images/case-study/etapes-01.jpg')}
-        alt="Exemple de carte"
+        src={image}
+        alt="Exemple d'image de projet"
         width={1200}
         height={800}
       />
+      <CardTags slot="tags-top">
+        <Tag variant="accent">En cours</Tag>
+      </CardTags>
+      <CardTags slot="tags-bottom">
+        <Tag>Gouache</Tag>
+        <Tag>Encre</Tag>
+      </CardTags>
       <CardActions slot="actions">
         <Button variant="secondary">Modifier</Button>
         <Button>Voir le projet</Button>
@@ -70,8 +88,24 @@ import { withBase } from '../../design-system/lib/url';
     </CardDefault>
   </div>
 
+  <div slot="playground-controls">
+    <p>La composition est reglee par ses slots : texte, image, tags et actions.</p>
+  </div>
+
   <div slot="playground">
-    <p>Playground CardDefault à développer</p>
+    <CardDefault href="#card-detail">
+      <CardText
+        title="Carte lien"
+        subtitle="Sans slot actions, toute la carte mène au détail."
+        meta="Exemple"
+      />
+      <CardImage
+        slot="image"
+        src={image}
+        alt="Exemple d'image de projet"
+        width={1200}
+        height={800}
+      />
+    </CardDefault>
   </div>
 </ComponentDetailLayout>
-

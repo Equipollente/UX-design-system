@@ -4,12 +4,13 @@ import ComponentIntroduction from '../../design-system/layouts/blocks/ComponentI
 import ComponentOverview from '../../design-system/layouts/blocks/ComponentOverview.astro';
 import ComponentPlayground from '../../design-system/layouts/blocks/ComponentPlayground.astro';
 import Card from '../../design-system/components/cards/Card.astro';
-import CardDefault from '../../design-system/components/CardDefault.astro';
+import CardDefaultLegacy from '../../design-system/components/CardDefaultLegacy.astro';
 import { withBase } from '../../design-system/lib/url';
 import { componentPageGroups, componentPages } from '../_component-pages';
 
 export function getStaticPaths() {
-  return componentPages.map((page) => ({
+  const dedicatedSlugs = new Set(['card', 'card-default', 'cardcanonique']);
+  return componentPages.filter((page) => !dedicatedSlugs.has(page.slug)).map((page) => ({
     params: { slug: page.slug },
     props: { page },
   }));
@@ -66,7 +67,7 @@ if (slug === 'card') {
       )}
 
       {example === 'card-default' && (
-        <CardDefault
+        <CardDefaultLegacy
           title="Titre du composant"
           subtitle="Sous-titre optionnel"
           meta="Métadonnées"

@@ -1,0 +1,70 @@
+---
+// Compatibility adapter for the former direct-props CardDefault API.
+// The cards/CardDefault component owns the markup and responsive behavior.
+
+import NewCardDefault from './cards/CardDefault.astro';
+import CardImage from './cards/CardImage.astro';
+import CardText from './cards/CardText.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  meta?: string;
+  href?: string;
+  image?: string;
+  imageAlt?: string;
+  fallbackImage?: string;
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
+  class?: string;
+  style?: string;
+}
+
+const {
+  title,
+  subtitle,
+  meta,
+  href,
+  image,
+  imageAlt,
+  fallbackImage,
+  headingLevel = 3,
+  class: className,
+  style,
+  ...rest
+} = Astro.props;
+
+const hasActions = Astro.slots.has('actions');
+const hasTagsTop = Astro.slots.has('tags-top');
+const hasTagsBottom = Astro.slots.has('tags-bottom');
+---
+
+<NewCardDefault class={className} style={style} href={href} {...rest}>
+  <CardText title={title} subtitle={subtitle} meta={meta} headingLevel={headingLevel} />
+
+  {(image || fallbackImage) && (
+    <CardImage
+      slot="image"
+      src={image}
+      fallback={fallbackImage}
+      alt={imageAlt}
+    />
+  )}
+
+  {hasTagsTop && (
+    <div slot="tags-top">
+      <slot name="tags-top" />
+    </div>
+  )}
+
+  {hasTagsBottom && (
+    <div slot="tags-bottom">
+      <slot name="tags-bottom" />
+    </div>
+  )}
+
+  {hasActions && (
+    <div slot="actions">
+      <slot name="actions" />
+    </div>
+  )}
+</NewCardDefault>

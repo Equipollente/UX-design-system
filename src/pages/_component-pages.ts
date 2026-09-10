@@ -20,6 +20,12 @@ export const componentPages: ComponentPage[] = [
     title: 'CardDefault',
     description: 'Documentation du composant CardDefault.',
   },
+  {
+    slug: 'cardcanonique',
+    label: 'Card canonique',
+    title: 'CardDefault canonique',
+    description: 'Composition canonique de la famille Cards, construite avec des slots.',
+  },
 ];
 
 export const componentPageGroups = [
