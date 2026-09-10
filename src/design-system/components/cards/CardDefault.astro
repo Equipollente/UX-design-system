@@ -187,6 +187,33 @@ const cardVariant = hasActions ? 'actions' : 'link';
     }
   }
 
+  /* Repli pour les navigateurs ou feuilles de style qui ne prennent pas en
+     compte la requête de conteneur sur la page publiée. */
+  @media (min-width: 768px) {
+    .card-default[data-card-layout='with-image'] .card-layout {
+      position: relative;
+      grid-template-columns: 254px minmax(0, 1fr);
+    }
+
+    .card-default[data-card-layout='with-image'] .card-img {
+      position: static;
+      aspect-ratio: var(--ratio-portrait);
+      width: 100%;
+      height: auto;
+      min-width: 0;
+      max-height: none;
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .card-default[data-card-layout='with-image'] .card-info {
+      grid-column: 2;
+      grid-row: 1;
+      min-width: 0;
+      align-self: start;
+    }
+  }
+
     /* Sous 561px, le code repasse la composition en colonne pour que le palier
       horizontal ne force jamais une largeur illisible sur téléphone. */
     @container (max-width: 560px) {
