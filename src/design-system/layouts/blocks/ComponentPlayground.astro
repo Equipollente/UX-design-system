@@ -216,6 +216,7 @@ const htmlPanelId = `${id}-html-panel`;
   .playground-header {
     display: grid;
     gap: var(--space-xs);
+    padding: var(--space-2xl) 0 var(--space-xs) 0;
   }
 
   h2,
@@ -238,7 +239,7 @@ const htmlPanelId = `${id}-html-panel`;
 
   .playground-frame {
     display: grid;
-    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 2.3fr);
     grid-template-rows: minmax(0, 1fr);
     gap: var(--space-xl);
     width: 100%;
@@ -266,6 +267,9 @@ const htmlPanelId = `${id}-html-panel`;
 
   .playground-controls {
     padding-right: var(--space-xs);
+    display: grid;
+    gap: var(--space-lg);
+
   }
 
   .playground-controls :global(form) {
@@ -278,28 +282,28 @@ const htmlPanelId = `${id}-html-panel`;
     gap: var(--space-md);
     min-inline-size: 0;
     margin: 0;
-    padding: var(--space-lg);
+    padding: var(--space-md);
     border: var(--border-width-default) solid var(--color-border-default);
     border-radius: var(--radius-md);
     background: var(--color-bg-default);
   }
 
   .playground-controls :global(legend) {
-    padding-inline: var(--space-xs);
+    padding-inline: var(--space-xs) var(--space-xl);
+    padding-block: var(--space-xl) var(--space-md);
     color: var(--color-text-default);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-body);
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-heading);
     font-weight: var(--font-weight-medium);
     line-height: var(--font-line-height-tight);
   }
 
-  .playground-controls :global([data-playground-group] .btn) {
-    --btn-h: var(--button-height-sm);
-    --btn-px: var(--button-padding-x-sm);
-    --btn-gap: var(--button-gap-sm);
-    --btn-icon: var(--button-icon-size-sm);
-    --btn-min-w: var(--button-min-width-sm);
+  .playground-controls :global([data-playground-options]) {
+    display: grid;
+    gap: var(--space-md);
+    min-inline-size: 0;
   }
+
 
   .playground-preview {
     width: 100%;
