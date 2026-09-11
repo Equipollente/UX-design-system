@@ -9,18 +9,6 @@ export type ComponentPage = {
 
 export const componentPages: ComponentPage[] = [
   {
-    slug: 'card',
-    label: 'Card',
-    title: 'Card',
-    description: 'Composant de base pour les cartes. Structure générique qui accepte des slots pour construire différentes variantes.',
-  },
-  {
-    slug: 'card-default',
-    label: 'CardDefault',
-    title: 'CardDefault',
-    description: 'Documentation du composant CardDefault.',
-  },
-  {
     slug: 'cardcanonique',
     label: 'Card canonique',
     title: 'CardDefault canonique',
