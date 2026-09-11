@@ -3,7 +3,11 @@
 // Bouton (pas un lien) : il change ce qui s'affiche, il ne navigue pas.
 // `controls` doit reprendre l'`id` du TabPanel associé ;
 // le TabPanel doit à son tour reprendre l'`id` du TabButton dans son `labelledby`.
+// Son contenu peut être un libellé, une icône, ou les deux. Quand l'icône est seule,
+// l'appelant donne le nom accessible de l'onglet avec `aria-label`.
 
+import Icon from '../Icon.astro';
+import type { IconName } from '../../lib/icons';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'button'> {
@@ -11,9 +15,11 @@ interface Props extends HTMLAttributes<'button'> {
   controls: string;
   /** Onglet affiché au chargement. Un seul TabButton `selected` par Tabs. */
   selected?: boolean;
+  /** Nom d'une icône du système, posée avant le libellé. */
+  icon?: IconName;
 }
 
-const { controls, selected = false, id, class: className, ...rest } = Astro.props;
+const { controls, selected = false, icon, id, class: className, ...rest } = Astro.props;
 const classes = ['tabs-tab', className].filter(Boolean).join(' ');
 ---
 <button
@@ -27,6 +33,7 @@ const classes = ['tabs-tab', className].filter(Boolean).join(' ');
   class={classes}
   {...rest}
 >
+  {icon && <Icon name={icon} />}
   <slot />
 </button>
 
@@ -36,10 +43,13 @@ const classes = ['tabs-tab', className].filter(Boolean).join(' ');
        atteindre les enfants slottés — c'est ici que l'onglet passe au-dessus de la pastille. */
     position: relative;
     z-index: 1;
+    display: inline-flex;
+    height: var(--button-height-md);
     padding: var(--space-md);
     justify-content: center;
     align-items: center;
     gap: var(--button-gap-sm);
+    --icon-size: var(--button-icon-size-md);
     border-radius: var(--radius-lg);
     border: none;
     /* La pastille (fond visible de l'onglet actif) est portée par TabList :

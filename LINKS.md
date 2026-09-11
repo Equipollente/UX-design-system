@@ -47,7 +47,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Add Image (jeu de variantes + cycle de dépôt) | [`343-315`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=343-315) · [`418-1020`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=418-1020) | [AddImage.astro](src/design-system/components/AddImage.astro) |
 | Edit Image Gallery | [`355-1396`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=355-1396) | [EditImageGallery.astro](src/design-system/components/EditImageGallery.astro) |
 | Modals (jeu de variantes) | [`420-1223`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=420-1223) | [Modal.astro](src/design-system/components/Modal.astro) |
-| Tabs (famille : Tabs, TabList, TabButton, TabPanel) | — (spécifié en conversation) | [tabs/](src/design-system/components/tabs) |
+| Tabs (famille : Tabs, TabList, TabButton, TabPanel) | [`531-3521`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=531-3521) | [tabs/](src/design-system/components/tabs) |
 
 La section Figma qui porte les trois derniers : [`176-1236`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1236) — *Case Study Cards Components*.
 

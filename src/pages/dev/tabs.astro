@@ -22,6 +22,26 @@ import TabPanel from '../../design-system/components/tabs/TabPanel.astro';
       <TabPanel id="panel-3" labelledby="tab-3" hidden><p>Panneau 3.</p></TabPanel>
     </Tabs>
 
+    <h2>Icônes</h2>
+    <Tabs>
+      <TabList label="Mode d'affichage">
+        <TabButton id="tab-icon-grid" controls="panel-icon-grid" icon="grid" aria-label="Grille" selected />
+        <TabButton id="tab-icon-list" controls="panel-icon-list" icon="list" aria-label="Liste" />
+      </TabList>
+      <TabPanel id="panel-icon-grid" labelledby="tab-icon-grid"><p>Affichage en grille.</p></TabPanel>
+      <TabPanel id="panel-icon-list" labelledby="tab-icon-list" hidden><p>Affichage en liste.</p></TabPanel>
+    </Tabs>
+
+    <h2>Texte et icône</h2>
+    <Tabs>
+      <TabList label="Action sur le document">
+        <TabButton id="tab-read" controls="panel-read" icon="file-text" selected>Consulter</TabButton>
+        <TabButton id="tab-edit" controls="panel-edit" icon="file-text">Editer</TabButton>
+      </TabList>
+      <TabPanel id="panel-read" labelledby="tab-read"><p>Consultation du document.</p></TabPanel>
+      <TabPanel id="panel-edit" labelledby="tab-edit" hidden><p>Edition du document.</p></TabPanel>
+    </Tabs>
+
     <h2>Contenu long</h2>
     <Tabs>
       <TabList label="Exemple avec contenu long">
