@@ -18,6 +18,7 @@ import cornerRightDown from '../icons/corner-right-down.svg';
 import edit from '../icons/edit.svg';
 import filePlus from '../icons/file-plus.svg';
 import fileText from '../icons/file-text.svg';
+import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
 import list from '../icons/list.svg';
 import mailEdit from '../icons/mail-edit.svg';
@@ -43,6 +44,7 @@ export const icons = {
   'edit': edit,
   'file-plus': filePlus,
   'file-text': fileText,
+  'grid': grid,
   'image-plus': imagePlus,
   'list': list,
   'mail-edit': mailEdit,
