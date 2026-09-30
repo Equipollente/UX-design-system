@@ -13,6 +13,7 @@ import check from '../icons/check.svg';
 import chevronDown from '../icons/chevron-down.svg';
 import chevronTop from '../icons/chevron-top.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
+import clockForward from '../icons/clock-forward.svg';
 import close from '../icons/close.svg';
 import codeSnippet from '../icons/code-snippet.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
@@ -45,6 +46,7 @@ export const icons = {
   'chevron-down': chevronDown,
   'chevron-top': chevronTop,
   'circle-face-content': circleFaceContent,
+  'clock-forward': clockForward,
   'close': close,
   'code-snippet': codeSnippet,
   'corner-right-down': cornerRightDown,
