@@ -23,6 +23,7 @@ import fileText from '../icons/file-text.svg';
 import globe3 from '../icons/globe-3.svg';
 import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
+import link2 from '../icons/link-2.svg';
 import list from '../icons/list.svg';
 import luggage1 from '../icons/luggage-1.svg';
 import luggage2 from '../icons/luggage-2.svg';
@@ -56,6 +57,7 @@ export const icons = {
   'globe-3': globe3,
   'grid': grid,
   'image-plus': imagePlus,
+  'link-2': link2,
   'list': list,
   'luggage-1': luggage1,
   'luggage-2': luggage2,
