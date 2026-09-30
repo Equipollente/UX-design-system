@@ -25,6 +25,7 @@ import list from '../icons/list.svg';
 import mailEdit from '../icons/mail-edit.svg';
 import mainComponent from '../icons/main-component.svg';
 import menuRight from '../icons/menu-right.svg';
+import passport1 from '../icons/passport-1.svg';
 import plus from '../icons/plus.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
@@ -53,6 +54,7 @@ export const icons = {
   'mail-edit': mailEdit,
   'main-component': mainComponent,
   'menu-right': menuRight,
+  'passport-1': passport1,
   'plus': plus,
   'quote-down': quoteDown,
   'route': route,
