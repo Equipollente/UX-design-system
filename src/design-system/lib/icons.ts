@@ -22,6 +22,7 @@ import fileText from '../icons/file-text.svg';
 import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
 import list from '../icons/list.svg';
+import luggage1 from '../icons/luggage-1.svg';
 import luggage2 from '../icons/luggage-2.svg';
 import mailEdit from '../icons/mail-edit.svg';
 import mainComponent from '../icons/main-component.svg';
@@ -52,6 +53,7 @@ export const icons = {
   'grid': grid,
   'image-plus': imagePlus,
   'list': list,
+  'luggage-1': luggage1,
   'luggage-2': luggage2,
   'mail-edit': mailEdit,
   'main-component': mainComponent,
