@@ -16,14 +16,27 @@
 // — la limite et les pastilles demanderaient un script de toute façon.
 //
 // Le champ est donc un groupe de cases, et il s'écrit comme tel : un <fieldset>
-// que nomme sa <legend> (FieldLabel en `as="legend"`), un <details> qui replie la
-// liste, et dedans des Checkbox qui portent toutes le même `name`. Le formulaire
-// envoie toutes les valeurs cochées sans une ligne de script, et le clavier est
-// celui du navigateur — Entrée ouvre, Tab parcourt, Espace coche. Escape referme.
+// que nomme sa <legend> (FieldLabel en `as="legend"`), un bouton qui ouvre la
+// liste, et dans la liste des Checkbox qui portent toutes le même `name`. Le
+// formulaire envoie toutes les valeurs cochées sans une ligne de script, et le
+// clavier est celui du navigateur — Entrée ouvre, Tab parcourt, Espace coche.
 //
-// La boîte fermée est un <summary> qui porte `.field-box` : la recette de
-// global.css la dessine mot pour mot comme le Select — trait, fond, rayon,
+// La boîte fermée est ce bouton, et il porte `.field-box` : la recette de
+// global.css le dessine mot pour mot comme le Select — trait, fond, rayon,
 // hauteur 36, survol. Son chevron est celui du Select, posé de la même façon.
+//
+// La liste flotte, et rien n'y est écrit à la main. C'est un `popover` natif :
+// le navigateur la pose dans sa couche réservée, au-dessus de toute la page, ce
+// qui épargne l'ordre d'empilement que le système n'a pas. Elle s'accroche sous
+// la boîte et en prend la largeur par l'ancrage CSS (`anchor()`,
+// `anchor-size()`), et passe au-dessus quand la place manque en bas. Un clic à
+// côté ou Escape la referme, et le focus revient à la boîte : c'est le
+// navigateur qui le fait. Elle reste à sa place dans le document — contrairement
+// à un portail, qui la déplacerait hors du <form> et ferait perdre ses valeurs.
+//
+// Sa hauteur montre `visibleOptions` lignes, sept par défaut, et la suite
+// défile. Une ligne mesure la case et son rembourrage : la hauteur se compose
+// donc de variables, et suit si elles bougent.
 //
 // Deux affichages de ce qui est choisi, par `display` :
 // — `count` : la boîte dit « 2 sélectionnés » ;
@@ -41,10 +54,9 @@
 // Nœud Figma : aucun. Le composant est composé avec l'existant — la boîte du
 // Select (340:933), la case du Checkbox (340:842), le dessin retenu du Chip
 // (351:273) — et rien n'y est inventé : chaque mesure est une variable que l'une
-// de ces trois pièces lit déjà. Ce qui reste à dessiner est dans arbitrages.md :
-// la liste ouverte est posée dans le flux, elle pousse ce qui suit plutôt que de
-// flotter, parce qu'un panneau flottant demanderait un ordre d'empilement et une
-// hauteur maximale que le système n'a pas.
+// de ces trois pièces lit déjà. La liste flottante, sa largeur et ses sept lignes
+// ont été tranchées en conversation ; leur dessin reste à faire, voir
+// arbitrages.md.
 
 import FieldLabel from './FieldLabel.astro';
 import Checkbox from './Checkbox.astro';
@@ -63,6 +75,8 @@ interface Props {
   max?: number;
   /** Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles. */
   display?: 'count' | 'chips';
+  /** Le nombre de lignes que la liste montre avant de défiler. */
+  visibleOptions?: number;
   /** Ce que dit la boîte quand rien n'est coché. */
   placeholder?: string;
   /** Ce que dit la boîte pour un seul choix. `{n}` vaut le nombre. */
@@ -90,6 +104,7 @@ const {
   values = [],
   max,
   display = 'count',
+  visibleOptions = 7,
   placeholder = 'Choisir',
   countOneLabel = '{n} sélectionné',
   countLabel = '{n} sélectionnés',
@@ -117,6 +132,10 @@ const fill = (template: string, n: number) =>
 const summary = count === 0 ? placeholder : fill(count === 1 ? countOneLabel : countLabel, count);
 
 const statusId = `${id}-status`;
+const listId = `${id}-list`;
+// Le nom d'ancre lie la liste à sa boîte. Il est unique comme l'`id` dont il
+// dérive : deux champs d'une page ne s'accrochent pas l'un à l'autre.
+const anchor = `--multi-${id}`;
 const classes = ['multi', className].filter(Boolean).join(' ');
 ---
 
@@ -135,22 +154,19 @@ const classes = ['multi', className].filter(Boolean).join(' ');
 >
   <FieldLabel as="legend" required={required} disabled={disabled}>{label}</FieldLabel>
 
-  <details class="multi-details">
-    {/* Un champ éteint ne s'ouvre pas : le <summary> n'est pas un contrôle de
-        formulaire, et le `disabled` du fieldset ne l'atteint pas. */}
-    <summary
-      class="field-box multi-box"
-      tabindex={disabled ? -1 : undefined}
-      aria-disabled={disabled ? 'true' : undefined}
-    >
+  {/* L'ancre et le nombre de lignes sont propres à chaque champ : ils passent
+      en propriétés posées sur la boîte, que la feuille de style lit. Un champ
+      éteint ne s'ouvre pas — le `disabled` du fieldset atteint le bouton. */}
+  <div class="multi-control" style={`--multi-anchor: ${anchor}; --multi-visible-options: ${visibleOptions}`}>
+    <button type="button" class="field-box multi-box" popovertarget={listId} data-trigger>
       <span class:list={['multi-summary', count === 0 && 'multi-summary-empty']} data-summary>
         {summary}
       </span>
       <Icon name="chevron-down" class="multi-chevron multi-chevron-closed" />
       <Icon name="chevron-top" class="multi-chevron multi-chevron-open" />
-    </summary>
+    </button>
 
-    <div class="multi-list">
+    <div class="multi-list" id={listId} popover data-list>
       {
         items.map((o) => {
           const checked = values.includes(o.value);
@@ -167,7 +183,7 @@ const classes = ['multi', className].filter(Boolean).join(' ');
         })
       }
     </div>
-  </details>
+  </div>
 
   {
     display === 'chips' && (
@@ -220,8 +236,8 @@ const classes = ['multi', className].filter(Boolean).join(' ');
       root.dataset;
     const requiredMessage = root.dataset.requiredMessage;
     const max = maxAttr ? Number(maxAttr) : undefined;
-    const details = root.querySelector('details');
-    const summaryBox = root.querySelector<HTMLElement>('summary');
+    const list = root.querySelector<HTMLElement>('[data-list]');
+    const trigger = root.querySelector<HTMLElement>('[data-trigger]');
     const summary = root.querySelector<HTMLElement>('[data-summary]');
     const status = root.querySelector<HTMLElement>('[data-status]');
     const inputs = [
@@ -269,23 +285,15 @@ const classes = ['multi', className].filter(Boolean).join(' ');
       sync();
       // La pastille disparaît sous le doigt : le focus revient à la boîte
       // plutôt que de tomber au début de la page.
-      summaryBox?.focus();
+      trigger?.focus();
     });
 
-    // Escape referme la liste, comme toute liste dépliante, et rend le focus à
-    // la boîte — sans quoi il resterait sur une case devenue invisible.
-    details?.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || !details.open) return;
-      details.open = false;
-      summaryBox?.focus();
-    });
-
-    // Une case refusée dans une liste repliée ne peut pas recevoir le focus,
-    // et le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse.
+    // Une case refusée dans une liste fermée ne peut pas recevoir le focus, et
+    // le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse.
     root.addEventListener(
       'invalid',
       () => {
-        if (details) details.open = true;
+        if (list && !list.matches(':popover-open')) list.showPopover();
       },
       true,
     );
@@ -308,43 +316,38 @@ const classes = ['multi', className].filter(Boolean).join(' ');
   /* 5 — l'écart des trois autres champs, entre libellé, boîte, pastilles et
      message. Posé en marge haute plutôt qu'en `gap` : une <legend> n'est pas un
      élément de la colonne, et le message vide ne doit rien réserver. */
-  .multi-details,
+  .multi-control,
   .multi-chips,
   .multi-status:not(:empty) {
     margin-top: var(--control-field-gap);
   }
 
-  .multi-details {
-    display: flex;
-    flex-direction: column;
-    gap: var(--control-field-gap);
-  }
-
   /* La boîte fermée. Tout son dessin est la recette de global.css ; elle ne
-     déclare que sa place, et le chevron — posé comme celui du Select. */
+     déclare que sa place, l'ancre de la liste, et le chevron — posé comme celui
+     du Select. Un bouton centre son texte : celui-ci s'aligne à gauche, comme
+     dans le Select. */
   .multi-box {
     position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+    text-align: left;
     cursor: pointer;
-    list-style: none;
-  }
-
-  /* Le triangle que le navigateur pose devant un <summary> s'efface : c'est le
-     chevron du système qui dit « ça s'ouvre ». */
-  .multi-box::-webkit-details-marker {
-    display: none;
+    anchor-name: var(--multi-anchor);
   }
 
   /* — focused — L'anneau du système, au clic comme au clavier. Le navigateur le
      montre sur un <select> même au clic, parce qu'il le tient pour un champ ; un
-     <summary>, il le tient pour un bouton, et ne le montre qu'au clavier. Les
-     deux boîtes voisines doivent réagir pareil. */
+     bouton, il ne le montre qu'au clavier. Les deux boîtes voisines doivent
+     réagir pareil. */
   .multi-box:focus {
     outline: var(--border-width-focus) solid var(--color-border-focus);
     outline-offset: var(--button-focus-offset);
+  }
+
+  .multi-box:disabled {
+    cursor: not-allowed;
   }
 
   .multi-summary {
@@ -369,26 +372,51 @@ const classes = ['multi', className].filter(Boolean).join(' ');
 
   /* Ouverte, le chevron change de sens. Ce sont deux icônes du registre plutôt
      qu'une rotation : un angle écrit ici serait une valeur sans variable. */
-  .multi-details:not([open]) .multi-chevron-open,
-  .multi-details[open] .multi-chevron-closed {
+  .multi-control:not(:has(.multi-list:popover-open)) .multi-chevron-open,
+  .multi-control:has(.multi-list:popover-open) .multi-chevron-closed {
     display: none;
   }
 
-  .multi:disabled .multi-box {
-    pointer-events: none;
-  }
-
-  /* La liste ouverte. Elle est posée dans le flux : voir le pavé en tête. Son
-     cadre est celui de la boîte — même trait, même rayon. Le rembourrage se
-     partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la boîte,
-     et le libellé d'une option tombe à l'aplomb du texte de la boîte. */
+  /* La liste flottante. Le navigateur la pose dans sa couche réservée ; il ne
+     reste qu'à l'accrocher. Elle tombe sous la boîte, à l'écart du libellé
+     (5), en prend exactement la largeur, et passe au-dessus quand la place
+     manque en bas. Les marges et l'encart que le navigateur donne à un popover
+     — centré au milieu de l'écran — s'effacent. */
   .multi-list {
-    display: flex;
-    flex-direction: column;
+    position-anchor: var(--multi-anchor);
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin: var(--control-field-gap) 0 0;
+    position-try-fallbacks: flip-block;
+    /* Sept lignes, puis la liste défile. Une ligne mesure la case
+       (`control/size`, 18 — plus haute que le libellé, 16,8) et son rembourrage
+       (`space/xs` dessus et dessous) ; s'y ajoutent le rembourrage et le trait
+       du cadre. Rien n'est mesuré à la main : la hauteur suit ses variables. */
+    max-height: calc(
+      var(--multi-visible-options) * (var(--control-size) + 2 * var(--space-xs)) +
+        2 * var(--space-xs) + 2 * var(--border-width-default)
+    );
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Son cadre est celui de la boîte — même trait, même rayon — et l'ombre
+       `shadow/md` du système la détache de ce qu'elle recouvre. Le rembourrage
+       se partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la
+       boîte, et le libellé d'une option tombe à l'aplomb du texte de la boîte. */
     padding: var(--space-xs);
     background: var(--color-bg-default);
+    color: var(--color-text-default);
     border: var(--border-width-default) solid var(--color-border-default);
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* `display` seulement ouverte : posé sans condition, il l'emporterait sur le
+     `display: none` que le navigateur donne à un popover fermé. */
+  .multi-list:popover-open {
+    display: flex;
+    flex-direction: column;
   }
 
   /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :

@@ -66,6 +66,7 @@ const multiSelectProps = [
   ['values', 'string[]', '[]', 'Les valeurs cochées à l’ouverture.'],
   ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
   ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
+  ['visibleOptions', 'number', '7', 'Le nombre de lignes que la liste montre avant de défiler.'],
   ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est coché.'],
   ['countOneLabel', 'string', '{n} sélectionné', 'Ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
   ['countLabel', 'string', '{n} sélectionnés', 'Ce que dit la boîte pour plusieurs choix.'],
@@ -163,7 +164,7 @@ const galleryProps = [
 ];
 
 const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
-const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon'];
+const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon', 'Portugal', 'Espagne', 'Grèce', 'Maroc'];
 ---
 
 <DocsLayout
@@ -494,10 +495,10 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
 
       <p class="section-note">
         Ce champ est donc <strong>un groupe de cases</strong> :
-        un <code>&lt;fieldset&gt;</code> nommé par sa légende, une liste repliée, et des
+        un <code>&lt;fieldset&gt;</code> nommé par sa légende, une liste qui s'ouvre sous la boîte, et des
         {' '}<code>Checkbox</code> qui portent toutes le même <code>name</code>. Le formulaire envoie
         toutes les valeurs cochées, et le clavier est celui du navigateur : Entrée ouvre, Tab
-        parcourt, Espace coche. Escape referme et rend le focus à la boîte.
+        parcourt, Espace coche. Un clic à côté ou Escape referme, et le focus revient à la boîte.
         <br />
         Chaque option réagit en entier au survol et au focus, pas seulement sa case, et une option
         cochée passe son mot en semibold : l'état ne se lit pas que par la couleur (WCAG 1.4.1). La
@@ -567,9 +568,18 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <strong>Aucun nœud Figma.</strong> Le composant est composé avec l'existant — la boîte du
         Select (<code>340:933</code>), la case du Checkbox (<code>340:842</code>), le dessin retenu du
         Chip (<code>351:273</code>) — et chaque mesure est une variable que l'une de ces trois pièces
-        lit déjà. Ce qui reste à dessiner : la liste ouverte est posée <strong>dans le flux</strong>,
-        elle pousse ce qui suit au lieu de flotter. Un panneau flottant demanderait un ordre
-        d'empilement et une hauteur maximale, et le système n'a de variable pour aucun des deux.
+        lit déjà. La liste flottante a été tranchée en conversation, et reste à dessiner.
+      </p>
+
+      <p class="section-note">
+        <strong>La liste flotte, et rien n'y est écrit à la main.</strong> C'est un
+        {' '}<code>popover</code> natif : le navigateur la pose dans sa couche réservée, au-dessus de
+        toute la page, sans ordre d'empilement à inventer. L'ancrage CSS l'accroche sous la boîte et
+        lui en donne la <strong>largeur</strong> ; elle passe au-dessus quand la place manque en bas.
+        Sa <strong>hauteur</strong> montre <code>visibleOptions</code> lignes — sept par défaut — puis
+        défile : une ligne mesure <code>control/size</code> plus deux <code>space/xs</code>, et la
+        hauteur suit ces variables. Elle reste à sa place dans le document, donc dans le
+        formulaire : ses cases sont envoyées avec lui.
       </p>
     </section>
 
