@@ -62,7 +62,7 @@ const selectProps = [
 const multiSelectProps = [
   ['id', 'string', '—', 'Préfixe des id des cases, et name si aucun n’est donné. Unique dans la page.'],
   ['label', 'string', '—', 'Le texte du libellé — la légende du groupe, rendue par FieldLabel.'],
-  ['options', '(string | { value, label })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur.'],
+  ['options', '(option | { label, options, disabled? })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur. Un groupe range ses choix sous un nom, comme un optgroup ; disabled l’éteint en entier.'],
   ['values', 'string[]', '[]', 'Les valeurs cochées à l’ouverture.'],
   ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
   ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
@@ -168,6 +168,12 @@ const galleryProps = [
 ];
 
 const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
+const destinationsGroupees = [
+  { label: 'Europe', options: ['France', 'Belgique', 'Suisse', 'Italie', 'Portugal', 'Espagne', 'Grèce'] },
+  { label: 'Amérique', options: ['Canada', 'Mexique', 'Brésil'] },
+  { label: 'Asie', options: ['Japon', 'Vietnam'] },
+  { label: 'Océanie', options: ['Australie', 'Nouvelle-Zélande'], disabled: true },
+];
 const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon', 'Portugal', 'Espagne', 'Grèce', 'Maroc'];
 ---
 
@@ -527,6 +533,10 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
           <MultiSelect id="dest-e" label="Destinations" options={destinations} values={['Grèce']} searchable />
         </div>
         <div class="demo-case">
+          <p class="demo-name">groupée — Océanie éteinte</p>
+          <MultiSelect id="dest-f" label="Destinations" options={destinationsGroupees} values={['Japon']} searchable />
+        </div>
+        <div class="demo-case">
           <p class="demo-name">disabled + required</p>
           <MultiSelect id="dest-d" label="Destinations" options={destinations} values={['Belgique']} required disabled />
         </div>
@@ -590,6 +600,15 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         dessinent une coche coupée ; et l'anneau de focus d'une pastille retenue, comme celui du Chip
         retenu, est de la couleur de son fond — sans l'écart de <code>button/focus-offset</code> que le
         code lui donne, il ne se voit pas.
+      </p>
+
+      <p class="section-note">
+        <strong>La liste est simple ou groupée</strong>, selon ce qu'on lui donne : une option peut
+        être remplacée par un groupe, <code>{'{ label, options, disabled? }'}</code>, qui range ses
+        choix sous un nom — comme un <code>&lt;optgroup&gt;</code>. Le nom ne se coche pas et ne prend
+        pas le focus ; il s'écrit au petit corps des libellés, en capitales atténuées. Les groupes ne
+        s'imbriquent pas, et <code>disabled</code> éteint tout le groupe. Avec la recherche, un groupe
+        dont rien ne correspond disparaît avec son nom.
       </p>
 
       <p class="section-note">

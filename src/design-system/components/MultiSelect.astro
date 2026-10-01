@@ -38,6 +38,13 @@
 // défile. Une ligne mesure la case et son rembourrage : la hauteur se compose
 // donc de variables, et suit si elles bougent.
 //
+// La liste est simple ou groupée, selon ce qu'on lui donne : une option peut
+// être remplacée par un groupe — `{ label, options, disabled? }` — qui range ses
+// choix sous un nom, comme un <optgroup>. Le nom ne se coche pas et ne prend pas
+// le focus ; il s'écrit petit, en capitales atténuées. Les groupes ne
+// s'imbriquent pas, et `disabled` éteint tout le groupe, limite ou pas. Avec la
+// recherche, un groupe dont rien ne correspond disparaît avec son nom.
+//
 // `searchable` pose un champ de recherche en tête de la liste. Il prend le
 // focus à l'ouverture, filtre les options à chaque lettre — sans casse ni
 // accents, sur ce que l'option contient — et dit quand rien ne correspond. Le
@@ -71,13 +78,25 @@ import FieldLabel from './FieldLabel.astro';
 import Checkbox from './Checkbox.astro';
 import Icon from './Icon.astro';
 
+type Option = string | { value: string; label: string };
+interface OptionGroup {
+  /** Le nom du groupe. Il range, il ne se coche pas. */
+  label: string;
+  options: Option[];
+  disabled?: boolean;
+}
+
 interface Props {
   /** Préfixe des `id` des cases, et `name` si aucun n'est donné. Unique dans la page. */
   id: string;
   /** Le texte du libellé — la légende du groupe. */
   label: string;
-  /** Les choix. Une chaîne vaut pour sa propre valeur. */
-  options: (string | { value: string; label: string })[];
+  /**
+   * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label,
+   * options }` — range ses choix sous un nom, comme un <optgroup> : il ne
+   * s'imbrique pas, et `disabled` éteint tout le groupe.
+   */
+  options: (Option | OptionGroup)[];
   /** Les valeurs cochées à l'ouverture. */
   values?: string[];
   /** Le nombre de choix à ne pas dépasser. Absent : aucune limite. */
@@ -138,10 +157,23 @@ const {
   class: className,
 } = Astro.props;
 
-const items = options.map((o, i) => ({
+// Les choix sont mis à plat pour compter et cocher, et rangés en blocs pour
+// s'afficher : un bloc est un groupe nommé, ou une suite de choix sans groupe.
+// Les `id` des cases se numérotent d'un bout à l'autre, groupes compris.
+const isGroup = (o: Option | OptionGroup): o is OptionGroup =>
+  typeof o === 'object' && 'options' in o;
+let index = 0;
+const toItem = (o: Option, locked = false) => ({
   ...(typeof o === 'string' ? { value: o, label: o } : o),
-  inputId: `${id}-${i}`,
-}));
+  inputId: `${id}-${index++}`,
+  locked,
+});
+const blocks = options.map((o) =>
+  isGroup(o)
+    ? { label: o.label, labelId: `${id}-group-${index}`, items: o.options.map((x) => toItem(x, !!o.disabled)) }
+    : { label: undefined, labelId: undefined, items: [toItem(o)] },
+);
+const items = blocks.flatMap((b) => b.items);
 const count = items.filter((o) => values.includes(o.value)).length;
 const full = max !== undefined && count >= max;
 
@@ -209,17 +241,30 @@ const classes = ['multi', className].filter(Boolean).join(' ');
       }
       <div class="multi-options">
         {
-          items.map((o) => {
-            const checked = values.includes(o.value);
-            return (
-              <Checkbox
-                id={o.inputId}
-                label={o.label}
-                name={name ?? id}
-                value={o.value}
-                checked={checked}
-                disabled={disabled || (full && !checked)}
-              />
+          blocks.map((block) => {
+            const rows = block.items.map((o) => {
+              const checked = values.includes(o.value);
+              return (
+                <Checkbox
+                  id={o.inputId}
+                  label={o.label}
+                  name={name ?? id}
+                  value={o.value}
+                  checked={checked}
+                  disabled={disabled || o.locked || (full && !checked)}
+                  data-locked={o.locked ? '' : undefined}
+                />
+              );
+            });
+            /* Un groupe est ce que serait un <optgroup> : un `group` que son
+               nom désigne. Le nom n'est pas une case, il ne prend pas le focus. */
+            return block.label ? (
+              <div class="multi-group" role="group" aria-labelledby={block.labelId} data-group>
+                <p class="multi-group-label" id={block.labelId}>{block.label}</p>
+                {rows}
+              </div>
+            ) : (
+              rows
             );
           })
         }
@@ -297,7 +342,9 @@ const classes = ['multi', className].filter(Boolean).join(' ');
       }
 
       for (const input of inputs) {
-        const off = full && !input.checked;
+        // Une case d'un groupe éteint le reste, limite ou pas.
+        const locked = input.closest('[data-locked]') !== null;
+        const off = locked || (full && !input.checked);
         input.disabled = off;
         // Les deux classes que Checkbox et FieldLabel posent eux-mêmes quand
         // on leur passe `disabled` : la case s'atténue, son libellé pâlit.
@@ -348,6 +395,10 @@ const classes = ['multi', className].filter(Boolean).join(' ');
         const match = !query || plain(row?.textContent ?? '').includes(query);
         row?.classList.toggle('multi-filtered', !match);
         if (match) shown += 1;
+      }
+      // Un groupe dont aucune option ne correspond s'efface avec son nom.
+      for (const group of root.querySelectorAll<HTMLElement>('[data-group]')) {
+        group.classList.toggle('multi-filtered', !group.querySelector('.checkbox:not(.multi-filtered)'));
       }
       if (empty) empty.textContent = shown === 0 ? noResults : '';
     };
@@ -553,6 +604,31 @@ const classes = ['multi', className].filter(Boolean).join(' ');
     --icon-size: var(--button-icon-size-sm);
     color: var(--color-text-muted);
     pointer-events: none;
+  }
+
+  /* Un groupe d'options. Son nom range la liste sans attirer l'œil : le petit
+     corps des libellés, en capitales et en encre atténuée, avec l'interlettrage
+     large que le système donne à ses capitales (celui du h6). Il s'aligne sur
+     le bord des cases, et prend de l'air au-dessus pour séparer les groupes. */
+  .multi-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .multi-group-label {
+    margin: 0;
+    padding: var(--space-sm) var(--space-md) var(--space-xs);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-snug);
+    letter-spacing: var(--font-letter-spacing-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .multi-group.multi-filtered {
+    display: none;
   }
 
   /* Une option écartée par le filtre. Une classe plutôt que `hidden` : le
