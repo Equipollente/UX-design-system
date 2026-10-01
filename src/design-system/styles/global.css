@@ -133,7 +133,7 @@ pre {
  * gardent leur spécificité normale — ils doivent battre la base.
  *
  * `.field-box` est la quatrième entrée, et la seule qui ne soit pas une balise :
- * c'est la boîte fermée de MultiSelect, un <summary> qui doit se dessiner comme
+ * c'est la boîte fermée de MultiSelect, un <button> qui doit se dessiner comme
  * un <select> sans en être un. Une classe dans la liste plutôt qu'une copie de
  * la recette dans le composant — sans quoi les deux divergeraient en silence.
  *
