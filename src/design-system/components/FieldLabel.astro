@@ -24,10 +24,17 @@
 // Il reste redondant pour l'autre raison, celle qui n'a pas bougé — être lu deux
 // fois. Le formulaire qui s'en sert doit en revanche ouvrir sur la phrase
 // « Les champs marqués * sont obligatoires ».
+//
+// Un groupe de cases ne se nomme pas par un <label for> : il n'y a pas un champ
+// à désigner, mais plusieurs. Il se nomme par la <legend> de son <fieldset>, et
+// `as="legend"` rend ce même libellé dans cette balise — même dessin, même
+// astérisque. C'est MultiSelect qui en a eu besoin le premier.
 
 interface Props {
-  /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. */
-  for: string;
+  /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. Sans objet en légende. */
+  for?: string;
+  /** `legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`. */
+  as?: 'label' | 'legend';
   /** Pose l'astérisque. Le champ doit porter `required` de son côté. */
   required?: boolean;
   /** L'encre passe en muted. Le champ doit porter `disabled` de son côté. */
@@ -35,15 +42,29 @@ interface Props {
   class?: string;
 }
 
-const { for: htmlFor, required = false, disabled = false, class: className } = Astro.props;
+const {
+  for: htmlFor,
+  as = 'label',
+  required = false,
+  disabled = false,
+  class: className,
+} = Astro.props;
 const classes = ['field-label', disabled && 'field-label-disabled', className]
   .filter(Boolean)
   .join(' ');
 ---
 
-<label class={classes} for={htmlFor}>
-  <slot />{required && <span class="field-label-mark" aria-hidden="true">*</span>}
-</label>
+{
+  as === 'legend' ? (
+    <legend class={classes}>
+      <slot />{required && <span class="field-label-mark" aria-hidden="true">*</span>}
+    </legend>
+  ) : (
+    <label class={classes} for={htmlFor}>
+      <slot />{required && <span class="field-label-mark" aria-hidden="true">*</span>}
+    </label>
+  )
+}
 
 <style>
   /* Les déclarations qui font le libellé. Elles lisent les primitives du système
@@ -57,6 +78,9 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
     font-weight: var(--font-weight-medium); /* 500 */
     line-height: var(--font-line-height-tight); /* 1.12 */
     letter-spacing: var(--font-letter-spacing-normal); /* 0em */
+    /* Une <legend> arrive avec un rembourrage du navigateur, qui ne vient
+       d'aucune variable : il s'efface, et les deux balises se posent pareil. */
+    padding: 0;
   }
 
   /* Désactivé : l'encre, et rien d'autre. */

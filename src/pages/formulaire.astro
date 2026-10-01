@@ -25,7 +25,8 @@ import {
 } from './_demo';
 
 const labelProps = [
-  ['for', 'string', '—', 'L’id du champ que ce libellé nomme. C’est ce qui les lie.'],
+  ['for', 'string', '—', 'L’id du champ que ce libellé nomme. C’est ce qui les lie. Sans objet en légende.'],
+  ['as', "'label' | 'legend'", "'label'", 'legend quand le libellé nomme un groupe, en premier enfant d’un fieldset.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque. Le champ doit porter required de son côté.'],
   ['disabled', 'boolean', 'false', 'L’encre passe en muted. Le champ doit porter disabled de son côté.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
