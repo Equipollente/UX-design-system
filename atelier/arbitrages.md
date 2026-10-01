@@ -43,7 +43,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Système** | — | **aucune famille de mesures pour la géométrie d'un contrôle** — 18, 22, 5 | /formulaire | *réglé — 27/08, groupe `control`* |
 | **Système** | — | **aucune famille d'épaisseurs de trait** (1 · 1,5 · 2) | /formulaire | *réglé — 27/08, groupe `border`* |
 | **Système** | — | **aucune échelle d'opacité** (0,4 · 0,5 · 0,6) | /formulaire | *réglé — 27/08, groupe `opacity`* |
-| **Système** | — | **rien ne dessine le nom d'un groupe de champs** : une `legend` n'a pas de `for`, FieldLabel ne peut donc pas la rendre, et l'atelier du formulaire redéfinit sa typographie à la main | /bac-à-sable → Un formulaire | ouvert |
+| **Système** | — | **rien ne dessine le nom d'un groupe de champs** : une `legend` n'a pas de `for`, FieldLabel ne peut donc pas la rendre, et l'atelier du formulaire redéfinit sa typographie à la main | /bac-à-sable → Un formulaire | ouvert — côté code, FieldLabel rend une `legend` depuis `as="legend"` ; le dessin reste à faire |
 | ~~Chip~~ | `351:273` | ~~son trait ne vaut que 1,28:1 sur le blanc — WCAG 1.4.11 en demande 3~~ | /formulaire → Chip | *réglé — 31/08, trait des états non sélectionnés rebranché sur `color/accent/300` (3,2:1) ; `color/border/default` lui-même n'a pas bougé, toujours à 1,28:1 pour qui d'autre le lit* |
 | ~~Select~~ | `340:933` | ~~pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment~~ | /formulaire → Select | *réglé — 31/08, dans Figma seul, les quatre états portent `border/default`* |
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
@@ -54,6 +54,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
 | Select | `340:933` | boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile | /formulaire → Select | ouvert |
 | Select | `340:933` | chevron de 20, quand le code prend les 24 de `button/icon-size/md` | /formulaire → Select | ouvert |
+| Select à plusieurs choix | — | **aucun nœud** : boîte, liste ouverte (dans le flux ou flottante ?), pastilles et message de limite à dessiner | /formulaire → Select field — plusieurs choix | ouvert |
 | Select · Text field | `340:933` · `23:29` | boîte de 36 et rembourrage vertical de 12 s'excluent : 12 + 16,8 + 12 = 40,8 | /formulaire → Select | ouvert |
 | ~~Text field~~ | `23:29` | ~~rembourrage de 6 / 14, que rien ne lie : 14 n'existe que comme rayon, 6 n'existe pas~~ | /formulaire → Text field | *réglé — 31/08, nœud redessiné à 12 / 16 sur ses six variantes, lié aux deux `button/padding-*/sm` — aucune variable créée* |
 | Text field | `23:29` | **le nœud existait, et personne ne l'avait vu** — hors de la plage `340`–`355` relevée par le sprint, il n'était ni intégré ni listé | /formulaire → Text field | ouvert |
