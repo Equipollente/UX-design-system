@@ -38,6 +38,13 @@
 // défile. Une ligne mesure la case et son rembourrage : la hauteur se compose
 // donc de variables, et suit si elles bougent.
 //
+// `searchable` pose un champ de recherche en tête de la liste. Il prend le
+// focus à l'ouverture, filtre les options à chaque lettre — sans casse ni
+// accents, sur ce que l'option contient — et dit quand rien ne correspond. Le
+// filtre ne décoche rien : une option masquée reste choisie, et envoyée. À la
+// fermeture, il s'efface. Le champ reste en haut quand les options défilent :
+// ce sont elles qui défilent, pas le cadre.
+//
 // Deux affichages de ce qui est choisi, par `display` :
 // — `count` : la boîte dit « 2 sélectionnés » ;
 // — `chips` : la boîte dit pareil, et les choix s'alignent dessous en pastilles
@@ -76,6 +83,14 @@ interface Props {
   display?: 'count' | 'chips';
   /** Le nombre de lignes que la liste montre avant de défiler. */
   visibleOptions?: number;
+  /** Pose un champ de recherche en tête de la liste, qui filtre les options. */
+  searchable?: boolean;
+  /** Le nom lu du champ de recherche. Il n'est pas affiché. */
+  searchLabel?: string;
+  /** L'invite du champ de recherche. */
+  searchPlaceholder?: string;
+  /** Ce que dit la liste quand aucune option ne correspond. */
+  noResultsLabel?: string;
   /** Ce que dit la boîte quand rien n'est coché. */
   placeholder?: string;
   /** Ce que dit la boîte pour un seul choix. `{n}` vaut le nombre. */
@@ -104,6 +119,10 @@ const {
   max,
   display = 'count',
   visibleOptions = 7,
+  searchable = false,
+  searchLabel = 'Filtrer les options',
+  searchPlaceholder = 'Rechercher',
+  noResultsLabel = 'Aucun résultat',
   placeholder = 'Choisir',
   countOneLabel = '{n} sélectionné',
   countLabel = '{n} sélectionnés',
@@ -150,6 +169,7 @@ const classes = ['multi', className].filter(Boolean).join(' ');
   data-count={countLabel}
   data-max-label={maxLabel}
   data-required-message={required ? requiredMessage : undefined}
+  data-no-results={searchable ? noResultsLabel : undefined}
 >
   <FieldLabel as="legend" required={required} disabled={disabled}>{label}</FieldLabel>
 
@@ -167,20 +187,41 @@ const classes = ['multi', className].filter(Boolean).join(' ');
 
     <div class="multi-list" id={listId} popover data-list>
       {
-        items.map((o) => {
-          const checked = values.includes(o.value);
-          return (
-            <Checkbox
-              id={o.inputId}
-              label={o.label}
-              name={name ?? id}
-              value={o.value}
-              checked={checked}
-              disabled={disabled || (full && !checked)}
+        searchable && (
+          /* Le champ de recherche n'a pas de `name` : il filtre la liste, il
+             n'est pas envoyé. Son libellé n'est pas affiché — la légende du
+             groupe dit déjà de quoi il s'agit — mais il est lu. */
+          <div class="multi-search">
+            <input
+              type="search"
+              class="multi-search-input"
+              aria-label={searchLabel}
+              placeholder={searchPlaceholder}
+              autocomplete="off"
+              data-search
             />
-          );
-        })
+            <Icon name="search-2" class="multi-search-icon" />
+          </div>
+        )
       }
+      <div class="multi-options">
+        {
+          items.map((o) => {
+            const checked = values.includes(o.value);
+            return (
+              <Checkbox
+                id={o.inputId}
+                label={o.label}
+                name={name ?? id}
+                value={o.value}
+                checked={checked}
+                disabled={disabled || (full && !checked)}
+              />
+            );
+          })
+        }
+        {searchable && <p class="multi-empty" role="status" data-empty></p>}
+      </div>
     </div>
   </div>
 
@@ -287,11 +328,55 @@ const classes = ['multi', className].filter(Boolean).join(' ');
       trigger?.focus();
     });
 
+    // La recherche. Elle compare sans casse ni accents — « grece » trouve
+    // « Grèce » — et retient ce qui contient le texte tapé, où qu'il soit.
+    // Une option masquée par le filtre reste cochée, et le formulaire l'envoie.
+    const search = root.querySelector<HTMLInputElement>('[data-search]');
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+    const noResults = root.dataset.noResults ?? '';
+    const plain = (text: string) =>
+      text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+
+    const filter = () => {
+      const query = plain(search?.value ?? '');
+      let shown = 0;
+      for (const input of inputs) {
+        const row = input.closest('.checkbox');
+        const match = !query || plain(row?.textContent ?? '').includes(query);
+        row?.classList.toggle('multi-filtered', !match);
+        if (match) shown += 1;
+      }
+      if (empty) empty.textContent = shown === 0 ? noResults : '';
+    };
+
+    if (search && list) {
+      search.addEventListener('input', filter);
+      // Entrée dans le champ de recherche enverrait le formulaire entier.
+      search.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') event.preventDefault();
+      });
+      // Ouverte, la liste donne le focus à la recherche : on tape aussitôt.
+      // Fermée, elle oublie le filtre, pour rouvrir sur toutes ses options.
+      list.addEventListener('toggle', (event) => {
+        if ((event as ToggleEvent).newState === 'open') {
+          search.focus();
+        } else {
+          search.value = '';
+          filter();
+        }
+      });
+    }
+
     // Une case refusée dans une liste fermée ne peut pas recevoir le focus, et
-    // le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse.
+    // le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse — et
+    // on lève le filtre, qui pourrait masquer justement la case refusée.
     root.addEventListener(
       'invalid',
       () => {
+        if (search?.value) {
+          search.value = '';
+          filter();
+        }
         if (list && !list.matches(':popover-open')) list.showPopover();
       },
       true,
@@ -396,10 +481,12 @@ const classes = ['multi', className].filter(Boolean).join(' ');
        variables, comme le cadre de 585:1410 la suit dans Figma. */
     max-height: calc(
       var(--multi-visible-options) * (var(--control-size) + 2 * var(--space-sm)) +
-        2 * var(--space-xs) + 2 * var(--border-width-default)
+        2 * var(--space-xs) + 2 * var(--border-width-default) + var(--multi-search-block, 0px)
     );
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    /* Ce n'est pas le cadre qui défile, ce sont ses options : la recherche
+       reste en haut sans avoir à flotter au-dessus d'elles. Le cadre ne coupe
+       rien — l'anneau de focus du champ déborde de son rembourrage. */
+    overflow: visible;
     /* Son cadre est celui de la boîte — même trait, même rayon — et l'ombre
        `shadow/md` du système la détache de ce qu'elle recouvre. Le rembourrage
        se partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la
@@ -417,6 +504,73 @@ const classes = ['multi', className].filter(Boolean).join(' ');
   .multi-list:popover-open {
     display: flex;
     flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  /* Avec la recherche, la liste grandit de la hauteur d'un champ (36, la
+     hauteur de la recette) et de l'écart qui la sépare des options : les sept
+     lignes restent sept. */
+  .multi-list:has(.multi-search) {
+    --multi-search-block: calc(var(--space-2xl) + 2 * var(--space-xs));
+  }
+
+  .multi-options {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Le champ de recherche. Tout son dessin est la recette des champs de
+     global.css — `type="search"` y est déjà ; il ne déclare que sa place et
+     celle de sa loupe, posée comme le chevron de la boîte. */
+  .multi-search {
+    position: relative;
+    display: flex;
+    flex: none;
+  }
+
+  .multi-search-input {
+    width: 100%;
+    padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+  }
+
+  /* La croix que le navigateur pose dans un champ de recherche tomberait sous
+     la loupe : elle s'efface, Escape vide déjà le champ. */
+  .multi-search-input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .multi-search-icon {
+    position: absolute;
+    right: var(--button-padding-x-sm);
+    top: 50%;
+    translate: 0 -50%;
+    --icon-size: var(--button-icon-size-sm);
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  /* Une option écartée par le filtre. Une classe plutôt que `hidden` : le
+     `display: flex` de Checkbox l'emporterait sur celui du navigateur. */
+  .multi-list :global(.checkbox.multi-filtered) {
+    display: none;
+  }
+
+  /* Rien ne correspond : la liste le dit, à la place d'une ligne, et le
+     message est annoncé. Vide, il ne prend aucune place. */
+  .multi-empty {
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-ui);
+    line-height: var(--font-line-height-snug);
+    color: var(--color-text-muted);
+  }
+
+  .multi-empty:empty {
+    display: none;
   }
 
   /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :

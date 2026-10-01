@@ -67,6 +67,10 @@ const multiSelectProps = [
   ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
   ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
   ['visibleOptions', 'number', '7', 'Le nombre de lignes que la liste montre avant de défiler.'],
+  ['searchable', 'boolean', 'false', 'Pose un champ de recherche en tête de la liste, qui filtre les options.'],
+  ['searchLabel', 'string', 'Filtrer les options', 'Le nom lu du champ de recherche. Il n’est pas affiché.'],
+  ['searchPlaceholder', 'string', 'Rechercher', 'L’invite du champ de recherche.'],
+  ['noResultsLabel', 'string', 'Aucun résultat', 'Ce que dit la liste quand aucune option ne correspond.'],
   ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est coché.'],
   ['countOneLabel', 'string', '{n} sélectionné', 'Ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
   ['countLabel', 'string', '{n} sélectionnés', 'Ce que dit la boîte pour plusieurs choix.'],
@@ -519,6 +523,10 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
           <MultiSelect id="dest-c" label="Destinations" options={destinations} values={['France', 'Suisse', 'Italie']} max={3} />
         </div>
         <div class="demo-case">
+          <p class="demo-name">searchable — filtrer les options</p>
+          <MultiSelect id="dest-e" label="Destinations" options={destinations} values={['Grèce']} searchable />
+        </div>
+        <div class="demo-case">
           <p class="demo-name">disabled + required</p>
           <MultiSelect id="dest-d" label="Destinations" options={destinations} values={['Belgique']} required disabled />
         </div>
@@ -580,6 +588,15 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         dessinent une coche coupée ; et l'anneau de focus d'une pastille retenue, comme celui du Chip
         retenu, est de la couleur de son fond — sans l'écart de <code>button/focus-offset</code> que le
         code lui donne, il ne se voit pas.
+      </p>
+
+      <p class="section-note">
+        <strong>Avec <code>searchable</code>, un champ de recherche ouvre la liste.</strong> Il prend
+        le focus dès qu'elle s'ouvre et filtre à chaque lettre, sans casse ni accents, sur ce que
+        l'option contient : « grece » trouve « Grèce », « isse » trouve « Suisse ». Le filtre ne
+        décoche rien — une option masquée reste choisie et envoyée — et s'efface à la fermeture.
+        Quand rien ne correspond, la liste le dit. Le champ reste en haut : ce sont les options
+        qui défilent, pas le cadre.
       </p>
 
       <p class="section-note">
