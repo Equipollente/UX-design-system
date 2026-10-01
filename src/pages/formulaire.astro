@@ -67,6 +67,11 @@ const multiSelectProps = [
   ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
   ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
   ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est coché.'],
+  ['countOneLabel', 'string', '{n} sélectionné', 'Ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
+  ['countLabel', 'string', '{n} sélectionnés', 'Ce que dit la boîte pour plusieurs choix.'],
+  ['maxLabel', 'string', 'Maximum atteint : {n} sur {max}', 'Le message de limite.'],
+  ['removeLabel', 'string', 'Retirer', 'Le verbe d’une pastille, lu avant son mot : « Retirer France ».'],
+  ['requiredMessage', 'string', 'Choisir au moins une option.', 'Ce que le navigateur dit si required et rien n’est coché.'],
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire, le même pour toutes les cases.'],
   ['required', 'boolean', 'false', 'Au moins un choix. Pose l’astérisque ; c’est le script qui le fait tenir.'],
   ['disabled', 'boolean', 'false', 'Éteint le groupe entier, et la boîte ne s’ouvre plus.'],
@@ -478,13 +483,25 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       </p>
 
       <p class="section-note">
-        Le <code>&lt;select multiple&gt;</code> du navigateur aurait gardé le contrat du Select, mais
-        il en fait une boîte toujours ouverte où l'on choisit au Ctrl+clic — un geste que personne ne
-        devine, sans compteur ni limite possible. Ce champ est donc <strong>un groupe de cases</strong> :
+        <strong>Pourquoi pas un <code>&lt;select multiple&gt;</code>.</strong> Avec
+        {' '}<code>appearance: base-select</code>, le navigateur laisse maintenant dessiner la boîte et
+        chacune de ses options. Quatre raisons tiennent pourtant ce champ à l'écart : Firefox retombe
+        sur la liste classique, où l'on choisit au Ctrl+clic ; un <code>&lt;select multiple&gt;</code>
+        est une boîte toujours ouverte, sans état fermé qui dirait « 2 sélectionnés » ; sa coche est un
+        pseudo-élément, pas le dessin du Checkbox ; et la limite comme les pastilles demanderaient un
+        script de toute façon.
+      </p>
+
+      <p class="section-note">
+        Ce champ est donc <strong>un groupe de cases</strong> :
         un <code>&lt;fieldset&gt;</code> nommé par sa légende, une liste repliée, et des
         {' '}<code>Checkbox</code> qui portent toutes le même <code>name</code>. Le formulaire envoie
         toutes les valeurs cochées, et le clavier est celui du navigateur : Entrée ouvre, Tab
-        parcourt, Espace coche.
+        parcourt, Espace coche. Escape referme et rend le focus à la boîte.
+        <br />
+        Chaque option réagit en entier au survol et au focus, pas seulement sa case, et une option
+        cochée passe son mot en semibold : l'état ne se lit pas que par la couleur (WCAG 1.4.1). La
+        boîte montre l'anneau de focus au clic comme au clavier, comme le Select.
       </p>
 
       <div class="demo demo-fields">
@@ -538,7 +555,8 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       </p>
 
       <p class="section-note">
-        <strong>Il porte un script</strong>, et il le justifie comme TextArea : sans lui, au premier
+        <strong>Il porte un script</strong>, chargé une seule fois pour tous les champs de la page,
+        et il le justifie comme TextArea : sans lui, au premier
         clic, la boîte dit « 2 sélectionnés » quand il y en a trois, et les pastilles montrent des
         choix qui n'en sont plus — l'affichage serait faux. Le navigateur ne sait pas non plus borner
         le nombre de cases cochées, ni exiger qu'au moins une le soit. Sans le script, on choisit et on

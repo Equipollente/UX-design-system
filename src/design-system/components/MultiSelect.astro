@@ -2,16 +2,24 @@
 // MultiSelect — un champ qui fait choisir plusieurs valeurs dans une liste fermée.
 //
 // Ce n'est pas le Select : le Select ne retient qu'une valeur, et il reste natif.
-// Un <select multiple> aurait gardé ce contrat, mais le navigateur en fait une
-// boîte toujours ouverte où l'on choisit au Ctrl+clic — un geste que personne ne
-// devine, sans compteur ni limite possible. Ce n'est pas non plus un groupe de
-// Chips à plat : la liste est repliée, elle ne prend sa place qu'à la demande.
+// Ce n'est pas non plus un groupe de Chips à plat : la liste est repliée, elle ne
+// prend sa place qu'à la demande.
 //
-// Le champ est un groupe de cases, et il s'écrit comme tel : un <fieldset> que
-// nomme sa <legend> (FieldLabel en `as="legend"`), un <details> qui replie la
+// Pourquoi pas un <select multiple>. Avec `appearance: base-select`, le navigateur
+// laisse maintenant dessiner la boîte et chacune de ses options. Quatre raisons
+// tiennent pourtant ce composant à l'écart :
+// — la prise en charge est partielle : Firefox retombe sur la liste classique,
+//   où l'on choisit au Ctrl+clic, un geste que personne ne devine ;
+// — un <select multiple> est une boîte toujours ouverte. Il n'a pas d'état fermé
+//   qui dirait « 2 sélectionnés » ; le replier ne se fait qu'au survol ;
+// — sa coche est un pseudo-élément, pas le dessin du Checkbox (340:842) ;
+// — la limite et les pastilles demanderaient un script de toute façon.
+//
+// Le champ est donc un groupe de cases, et il s'écrit comme tel : un <fieldset>
+// que nomme sa <legend> (FieldLabel en `as="legend"`), un <details> qui replie la
 // liste, et dedans des Checkbox qui portent toutes le même `name`. Le formulaire
-// envoie donc toutes les valeurs cochées sans une ligne de script, le clavier
-// est celui du navigateur — Entrée ouvre, Tab parcourt, Espace coche.
+// envoie toutes les valeurs cochées sans une ligne de script, et le clavier est
+// celui du navigateur — Entrée ouvre, Tab parcourt, Espace coche. Escape referme.
 //
 // La boîte fermée est un <summary> qui porte `.field-box` : la recette de
 // global.css la dessine mot pour mot comme le Select — trait, fond, rayon,
@@ -26,6 +34,9 @@
 //
 // `max` borne le nombre de choix. Atteint, les cases restantes s'éteignent et un
 // message le dit ; une case décochée les rallume.
+//
+// Les mots du champ sont des props, avec un défaut en français : le système ne
+// connaît pas la langue du site qui l'emploie. `{n}` et `{max}` y sont remplacés.
 //
 // Nœud Figma : aucun. Le composant est composé avec l'existant — la boîte du
 // Select (340:933), la case du Checkbox (340:842), le dessin retenu du Chip
@@ -54,6 +65,16 @@ interface Props {
   display?: 'count' | 'chips';
   /** Ce que dit la boîte quand rien n'est coché. */
   placeholder?: string;
+  /** Ce que dit la boîte pour un seul choix. `{n}` vaut le nombre. */
+  countOneLabel?: string;
+  /** Ce que dit la boîte pour plusieurs choix. `{n}` vaut le nombre. */
+  countLabel?: string;
+  /** Le message de limite. `{n}` et `{max}` y sont remplacés. */
+  maxLabel?: string;
+  /** Le verbe d'une pastille, lu avant son mot : « Retirer France ». */
+  removeLabel?: string;
+  /** Ce que le navigateur dit si `required` et rien n'est coché. */
+  requiredMessage?: string;
   /** Le nom envoyé par le formulaire, le même pour toutes les cases. */
   name?: string;
   /** Au moins un choix. Pose l'astérisque ; c'est le script qui le fait tenir. */
@@ -70,6 +91,11 @@ const {
   max,
   display = 'count',
   placeholder = 'Choisir',
+  countOneLabel = '{n} sélectionné',
+  countLabel = '{n} sélectionnés',
+  maxLabel = 'Maximum atteint : {n} sur {max}',
+  removeLabel = 'Retirer',
+  requiredMessage = 'Choisir au moins une option.',
   name,
   required = false,
   disabled = false,
@@ -80,16 +106,18 @@ const items = options.map((o, i) => ({
   ...(typeof o === 'string' ? { value: o, label: o } : o),
   inputId: `${id}-${i}`,
 }));
-const chosen = items.filter((o) => values.includes(o.value));
-const full = max !== undefined && chosen.length >= max;
+const count = items.filter((o) => values.includes(o.value)).length;
+const full = max !== undefined && count >= max;
 
-// La même phrase que le script recalcule : rendue ici, la page s'ouvre juste
-// avant qu'il ait tourné.
-const summarize = (n: number) => (n === 0 ? placeholder : `${n} sélectionné${n > 1 ? 's' : ''}`);
-const fullMessage = (n: number) => `Maximum atteint : ${n} sur ${max}`;
+// Rendu ici pour que la page s'ouvre juste avant que le script ait tourné. Le
+// script ne réécrit pas ces phrases : il relit les mêmes gabarits, posés en
+// `data-*` sur le fieldset. La règle est donc écrite deux fois, les mots une seule.
+const fill = (template: string, n: number) =>
+  template.replace('{n}', String(n)).replace('{max}', String(max));
+const summary = count === 0 ? placeholder : fill(count === 1 ? countOneLabel : countLabel, count);
 
 const statusId = `${id}-status`;
-const classes = ['field', 'multi', className].filter(Boolean).join(' ');
+const classes = ['multi', className].filter(Boolean).join(' ');
 ---
 
 <fieldset
@@ -100,16 +128,23 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
   data-multi
   data-max={max}
   data-placeholder={placeholder}
-  data-required={required ? '' : undefined}
+  data-count-one={countOneLabel}
+  data-count={countLabel}
+  data-max-label={maxLabel}
+  data-required-message={required ? requiredMessage : undefined}
 >
   <FieldLabel as="legend" required={required} disabled={disabled}>{label}</FieldLabel>
 
   <details class="multi-details">
     {/* Un champ éteint ne s'ouvre pas : le <summary> n'est pas un contrôle de
         formulaire, et le `disabled` du fieldset ne l'atteint pas. */}
-    <summary class="field-box multi-box" tabindex={disabled ? -1 : undefined} aria-disabled={disabled ? 'true' : undefined}>
-      <span class:list={['multi-summary', chosen.length === 0 && 'multi-summary-empty']} data-summary>
-        {summarize(chosen.length)}
+    <summary
+      class="field-box multi-box"
+      tabindex={disabled ? -1 : undefined}
+      aria-disabled={disabled ? 'true' : undefined}
+    >
+      <span class:list={['multi-summary', count === 0 && 'multi-summary-empty']} data-summary>
+        {summary}
       </span>
       <Icon name="chevron-down" class="multi-chevron multi-chevron-closed" />
       <Icon name="chevron-top" class="multi-chevron multi-chevron-open" />
@@ -139,7 +174,12 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
       <ul class="multi-chips" role="list">
         {items.map((o) => (
           <li hidden={!values.includes(o.value)} data-chip-for={o.inputId}>
-            <button type="button" class="multi-chip" aria-label={`Retirer ${o.label}`} data-remove={o.inputId}>
+            <button
+              type="button"
+              class="multi-chip"
+              aria-label={`${removeLabel} ${o.label}`}
+              data-remove={o.inputId}
+            >
               {o.label}
               <Icon name="close" class="multi-chip-icon" />
             </button>
@@ -153,80 +193,104 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
     max !== undefined && (
       /* Une région vivante, et cette fois c'est juste : elle ne parle qu'une
          fois, quand la limite tombe — pas à chaque case, comme l'aurait fait un
-         compteur. */
+         compteur. Elle reste dans la page même vide : une région masquée puis
+         montrée n'est pas toujours annoncée. */
       <p class="multi-status" id={statusId} role="status" data-status>
-        {full ? fullMessage(chosen.length) : ''}
+        {full ? fill(maxLabel, count) : ''}
       </p>
     )
   }
 </fieldset>
 
-{/* Le script se justifie par un échec mesurable, le même que celui de TextArea :
-    sans lui, au premier clic, la boîte dit « 2 sélectionnés » quand il y en a
-    trois, et les pastilles montrent des choix qui n'en sont plus — l'affichage
-    n'est pas dégradé, il est faux. La limite non plus ne tient pas : le
-    navigateur ne sait borner ni le nombre de cases cochées, ni exiger qu'au moins
-    une le soit. Ce qui marche sans lui : choisir, et envoyer. */}
-<script is:inline define:vars={{ id }}>
-  {
-    const root = document.getElementById(id);
-    if (root && !root.disabled) {
-      const max = root.dataset.max ? Number(root.dataset.max) : undefined;
-      const placeholder = root.dataset.placeholder;
-      const required = root.dataset.required !== undefined;
-      const details = root.querySelector('details');
-      const summary = root.querySelector('[data-summary]');
-      const status = root.querySelector('[data-status]');
-      const inputs = [...root.querySelectorAll('.multi-list input[type="checkbox"]')];
+{/* Un script, chargé une fois pour tous les MultiSelect de la page. Il se
+    justifie par un échec mesurable, le même que celui de TextArea : sans lui, au
+    premier clic, la boîte dit « 2 sélectionnés » quand il y en a trois, et les
+    pastilles montrent des choix qui n'en sont plus — l'affichage n'est pas
+    dégradé, il est faux. La limite non plus ne tient pas : le navigateur ne sait
+    borner ni le nombre de cases cochées, ni exiger qu'au moins une le soit. Ce
+    qui marche sans lui : choisir, et envoyer. */}
+<script>
+  const fill = (template: string, n: number, max?: number) =>
+    template.replace('{n}', String(n)).replace('{max}', String(max));
 
-      const sync = () => {
-        const n = inputs.filter((i) => i.checked).length;
-        const full = max !== undefined && n >= max;
+  for (const root of document.querySelectorAll<HTMLFieldSetElement>('[data-multi]')) {
+    if (root.disabled) continue;
 
-        summary.textContent = n === 0 ? placeholder : `${n} sélectionné${n > 1 ? 's' : ''}`;
+    const { max: maxAttr, placeholder = '', countOne = '', count = '', maxLabel = '' } =
+      root.dataset;
+    const requiredMessage = root.dataset.requiredMessage;
+    const max = maxAttr ? Number(maxAttr) : undefined;
+    const details = root.querySelector('details');
+    const summaryBox = root.querySelector<HTMLElement>('summary');
+    const summary = root.querySelector<HTMLElement>('[data-summary]');
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    const inputs = [
+      ...root.querySelectorAll<HTMLInputElement>('.multi-list input[type="checkbox"]'),
+    ];
+
+    const sync = () => {
+      const n = inputs.filter((i) => i.checked).length;
+      const full = max !== undefined && n >= max;
+
+      if (summary) {
+        summary.textContent = n === 0 ? placeholder : fill(n === 1 ? countOne : count, n);
         summary.classList.toggle('multi-summary-empty', n === 0);
+      }
 
-        for (const input of inputs) {
-          const off = full && !input.checked;
-          input.disabled = off;
-          // Les deux classes que Checkbox et FieldLabel posent eux-mêmes quand
-          // on leur passe `disabled` : la case s'atténue, son libellé pâlit.
-          const box = input.closest('.checkbox');
-          box?.classList.toggle('checkbox-disabled', off);
-          box?.querySelector('.field-label')?.classList.toggle('field-label-disabled', off);
-          const chip = root.querySelector(`[data-chip-for="${input.id}"]`);
-          if (chip) chip.hidden = !input.checked;
-        }
+      for (const input of inputs) {
+        const off = full && !input.checked;
+        input.disabled = off;
+        // Les deux classes que Checkbox et FieldLabel posent eux-mêmes quand
+        // on leur passe `disabled` : la case s'atténue, son libellé pâlit.
+        const box = input.closest('.checkbox');
+        box?.classList.toggle('checkbox-disabled', off);
+        box?.querySelector('.field-label')?.classList.toggle('field-label-disabled', off);
+        const chip = root.querySelector<HTMLElement>(`[data-chip-for="${input.id}"]`);
+        if (chip) chip.hidden = !input.checked;
+      }
 
-        if (status) status.textContent = full ? `Maximum atteint : ${n} sur ${max}` : '';
+      if (status) status.textContent = full ? fill(maxLabel, n, max) : '';
 
-        // Le navigateur exige chaque case `required`, jamais « au moins une » :
-        // la règle se pose sur la première, et tombe dès qu'une est cochée.
-        if (required && inputs[0]) {
-          inputs[0].setCustomValidity(n === 0 ? 'Choisir au moins une option.' : '');
-        }
-      };
+      // Le navigateur exige chaque case `required`, jamais « au moins une » :
+      // la règle se pose sur la première, et tombe dès qu'une est cochée.
+      if (requiredMessage !== undefined && inputs[0]) {
+        inputs[0].setCustomValidity(n === 0 ? requiredMessage : '');
+      }
+    };
 
-      root.addEventListener('change', sync);
+    root.addEventListener('change', sync);
 
-      root.addEventListener('click', (event) => {
-        const button = event.target.closest('[data-remove]');
-        if (!button) return;
-        const input = document.getElementById(button.dataset.remove);
-        if (!input) return;
-        input.checked = false;
-        sync();
-        // La pastille disparaît sous le doigt : le focus revient à la boîte
-        // plutôt que de tomber au début de la page.
-        root.querySelector('summary')?.focus();
-      });
-
-      // Une case refusée dans une liste repliée ne peut pas recevoir le focus,
-      // et le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse.
-      root.addEventListener('invalid', () => details && (details.open = true), true);
-
+    root.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLElement>('[data-remove]');
+      if (!button?.dataset.remove) return;
+      const input = document.getElementById(button.dataset.remove);
+      if (!(input instanceof HTMLInputElement)) return;
+      input.checked = false;
       sync();
-    }
+      // La pastille disparaît sous le doigt : le focus revient à la boîte
+      // plutôt que de tomber au début de la page.
+      summaryBox?.focus();
+    });
+
+    // Escape referme la liste, comme toute liste dépliante, et rend le focus à
+    // la boîte — sans quoi il resterait sur une case devenue invisible.
+    details?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !details.open) return;
+      details.open = false;
+      summaryBox?.focus();
+    });
+
+    // Une case refusée dans une liste repliée ne peut pas recevoir le focus,
+    // et le navigateur ne dirait rien. On ouvre la liste pour qu'il le puisse.
+    root.addEventListener(
+      'invalid',
+      () => {
+        if (details) details.open = true;
+      },
+      true,
+    );
+
+    sync();
   }
 </script>
 
@@ -241,11 +305,13 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
     min-inline-size: 0;
   }
 
-  /* 5 — l'écart des trois autres champs, entre libellé, boîte et message. */
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--control-field-gap);
+  /* 5 — l'écart des trois autres champs, entre libellé, boîte, pastilles et
+     message. Posé en marge haute plutôt qu'en `gap` : une <legend> n'est pas un
+     élément de la colonne, et le message vide ne doit rien réserver. */
+  .multi-details,
+  .multi-chips,
+  .multi-status:not(:empty) {
+    margin-top: var(--control-field-gap);
   }
 
   .multi-details {
@@ -270,6 +336,15 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
      chevron du système qui dit « ça s'ouvre ». */
   .multi-box::-webkit-details-marker {
     display: none;
+  }
+
+  /* — focused — L'anneau du système, au clic comme au clavier. Le navigateur le
+     montre sur un <select> même au clic, parce qu'il le tient pour un champ ; un
+     <summary>, il le tient pour un bouton, et ne le montre qu'au clavier. Les
+     deux boîtes voisines doivent réagir pareil. */
+  .multi-box:focus {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
   }
 
   .multi-summary {
@@ -304,15 +379,35 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
   }
 
   /* La liste ouverte. Elle est posée dans le flux : voir le pavé en tête. Son
-     cadre est celui de la boîte — même trait, même rayon, même rembourrage. */
+     cadre est celui de la boîte — même trait, même rayon. Le rembourrage se
+     partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la boîte,
+     et le libellé d'une option tombe à l'aplomb du texte de la boîte. */
   .multi-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    padding: var(--button-padding-y-sm) var(--button-padding-x-sm);
+    padding: var(--space-xs);
     background: var(--color-bg-default);
     border: var(--border-width-default) solid var(--color-border-default);
     border-radius: var(--radius-md);
+  }
+
+  /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :
+     on doit toujours savoir laquelle on survole et laquelle a le focus. Le fond
+     est celui du survol du Checkbox. */
+  .multi-list :global(.checkbox) {
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .multi-list :global(.checkbox:not(.checkbox-disabled):hover),
+  .multi-list :global(.checkbox:has(input:focus-visible)) {
+    background: var(--color-neutral-100);
+  }
+
+  /* Une option cochée se lit aussi par son mot, pas seulement par sa case
+     (WCAG 1.4.1). Le libellé est déjà en medium : c'est le cran au-dessus. */
+  .multi-list :global(.checkbox:has(input:checked) .field-label) {
+    font-weight: var(--font-weight-semibold);
   }
 
   /* Les pastilles. Elles se rangent et passent à la ligne comme des mots. */
@@ -320,7 +415,7 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
-    margin: 0;
+    margin-bottom: 0;
     padding: 0;
     list-style: none;
   }
@@ -329,9 +424,9 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
     display: none;
   }
 
-  /* Le dessin du Chip retenu, déclaration pour déclaration — fond accent, encre
-     sur accent, pilule, 8 / 16, 14 en medium — plus une croix à droite, qui dit
-     que le clic retire. */
+  /* Le dessin du Chip retenu, recopié de Chip.astro — les règles `.chip` et
+     `.chip:has(.chip-input:checked)`, plus leur survol. Si le Chip change, ces
+     lignes suivent. S'y ajoute une croix à droite, qui dit que le clic retire. */
   .multi-chip {
     display: inline-flex;
     align-items: center;
@@ -366,11 +461,9 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
   }
 
   /* Le message de limite, dans le dessin du compteur de TextArea : rangé à
-     droite, sous la boîte. Vide, il reste dans la page — une région vivante
-     masquée puis montrée n'est pas toujours annoncée — mais rend l'écart que la
-     colonne lui donne, et ne prend donc aucune place. */
+     droite, sous la boîte. */
   .multi-status {
-    margin: 0;
+    margin-bottom: 0;
     text-align: right;
     font-family: var(--font-family-body);
     font-size: var(--font-size-label);
@@ -380,6 +473,6 @@ const classes = ['field', 'multi', className].filter(Boolean).join(' ');
   }
 
   .multi-status:empty {
-    margin-top: calc(-1 * var(--control-field-gap));
+    margin-top: 0;
   }
 </style>
