@@ -58,11 +58,14 @@
 // Les mots du champ sont des props, avec un défaut en français : le système ne
 // connaît pas la langue du site qui l'emploie. `{n}` et `{max}` y sont remplacés.
 //
-// Nœud Figma : 586:5282 — `forms/Multi Select`, 8 variantes, Display × State.
-// Il assemble quatre pièces du fichier : la boîte du Select (340:933), la liste
-// `forms/Multi Select List` (585:1410), sa ligne `forms/Menu Item Checkbox`
-// (586:4868) — la ligne du Menu Item avec une case devant — et la pastille
-// `forms/Chip Remove` (586:4921). Chaque mesure y est liée à une variable.
+// Nœud Figma : 586:5282 — `forms/Multi Select`, 9 variantes, Display × State,
+// dont `Searching` pour `searchable`. Il assemble les pièces du fichier : la
+// boîte du Select (340:933), la liste `forms/Multi Select List` (585:1410) et sa
+// version avec recherche `forms/Multi Select List Search` (586:5356, 3
+// variantes : vide, texte tapé, aucun résultat), leur ligne `forms/Menu Item
+// Checkbox` (586:4868) — la ligne du Menu Item avec une case devant — et la
+// pastille `forms/Chip Remove` (586:4921). Chaque mesure y est liée à une
+// variable.
 
 import FieldLabel from './FieldLabel.astro';
 import Checkbox from './Checkbox.astro';
