@@ -5,6 +5,7 @@ import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import FieldLabel from '../design-system/components/FieldLabel.astro';
 import TextField from '../design-system/components/TextField.astro';
 import Select from '../design-system/components/Select.astro';
+import MultiSelect from '../design-system/components/MultiSelect.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
 import Toggle from '../design-system/components/Toggle.astro';
@@ -55,6 +56,20 @@ const selectProps = [
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+];
+
+const multiSelectProps = [
+  ['id', 'string', '—', 'Préfixe des id des cases, et name si aucun n’est donné. Unique dans la page.'],
+  ['label', 'string', '—', 'Le texte du libellé — la légende du groupe, rendue par FieldLabel.'],
+  ['options', '(string | { value, label })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur.'],
+  ['values', 'string[]', '[]', 'Les valeurs cochées à l’ouverture.'],
+  ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
+  ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
+  ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est coché.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire, le même pour toutes les cases.'],
+  ['required', 'boolean', 'false', 'Au moins un choix. Pose l’astérisque ; c’est le script qui le fait tenir.'],
+  ['disabled', 'boolean', 'false', 'Éteint le groupe entier, et la boîte ne s’ouvre plus.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
@@ -143,6 +158,7 @@ const galleryProps = [
 ];
 
 const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
+const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon'];
 ---
 
 <DocsLayout
@@ -445,6 +461,97 @@ const pays = ['France', 'Belgique', 'Suisse', 'Canada'];
         {' '}<code>button/height/sm</code>, choisi pour tenir une cible tactile de 44 px — WCAG 2.5.5,
         niveau AAA. À 36 la cible reste conforme au niveau AA, qui en demande 24, mais le champ ne se
         vise plus comme un bouton. C'est le dessin qui l'emporte ici, et c'est un choix, pas un oubli.
+      </p>
+    </section>
+
+    <!-- ── Select multiple ─────────────────────────────── -->
+    <section>
+      <h2>Select field — plusieurs choix</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Un champ qui fait choisir <em>plusieurs</em> valeurs dans une
+        liste fermée, et qui dit combien sont choisies.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni le Select — lui ne retient qu'une valeur, et reste
+        natif — ni un groupe de Chips à plat : la liste est repliée, elle ne prend sa place qu'à la
+        demande.
+      </p>
+
+      <p class="section-note">
+        Le <code>&lt;select multiple&gt;</code> du navigateur aurait gardé le contrat du Select, mais
+        il en fait une boîte toujours ouverte où l'on choisit au Ctrl+clic — un geste que personne ne
+        devine, sans compteur ni limite possible. Ce champ est donc <strong>un groupe de cases</strong> :
+        un <code>&lt;fieldset&gt;</code> nommé par sa légende, une liste repliée, et des
+        {' '}<code>Checkbox</code> qui portent toutes le même <code>name</code>. Le formulaire envoie
+        toutes les valeurs cochées, et le clavier est celui du navigateur : Entrée ouvre, Tab
+        parcourt, Espace coche.
+      </p>
+
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">display="count" — un compteur</p>
+          <MultiSelect id="dest-a" label="Destinations" options={destinations} placeholder="Choisir des destinations" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">display="chips" + max 3</p>
+          <MultiSelect id="dest-b" label="Destinations" options={destinations} values={['France', 'Japon']} max={3} display="chips" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">maximum atteint — 3 sur 3</p>
+          <MultiSelect id="dest-c" label="Destinations" options={destinations} values={['France', 'Suisse', 'Italie']} max={3} />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + required</p>
+          <MultiSelect id="dest-d" label="Destinations" options={destinations} values={['Belgique']} required disabled />
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+        <caption>Props</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            multiSelectProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
+
+      <p class="section-note">
+        <strong>Au maximum, les cases restantes s'éteignent</strong>, et un message le dit sous la
+        boîte. Décocher une case les rallume. Le message est une région vivante : il est annoncé une
+        fois, quand la limite tombe — pas à chaque case.
+        <br />
+        <strong>Une pastille n'est pas un Chip.</strong> Un Chip est une case : il enverrait sa valeur
+        une seconde fois. C'est un bouton qui décoche la case de la liste, au dessin du Chip retenu,
+        avec une croix.
+      </p>
+
+      <p class="section-note">
+        <strong>Il porte un script</strong>, et il le justifie comme TextArea : sans lui, au premier
+        clic, la boîte dit « 2 sélectionnés » quand il y en a trois, et les pastilles montrent des
+        choix qui n'en sont plus — l'affichage serait faux. Le navigateur ne sait pas non plus borner
+        le nombre de cases cochées, ni exiger qu'au moins une le soit. Sans le script, on choisit et on
+        envoie encore.
+      </p>
+
+      <p class="flag">
+        <strong>Aucun nœud Figma.</strong> Le composant est composé avec l'existant — la boîte du
+        Select (<code>340:933</code>), la case du Checkbox (<code>340:842</code>), le dessin retenu du
+        Chip (<code>351:273</code>) — et chaque mesure est une variable que l'une de ces trois pièces
+        lit déjà. Ce qui reste à dessiner : la liste ouverte est posée <strong>dans le flux</strong>,
+        elle pousse ce qui suit au lieu de flotter. Un panneau flottant demanderait un ordre
+        d'empilement et une hauteur maximale, et le système n'a de variable pour aucun des deux.
       </p>
     </section>
 
