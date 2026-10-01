@@ -39,7 +39,10 @@ le `LINKS.md` du dossier `portfolio`.
 | FieldLabel | — (spécifié en conversation) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
 | Text field (jeu de variantes) | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | [TextField.astro](src/design-system/components/TextField.astro) |
 | Select (jeu de variantes) | [`340-933`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-933) | [Select.astro](src/design-system/components/Select.astro) |
-| Select à plusieurs choix | — (composé de Select, Checkbox et Chip ; à dessiner) | [MultiSelect.astro](src/design-system/components/MultiSelect.astro) |
+| Multi Select (jeu de variantes) | [`586-5282`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=586-5282) | [MultiSelect.astro](src/design-system/components/MultiSelect.astro) |
+| Multi Select List (la liste flottante) | [`585-1410`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=585-1410) | [MultiSelect.astro](src/design-system/components/MultiSelect.astro) |
+| Menu Item Checkbox (une ligne de la liste) | [`586-4868`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=586-4868) | [MultiSelect.astro](src/design-system/components/MultiSelect.astro) |
+| Chip Remove (une pastille retirable) | [`586-4921`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=586-4921) | [MultiSelect.astro](src/design-system/components/MultiSelect.astro) |
 | Radio (jeu de variantes) | [`340-879`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-879) | [Radio.astro](src/design-system/components/Radio.astro) |
 | Checkbox (jeu de variantes) | [`340-842`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-842) | [Checkbox.astro](src/design-system/components/Checkbox.astro) |
 | Toggle (jeu de variantes) | [`340-912`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-912) | [Toggle.astro](src/design-system/components/Toggle.astro) |

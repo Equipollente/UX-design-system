@@ -564,11 +564,22 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         envoie encore.
       </p>
 
+      <p class="section-note">
+        <strong>Nœud Figma <code>586:5282</code></strong> — <code>forms/Multi Select</code>, huit
+        variantes, <code>Display</code> × <code>State</code>. Il assemble la boîte du Select
+        (<code>340:933</code>), la liste <code>forms/Multi Select List</code> (<code>585:1410</code>),
+        sa ligne <code>forms/Menu Item Checkbox</code> (<code>586:4868</code>) et la pastille
+        {' '}<code>forms/Chip Remove</code> (<code>586:4921</code>). Chaque mesure y est liée à une
+        variable.
+      </p>
+
       <p class="flag">
-        <strong>Aucun nœud Figma.</strong> Le composant est composé avec l'existant — la boîte du
-        Select (<code>340:933</code>), la case du Checkbox (<code>340:842</code>), le dessin retenu du
-        Chip (<code>351:273</code>) — et chaque mesure est une variable que l'une de ces trois pièces
-        lit déjà. La liste flottante a été tranchée en conversation, et reste à dessiner.
+        <strong>Trois écarts venus des pièces qu'il emprunte</strong>, relevés en le dessinant :
+        le libellé du Select est en <code>LOWER</code> dans Figma — « destinations » — quand le code
+        ne touche pas à la casse ; les variantes cochées Hover, Focused et Disabled du Checkbox
+        dessinent une coche coupée ; et l'anneau de focus d'une pastille retenue, comme celui du Chip
+        retenu, est de la couleur de son fond — sans l'écart de <code>button/focus-offset</code> que le
+        code lui donne, il ne se voit pas.
       </p>
 
       <p class="section-note">
@@ -577,8 +588,9 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         toute la page, sans ordre d'empilement à inventer. L'ancrage CSS l'accroche sous la boîte et
         lui en donne la <strong>largeur</strong> ; elle passe au-dessus quand la place manque en bas.
         Sa <strong>hauteur</strong> montre <code>visibleOptions</code> lignes — sept par défaut — puis
-        défile : une ligne mesure <code>control/size</code> plus deux <code>space/xs</code>, et la
-        hauteur suit ces variables. Elle reste à sa place dans le document, donc dans le
+        défile : une ligne mesure <code>control/size</code> plus deux <code>space/sm</code>, et la
+        hauteur suit ces variables. Chaque ligne est celle du <code>Menu Item</code> avec une case
+        devant : les listes à un et à plusieurs choix ont le même rythme. Elle reste à sa place dans le document, donc dans le
         formulaire : ses cases sont envoyées avec lui.
       </p>
     </section>

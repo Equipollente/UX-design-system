@@ -51,12 +51,11 @@
 // Les mots du champ sont des props, avec un défaut en français : le système ne
 // connaît pas la langue du site qui l'emploie. `{n}` et `{max}` y sont remplacés.
 //
-// Nœud Figma : aucun. Le composant est composé avec l'existant — la boîte du
-// Select (340:933), la case du Checkbox (340:842), le dessin retenu du Chip
-// (351:273) — et rien n'y est inventé : chaque mesure est une variable que l'une
-// de ces trois pièces lit déjà. La liste flottante, sa largeur et ses sept lignes
-// ont été tranchées en conversation ; leur dessin reste à faire, voir
-// arbitrages.md.
+// Nœud Figma : 586:5282 — `forms/Multi Select`, 8 variantes, Display × State.
+// Il assemble quatre pièces du fichier : la boîte du Select (340:933), la liste
+// `forms/Multi Select List` (585:1410), sa ligne `forms/Menu Item Checkbox`
+// (586:4868) — la ligne du Menu Item avec une case devant — et la pastille
+// `forms/Chip Remove` (586:4921). Chaque mesure y est liée à une variable.
 
 import FieldLabel from './FieldLabel.astro';
 import Checkbox from './Checkbox.astro';
@@ -392,10 +391,11 @@ const classes = ['multi', className].filter(Boolean).join(' ');
     position-try-fallbacks: flip-block;
     /* Sept lignes, puis la liste défile. Une ligne mesure la case
        (`control/size`, 18 — plus haute que le libellé, 16,8) et son rembourrage
-       (`space/xs` dessus et dessous) ; s'y ajoutent le rembourrage et le trait
-       du cadre. Rien n'est mesuré à la main : la hauteur suit ses variables. */
+       (`space/sm` dessus et dessous), soit 34 ; s'y ajoutent le rembourrage et le
+       trait du cadre. Rien n'est mesuré à la main : la hauteur suit ses
+       variables, comme le cadre de 585:1410 la suit dans Figma. */
     max-height: calc(
-      var(--multi-visible-options) * (var(--control-size) + 2 * var(--space-xs)) +
+      var(--multi-visible-options) * (var(--control-size) + 2 * var(--space-sm)) +
         2 * var(--space-xs) + 2 * var(--border-width-default)
     );
     overflow-y: auto;
@@ -420,11 +420,14 @@ const classes = ['multi', className].filter(Boolean).join(' ');
   }
 
   /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :
-     on doit toujours savoir laquelle on survole et laquelle a le focus. Le fond
-     est celui du survol du Checkbox. */
+     on doit toujours savoir laquelle on survole et laquelle a le focus. C'est la
+     ligne du Menu Item (340:972) avec une case devant — `forms/Menu Item
+     Checkbox`, 586:4868 : rembourrage 8 / 12, rayon `radius/md`, survol
+     `neutral/100`. Les deux listes, à un et à plusieurs choix, ont le même
+     rythme. */
   .multi-list :global(.checkbox) {
-    padding: var(--space-xs) var(--space-md);
-    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
   }
 
   .multi-list :global(.checkbox:not(.checkbox-disabled):hover),
