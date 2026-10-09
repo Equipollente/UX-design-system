@@ -7,6 +7,7 @@
 import arrowNarrowDown from '../icons/arrow-narrow-down.svg';
 import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
 import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
+import arrowNarrowUpRight from '../icons/arrow-narrow-up-right.svg';
 import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
 import check from '../icons/check.svg';
@@ -42,6 +43,7 @@ export const icons = {
   'arrow-narrow-down': arrowNarrowDown,
   'arrow-narrow-left': arrowNarrowLeft,
   'arrow-narrow-right': arrowNarrowRight,
+  'arrow-narrow-up-right': arrowNarrowUpRight,
   'book-open': bookOpen,
   'box-plus': boxPlus,
   'check': check,
