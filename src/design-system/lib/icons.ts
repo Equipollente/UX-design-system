@@ -37,6 +37,7 @@ import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
 import save from '../icons/save.svg';
 import search2 from '../icons/search-2.svg';
+import star2 from '../icons/star-2.svg';
 import trash from '../icons/trash.svg';
 
 export const icons = {
@@ -73,6 +74,7 @@ export const icons = {
   'route': route,
   'save': save,
   'search-2': search2,
+  'star-2': star2,
   'trash': trash,
 } as const;
 
