@@ -23,7 +23,8 @@ le `LINKS.md` du dossier `portfolio`.
 | Composant | Nœud | Code |
 | --- | --- | --- |
 | Icon (les 33 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
-| Button (un jeu de variantes par taille) | lg [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) · md [`334-1233`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1233) · sm [`334-1283`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1283) | [Button.astro](src/design-system/components/Button.astro) |
+| Button (un jeu de variantes par taille, dont la variante Icon, le bouton rond) | lg [`21-47`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=21-47) · md [`334-1233`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1233) · sm [`334-1283`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=334-1283) | [Button.astro](src/design-system/components/Button.astro) |
+| Link (jeu d'états : Default, Hover, Pressed, Disabled, Focus) | [`613-4816`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=613-4816) | [Link.astro](src/design-system/components/Link.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
 | Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |

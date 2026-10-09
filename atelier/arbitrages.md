@@ -49,6 +49,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
 | Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
 | Button | `21:47` · `334:1233` · `334:1283` | le survol du secondaire ne bougeait pas en lg et md, et empruntait `bg/section` en sm | — | *réglé — 31/08, dans Figma seul* |
+| Link | `613:4816` | sans icône le lien mesure 41 de haut ; le code impose 44 (`min-height`) que Figma ne porte pas | /components → Link | ouvert |
+| Button | `334:1283` · `334:1233` · `21:47` | Primary, Secondary et Alert n'ont d'état Focus qu'en sm ; Link et Icon l'ont dans les trois tailles | — | ouvert |
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |

@@ -4,6 +4,7 @@
 import { withBase } from '../design-system/lib/url';
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
+import Link from '../design-system/components/Link.astro';
 import Tag from '../design-system/components/Tag.astro';
 import CardDefault from '../design-system/components/cards/CardDefault.astro';
 import CardActions from '../design-system/components/cards/CardActions.astro';
@@ -43,24 +44,32 @@ const buttonSizes = ['sm', 'md', 'lg'] as const;
 const buttonProps = [
   [
     'variant',
-    `'primary' | 'secondary' | 'alert'`,
+    `'primary' | 'secondary' | 'alert' | 'icon'`,
     'primary',
-    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive.',
+    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Icon est le bouton rond : l’icône seule, sans libellé, et il exige icon et aria-label.',
   ],
   ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
   ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
-  ['icon', 'IconName', '—', 'Nom d’une icône du système. Posée avant le label.'],
+  ['icon', 'IconName', '—', 'Nom d’une icône du système. Posée avant le label. Obligatoire avec variant="icon".'],
   ['iconEnd', 'IconName', '—', 'Idem, mais posée après le label. Cumulable avec icon.'],
   [
     'aria-label',
     'string',
     '—',
-    'Le nom du bouton quand aucun libellé ne le porte. Obligatoire dès que l’icône est seule.',
+    'Le nom du bouton quand aucun libellé ne le porte. Obligatoire dès que l’icône est seule : la variante icon refuse de se compiler sans.',
   ],
   ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
+const linkProps = [
+  ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
+  ['iconEnd', 'IconName', '—', 'Nom d’une icône du système, posée après le libellé.'],
+  ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
+  ['disabled', 'boolean', 'false', 'Sans href seulement : un <a> ne se désactive pas.'],
+  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
+  ['style', 'string', '—', 'Surcharge ponctuelle : --link-color, --link-color-active.'],
+];
 const navProps = [
   ['links', '{ href, label, icon? }[]', '—', 'Les items. Le composant ne les connaît pas d’avance.'],
   ['current', 'string', '—', 'Chemin courant. Aucun item actif s’il ne correspond à aucun href.'],
@@ -330,7 +339,7 @@ const modalProps = [
           {buttonSizes.map((size) => <Button variant="secondary" size={size}>Secondaire {size}</Button>)}
         </div>
 
-        <div class="btn-row last">
+        <div class="btn-row">
           {
             buttonSizes.map((size) => (
               <Button variant="alert" size={size} icon="trash">
@@ -339,7 +348,24 @@ const modalProps = [
             ))
           }
         </div>
+
+        <div class="btn-row last">
+          {
+            buttonSizes.map((size) => (
+              <Button variant="icon" size={size} icon="mail-edit" aria-label={`Écrire, taille ${size}`} />
+            ))
+          }
+        </div>
       </div>
+
+      <p class="section-note">
+        <strong>Le bouton rond est le secondaire sans libellé.</strong> Même fond
+        {' '}(<code>color.bg.surface</code>, puis <code>accent 100</code> et <code>200</code>), même encre ;
+        seule la boîte change : sa largeur vaut sa hauteur, et le rayon de la pilule en fait un cercle.
+        Les trois diamètres sont les trois hauteurs du bouton, donc les cibles tactiles de WCAG 2.5.5.
+        Comme il n'a pas de texte, il ne se compile pas sans <code>icon</code> ni
+        {' '}<code>aria-label</code> : un contrôle expose un nom (WCAG 4.1.2).
+      </p>
 
       <p class="section-note">
         <strong>Aucune des trois variantes n'a de liseré</strong>, et c'est ce que Figma
@@ -411,22 +437,21 @@ const modalProps = [
       <pre><code>{`<Button>Texte seul</Button>
 <Button icon="mail-edit">Icône à gauche</Button>
 <Button iconEnd="arrow-narrow-right">Icône à droite</Button>
-<Button icon="trash" aria-label="Supprimer" style="--btn-min-w: 0" />`}</code></pre>
+<Button variant="icon" icon="trash" aria-label="Supprimer" />`}</code></pre>
       <p class="section-note">
         Les deux se cumulent : <code>icon</code> et <code>iconEnd</code> ensemble encadrent le libellé.
-        Le quatrième cas est le seul qui demande deux précautions. <strong>Sans libellé, plus rien ne
-        donne sa largeur au bouton</strong> : la largeur minimale de la taille — 96 px en md — ferait
-        flotter l'icône au milieu d'un vide, d'où le <code>--btn-min-w: 0</code>. Et <strong
-        >une icône ne s'annonce pas</strong> : <code>aria-label</code> devient le seul nom du
-        bouton, faute de quoi un lecteur d'écran dit « bouton » et rien de plus.
+        Le quatrième cas est la variante <code>icon</code>, et elle porte elle-même les deux précautions
+        qu'il fallait connaître : <strong>sans libellé, plus rien ne donne sa largeur au bouton</strong>
+        {' '}— elle retire donc sa largeur minimale — et <strong>une icône ne s'annonce pas</strong> :
+        {' '}<code>aria-label</code> devient le seul nom du bouton, faute de quoi un lecteur d'écran dit
+        {' '}« bouton » et rien de plus. Elle refuse de se compiler sans lui.
       </p>
 
       <p class="flag">
-        <strong>Ce que le composant devrait porter lui-même.</strong> Ces deux précautions se répètent à
-        chaque bouton à icône seule — le Carousel et la page <a href={withBase('/icons')}>Icônes</a>
-        {' '}les réécrivent chacun de leur côté. Une prop qu'on doit connaître pour l'écrire est une qu'on
-        n'écrira pas : c'est au bouton de retirer sa largeur minimale quand il n'a pas de libellé, pas à
-        l'appelant de le savoir.
+        <strong>Deux appelants écrivent encore l'ancienne recette.</strong> Les flèches du Carousel et la
+        page <a href={withBase('/icons')}>Icônes</a> retirent la largeur minimale à la main. Le Carousel
+        pose en plus <code>color.bg.default</code> à la place de la surface lavande, ce que la variante
+        n'a pas : ils n'ont pas été touchés, et la bascule se décide avec eux.
       </p>
 
       <p class="flag">
@@ -468,6 +493,66 @@ const modalProps = [
           ))
         }
       </ul>
+    </section>
+
+    <!-- ── Link ─────────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Link</h2>
+
+      <p class="section-note">
+        <strong>Ce qu'il est.</strong> Un texte qui mène quelque part, sans fond : l'action la plus
+        discrète d'une vue, avec une icône à droite si l'on veut.
+        <br />
+        <strong>Ce qu'il n'est pas.</strong> Ni un <em>Button</em> — il n'a ni fond, ni taille, ni
+        variante, et l'action principale d'une vue n'est jamais un lien — ni un texte coloré : sans son
+        soulignement au survol, rien ne le distinguerait d'un mot posé là.
+        <br />
+        <span class="source">Composant Figma <code>613:4816</code>.</span>
+      </p>
+
+      <div class="demo">
+        <div class="btn-row last">
+          <Link href="#link">Lien</Link>
+          <Link href="#link" iconEnd="arrow-narrow-right">Lien avec icône</Link>
+          <Link disabled>Lien désactivé</Link>
+        </div>
+      </div>
+
+      <p class="section-note">
+        <strong>Le survol souligne, l'appui grise.</strong> Au repos le libellé est à
+        {' '}<code>color.text.default</code>, sans trait ; au survol il est souligné, sans changer de
+        couleur ; à l'appui il passe à <code>color.text.muted</code>, sans soulignement. Le soulignement
+        est le seul signe qui sépare un lien d'un texte (WCAG 1.4.1 : la couleur seule ne suffit pas).
+        Tabulez pour voir l'anneau de focus, qui entoure la zone cliquable et non le texte.
+      </p>
+
+      <h3>Props</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
+          </thead>
+          <tbody>
+            {
+              linkProps.map(([nom, type, defaut, role]) => (
+                <tr>
+                  <td><code>{nom}</code></td>
+                  <td><code>{type}</code></td>
+                  <td>{defaut}</td>
+                  <td>{role}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="flag">
+        <strong>Écart à arbitrer côté Figma.</strong> Le dessin pose <code>space.md</code> tout autour
+        du texte : avec l'icône de 24 px le lien mesure 48 de haut, mais sans elle il n'en fait que 41.
+        Le code ajoute <code>min-height: var(--button-height-sm)</code> (44) pour que la cible tienne
+        dans les deux cas — le composant Figma ne porte pas cette hauteur minimale.
+      </p>
     </section>
 
     <!-- ── Tag ──────────────────────────────────────────────────────────── -->

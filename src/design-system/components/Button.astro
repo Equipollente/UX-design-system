@@ -26,6 +26,16 @@
 // apprend à ne plus être lu. Les trois crans tiennent le libellé blanc à 4,8:1,
 // 6,5:1 et 8,3:1, tous au-dessus des 4,5:1 que WCAG 1.4.3 demande à 14 px.
 //
+// La quatrième variante, `icon`, est le bouton rond : l'icône seule, sur le fond du
+// secondaire, dans un cercle dont le diamètre est la hauteur de la taille (Figma
+// 612:2 et suivants, variante Icon des trois jeux). Elle remplace ce que le Carousel
+// et la page Icônes réécrivaient chacun de leur côté — retirer la largeur minimale,
+// annoncer le bouton — et que l'appelant devait savoir pour l'écrire. Elle ne rend
+// ni libellé ni `iconEnd`, comme le dessin : Figma retire le texte et la seconde
+// icône de ses cinq états. Un bouton rond sans nom lisible n'a pas lieu d'être,
+// donc le composant refuse de se compiler sans `icon` et sans `aria-label`
+// (WCAG 4.1.2 : un contrôle expose un nom).
+//
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
 // en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
@@ -34,10 +44,10 @@ import Icon from './Icon.astro';
 import type { IconName } from '../lib/icons';
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'alert';
+  variant?: 'primary' | 'secondary' | 'alert' | 'icon';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
-  /** Nom d'une icône du système. Posée avant le label. */
+  /** Nom d'une icône du système. Posée avant le label. Seule, et obligatoire, avec `variant="icon"`. */
   icon?: IconName;
   /** Idem, mais posée après le label. */
   iconEnd?: IconName;
@@ -49,6 +59,11 @@ interface Props {
    */
   name?: string;
   value?: string;
+  /**
+   * Le nom du bouton quand aucun libellé ne le porte. Obligatoire avec
+   * `variant="icon"`, qui n'en a jamais.
+   */
+  'aria-label'?: string;
   class?: string;
   /**
    * La surcharge ponctuelle décrite plus haut : --btn-bg, --btn-px, --btn-icon…
@@ -69,14 +84,21 @@ const {
   ...rest
 } = Astro.props;
 
+if (variant === 'icon' && (!icon || !rest['aria-label'])) {
+  throw new Error(
+    `Button : la variante « icon » est un bouton sans libellé. Elle demande \`icon\` et \`aria-label\` ` +
+      `(reçu icon=${icon ?? '—'}, aria-label=${rest['aria-label'] ?? '—'}).`,
+  );
+}
+
 const Tag = href ? 'a' : 'button';
 const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boolean).join(' ');
 ---
 
 <Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
   {icon && <Icon name={icon} />}
-  <slot />
-  {iconEnd && <Icon name={iconEnd} />}
+  {variant !== 'icon' && <slot />}
+  {variant !== 'icon' && iconEnd && <Icon name={iconEnd} />}
 </Tag>
 
 <style>
@@ -166,6 +188,21 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-bg-hover: var(--color-feedback-danger-600);
     --btn-bg-active: var(--color-feedback-danger-700);
     color: var(--color-text-on-accent);
+  }
+
+  /* Le rond. Même fond et même encre que le secondaire : Figma lui donne
+     bg/surface au repos, accent 100 au survol et 200 à l'appui, l'icône en
+     neutral/900. Ce qui change est la boîte — la largeur vaut la hauteur de la
+     taille, le rembourrage horizontal disparaît, la largeur minimale aussi — et
+     le rayon, qui est déjà celui de la pilule, fait le reste : un cercle. */
+  .btn-icon {
+    --btn-bg: var(--color-bg-surface);
+    --btn-bg-hover: var(--color-accent-100);
+    --btn-bg-active: var(--color-accent-200);
+    --btn-px: 0;
+    --btn-min-w: 0;
+    width: var(--btn-h);
+    color: var(--color-text-default);
   }
 
   .btn:hover:not(:disabled) {

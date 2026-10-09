@@ -1,0 +1,87 @@
+---
+// Lien du système : un texte qui mène quelque part, sans fond.
+//
+// Ce qu'il est : l'action la plus discrète, celle qui se lit comme un lien et non comme
+// un bouton — de l'encre, une icône à droite si l'on veut, et un soulignement qui
+// n'apparaît qu'au survol. Ce qu'il n'est pas : un Button. Il n'a ni fond, ni taille
+// (sm, md, lg), ni variante ; l'action principale d'une vue est un Button primaire, et
+// un lien n'en tient jamais lieu. Figma 613:4816.
+//
+// Le dessin pose le texte en heading bold à font.size.ui, comme le bouton, avec
+// space.md de rembourrage tout autour : la zone cliquable déborde du texte, et c'est
+// elle que l'anneau de focus entoure. L'appui passe à color.text.muted, sans
+// soulignement. Le désactivé baisse l'opacité de tout le lien à 45 %, comme le
+// bouton (WCAG 1.4.3 exempte les contrôles inactifs).
+//
+// Le survol ne change pas la couleur : le soulignement est son seul signe. C'est lui
+// qui sépare un lien d'un texte posé là, parce que la couleur seule ne suffit pas
+// (WCAG 1.4.1) — et c'est pour cela qu'il ne se retire pas.
+
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  href?: string;
+  /** Nom d'une icône du système, posée après le libellé. */
+  iconEnd?: IconName;
+  type?: 'button' | 'submit';
+  /** Sans `href` seulement : un <a> ne se désactive pas. */
+  disabled?: boolean;
+  class?: string;
+  /** Surcharge ponctuelle : --link-color, --link-color-active. */
+  style?: string;
+}
+
+const { href, iconEnd, type = 'button', class: className, ...rest } = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = ['link', className].filter(Boolean).join(' ');
+---
+
+<Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
+  <span class="link-label"><slot /></span>
+  {iconEnd && <Icon name={iconEnd} />}
+</Tag>
+
+<style>
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    /* Figma pose space.md tout autour. Sans icône, le texte seul ne ferait que
+       41 px de haut : la hauteur de la plus petite taille de bouton rétablit les
+       44 que WCAG 2.5.5 vise pour une cible, sans toucher au rembourrage dessiné. */
+    padding: var(--space-md);
+    min-height: var(--button-height-sm);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    /* La taille d'icône descend par héritage jusqu'au <svg>, comme dans le bouton. */
+    --icon-size: var(--button-icon-size-md);
+    color: var(--link-color, var(--color-text-default));
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-ui);
+    line-height: var(--font-line-height-snug);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  .link:hover:not(:disabled) .link-label {
+    text-decoration: underline;
+  }
+
+  .link:active:not(:disabled) {
+    color: var(--link-color-active, var(--color-text-muted));
+  }
+
+  .link:active:not(:disabled) .link-label {
+    text-decoration: none;
+  }
+
+  .link:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+</style>
