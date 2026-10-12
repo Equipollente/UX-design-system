@@ -41,6 +41,7 @@ import mailEdit from '../icons/mail-edit.svg';
 import mainComponent from '../icons/main-component.svg';
 import menuRight from '../icons/menu-right.svg';
 import passport1 from '../icons/passport-1.svg';
+import pin2 from '../icons/pin-2.svg';
 import plus from '../icons/plus.svg';
 import podcast from '../icons/podcast.svg';
 import pressArticleSource from '../icons/press-article-source.svg';
@@ -90,6 +91,7 @@ export const icons = {
   'main-component': mainComponent,
   'menu-right': menuRight,
   'passport-1': passport1,
+  'pin-2': pin2,
   'plus': plus,
   'podcast': podcast,
   'press-article-source': pressArticleSource,
