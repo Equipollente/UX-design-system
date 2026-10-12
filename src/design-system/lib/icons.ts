@@ -8,6 +8,7 @@ import arrowNarrowDown from '../icons/arrow-narrow-down.svg';
 import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
 import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
 import arrowNarrowUpRight from '../icons/arrow-narrow-up-right.svg';
+import book from '../icons/book.svg';
 import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
 import check from '../icons/check.svg';
@@ -20,12 +21,17 @@ import clockForward from '../icons/clock-forward.svg';
 import close from '../icons/close.svg';
 import codeSnippet from '../icons/code-snippet.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
+import documentPedagogicalMaterial from '../icons/document-pedagogical-material.svg';
 import edit from '../icons/edit.svg';
 import filePlus from '../icons/file-plus.svg';
 import fileText from '../icons/file-text.svg';
+import fileTextAttachment from '../icons/file-text-attachment.svg';
+import fileTextSend from '../icons/file-text-send.svg';
+import fileTextShield from '../icons/file-text-shield.svg';
 import globe3 from '../icons/globe-3.svg';
 import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
+import institutionalWebsiteLink from '../icons/institutional-website-link.svg';
 import link2 from '../icons/link-2.svg';
 import list from '../icons/list.svg';
 import luggage1 from '../icons/luggage-1.svg';
@@ -35,10 +41,13 @@ import mainComponent from '../icons/main-component.svg';
 import menuRight from '../icons/menu-right.svg';
 import passport1 from '../icons/passport-1.svg';
 import plus from '../icons/plus.svg';
+import podcast from '../icons/podcast.svg';
+import pressArticleSource from '../icons/press-article-source.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
 import save from '../icons/save.svg';
 import search2 from '../icons/search-2.svg';
+import siteInstitutionnel from '../icons/site-institutionnel.svg';
 import star2 from '../icons/star-2.svg';
 import trash from '../icons/trash.svg';
 
@@ -47,6 +56,7 @@ export const icons = {
   'arrow-narrow-left': arrowNarrowLeft,
   'arrow-narrow-right': arrowNarrowRight,
   'arrow-narrow-up-right': arrowNarrowUpRight,
+  'book': book,
   'book-open': bookOpen,
   'box-plus': boxPlus,
   'check': check,
@@ -59,12 +69,17 @@ export const icons = {
   'close': close,
   'code-snippet': codeSnippet,
   'corner-right-down': cornerRightDown,
+  'document-pedagogical-material': documentPedagogicalMaterial,
   'edit': edit,
   'file-plus': filePlus,
   'file-text': fileText,
+  'file-text-attachment': fileTextAttachment,
+  'file-text-send': fileTextSend,
+  'file-text-shield': fileTextShield,
   'globe-3': globe3,
   'grid': grid,
   'image-plus': imagePlus,
+  'institutional-website-link': institutionalWebsiteLink,
   'link-2': link2,
   'list': list,
   'luggage-1': luggage1,
@@ -74,10 +89,13 @@ export const icons = {
   'menu-right': menuRight,
   'passport-1': passport1,
   'plus': plus,
+  'podcast': podcast,
+  'press-article-source': pressArticleSource,
   'quote-down': quoteDown,
   'route': route,
   'save': save,
   'search-2': search2,
+  'site-institutionnel': siteInstitutionnel,
   'star-2': star2,
   'trash': trash,
 } as const;
