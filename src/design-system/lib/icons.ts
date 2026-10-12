@@ -11,6 +11,7 @@ import arrowNarrowUpRight from '../icons/arrow-narrow-up-right.svg';
 import book from '../icons/book.svg';
 import bookOpen from '../icons/book-open.svg';
 import boxPlus from '../icons/box-plus.svg';
+import calendar from '../icons/calendar.svg';
 import check from '../icons/check.svg';
 import chevronDown from '../icons/chevron-down.svg';
 import chevronLeft from '../icons/chevron-left.svg';
@@ -59,6 +60,7 @@ export const icons = {
   'book': book,
   'book-open': bookOpen,
   'box-plus': boxPlus,
+  'calendar': calendar,
   'check': check,
   'chevron-down': chevronDown,
   'chevron-left': chevronLeft,
