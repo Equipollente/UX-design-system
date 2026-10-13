@@ -31,6 +31,7 @@ import fileText from '../icons/file-text.svg';
 import fileTextAttachment from '../icons/file-text-attachment.svg';
 import fileTextSend from '../icons/file-text-send.svg';
 import fileTextShield from '../icons/file-text-shield.svg';
+import folderCheck from '../icons/folder-check.svg';
 import globe3 from '../icons/globe-3.svg';
 import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
@@ -84,6 +85,7 @@ export const icons = {
   'file-text-attachment': fileTextAttachment,
   'file-text-send': fileTextSend,
   'file-text-shield': fileTextShield,
+  'folder-check': folderCheck,
   'globe-3': globe3,
   'grid': grid,
   'image-plus': imagePlus,
