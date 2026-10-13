@@ -23,6 +23,7 @@ import clockForward from '../icons/clock-forward.svg';
 import close from '../icons/close.svg';
 import codeSnippet from '../icons/code-snippet.svg';
 import cornerRightDown from '../icons/corner-right-down.svg';
+import disciplines from '../icons/disciplines.svg';
 import documentPedagogicalMaterial from '../icons/document-pedagogical-material.svg';
 import edit from '../icons/edit.svg';
 import filePlus from '../icons/file-plus.svg';
@@ -74,6 +75,7 @@ export const icons = {
   'close': close,
   'code-snippet': codeSnippet,
   'corner-right-down': cornerRightDown,
+  'disciplines': disciplines,
   'document-pedagogical-material': documentPedagogicalMaterial,
   'edit': edit,
   'file-plus': filePlus,
