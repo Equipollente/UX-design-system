@@ -4,6 +4,7 @@
 // chemin de fichier : `icon="mail-edit"` se vérifie à la compilation, `icon="/icons/mail-edit.svg"`
 // ne se vérifiait qu'en production, sur un 404.
 
+import aiTools from '../icons/ai-tools.svg';
 import arrowNarrowDown from '../icons/arrow-narrow-down.svg';
 import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
 import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
@@ -54,6 +55,7 @@ import star2 from '../icons/star-2.svg';
 import trash from '../icons/trash.svg';
 
 export const icons = {
+  'ai-tools': aiTools,
   'arrow-narrow-down': arrowNarrowDown,
   'arrow-narrow-left': arrowNarrowLeft,
   'arrow-narrow-right': arrowNarrowRight,
