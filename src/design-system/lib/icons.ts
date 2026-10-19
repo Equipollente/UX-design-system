@@ -37,6 +37,7 @@ import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
 import institutionalWebsiteLink from '../icons/institutional-website-link.svg';
 import knowledge1 from '../icons/knowledge1.svg';
+import knowledge2 from '../icons/knowledge2.svg';
 import link2 from '../icons/link-2.svg';
 import list from '../icons/list.svg';
 import luggage1 from '../icons/luggage-1.svg';
@@ -93,6 +94,7 @@ export const icons = {
   'image-plus': imagePlus,
   'institutional-website-link': institutionalWebsiteLink,
   'knowledge1': knowledge1,
+  'knowledge2': knowledge2,
   'link-2': link2,
   'list': list,
   'luggage-1': luggage1,
