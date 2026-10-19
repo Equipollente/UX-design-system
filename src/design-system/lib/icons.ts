@@ -55,6 +55,7 @@ import search2 from '../icons/search-2.svg';
 import siteInstitutionnel from '../icons/site-institutionnel.svg';
 import star2 from '../icons/star-2.svg';
 import telescope from '../icons/telescope.svg';
+import timeline from '../icons/timeline.svg';
 import trash from '../icons/trash.svg';
 
 export const icons = {
@@ -109,6 +110,7 @@ export const icons = {
   'site-institutionnel': siteInstitutionnel,
   'star-2': star2,
   'telescope': telescope,
+  'timeline': timeline,
   'trash': trash,
 } as const;
 
