@@ -60,6 +60,7 @@ import star2 from '../icons/star-2.svg';
 import telescope from '../icons/telescope.svg';
 import timeline from '../icons/timeline.svg';
 import trash from '../icons/trash.svg';
+import usersCheck from '../icons/users-check.svg';
 
 export const icons = {
   'ai-tools': aiTools,
@@ -118,6 +119,7 @@ export const icons = {
   'telescope': telescope,
   'timeline': timeline,
   'trash': trash,
+  'users-check': usersCheck,
 } as const;
 
 /** Les noms qu'un appelant a le droit d'écrire. */
