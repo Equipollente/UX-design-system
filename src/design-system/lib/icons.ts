@@ -27,6 +27,7 @@ import cornerRightDown from '../icons/corner-right-down.svg';
 import disciplines from '../icons/disciplines.svg';
 import documentPedagogicalMaterial from '../icons/document-pedagogical-material.svg';
 import edit from '../icons/edit.svg';
+import expand04 from '../icons/expand-04.svg';
 import filePlus from '../icons/file-plus.svg';
 import fileText from '../icons/file-text.svg';
 import fileTextAttachment from '../icons/file-text-attachment.svg';
@@ -88,6 +89,7 @@ export const icons = {
   'disciplines': disciplines,
   'document-pedagogical-material': documentPedagogicalMaterial,
   'edit': edit,
+  'expand-04': expand04,
   'file-plus': filePlus,
   'file-text': fileText,
   'file-text-attachment': fileTextAttachment,
