@@ -19,6 +19,7 @@ import chevronLeft from '../icons/chevron-left.svg';
 import chevronRight from '../icons/chevron-right.svg';
 import chevronTop from '../icons/chevron-top.svg';
 import circleFaceContent from '../icons/circle-face-content.svg';
+import circleInfo from '../icons/circle-info.svg';
 import clockForward from '../icons/clock-forward.svg';
 import close from '../icons/close.svg';
 import codeSnippet from '../icons/code-snippet.svg';
@@ -79,6 +80,7 @@ export const icons = {
   'chevron-right': chevronRight,
   'chevron-top': chevronTop,
   'circle-face-content': circleFaceContent,
+  'circle-info': circleInfo,
   'clock-forward': clockForward,
   'close': close,
   'code-snippet': codeSnippet,
