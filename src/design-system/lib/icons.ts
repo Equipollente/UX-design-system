@@ -37,6 +37,7 @@ import folderCheck from '../icons/folder-check.svg';
 import globe3 from '../icons/globe-3.svg';
 import grid from '../icons/grid.svg';
 import imagePlus from '../icons/image-plus.svg';
+import inbox1 from '../icons/inbox-1.svg';
 import institutionalWebsiteLink from '../icons/institutional-website-link.svg';
 import knowledge1 from '../icons/knowledge1.svg';
 import knowledge2 from '../icons/knowledge2.svg';
@@ -99,6 +100,7 @@ export const icons = {
   'globe-3': globe3,
   'grid': grid,
   'image-plus': imagePlus,
+  'inbox-1': inbox1,
   'institutional-website-link': institutionalWebsiteLink,
   'knowledge1': knowledge1,
   'knowledge2': knowledge2,
