@@ -279,9 +279,9 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         Le sprint du 27/08 a relevé les neuf composants de formulaire de la plage
         {' '}<code>340</code>–<code>355</code> ; celui-ci est en <code>23</code>, dessiné bien avant
         les autres, et il est resté invisible — ni dans les intégrés, ni dans la liste des
-        non-intégrés. Sa description disait pourtant l'essentiel : il partage ses
-        {' '}<strong>36 px</strong> de haut avec le bouton, pour que les deux se posent au même
-        niveau côte à côte.
+        non-intégrés. Sa description disait pourtant l'essentiel : il partage sa hauteur avec le
+        bouton, pour que les deux se posent au même niveau côte à côte — {' '}<strong>36 px</strong>
+        alors, <strong>44</strong> depuis que <code>control/height</code> la porte.
       </p>
 
       <p class="section-note">
@@ -335,7 +335,7 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         le système que comme rayon, et 6 n'existe pas du tout. Le nœud a été redessiné à
         {' '}<strong>12 / 16</strong>, les deux <code>button/padding-*/sm</code> — le geste déjà fait
         sur <code>Text Area</code> le 27/08. Les trois champs s'espacent maintenant pareil. Contre
-        une hauteur fixe de 36, le rembourrage vertical ne pousse rien : il dit seulement d'où le
+        une hauteur fixe de 44, le rembourrage vertical ne pousse rien : il dit seulement d'où le
         texte part.
       </p>
 
@@ -407,9 +407,8 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         en conversation » — il ne l'était pas, personne ne l'avait cherché. Le relire a corrigé trois
         mesures que rien ne signalait : la boîte fait <strong>36</strong> et non les 44 du bouton, le
         chevron <strong>20</strong> et non 24, l'écart au libellé <strong>5</strong> et non 8.
-        {' '}<code>space/2xl + space/xs</code> donne 36 exactement, et
-        {' '}<code>button/icon-size/sm</code> vaut 20 : aucune des trois n'a demandé de variable
-        nouvelle, seulement d'être regardée.
+        {' '}<code>button/icon-size/sm</code> vaut 20 et <code>control/field-gap</code> 5. La boîte
+        est depuis revenue aux 44 du bouton, portés par <code>control/height</code> — voir plus bas.
       </p>
 
       <div class="demo demo-fields">
@@ -461,22 +460,23 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       </p>
 
       <p class="flag">
-        <strong>36 de haut et 12 de rembourrage vertical ne tiennent pas ensemble</strong>, et les
+        <strong>44 de haut et 12 de rembourrage vertical ne tiennent pas ensemble</strong>, et les
         deux champs d'une ligne le déclarent tous les deux. Le texte fait 14 à 120 %, soit 16,8 :
-        12 + 16,8 + 12 = <strong>40,8</strong>, et la boîte n'en mesure que 36. Sur un
+        12 + 16,8 + 12 = <strong>40,8</strong>, et la boîte en mesure 44. Sur un
         {' '}<code>&lt;input&gt;</code> ça ne se voit pas — le navigateur centre le texte et ignore le
         rembourrage. Sur un <code>&lt;select&gt;</code>, il coupe : les jambages de « Choisir un pays »
         disparaissaient. La recette met donc le rembourrage vertical à zéro pour les deux, la hauteur
-        de 36 faisant seule le centrage. Deux gestes possibles dans Figma, sur <code>23:29</code>
-        comme sur <code>340:933</code> : porter la boîte à 40,8, ou ramener le rembourrage vertical
-        à 9,6.
+        faisant seule le centrage. C'est ce que fait Button : sa hauteur prime, son
+        {' '}<code>padding-y</code> n'est pas appliqué.
       </p>
 
       <p class="flag">
-        <strong>La boîte est passée de 44 à 36.</strong> Le code prenait
-        {' '}<code>button/height/sm</code>, choisi pour tenir une cible tactile de 44 px — WCAG 2.5.5,
-        niveau AAA. À 36 la cible reste conforme au niveau AA, qui en demande 24, mais le champ ne se
-        vise plus comme un bouton. C'est le dessin qui l'emporte ici, et c'est un choix, pas un oubli.
+        <strong>La boîte est de 44 : <code>control/height</code>.</strong> Elle a été dessinée à 36
+        — <code>space/2xl + space/xs</code>, qu'aucune variable ne nommait —, puis portée aux
+        {' '}<code>button/height/sm</code>, la cible tactile de WCAG 2.5.5 (niveau AAA). Le champ se
+        vise alors comme un bouton, et les deux se posent au même niveau côte à côte. La variable
+        porte son propre nom plutôt que d'alias celui du bouton : un champ qui change de hauteur ne
+        doit pas entraîner le bouton avec lui.
       </p>
     </section>
 

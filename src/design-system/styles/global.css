@@ -161,21 +161,22 @@ pre {
   padding: var(--button-padding-y-sm) var(--button-padding-x-sm); /* 12 / 16 */
 }
 
-/* Les champs d'une ligne partagent leur hauteur avec le bouton — 32 + 4 = 36 —
- * pour que les deux se posent au même niveau côte à côte.
+/* Les champs d'une ligne ont la hauteur du bouton sm — `control/height`, 44,
+ * le même nombre que `button/height/sm` — pour que les deux se posent au même
+ * niveau côte à côte, et pour que la cible tactile tienne les 44 de WCAG 2.5.5.
  *
- * Leur rembourrage vertical retombe à 0, et ce n'est pas un oubli : la boîte
- * fait 36, la ligne 16,8, et 12 + 16,8 + 12 = 40,8. Sur un `<input>` ça ne se
- * voit pas, le navigateur centre le texte et ignore le rembourrage ; sur un
+ * Leur rembourrage vertical retombe à 0, et ce n'est pas un oubli : la ligne
+ * fait 16,8, et 12 + 16,8 + 12 = 40,8 ne donne jamais 44. Sur un `<input>` ça ne
+ * se voit pas, le navigateur centre le texte et ignore le rembourrage ; sur un
  * `<select>` il coupe, et les jambages de « Choisir un pays » disparaissent.
- * C'est la hauteur qui fait seule le centrage. L'écart avec les deux nœuds est
- * signalé dans la doc. */
+ * C'est la hauteur qui fait seule le centrage — comme pour Button, dont le
+ * `padding-y` n'est pas appliqué non plus. */
 :where(
     input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']),
     select,
     .field-box
   ) {
-  height: calc(var(--space-2xl) + var(--space-xs)); /* 36 */
+  height: var(--control-height); /* 44 */
   padding-block: 0;
 }
 
