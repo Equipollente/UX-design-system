@@ -51,6 +51,13 @@
   --color-highlight-800:         #44530E;
   --color-highlight-900:         #2B3505;
 
+  --color-text-default:          var(--color-neutral-900);
+  --color-text-muted:            var(--color-neutral-600);
+  --color-text-accent:           var(--color-accent-500);
+  --color-text-on-accent:        var(--color-bg-default);
+  --color-text-on-accent-soft:   var(--color-accent-100);
+  --color-text-on-highlight:     var(--color-neutral-900);
+
   --color-clay-100:              #FFEDE4;
   --color-clay-200:              #FFD6C2;
   --color-clay-300:              #FFB899;
@@ -90,13 +97,6 @@
   --color-rose-700:              #961858;
   --color-rose-800:              #721244;
   --color-rose-900:              #4B0B2D;
-
-  --color-text-default:          var(--color-neutral-900);
-  --color-text-muted:            var(--color-neutral-600);
-  --color-text-accent:           var(--color-accent-500);
-  --color-text-on-accent:        var(--color-bg-default);
-  --color-text-on-accent-soft:   var(--color-accent-100);
-  --color-text-on-highlight:     var(--color-neutral-900);
 
   /* ── Espacements ───────────────────────────────────────────────────────────── */
   --space-xs:                    4px;
@@ -206,6 +206,7 @@
   --button-height-sm:            44px;
   --button-height-md:            48px;
   --button-height-lg:            56px;
+  --button-height-xs:            36px;
 
   --button-padding-x-sm:         var(--space-lg);
   --button-padding-x-md:         var(--space-xl);
