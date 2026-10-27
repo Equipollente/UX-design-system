@@ -46,11 +46,11 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | **Système** | — | **rien ne dessine le nom d'un groupe de champs** : une `legend` n'a pas de `for`, FieldLabel ne peut donc pas la rendre, et l'atelier du formulaire redéfinit sa typographie à la main | /bac-à-sable → Un formulaire | ouvert — côté code, FieldLabel rend une `legend` depuis `as="legend"` ; le dessin reste à faire |
 | ~~Chip~~ | `351:273` | ~~son trait ne vaut que 1,28:1 sur le blanc — WCAG 1.4.11 en demande 3~~ | /formulaire → Chip | *réglé — 31/08, trait des états non sélectionnés rebranché sur `color/accent/300` (3,2:1) ; `color/border/default` lui-même n'a pas bougé, toujours à 1,28:1 pour qui d'autre le lit* |
 | ~~Select~~ | `340:933` | ~~pas de trait au repos, quand Text Area en a un de 1 — deux champs voisins dessinés différemment~~ | /formulaire → Select | *réglé — 31/08, dans Figma seul, les quatre états portent `border/default`* |
-| Button | `21:47` | **aucun état Focused dessiné**, et aucun trait dans tout le composant ; `button/focus-ring-width` ne décrit donc rien | — | ouvert |
+| ~~Button~~ | `21:47` | ~~**aucun état Focused dessiné**, et aucun trait dans tout le composant~~ | — | *réglé — 27/10, anneau décalé (cadre de 2 px, à 3 px du bord, `color/border/focus`) sur les états Focus des trois tailles ; états Focus créés en md et lg* |
 | Button | `21:41` · `334:1246` · `334:1296` | le secondaire désactivé n'a aucun fond, quand le code garde le sien à 45 % | — | ouvert |
 | Button | `21:47` · `334:1233` · `334:1283` | le survol du secondaire ne bougeait pas en lg et md, et empruntait `bg/section` en sm | — | *réglé — 31/08, dans Figma seul* |
 | Link | `613:4816` | sans icône le lien mesure 41 de haut ; le code impose 44 (`min-height`) que Figma ne porte pas | /components → Link | ouvert |
-| Button | `334:1283` · `334:1233` · `21:47` | Primary, Secondary et Alert n'ont d'état Focus qu'en sm ; Link et Icon l'ont dans les trois tailles | — | ouvert |
+| ~~Button~~ | `334:1283` · `334:1233` · `21:47` | ~~Primary, Secondary et Alert n'ont d'état Focus qu'en sm~~ | — | *réglé — 27/10, états Focus créés en md et lg* |
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
@@ -95,7 +95,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 
 | Ce qui reste | Pourquoi il reste | État |
 |---|---|---|
-| `button/focus-ring-width` = 3 | Plus personne ne le lit : `global.css` et les neuf composants sont passés à `border/width/focus`. Il n'a pas été touché — le brief l'interdisait — mais il ne décrit plus rien, et le Button n'a pas d'état Focused pour le justifier. À supprimer dans Figma, seul, quand tu voudras. | ouvert |
+| `button/focus-ring-width` = 3 | Plus personne ne le lit : `global.css` et les neuf composants sont passés à `border/width/focus`. Il n'a pas été touché — le brief l'interdisait — mais il ne décrit plus rien, et le Button ne l'utilise plus pour dessiner son anneau. À supprimer dans Figma, seul, quand tu voudras. | ouvert |
 
 ## Tokens qui manquent dans la collection
 

@@ -154,7 +154,7 @@ Ce qui reste ouvert côté Figma, et qui n'est plus une affaire de token :
 | --- | --- |
 | `color/border/default` ne vaut que **1,28:1** sur le blanc | Le trait du Chip se voit, mais n'atteint pas les 3:1 que WCAG 1.4.11 demande. C'est une couleur à foncer, pas une épaisseur |
 | Le Select ne porte aucun trait au repos | Text Area en a un de 1 : deux champs voisins dessinés différemment |
-| Le Button n'a **aucun état Focused** | `button/focus-ring-width` ne décrit donc aucun dessin. Plus personne ne le lit : c'est un reliquat à supprimer |
+| ~~Le Button n'a **aucun état Focused**~~ | *Réglé — 27/10, Figma dessine l'anneau décalé sur les états Focus des trois tailles. `button/focus-ring-width` ne décrit toujours aucun dessin : reliquat à supprimer |
 
 Tout le reste tombait déjà juste, souvent par composition de deux tokens : la piste du Toggle
 (`space-xl + space-lg` = 40), le point du Radio (18 − 1 − 1 − 4 − 4 = 8), le rembourrage d'AddImage

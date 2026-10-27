@@ -103,10 +103,9 @@ pre {
 }
 
 /* Focus visible. L'épaisseur est `border/width/focus` : c'est la mesure que neuf
- * contrôles dessinent dans Figma, et le Button n'a pas d'état Focused — ses huit
- * variantes sont Primary/Secondary × Default/Hover/Pressed/Disabled, et il ne
- * porte aucun trait. `button/focus-ring-width` ne décrivait donc aucun dessin ;
- * plus personne ne le lit. Le décalage, lui, reste le sien.
+ * contrôles dessinent dans Figma. Le Button, lui, dessine son anneau décalé dans
+ * ses états Focus (un cadre transparent à 3 px du bord). `button/focus-ring-width`
+ * ne décrit donc rien de dessiné ; plus personne ne le lit. Le décalage reste le sien.
  * WCAG 2.4.13 demande 2px d'épaisseur : c'est exactement ce que l'anneau fait. */
 :focus {
   outline: none;
