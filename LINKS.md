@@ -13,10 +13,18 @@ le `LINKS.md` du dossier `portfolio`.
 
 | Page | Ce qu'on y trouve | Lien |
 | --- | --- | --- |
-| Foundations | Couleurs, typo, espacements, rayons, ombres — la source des tokens | [`5-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=5-2) |
-| Components | Les composants et leurs variantes | [`19-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-2) |
-| Icons | Les icônes sources — exportées dans `icons/`, générées par `npm run icons` | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
-| Templates | Les maquettes de page — hors périmètre de ce dépôt | [`9-2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=9-2) |
+| Foundations | Couleurs, typo, espacements, rayons, ombres — la source des tokens | [`5:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=5-2) |
+| Icons | Les icônes sources — exportées dans `icons/`, générées par `npm run icons` | [`45:395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
+| Actions | Button (trois tailles), Link | [`723:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-2) |
+| Forms | Les champs et leurs compléments : Field, Select, Multi Select, Text Area, Radio, Checkbox, Toggle, Chip, médias | [`19:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-2) |
+| Navigation | Nav, Avatar-Button, Carousel Nav, Tabs | [`723:3`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-3) |
+| Cards | Toutes les cartes : CardDefault, Cards (ancien), Case Study, CardGrid, listes | [`478:6791`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=478-6791) |
+| Content | Tag, Role, Table, Image, Section.Intro, Carousel | [`723:4`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-4) |
+| Overlays | Modals, Dialog, panel-header | [`723:5`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-5) |
+| Templates | Les maquettes de page (Pages du site, Home, Case Study, Mockups) — hors périmètre de ce dépôt | [`9:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=9-2) |
+| Illustrations | Les illustrations | [`407:1486`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=407-1486) |
+| Documentation | Les cadres de l'interface de ce site de doc (Sidebar, etc.) — cités par `Sidebar.astro` | [`723:6`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-6) |
+| À trier | Brouillons, instances d'exemple et essais — à décider, rien n'y est une source | [`288:4586`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=288-4586) |
 
 ### Composants
 
@@ -36,7 +44,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Section.Intro | [`209-2348`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=209-2348) | [Intro.astro](src/design-system/components/Intro.astro) |
 | Case Study Card en situation | [`176-1248`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=176-1248) | — |
 | Case Study List | [`222-814`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-814) | [CaseStudyList.astro](src/design-system/components/CaseStudyList.astro) |
-| Page HP (la pile en situation, 3 états) | [`222-1168`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-1168) | [templates/home.astro](src/pages/templates/home.astro) |
+| Home (la pile en situation, 3 états — section de la page Templates, ancienne page HP) | [`729-3`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=729-3) | [templates/home.astro](src/pages/templates/home.astro) |
 | FieldLabel | — (spécifié en conversation) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
 | Text field (jeu de variantes) | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | [TextField.astro](src/design-system/components/TextField.astro) |
 | Select (jeu de variantes) | [`340-933`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-933) | [Select.astro](src/design-system/components/Select.astro) |
@@ -109,7 +117,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 
 | Ce qui manque | Où ça se voit | Arbitrage |
 | --- | --- | --- |
-| L'état « barre effacée » de la HP | prop `sticky` de [Nav.astro](src/design-system/components/Nav.astro) | Un quatrième frame sur la page HP |
+| L'état « barre effacée » de la page d'accueil | prop `sticky` de [Nav.astro](src/design-system/components/Nav.astro) | Un quatrième frame dans la section Home de la page Templates |
 | La taille de l'avatar (`64px`, en dur) | `--nav-home-size` dans [Nav.astro](src/design-system/components/Nav.astro) | Une variable. Elle vaut la hauteur d'une pilule d'onglets, et c'est ce qui fait que `nav/height` est le même nombre avec ou sans avatar — une coïncidence que rien ne garde aujourd'hui |
 | Un fond pour la barre, ou l'absence assumée | `.nav-bar` dans [Nav.astro](src/design-system/components/Nav.astro) | À trancher : la pilule lavande sur une carte lavande perd son contour, et l'eyebrow de la carte passe derrière la barre |
 | Une échelle d'empilement | `z-index: 1` dans [Nav.astro](src/design-system/components/Nav.astro) | Exception assumée : le seul z-index du système, à ne transformer en échelle que si un deuxième cas arrive |
@@ -121,7 +129,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | ~~Un emploi pour la variante `Alert`~~ | — | **Réglé — 31/08.** Le nœud `418:1020` (« Add Image process ») dessine le « supprimer » de son état `success` en `Alert` ; `EditImageGallery` (`355:1396`) suit, le sien passe de `secondary` à `alert` |
 
 Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
-`Cards/User Quote`, `Research Finding`, `Role` — tous sur la page Components. Les sept objets
+`Cards/User Quote` (page Cards), `Role` (page Content), et `Research Finding`, un cadre dessiné à la main sans composant, rangé dans « À trier ». Les sept objets
 de formulaire en sont sortis le 27/08.
 
 ### Ce que le formulaire attend de Figma
@@ -146,7 +154,7 @@ Ce qui reste ouvert côté Figma, et qui n'est plus une affaire de token :
 | --- | --- |
 | `color/border/default` ne vaut que **1,28:1** sur le blanc | Le trait du Chip se voit, mais n'atteint pas les 3:1 que WCAG 1.4.11 demande. C'est une couleur à foncer, pas une épaisseur |
 | Le Select ne porte aucun trait au repos | Text Area en a un de 1 : deux champs voisins dessinés différemment |
-| Le Button n'a **aucun état Focused** | `button/focus-ring-width` ne décrit donc aucun dessin. Plus personne ne le lit : c'est un reliquat à supprimer |
+| ~~Le Button n'a **aucun état Focused**~~ | *Réglé — 27/10, Figma dessine l'anneau décalé sur les états Focus des trois tailles. `button/focus-ring-width` ne décrit toujours aucun dessin : reliquat à supprimer |
 
 Tout le reste tombait déjà juste, souvent par composition de deux tokens : la piste du Toggle
 (`space-xl + space-lg` = 40), le point du Radio (18 − 1 − 1 − 4 − 4 = 8), le rembourrage d'AddImage
