@@ -283,3 +283,17 @@ Ce bloc n'existe pas dans Figma. Aucun composant n'a à connaître la préféren
 reste signalé, un bouton survolé reste survolé.
 
 `← ` [build-tokens.mjs](../scripts/build-tokens.mjs)
+
+## La hauteur d'un champ est un token, et c'est celle du bouton
+
+`control/height` vaut 44, comme `button/height/sm`. Les champs d'une ligne — Text field, Select,
+Multi Select, la recherche de sa liste — se posent ainsi au même niveau qu'un bouton, et tiennent la
+cible tactile de WCAG 2.5.5. Elle avait d'abord été dessinée à 36, une somme de deux espacements que
+rien ne nommait.
+
+Le token a son propre nom plutôt qu'un alias de `button/height/sm` : un champ qui change de hauteur
+ne doit pas entraîner le bouton avec lui. Son rembourrage vertical n'est pas appliqué — la ligne fait
+16,8, 12 + 16,8 + 12 donne 40,8 — et c'est la hauteur qui centre le texte, comme pour Button. Text
+Area, dont la hauteur se compte en lignes, n'est pas concernée.
+
+`← ` [global.css](../src/design-system/styles/global.css), variable `control/height` dans Figma

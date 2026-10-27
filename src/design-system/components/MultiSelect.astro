@@ -23,7 +23,7 @@
 //
 // La boîte fermée est ce bouton, et il porte `.field-box` : la recette de
 // global.css le dessine mot pour mot comme le Select — trait, fond, rayon,
-// hauteur 36, survol. Son chevron est celui du Select, posé de la même façon.
+// hauteur `control/height`, survol. Son chevron est celui du Select, posé de la même façon.
 //
 // La liste flotte, et rien n'y est écrit à la main. C'est un `popover` natif :
 // le navigateur la pose dans sa couche réservée, au-dessus de toute la page, ce
@@ -563,11 +563,11 @@ const classes = ['multi', className].filter(Boolean).join(' ');
     gap: var(--space-xs);
   }
 
-  /* Avec la recherche, la liste grandit de la hauteur d'un champ (36, la
-     hauteur de la recette) et de l'écart qui la sépare des options : les sept
+  /* Avec la recherche, la liste grandit de la hauteur d'un champ (`control/height`,
+     celle de la recette) et de l'écart qui la sépare des options : les sept
      lignes restent sept. */
   .multi-list:has(.multi-search) {
-    --multi-search-block: calc(var(--space-2xl) + 2 * var(--space-xs));
+    --multi-search-block: calc(var(--control-height) + 2 * var(--space-xs));
   }
 
   .multi-options {

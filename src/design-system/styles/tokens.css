@@ -121,6 +121,7 @@
   --control-size:                18px;
   --control-track-height:        22px;
   --control-field-gap:           5px;
+  --control-height:              44px;
 
   /* ── Traits — les épaisseurs, et rien d’autre ──────────────────────────────── */
   --border-width-default:        1px;

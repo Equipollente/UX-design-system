@@ -151,7 +151,8 @@ Ce qui reste ouvert côté Figma, et qui n'est plus une affaire de token :
 Tout le reste tombait déjà juste, souvent par composition de deux tokens : la piste du Toggle
 (`space-xl + space-lg` = 40), le point du Radio (18 − 1 − 1 − 4 − 4 = 8), le rembourrage d'AddImage
 (`space-xl + space-xs` = 28), son icône (`space/2xl` = 32), la hauteur d'une vignette
-(`space-layout-128 + space-md` = 140), et la hauteur du Select (`space/2xl + space/xs` = 36).
+(`space-layout-128 + space-md` = 140). La hauteur d'un champ, elle, s'est composée jusqu'au
+`control/height` : `space/2xl + space/xs` donnait 36 sans que rien ne la nomme.
 
 ### Variables
 

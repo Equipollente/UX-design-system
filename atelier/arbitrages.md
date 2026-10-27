@@ -54,14 +54,14 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
-| Select | `340:933` | boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile | /formulaire → Select | ouvert |
+| ~~Select~~ | `340:933` | ~~boîte de 36 de haut, quand le code prend les 44 du bouton pour la cible tactile~~ | /formulaire → Select | *réglé — 27/10, la boîte passe à 44 dans Figma et dans le code, portée par `control/height` ; Select, Text field, Multi Select et la recherche de sa liste la lisent* |
 | Select | `340:933` | chevron de 20, quand le code prend les 24 de `button/icon-size/md` | /formulaire → Select | ouvert |
 | ~~Select à plusieurs choix~~ | `586:5282` | ~~**aucun nœud** : boîte, liste flottante, pastilles et message de limite à dessiner~~ | /formulaire → Select field — plusieurs choix | *réglé — 01/10, dans Figma seul : `forms/Multi Select`, sa liste `585:1410`, la ligne `forms/Menu Item Checkbox` et `forms/Chip Remove`, sans variable créée* |
 | Select | `340:933` | le libellé est en casse `LOWER` ; le code ne touche pas à la casse | /formulaire → Select field — plusieurs choix | ouvert |
 | Checkbox | `340:842` | les variantes cochées Hover, Focused et Disabled dessinent une coche coupée | /formulaire → Select field — plusieurs choix | ouvert |
 | Chip · Chip Remove | `351:273` · `586:4921` | l'anneau de focus d'un chip retenu a la couleur de son fond, sans l'écart `button/focus-offset` du code : il ne se voit pas | /formulaire → Select field — plusieurs choix | ouvert |
 | Dropdown Menu | `340:973` | rembourrage 6 et écart 2 liés à aucune variable, rayon `lg` quand sa voisine multiple prend `md` | — | ouvert |
-| Select · Text field | `340:933` · `23:29` | boîte de 36 et rembourrage vertical de 12 s'excluent : 12 + 16,8 + 12 = 40,8 | /formulaire → Select | ouvert |
+| Select · Text field | `340:933` · `23:29` | boîte de 44 et rembourrage vertical de 12 ne se recoupent pas : 12 + 16,8 + 12 = 40,8. Le code laisse la hauteur centrer le texte, comme Button ; les nœuds portent encore les 12 liés | /formulaire → Select | ouvert |
 | ~~Text field~~ | `23:29` | ~~rembourrage de 6 / 14, que rien ne lie : 14 n'existe que comme rayon, 6 n'existe pas~~ | /formulaire → Text field | *réglé — 31/08, nœud redessiné à 12 / 16 sur ses six variantes, lié aux deux `button/padding-*/sm` — aucune variable créée* |
 | Text field | `23:29` | **le nœud existait, et personne ne l'avait vu** — hors de la plage `340`–`355` relevée par le sprint, il n'était ni intégré ni listé | /formulaire → Text field | ouvert |
 | Text field | `23:29` | **ni état désactivé ni état d'erreur** ; `disabled` a pu s'écrire quand même (`opacity/disabled` existe), l'erreur non — elle demanderait une encre, un trait et un message | /formulaire → Text field | ouvert |

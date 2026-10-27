@@ -19,19 +19,20 @@
 //
 // Nœud Figma : 340:933 — 4 états. Ce composant a longtemps été écrit sans lui :
 // on le croyait « spécifié en conversation », et personne ne l'avait cherché. Le
-// relire a corrigé trois mesures — la boîte fait 36 et non les 44 du bouton, le
-// chevron 20 et non 24, l'écart au libellé 5 et non 8.
+// relire a corrigé deux mesures — le chevron 20 et non 24, l'écart au libellé 5
+// et non 8. La boîte, elle, fut dessinée à 36 puis ramenée aux 44 du bouton
+// (`control/height`) : c'était la cible tactile que le code avait prise d'abord.
 //
 // Mesures :
-// — hauteur 36 → `space/2xl + space/xs`, exact ;
+// — hauteur 44 → `control/height`, la même que `button/height/sm` ;
 // — rembourrage 16 de côté → `button/padding-x/sm`, exact, tel que le nœud le lie.
-//   Les 12 du haut et du bas, eux, ne tiennent pas dans une boîte de 36 : voir plus bas ;
+//   Les 12 du haut et du bas, eux, ne tiennent pas dans une boîte de 44 : voir plus bas ;
 // — chevron 20 → `button/icon-size/sm` ;
 // — écart au libellé → `control/field-gap` = 5 ;
 // — anneau de focus 2 → `border/width/focus`.
 //
 // Le rembourrage vertical vaut 0 dans la recette, et ce n'est pas un oubli : la
-// boîte fait 36, la ligne 16,8 — les 12 du nœud n'y tiennent pas
+// boîte fait 44, la ligne 16,8 — les 12 du nœud ne la donnent pas
 // (12 + 16,8 + 12 = 40,8). Un `select` coupe son texte à la boîte de contenu, et
 // les jambages de « pays » disparaissaient. Un `input` déclare les mêmes 12 sans
 // que ça se voie, le navigateur centrant son texte lui-même ; la recette les

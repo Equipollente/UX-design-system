@@ -2976,6 +2976,20 @@
           "WEB": "var(--control-field-gap)"
         }
       }
+    },
+    "height": {
+      "$type": "number",
+      "$value": 44,
+      "$description": "The height of a one-line field — text field, select, multi select. Aligned on button/height/sm so a field and a button side by side sit level. The vertical padding is not applied: the height alone centres the text.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:703:709",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--control-height)"
+        }
+      }
     }
   },
   "border": {
