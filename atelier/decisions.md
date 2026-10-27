@@ -297,3 +297,19 @@ ne doit pas entraîner le bouton avec lui. Son rembourrage vertical n'est pas ap
 Area, dont la hauteur se compte en lignes, n'est pas concernée.
 
 `← ` [global.css](../src/design-system/styles/global.css), variable `control/height` dans Figma
+
+## Le fichier Figma est rangé par famille, et une page ne porte que des sources
+
+Une page par famille de composants — Actions, Forms, Navigation, Cards, Content, Overlays — plus
+Foundations, Icons, Templates, Illustrations. Chaque composant n'a qu'une place, et une page de
+famille ne porte que des composants, pas leurs instances : deux boutons identiques côte à côte ne
+disent pas lequel est la source. Les instances d'exemple et les brouillons vont dans « À trier »,
+sans être supprimés ; la page « Documentation » garde les cadres de l'interface de ce site, que
+`Sidebar.astro` cite.
+
+Déplacer un nœud ne change pas son identifiant : les liens du dépôt tiennent. Seuls les liens de
+**pages** ont changé, et `LINKS.md` les liste. La page HP n'existe plus : ses frames sont la
+section Home de la page Templates (`729:3`). La collection de variables « Collection » s'appelle
+« Responsive » ; la vide « Collection 2 » est supprimée.
+
+`← ` [LINKS.md](../LINKS.md)

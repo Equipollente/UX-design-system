@@ -85,8 +85,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Section.Intro | `209:2348` | trois couleurs tapées à la main, non liées | /components → Intro | ouvert |
 | Section.Intro | `142:1354` | la variante mobile ne descend pas au plancher déclaré (320) | /components → Intro | ouvert |
 | Style `heading/display` | — | la description annonce « tight », les valeurs disent 1.23 et 0 | /components → Intro | ouvert |
-| Page HP | `222:1168` | bloc nav + intro à 668 là où le liseré en demande 744 | /components → Case Study List | ouvert |
-| Page HP | `222:1168` | cartes à 814 et 776 là où le comportement en demande 834 | /components → Case Study List | ouvert |
+| Templates → Home | `729:3` | bloc nav + intro à 668 là où le liseré en demande 744 | /components → Case Study List | ouvert |
+| Templates → Home | `729:3` | cartes à 814 et 776 là où le comportement en demande 834 | /components → Case Study List | ouvert |
 | Case Study List | `222:814` | l'état empilé n'est pas dessiné en mobile, alors que la carte y tiendrait | /components → Case Study List | ouvert |
 | Page Icons | `45:395` | le nommage mélange quatre conventions pour onze objets | /icons → Icon | ouvert |
 | Icônes | `45:395` | `file-text`, `box-plus`, `mail-edit` s'exportent en aplat | /icons → Icon | ouvert |
