@@ -1,0 +1,137 @@
+---
+// DocExample — un exemple de la doc, dans toujours le même ordre : un titre, une
+// ou deux phrases, le composant qui marche, et son code entier, replié.
+//
+// C'est le format de la doc d'Atlassian pour ses exemples, et il tient à une
+// raison : on vient ici pour voir, essayer, copier — pas pour lire. Tout ce qui
+// explique pourquoi le composant est fait ainsi ne s'écrit pas ici, mais plus bas
+// dans la page, replié lui aussi.
+//
+// Le code est donné par l'appelant, qui le tire des mêmes props que le composant
+// montré : l'exemple et son code ne peuvent donc pas diverger.
+
+interface Props {
+  title: string;
+  /** Une ou deux phrases. Pas plus. */
+  description?: string;
+  /** Le code complet, tel qu'on le colle. */
+  code: string;
+}
+
+const { title, description, code } = Astro.props;
+// Ce qui est entre accents graves s'écrit en code : un nom de prop se repère.
+const parts = description?.split('`') ?? [];
+---
+
+<article class="doc-example">
+  <h4 class="doc-example-title">{title}</h4>
+  {
+    description && (
+      <p class="doc-example-description">
+        {parts.map((t, i) => (i % 2 ? <code>{t}</code> : t))}
+      </p>
+    )
+  }
+
+  <div class="doc-example-demo">
+    <slot />
+  </div>
+
+  <details class="doc-example-code">
+    <summary>Voir le code</summary>
+    <pre><code>{code}</code></pre>
+    <button type="button" class="doc-example-copy" data-copy>Copier le code</button>
+  </details>
+</article>
+
+{/* Un script, pour le seul bouton de copie : sans lui, le code reste lisible et se
+    sélectionne à la main. */}
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    button.addEventListener('click', async () => {
+      const code = button.closest('details')?.querySelector('code')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        button.textContent = 'Code copié';
+      } catch {
+        button.textContent = 'Copie impossible — sélectionne le code';
+      }
+      window.setTimeout(() => (button.textContent = 'Copier le code'), 1800);
+    });
+  }
+</script>
+
+<style>
+  .doc-example {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .doc-example-title {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-heading);
+  }
+
+  .doc-example-description {
+    max-width: 66ch;
+    margin: 0 0 var(--space-lg);
+    color: var(--color-text-muted);
+  }
+
+  /* Le composant, seul sur son fond : c'est ce qu'on vient regarder. La hauteur
+     minimale laisse sa liste s'ouvrir sans qu'on ait à défiler. */
+  .doc-example-demo {
+    padding: var(--space-xl);
+    background: var(--color-bg-surface);
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .doc-example-demo > :global(*) {
+    max-width: 26rem;
+  }
+
+  .doc-example-code {
+    margin-top: var(--space-md);
+  }
+
+  .doc-example-code summary {
+    display: inline-block;
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-accent);
+  }
+
+  .doc-example-code summary:focus-visible,
+  .doc-example-copy:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-focus);
+    outline-offset: var(--button-focus-offset);
+  }
+
+  /* Le code est un bloc : un seul fond, pas une bande par ligne comme le fait
+     `code` en ligne. */
+  .doc-example-code pre {
+    margin: var(--space-md) 0 0;
+    padding: var(--space-lg);
+    overflow-x: auto;
+    background: var(--color-bg-surface);
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .doc-example-code pre code {
+    padding: 0;
+    background: none;
+  }
+
+  .doc-example-copy {
+    margin-top: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    border: var(--border-width-default) solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-default);
+    color: var(--color-text-default);
+    font: inherit;
+    cursor: pointer;
+  }
+</style>
