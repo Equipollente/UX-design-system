@@ -313,3 +313,24 @@ section Home de la page Templates (`729:3`). La collection de variables « Colle
 « Responsive » ; la vide « Collection 2 » est supprimée.
 
 `← ` [LINKS.md](../LINKS.md)
+
+## Le Select n'est plus natif : un seul champ, à un ou plusieurs choix
+
+Le Select retenait une valeur et restait un `<select>` natif, parce qu'un menu réécrit en `div`
+coûte le clavier, la recherche à la frappe et la roulette du téléphone. MultiSelect, lui, était déjà
+une liste flottante. Le dessin (`forms/Select List Combined`, 778:4266) a demandé pour **une valeur
+seule** la recherche en haut, l'item choisi épinglé en bas et la création d'une option : une liste
+ouverte par le système d'exploitation est hors d'atteinte du CSS, et ces trois demandes auraient
+réécrit le natif presque en entier.
+
+Il y a donc un seul composant, `Select`, qui porte `multiple` : des radios pour un choix, des cases
+pour plusieurs, le même `name`, le même popover. Le clavier reste celui du navigateur (Tab, Entrée,
+Espace, flèches). `MultiSelect` n'est plus que `<Select multiple>`, gardé importable pour que les
+sites qui l'emploient ne changent rien ; **le Select, lui, change de balisage** — un `fieldset` et
+des radios à la place du `<select>` — et un site qui le ciblait par `select` doit suivre.
+
+La création d'une option n'enregistre rien : le champ l'annonce par l'événement `select-create`, et la
+page décide de la garder.
+
+`← ` [Select.astro](../src/design-system/components/Select.astro)
+

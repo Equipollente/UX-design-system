@@ -48,38 +48,33 @@ const textFieldProps = [
 ];
 
 const selectProps = [
-  ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
-  ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
-  ['options', '(string | { value, label })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur.'],
-  ['placeholder', 'string', '—', 'La première ligne, non sélectionnable. Absente : la liste ouvre sur son premier choix.'],
-  ['value', 'string', '—', 'Le choix pré-sélectionné.'],
-  ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
-  ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
-  ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
-  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
-];
-
-const multiSelectProps = [
-  ['id', 'string', '—', 'Préfixe des id des cases, et name si aucun n’est donné. Unique dans la page.'],
+  ['id', 'string', '—', 'Préfixe des id des contrôles, et name si aucun n’est donné. Unique dans la page.'],
   ['label', 'string', '—', 'Le texte du libellé — la légende du groupe, rendue par FieldLabel.'],
   ['options', '(option | { label, options, disabled? })[]', '—', 'Les choix. Une chaîne vaut pour sa propre valeur. Un groupe range ses choix sous un nom, comme un optgroup ; disabled l’éteint en entier.'],
-  ['values', 'string[]', '[]', 'Les valeurs cochées à l’ouverture.'],
-  ['max', 'number', '—', 'Le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
-  ['display', "'count' | 'chips'", "'count'", 'Ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
+  ['multiple', 'boolean', 'false', 'Plusieurs choix : des cases plutôt que des radios. MultiSelect n’est que ce composant avec multiple.'],
+  ['value', 'string', '—', 'Le choix présélectionné, pour un choix unique.'],
+  ['values', 'string[]', '[]', 'Les valeurs cochées à l’ouverture, pour multiple.'],
+  ['max', 'number', '—', 'multiple — le nombre de choix à ne pas dépasser. Absent : aucune limite.'],
+  ['display', "'count' | 'chips'", "'count'", 'multiple — ce que montre le champ de ses choix : un compteur, ou en plus des pastilles.'],
   ['visibleOptions', 'number', '7', 'Le nombre de lignes que la liste montre avant de défiler.'],
-  ['searchable', 'boolean', 'false', 'Pose un champ de recherche en tête de la liste, qui filtre les options.'],
+  ['searchable', 'boolean', 'false', 'Pose un champ de recherche en haut de la liste, qui filtre les options.'],
+  ['showSelected', 'boolean', 'false', 'Épingle en bas de la liste ce qui est choisi, sous un trait. Cliquer une ligne retire le choix.'],
+  ['creatable', 'boolean', 'false', 'Pose en bas de la liste la ligne qui crée une option. La page entend l’événement select-create (detail.value, detail.label) et l’enregistre.'],
   ['searchLabel', 'string', 'Filtrer les options', 'Le nom lu du champ de recherche. Il n’est pas affiché.'],
   ['searchPlaceholder', 'string', 'Rechercher', 'L’invite du champ de recherche.'],
   ['noResultsLabel', 'string', 'Aucun résultat', 'Ce que dit la liste quand aucune option ne correspond.'],
-  ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est coché.'],
-  ['countOneLabel', 'string', '{n} sélectionné', 'Ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
-  ['countLabel', 'string', '{n} sélectionnés', 'Ce que dit la boîte pour plusieurs choix.'],
-  ['maxLabel', 'string', 'Maximum atteint : {n} sur {max}', 'Le message de limite.'],
-  ['removeLabel', 'string', 'Retirer', 'Le verbe d’une pastille, lu avant son mot : « Retirer France ».'],
-  ['requiredMessage', 'string', 'Choisir au moins une option.', 'Ce que le navigateur dit si required et rien n’est coché.'],
-  ['name', 'string', 'id', 'Le nom envoyé par le formulaire, le même pour toutes les cases.'],
-  ['required', 'boolean', 'false', 'Au moins un choix. Pose l’astérisque ; c’est le script qui le fait tenir.'],
-  ['disabled', 'boolean', 'false', 'Éteint le groupe entier, et la boîte ne s’ouvre plus.'],
+  ['placeholder', 'string', 'Choisir', 'Ce que dit la boîte quand rien n’est choisi.'],
+  ['countOneLabel', 'string', '{n} sélectionné', 'multiple — ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
+  ['countLabel', 'string', '{n} sélectionnés', 'multiple — ce que dit la boîte pour plusieurs choix.'],
+  ['maxLabel', 'string', 'Maximum atteint : {n} sur {max}', 'multiple — le message de limite.'],
+  ['removeLabel', 'string', 'Retirer', 'Le verbe d’une pastille ou d’une ligne épinglée, lu avant son mot : « Retirer France ».'],
+  ['createLabel', 'string', 'Créer une option', 'La ligne de création au repos.'],
+  ['createQueryLabel', 'string', 'Créer « {q} »', 'La ligne de création quand un texte est tapé dans la recherche. {q} vaut ce texte.'],
+  ['createPlaceholder', 'string', 'Nom de l’option', 'L’invite du champ où l’on tape le nom de l’option créée.'],
+  ['requiredMessage', 'string', 'Choisir au moins une option.', 'multiple — ce que le navigateur dit si required et rien n’est coché.'],
+  ['name', 'string', 'id', 'Le nom envoyé par le formulaire, le même pour tous les contrôles.'],
+  ['required', 'boolean', 'false', 'Au moins un choix. Pose l’astérisque.'],
+  ['disabled', 'boolean', 'false', 'Éteint le champ entier, et la boîte ne s’ouvre plus.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
@@ -387,19 +382,26 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       <h2>Select field</h2>
 
       <p class="section-note">
-        <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur dans une liste fermée.
-        Nœud Figma <code>340:933</code>, quatre états.
+        <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur, ou plusieurs avec
+        {' '}<code>multiple</code>, dans une liste. Nœud Figma <code>340:933</code>
+        {' '}(<code>forms/Select</code>), dont l'état <code>Open</code> accroche la liste
+        {' '}<code>forms/Select List Combined</code> (<code>778:4266</code>).
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni un menu — un menu déclenche des actions, celui-ci
-        renseigne une valeur qu'un formulaire enverra — ni un champ à suggestions : on ne peut rien
-        écrire qui ne soit pas dans la liste.
+        renseigne une valeur qu'un formulaire enverra — ni un champ à suggestions : la liste est
+        close, et seule <code>creatable</code> y laisse entrer une option, par décision de la page.
       </p>
 
       <p class="section-note">
-        Son libellé vient de <code>FieldLabel</code>, comme celui de tous les autres champs. Le
-        {' '}<code>&lt;select&gt;</code>, lui, est natif : un menu réécrit en <code>div</code> coûterait le
-        clavier, la recherche à la frappe et la roulette du téléphone — pour un chevron dessiné
-        autrement. Le chevron du système est donc posé par-dessus, et le natif effacé.
+        Son libellé vient de <code>FieldLabel</code>, comme celui de tous les autres champs.
+        <strong>Il n'est plus un <code>&lt;select&gt;</code> natif.</strong> Le dessin a demandé la
+        recherche, la création d'une option et le choix épinglé en bas, y compris pour une valeur
+        seule : une liste ouverte par le système d'exploitation est hors d'atteinte du CSS. C'est
+        maintenant un <code>&lt;fieldset&gt;</code>, un bouton qui ouvre une liste flottante, et des
+        radios — des cases avec <code>multiple</code> — qui portent le même <code>name</code>. Le
+        formulaire envoie ce qui est choisi, et le clavier reste celui du navigateur : Entrée ouvre,
+        Tab parcourt, les flèches changent de ligne. Un choix unique referme la liste dès qu'on a
+        choisi.
       </p>
 
       <p class="section-note">
@@ -413,7 +415,7 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
 
       <div class="demo demo-fields">
         <div class="demo-case">
-          <p class="demo-name">default — sur son invite</p>
+          <p class="demo-name">simple — sur son invite</p>
           <Select id="pays-a" label="Pays" options={pays} placeholder="Choisir un pays" />
         </div>
         <div class="demo-case">
@@ -423,6 +425,26 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <div class="demo-case">
           <p class="demo-name">rempli — une valeur choisie</p>
           <Select id="pays-c" label="Pays" options={pays} value="Suisse" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">showSelected — le choix épinglé en bas</p>
+          <Select id="pays-e" label="Pays" options={destinations} value="Canada" showSelected />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">searchable — la recherche en haut</p>
+          <Select id="pays-f" label="Pays" options={destinations} placeholder="Choisir un pays" searchable />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">creatable — la création en bas</p>
+          <Select id="pays-g" label="Pays" options={pays} placeholder="Choisir un pays" creatable />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">searchable + creatable + showSelected</p>
+          <Select id="pays-h" label="Pays" options={destinations} value="Canada" searchable creatable showSelected />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">groupée</p>
+          <Select id="pays-i" label="Pays" options={destinationsGroupees} value="Japon" searchable />
         </div>
         <div class="demo-case">
           <p class="demo-name">disabled + required</p>
@@ -488,9 +510,10 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <strong>Ce qu'il est.</strong> Un champ qui fait choisir <em>plusieurs</em> valeurs dans une
         liste fermée, et qui dit combien sont choisies.
         <br />
-        <strong>Ce qu'il n'est pas.</strong> Ni le Select — lui ne retient qu'une valeur, et reste
-        natif — ni un groupe de Chips à plat : la liste est repliée, elle ne prend sa place qu'à la
-        demande.
+        <strong>Ce qu'il n'est pas.</strong> Ni un groupe de Chips à plat : la liste est repliée,
+        elle ne prend sa place qu'à la demande. Ce n'est pas non plus un autre composant :
+        {' '}<code>MultiSelect</code> n'est plus que le Select avec <code>multiple</code>, gardé
+        importable pour que les sites qui l'emploient ne changent rien.
       </p>
 
       <p class="section-note">
@@ -517,8 +540,24 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
 
       <div class="demo demo-fields">
         <div class="demo-case">
-          <p class="demo-name">display="count" — un compteur</p>
+          <p class="demo-name">simple — display="count"</p>
           <MultiSelect id="dest-a" label="Destinations" options={destinations} placeholder="Choisir des destinations" />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">showSelected — les choix épinglés en bas</p>
+          <MultiSelect id="dest-g" label="Destinations" options={destinations} values={['France', 'Japon']} showSelected />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">searchable — la recherche en haut</p>
+          <MultiSelect id="dest-e" label="Destinations" options={destinations} values={['Grèce']} searchable />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">creatable — la création en bas</p>
+          <MultiSelect id="dest-h" label="Destinations" options={destinations} placeholder="Choisir des destinations" creatable />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">searchable + creatable + showSelected</p>
+          <MultiSelect id="dest-i" label="Destinations" options={destinations} values={['France', 'Japon']} searchable creatable showSelected />
         </div>
         <div class="demo-case">
           <p class="demo-name">display="chips" + max 3</p>
@@ -527,10 +566,6 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <div class="demo-case">
           <p class="demo-name">maximum atteint — 3 sur 3</p>
           <MultiSelect id="dest-c" label="Destinations" options={destinations} values={['France', 'Suisse', 'Italie']} max={3} />
-        </div>
-        <div class="demo-case">
-          <p class="demo-name">searchable — filtrer les options</p>
-          <MultiSelect id="dest-e" label="Destinations" options={destinations} values={['Grèce']} searchable />
         </div>
         <div class="demo-case">
           <p class="demo-name">groupée — Océanie éteinte</p>
@@ -542,26 +577,10 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         </div>
       </div>
 
-      <div class="table-scroll">
-        <table>
-        <caption>Props</caption>
-        <thead>
-          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
-        </thead>
-        <tbody>
-          {
-            multiSelectProps.map(([nom, type, defaut, note]) => (
-              <tr>
-                <td><code>{nom}</code></td>
-                <td><code>{type}</code></td>
-                <td>{defaut}</td>
-                <td>{note}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-        </table>
-      </div>
+      <p class="section-note">
+        Les props sont celles du tableau de la section précédente : <code>multiple</code> y est posé
+        d'office, et celles qui ne valent que pour lui y sont marquées.
+      </p>
 
       <p class="section-note">
         <strong>Au maximum, les cases restantes s'éteignent</strong>, et un message le dit sous la
@@ -583,16 +602,40 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       </p>
 
       <p class="section-note">
-        <strong>Nœud Figma <code>586:5282</code></strong> — <code>forms/Multi Select</code>, dix
-        variantes, <code>Display</code> × <code>State</code>, dont <code>Searching</code> et
-        {' '}<code>Grouped</code>. Il assemble la boîte du Select (<code>340:933</code>), la liste
-        {' '}<code>forms/Multi Select List</code> (<code>586:5488</code>, simple ou groupée, ses noms de
-        groupe en <code>forms/Menu Group Label</code>, <code>586:5379</code>) et sa version avec
-        recherche
-        {' '}<code>forms/Multi Select List Search</code> (<code>586:5356</code>),
-        sa ligne <code>forms/Menu Item Checkbox</code> (<code>586:4868</code>) et la pastille
+        <strong>Nœuds Figma.</strong> La boîte est <code>forms/Select</code> (<code>340:933</code>),
+        dont l'état <code>Open</code> accroche <code>forms/Select List Combined</code>
+        {' '}(<code>778:4266</code>) : dix variantes, <code>List</code> (<code>single</code> ou
+        {' '}<code>multi</code>) × <code>Search</code> × <code>Create option</code> ×
+        {' '}<code>Selected</code>. Son contenu est <code>forms/Select List</code>
+        {' '}(<code>777:1349</code>, simple ou groupée, ses noms de groupe en
+        {' '}<code>forms/Menu Group Label</code>, <code>586:5379</code>), faite de
+        {' '}<code>forms/Single Select Menu Item</code> (<code>777:1216</code>) ou
+        {' '}<code>forms/Multi Select Menu Item</code> (<code>586:4868</code>). La ligne de création est
+        {' '}<code>forms/Select Menu Item Create Option</code> (<code>777:1968</code>), la pastille
         {' '}<code>forms/Chip Remove</code> (<code>586:4921</code>). Chaque mesure y est liée à une
         variable.
+      </p>
+
+      <p class="section-note">
+        <strong>Trois compléments, chacun à sa place dans la liste.</strong>
+        {' '}<code>searchable</code> pose la recherche <strong>en haut</strong>.
+        {' '}<code>showSelected</code> épingle <strong>en bas</strong> ce qui est choisi, sous un trait :
+        une ligne épinglée est un bouton, la cliquer retire le choix, et la zone n'existe que s'il y a
+        un choix. <code>creatable</code> pose <strong>en bas</strong> la ligne « Créer une option » :
+        elle devient un champ où l'on tape le nom et, validé par Entrée ou le plus, l'option entre dans
+        la liste, choisie. Avec la recherche et un texte tapé, elle dit « Créer « ce texte » » et crée
+        aussitôt ; elle disparaît si l'option existe déjà.
+        <br />
+        <strong>Le champ n'enregistre pas ce qu'il crée</strong> : il l'annonce à la page par
+        l'événement <code>select-create</code>, dont <code>detail.value</code> et
+        {' '}<code>detail.label</code> sont l'option. C'est à la page de la garder.
+      </p>
+
+      <p class="flag">
+        <strong>La zone « choisis » du bas est dessinée avec des lignes à case</strong>
+        {' '}(<code>forms/Multi Select Menu Item</code>), même pour un choix unique, où rien ne se
+        coche. Le code l'écrit en bouton avec une croix : la ligne dit ce qu'un clic fait — retirer le
+        choix. Si le dessin doit rester, la ligne épinglée d'un choix unique n'a pas de case à montrer.
       </p>
 
       <p class="flag">
@@ -776,7 +819,7 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
       <p class="section-note">
         <strong>La coche n'est pas dessinée en CSS.</strong> C'est l'icône <code>check</code> du
         registre, posée par-dessus la case et rendue insensible au clic — exactement comme
-        {' '}<code>Select</code> pose son chevron sur le <code>&lt;select&gt;</code>. Le dessin du
+        {' '}<code>Select</code> pose son chevron sur sa boîte. Le dessin du
         système sert donc à deux endroits au lieu d'être refait ici.
       </p>
 

@@ -60,6 +60,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Select | `340:933` | le libellé est en casse `LOWER` ; le code ne touche pas à la casse | /formulaire → Select field — plusieurs choix | ouvert |
 | Checkbox | `340:842` | les variantes cochées Hover, Focused et Disabled dessinent une coche coupée | /formulaire → Select field — plusieurs choix | ouvert |
 | Chip · Chip Remove | `351:273` · `586:4921` | l'anneau de focus d'un chip retenu a la couleur de son fond, sans l'écart `button/focus-offset` du code : il ne se voit pas | /formulaire → Select field — plusieurs choix | ouvert |
+| Select | `778:4266` | la zone « choisis » du bas est dessinée avec des lignes à case (`forms/Multi Select Menu Item`), même pour un choix unique ; le code l'écrit en bouton avec une croix, qui retire le choix | /formulaire → Select field — plusieurs choix | ouvert |
 | Dropdown Menu | `340:973` | rembourrage 6 et écart 2 liés à aucune variable, rayon `lg` quand sa voisine multiple prend `md` | — | ouvert |
 | Select · Text field | `340:933` · `23:29` | boîte de 44 et rembourrage vertical de 12 ne se recoupent pas : 12 + 16,8 + 12 = 40,8. Le code laisse la hauteur centrer le texte, comme Button ; les nœuds portent encore les 12 liés | /formulaire → Select | ouvert |
 | ~~Text field~~ | `23:29` | ~~rembourrage de 6 / 14, que rien ne lie : 14 n'existe que comme rayon, 6 n'existe pas~~ | /formulaire → Text field | *réglé — 31/08, nœud redessiné à 12 / 16 sur ses six variantes, lié aux deux `button/padding-*/sm` — aucune variable créée* |
