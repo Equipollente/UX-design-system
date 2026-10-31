@@ -67,7 +67,7 @@ const selectProps = [
   ['countOneLabel', 'string', '{n} sélectionné', 'multiple — ce que dit la boîte pour un seul choix. {n} vaut le nombre.'],
   ['countLabel', 'string', '{n} sélectionnés', 'multiple — ce que dit la boîte pour plusieurs choix.'],
   ['maxLabel', 'string', 'Maximum atteint : {n} sur {max}', 'multiple — le message de limite.'],
-  ['removeLabel', 'string', 'Retirer', 'Le verbe d’une pastille ou d’une ligne épinglée, lu avant son mot : « Retirer France ».'],
+  ['removeLabel', 'string', 'Retirer', 'Le verbe d’une pastille, lu avant son mot : « Retirer France ».'],
   ['createLabel', 'string', 'Créer une option', 'La ligne de création au repos.'],
   ['createQueryLabel', 'string', 'Créer « {q} »', 'La ligne de création quand un texte est tapé dans la recherche. {q} vaut ce texte.'],
   ['createPlaceholder', 'string', 'Nom de l’option', 'L’invite du champ où l’on tape le nom de l’option créée.'],
@@ -620,8 +620,9 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <strong>Trois compléments, chacun à sa place dans la liste.</strong>
         {' '}<code>searchable</code> pose la recherche <strong>en haut</strong>.
         {' '}<code>showSelected</code> épingle <strong>en bas</strong> ce qui est choisi, sous un trait :
-        une ligne épinglée est un bouton, la cliquer retire le choix, et la zone n'existe que s'il y a
-        un choix. <code>creatable</code> pose <strong>en bas</strong> la ligne « Créer une option » :
+        une ligne épinglée est une case cochée, dessinée comme celle d'une option — même pour un choix
+        unique, c'est le dessin du nœud. La décocher retire le choix, et la zone n'existe que s'il y
+        a un choix. <code>creatable</code> pose <strong>en bas</strong> la ligne « Créer une option » :
         elle devient un champ où l'on tape le nom et, validé par Entrée ou le plus, l'option entre dans
         la liste, choisie. Avec la recherche et un texte tapé, elle dit « Créer « ce texte » » et crée
         aussitôt ; elle disparaît si l'option existe déjà.
@@ -629,13 +630,6 @@ const destinations = ['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon
         <strong>Le champ n'enregistre pas ce qu'il crée</strong> : il l'annonce à la page par
         l'événement <code>select-create</code>, dont <code>detail.value</code> et
         {' '}<code>detail.label</code> sont l'option. C'est à la page de la garder.
-      </p>
-
-      <p class="flag">
-        <strong>La zone « choisis » du bas est dessinée avec des lignes à case</strong>
-        {' '}(<code>forms/Multi Select Menu Item</code>), même pour un choix unique, où rien ne se
-        coche. Le code l'écrit en bouton avec une croix : la ligne dit ce qu'un clic fait — retirer le
-        choix. Si le dessin doit rester, la ligne épinglée d'un choix unique n'a pas de case à montrer.
       </p>
 
       <p class="flag">
