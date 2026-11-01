@@ -233,7 +233,7 @@
   --color-action-destructive-bg-hover:    var(--ramp-red-600);
   --color-action-destructive-bg-pressed:  var(--ramp-red-700);
   --color-action-ghost-bg-hover:          var(--ramp-neutral-100);
-  --color-action-toggle-bg-off:           var(--ramp-neutral-300);
+  --color-action-toggle-bg-off:           var(--ramp-neutral-600);
 
   --color-category-clay-bg:               var(--ramp-clay-100);
   --color-category-clay-border:           var(--ramp-clay-300);

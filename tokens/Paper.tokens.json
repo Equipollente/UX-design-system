@@ -3242,14 +3242,14 @@
           "$value": {
             "colorSpace": "srgb",
             "components": [
-              0.8941176533699036,
-              0.8823529481887817,
-              0.9098039269447327
+              0.4156862795352936,
+              0.40392157435417175,
+              0.4274509847164154
             ],
             "alpha": 1,
-            "hex": "#E4E1E8"
+            "hex": "#6A676D"
           },
-          "$description": "Piste d’un interrupteur éteint. 1,29:1 sur le sol : sous le 3:1 des éléments d’interface, écart noté.",
+          "$description": "Piste d’un interrupteur éteint. 5,56:1 sur le sol : passe le 3:1 des éléments d’interface (WCAG 1.4.11). Le pouce blanc s’y détache à 5,56:1.",
           "$extensions": {
             "com.figma.variableId": "VariableID:845:17032",
             "com.figma.scopes": [
@@ -3260,8 +3260,8 @@
               "WEB": "var(--color-action-toggle-bg-off)"
             },
             "com.figma.aliasData": {
-              "targetVariableId": "VariableID:fd8c3c59fcd5edd0ccf2c1f1a251aef140ef0445/-1:-1",
-              "targetVariableName": "ramp/neutral/300",
+              "targetVariableId": "VariableID:5b0bd90dcc1caf8c58afa7e94d6846bebd4ff45a/-1:-1",
+              "targetVariableName": "ramp/neutral/600",
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
