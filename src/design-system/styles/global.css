@@ -219,7 +219,7 @@ fieldset:disabled .field-box {
 }
 
 ::selection {
-  background: var(--color-accent-100);
+  background: var(--color-bg-selection);
   color: var(--color-text-default);
 }
 
