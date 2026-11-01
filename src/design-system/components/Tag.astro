@@ -84,7 +84,7 @@ const classes = ['tag', `tag-${variant}`, className].filter(Boolean).join(' ');
 
        Sur une variante remplie, --tag-color ne fait rien : il n'y reprendrait
        que l'encre, donc déferait la paire 100/800 et son contraste. */
-    outline: 1px solid var(--tag-color, var(--color-accent-500));
+    outline: 1px solid var(--tag-color, var(--color-border-accent));
     outline-offset: -1px;
     color: var(--tag-color, var(--color-text-accent));
   }
