@@ -138,13 +138,13 @@ const classes = ['checkbox', disabled && 'checkbox-disabled', className]
 
   /* — checked — Le trait suit le fond : la case cochée est d'un seul tenant. */
   .checkbox-input:checked {
-    background: var(--checkbox-accent, var(--color-accent-500));
-    border-color: var(--checkbox-accent, var(--color-accent-500));
+    background: var(--checkbox-accent, var(--color-action-primary-bg));
+    border-color: var(--checkbox-accent, var(--color-action-primary-bg));
   }
 
   .checkbox:not(.checkbox-disabled):hover .checkbox-input:checked {
-    background: var(--checkbox-accent-hover, var(--color-accent-600));
-    border-color: var(--checkbox-accent-hover, var(--color-accent-600));
+    background: var(--checkbox-accent-hover, var(--color-action-primary-bg-hover));
+    border-color: var(--checkbox-accent-hover, var(--color-action-primary-bg-hover));
   }
 
   /* La coche est posée sur la case, à sa taille, et ne prend pas le clic : il
