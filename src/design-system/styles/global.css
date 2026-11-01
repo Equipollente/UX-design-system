@@ -213,7 +213,7 @@ select:disabled,
 textarea:disabled,
 fieldset:disabled .field-box {
   border-color: var(--color-border-default);
-  color: var(--color-neutral-400);
+  color: var(--color-text-disabled);
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
