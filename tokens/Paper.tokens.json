@@ -415,6 +415,64 @@
             "targetVariableSetName": "Primitives"
           }
         }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.24705882370471954,
+            0.16862745583057404,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#3F2BFF"
+        },
+        "$description": "Liseré d’accent : le contour d’un tag.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:845:17030",
+          "com.figma.scopes": [
+            "STROKE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-border-accent)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:fcde7e46747b93f02baa58e7e414b546904e3f57/-1:-1",
+            "targetVariableName": "ramp/accent/500",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6627451181411743,
+            0.6470588445663452,
+            0.6901960968971252
+          ],
+          "alpha": 1,
+          "hex": "#A9A5B0"
+        },
+        "$description": "Bordure d’un champ survolé. Décorative : 2,41:1 sur le sol.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:845:17031",
+          "com.figma.scopes": [
+            "STROKE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-border-hover)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:57cae227cd49c4b65891951996024d31a9d03cf2/-1:-1",
+            "targetVariableName": "ramp/neutral/500",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
       }
     },
     "feedback": {
@@ -1966,6 +2024,35 @@
             "targetVariableSetName": "Primitives"
           }
         }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.29019609093666077,
+            0.27843138575553894,
+            0.3137255012989044
+          ],
+          "alpha": 1,
+          "hex": "#4A4750"
+        },
+        "$description": "Texte courant dense : le corps d’un dialogue. 9,10:1 sur le sol. Entre text/default et text/muted.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:845:17029",
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-text-secondary)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:1c0a90fd6cb091e3a67b3311f9772b1f86bd9137/-1:-1",
+            "targetVariableName": "ramp/neutral/700",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
       }
     },
     "clay": {
@@ -3148,6 +3235,38 @@
             }
           }
         }
+      },
+      "toggle": {
+        "bg-off": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8941176533699036,
+              0.8823529481887817,
+              0.9098039269447327
+            ],
+            "alpha": 1,
+            "hex": "#E4E1E8"
+          },
+          "$description": "Piste d’un interrupteur éteint. 1,29:1 sur le sol : sous le 3:1 des éléments d’interface, écart noté.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:845:17032",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-toggle-bg-off)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:fd8c3c59fcd5edd0ccf2c1f1a251aef140ef0445/-1:-1",
+              "targetVariableName": "ramp/neutral/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
       }
     },
     "category": {
@@ -3778,6 +3897,68 @@
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
+          }
+        }
+      }
+    },
+    "progress": {
+      "track": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7882353067398071,
+            0.772549033164978,
+            0.8156862854957581
+          ],
+          "alpha": 1,
+          "hex": "#C9C5D0"
+        },
+        "$description": "Piste d’une barre de progression.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:845:17033",
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-progress-track)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e99f1d681eac9359e48c04680ed6b588e8e9f4d6/-1:-1",
+            "targetVariableName": "ramp/neutral/400",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "fill": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5490196347236633,
+            0.4901960790157318,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#8C7DFF"
+        },
+        "$description": "Remplissage d’une barre de progression.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:845:17034",
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-progress-fill)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:85936f045f415fd6eee77734422ef9ac827f0119/-1:-1",
+            "targetVariableName": "ramp/accent/300",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "Primitives"
           }
         }
       }
