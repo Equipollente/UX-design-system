@@ -1017,7 +1017,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   .select-list :global(.checkbox:not(.checkbox-disabled):hover),
   .select-list :global(.checkbox:has(input:focus-visible)) {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
   }
 
   /* Une option cochée se lit aussi par son mot, pas seulement par sa case
@@ -1066,12 +1066,12 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   /* — hover — */
   .select-row:not(:has(input:disabled)):hover {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
   }
 
   /* — focused — Le fond du survol et l'anneau du système. */
   .select-row:has(input:focus-visible) {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
     outline: var(--border-width-focus) solid var(--color-border-focus);
     outline-offset: calc(-1 * var(--border-width-focus));
   }
@@ -1090,7 +1090,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   .select-row:has(input:checked):not(:has(input:disabled)):hover,
   .select-row:has(input:checked):has(input:focus-visible) {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
     color: var(--color-text-default);
   }
 
@@ -1152,11 +1152,11 @@ const classes = ['select', className].filter(Boolean).join(' ');
   }
 
   .select-create-open:hover {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
   }
 
   .select-create-open:focus-visible {
-    background: var(--color-neutral-100);
+    background: var(--color-action-ghost-bg-hover);
     outline: var(--border-width-focus) solid var(--color-border-focus);
     outline-offset: calc(-1 * var(--border-width-focus));
   }
