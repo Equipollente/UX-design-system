@@ -127,14 +127,14 @@ const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolea
      soit d'un seul tenant. */
   .radio-input:checked {
     background: var(--color-text-on-accent);
-    border-color: var(--radio-accent, var(--color-accent-500));
-    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent, var(--color-accent-500));
+    border-color: var(--radio-accent, var(--color-action-primary-bg));
+    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent, var(--color-action-primary-bg));
   }
 
   .radio:not(.radio-disabled):hover .radio-input:checked {
     background: var(--color-text-on-accent);
-    border-color: var(--radio-accent-hover, var(--color-accent-600));
-    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent-hover, var(--color-accent-600));
+    border-color: var(--radio-accent-hover, var(--color-action-primary-bg-hover));
+    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent-hover, var(--color-action-primary-bg-hover));
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
