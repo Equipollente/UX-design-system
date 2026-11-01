@@ -345,12 +345,40 @@ rien ne charge par défaut : un projet qui garde la palette d'origine ne paie pa
 Les paliers suivent ton échelle, du plus clair au plus foncé : 50 à 950, la teinte `main` du DSFR
 toujours en 500 ; `grey` a ses 14 pas, les couleurs fonctionnelles reprennent `feedback`. Le nom DSFR
 d'origine reste dans la description de chaque variable. Le `error` du DSFR n'est **pas** renommé
-`danger` : `color.feedback.danger.600` existe déjà, et les deux fichiers auraient défini la même
+`danger` : `color.feedback.danger.*` existe déjà (bg, border, text, solid), et les deux fichiers auraient défini la même
 variable, le DSFR écrasant le rouge d'erreur en silence. `build-tokens.mjs` refuse désormais un nom
 déjà pris.
 
-**Pas encore fait** : les composants lisent `accent`, `neutral` et `highlight`. Pour qu'une palette
-les remplace, ces rôles doivent pointer vers une famille — et `bg-default`, `bg-surface`,
-`bg-section` sont des hex écrits en dur, qu'il faudra d'abord lier.
+**Reste à faire** : les composants lisent désormais des rôles (`color.action.*`, `color.text.*`…), et ces
+rôles pointent vers `ramp.*` (voir ci-dessous) ; `bg-default`, `bg-surface` et `bg-section` sont liés. Pour qu'une
+palette en remplace une, il reste à repointer les rôles vers la famille choisie.
 
 `← ` [LINKS.md](../LINKS.md)
+
+---
+
+## Les composants lisent des rôles, jamais une rampe ; les rampes sont à part
+
+Les couleurs sont sur deux étages. `Primitives` (collection Figma, un seul mode, exportée dans
+`tokens/Primitives.tokens.json`) porte les rampes brutes — `ramp.neutral.100`, `ramp.accent.500`,
+`ramp.red.800`… — et n'est appliquée par personne. `Design tokens` porte les rôles (`bg`, `text`,
+`border`, `action`, `feedback`, `category`, `progress`), tous des alias vers une primitive. Un composant ne
+lit qu'un rôle : la valeur d'un survol ou d'un état se décide dans Figma, une fois, et non en choisissant
+un cran de rampe dans le composant.
+
+Les anciens noms — `color.neutral|accent|highlight|clay|teal|sun|rose.*`, `color.feedback.danger.500|600|700`
+et `color.feedback.success` — sont **retirés** : 67 tokens, 335 → 268. C'est un changement cassant pour un
+site qui lisait `--color-accent-500` ; d'où la version `0.2.0` (en `0.x`, le cassant monte le deuxième
+chiffre). La correspondance est mécanique : `--color-accent-500` devient `--ramp-accent-500`, ou mieux le
+rôle qui dit l'usage (`--color-action-primary-bg`).
+
+Le retrait s'est fait dans cet ordre, qui est le seul sûr : plus aucune lecture dans le code ; dans Figma,
+chaque liaison vers un ancien nom déplacée vers la primitive de même valeur (environ 2 400, composants
+principaux d'abord, puis surcharges d'instances) ; contrôle qu'il n'en restait aucune ; seulement alors
+suppression des variables. Résultat : 0 valeur résolue qui change, 67 tokens en moins, rien d'autre.
+
+**Reste à faire, côté dessin** : beaucoup de nœuds Figma lisent maintenant `ramp/*` directement. C'est un
+état de transition, pas la règle — chacun doit être repointé vers le rôle qui dit son usage, ce qui
+demande un jugement nœud par nœud.
+
+`←` [atelier/architecture-couleurs.md](architecture-couleurs.md), [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md)

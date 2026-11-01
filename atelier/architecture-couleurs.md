@@ -184,6 +184,10 @@ besoin lu dans le code. À ajouter le jour où un composant les demande.
    section, 8,11 sur surface), soit on reste à « grand texte seulement » sur section.
 4. **Numérotation** de `accent/25` et `accent/50`.
 
+> **Fait (01/11).** Les cinq étapes ci-dessous sont terminées : `Primitives` existe, les rôles pointent vers elle,
+> les composants lisent des rôles, et les anciens noms sont retirés (version `0.2.0`). Reste côté dessin : repointer
+> vers les rôles les nœuds Figma qui lisent encore `ramp/*` directement.
+
 ## Migration — sans rien casser
 
 Les noms de variables CSS sont une API publique (le portfolio les consomme) : tout retrait est un

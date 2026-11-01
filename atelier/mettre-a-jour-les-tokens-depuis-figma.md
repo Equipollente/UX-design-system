@@ -58,8 +58,8 @@ C'est tout. Le script écrit `styles/tokens.css` et `data/tokens.json`, que tous
 **Le compte, qu'il affiche à la fin.** C'est le contrôle le plus simple, et il suffit :
 
 ```
-146 tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json
-  color 45, space 10, radius 4, control 3, border 2, opacity 1, shadow 16, font 27, ...
+268 tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json
+  ramp 84, color 78, space 10, radius 4, control 4, border 2, opacity 1, shadow 16, font 27, ...
 ```
 
 | Ce que tu lis | Ce que ça veut dire |

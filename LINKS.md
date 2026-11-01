@@ -172,7 +172,7 @@ groupe `nav`, et le premier qui varie par mode en dehors de `layout`. Il double 
 aussi dans le padding de `.nav-bar` — changer l'un demande de reprendre l'autre, et les deux
 fichiers se renvoient l'un à l'autre en commentaire.
 
-Les 146 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
+Les 184 tokens vivent dans la collection **Design tokens** du même fichier, en 4 modes (Desktop,
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 
