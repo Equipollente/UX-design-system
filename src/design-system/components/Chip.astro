@@ -135,12 +135,12 @@ const classes = ['chip', className].filter(Boolean).join(' ');
      gris (WCAG 1.4.1 — la couleur n'est pas le seul indice). */
   .chip:has(.chip-input:checked) {
     color: var(--color-text-on-accent);
-    background: var(--chip-bg-selected, var(--color-accent-500));
+    background: var(--chip-bg-selected, var(--color-action-primary-bg));
     font-weight: var(--font-weight-medium); /* 500 */
   }
 
   .chip:has(.chip-input:checked):hover {
-    background: var(--chip-bg-selected-hover, var(--color-accent-600));
+    background: var(--chip-bg-selected-hover, var(--color-action-primary-bg-hover));
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
@@ -157,6 +157,6 @@ const classes = ['chip', className].filter(Boolean).join(' ');
 
   .chip:has(.chip-input:checked:disabled),
   .chip:has(.chip-input:checked:disabled):hover {
-    background: var(--chip-bg-selected, var(--color-accent-500));
+    background: var(--chip-bg-selected, var(--color-action-primary-bg));
   }
 </style>
