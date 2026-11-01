@@ -377,8 +377,12 @@ chaque liaison vers un ancien nom déplacée vers la primitive de même valeur (
 principaux d'abord, puis surcharges d'instances) ; contrôle qu'il n'en restait aucune ; seulement alors
 suppression des variables. Résultat : 0 valeur résolue qui change, 67 tokens en moins, rien d'autre.
 
-**Reste à faire, côté dessin** : beaucoup de nœuds Figma lisent maintenant `ramp/*` directement. C'est un
-état de transition, pas la règle — chacun doit être repointé vers le rôle qui dit son usage, ce qui
-demande un jugement nœud par nœud.
+**Côté dessin, fait le 01/11** : sur 2 400 liaisons vers `ramp/*`, 2 300 ont été repointées vers le rôle qui
+dit leur usage (texte, traits d'icône, fonds de survol, tags, boutons, retours d'état…). Chaque rôle choisi a la
+même valeur que la primitive qu'il remplace, sauf une exception voulue : l'icône d'un bouton primaire lisait
+`neutral/100` et lit `text/on-accent` (blanc), comme le code. **Restent 100 liaisons** sans rôle équivalent : des gris
+décoratifs de la page Fondations et des nœuds de maquette (`neutral/400`, `neutral/200`, `neutral/800`,
+`highlight/*`, quelques `accent/200`) — soit un rôle à créer, soit à laisser en `ramp/*` s'il s'agit de
+maquette plutôt que de système.
 
 `←` [atelier/architecture-couleurs.md](architecture-couleurs.md), [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md)

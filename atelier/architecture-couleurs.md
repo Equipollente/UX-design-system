@@ -185,8 +185,8 @@ besoin lu dans le code. À ajouter le jour où un composant les demande.
 4. **Numérotation** de `accent/25` et `accent/50`.
 
 > **Fait (01/11).** Les cinq étapes ci-dessous sont terminées : `Primitives` existe, les rôles pointent vers elle,
-> les composants lisent des rôles, et les anciens noms sont retirés (version `0.2.0`). Reste côté dessin : repointer
-> vers les rôles les nœuds Figma qui lisent encore `ramp/*` directement.
+> les composants lisent des rôles, et les anciens noms sont retirés (version `0.2.0`). Les nœuds Figma ont été repointés
+> vers les rôles (2 300 liaisons sur 2 400) ; il en reste une centaine en `ramp/*`, faute de rôle équivalent.
 
 ## Migration — sans rien casser
 
