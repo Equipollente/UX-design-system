@@ -58,18 +58,18 @@ const classes = ['tag', `tag-${variant}`, className].filter(Boolean).join(' ');
   /* — les trois remplies : fond au cran 100, encre au cran 800 de la même rampe.
        La paire ne se dissocie pas : c'est elle qui porte le contraste. — */
   .tag-accent {
-    background: var(--color-accent-100);
-    color: var(--color-accent-800);
+    background: var(--color-category-accent-bg);
+    color: var(--color-category-accent-text);
   }
 
   .tag-lime {
-    background: var(--color-highlight-100);
-    color: var(--color-highlight-800);
+    background: var(--color-category-highlight-bg);
+    color: var(--color-category-highlight-text);
   }
 
   .tag-neutral {
-    background: var(--color-neutral-100);
-    color: var(--color-neutral-800);
+    background: var(--color-category-neutral-bg);
+    color: var(--color-category-neutral-text);
   }
 
   /* — l'outline : pas de fond, une seule couleur pour le liseré et l'encre — */
