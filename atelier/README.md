@@ -44,6 +44,7 @@ que de le recopier.
 | Fichier | Quand l'ouvrir |
 |---|---|
 | [brief.md](brief.md) | **le point de départ** : les quatre lignes d'un ordre de travail |
+| [workflow-designer-dev.md](workflow-designer-dev.md) | **le fil entier** : qui fait quoi, du besoin au retour dans Figma, et où se passent les relais |
 | [conventions.md](conventions.md) | avant d'écrire une ligne de composant |
 | [coder-un-composant.md](coder-un-composant.md) | le workflow Astro pour coder un composant réutilisable |
 | [workflow-agent-composant-astro.md](workflow-agent-composant-astro.md) | les consignes d'exécution pour l'agent IA |
