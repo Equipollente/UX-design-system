@@ -1,0 +1,1826 @@
+[
+  {
+    "name": "--color-blue-cumulus-50",
+    "path": "color.blue-cumulus.50",
+    "group": "color",
+    "type": "color",
+    "css": "#F3F6FE",
+    "description": "DSFR $blue-cumulus-975"
+  },
+  {
+    "name": "--color-blue-cumulus-100",
+    "path": "color.blue-cumulus.100",
+    "group": "color",
+    "type": "color",
+    "css": "#E6EEFE",
+    "description": "DSFR $blue-cumulus-950"
+  },
+  {
+    "name": "--color-blue-cumulus-200",
+    "path": "color.blue-cumulus.200",
+    "group": "color",
+    "type": "color",
+    "css": "#DAE6FD",
+    "description": "DSFR $blue-cumulus-925"
+  },
+  {
+    "name": "--color-blue-cumulus-300",
+    "path": "color.blue-cumulus.300",
+    "group": "color",
+    "type": "color",
+    "css": "#B6CFFB",
+    "description": "DSFR $blue-cumulus-850"
+  },
+  {
+    "name": "--color-blue-cumulus-400",
+    "path": "color.blue-cumulus.400",
+    "group": "color",
+    "type": "color",
+    "css": "#7AB1E8",
+    "description": "DSFR $blue-cumulus-moon-732"
+  },
+  {
+    "name": "--color-blue-cumulus-500",
+    "path": "color.blue-cumulus.500",
+    "group": "color",
+    "type": "color",
+    "css": "#417DC4",
+    "description": "DSFR $blue-cumulus-main-526"
+  },
+  {
+    "name": "--color-blue-cumulus-600",
+    "path": "color.blue-cumulus.600",
+    "group": "color",
+    "type": "color",
+    "css": "#3558A2",
+    "description": "DSFR $blue-cumulus-sun-368"
+  },
+  {
+    "name": "--color-blue-cumulus-700",
+    "path": "color.blue-cumulus.700",
+    "group": "color",
+    "type": "color",
+    "css": "#263B58",
+    "description": "DSFR $blue-cumulus-200"
+  },
+  {
+    "name": "--color-blue-cumulus-800",
+    "path": "color.blue-cumulus.800",
+    "group": "color",
+    "type": "color",
+    "css": "#212A3A",
+    "description": "DSFR $blue-cumulus-125"
+  },
+  {
+    "name": "--color-blue-cumulus-900",
+    "path": "color.blue-cumulus.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1C2433",
+    "description": "DSFR $blue-cumulus-100"
+  },
+  {
+    "name": "--color-blue-cumulus-950",
+    "path": "color.blue-cumulus.950",
+    "group": "color",
+    "type": "color",
+    "css": "#171E2B",
+    "description": "DSFR $blue-cumulus-75"
+  },
+  {
+    "name": "--color-blue-ecume-50",
+    "path": "color.blue-ecume.50",
+    "group": "color",
+    "type": "color",
+    "css": "#F4F6FE",
+    "description": "DSFR $blue-ecume-975"
+  },
+  {
+    "name": "--color-blue-ecume-100",
+    "path": "color.blue-ecume.100",
+    "group": "color",
+    "type": "color",
+    "css": "#E9EDFE",
+    "description": "DSFR $blue-ecume-950"
+  },
+  {
+    "name": "--color-blue-ecume-200",
+    "path": "color.blue-ecume.200",
+    "group": "color",
+    "type": "color",
+    "css": "#DEE5FD",
+    "description": "DSFR $blue-ecume-925"
+  },
+  {
+    "name": "--color-blue-ecume-300",
+    "path": "color.blue-ecume.300",
+    "group": "color",
+    "type": "color",
+    "css": "#BFCCFB",
+    "description": "DSFR $blue-ecume-850"
+  },
+  {
+    "name": "--color-blue-ecume-400",
+    "path": "color.blue-ecume.400",
+    "group": "color",
+    "type": "color",
+    "css": "#869ECE",
+    "description": "DSFR $blue-ecume-moon-675"
+  },
+  {
+    "name": "--color-blue-ecume-500",
+    "path": "color.blue-ecume.500",
+    "group": "color",
+    "type": "color",
+    "css": "#465F9D",
+    "description": "DSFR $blue-ecume-main-400"
+  },
+  {
+    "name": "--color-blue-ecume-600",
+    "path": "color.blue-ecume.600",
+    "group": "color",
+    "type": "color",
+    "css": "#2F4077",
+    "description": "DSFR $blue-ecume-sun-247"
+  },
+  {
+    "name": "--color-blue-ecume-700",
+    "path": "color.blue-ecume.700",
+    "group": "color",
+    "type": "color",
+    "css": "#273962",
+    "description": "DSFR $blue-ecume-200"
+  },
+  {
+    "name": "--color-blue-ecume-800",
+    "path": "color.blue-ecume.800",
+    "group": "color",
+    "type": "color",
+    "css": "#222940",
+    "description": "DSFR $blue-ecume-125"
+  },
+  {
+    "name": "--color-blue-ecume-900",
+    "path": "color.blue-ecume.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1D2437",
+    "description": "DSFR $blue-ecume-100"
+  },
+  {
+    "name": "--color-blue-ecume-950",
+    "path": "color.blue-ecume.950",
+    "group": "color",
+    "type": "color",
+    "css": "#171D2F",
+    "description": "DSFR $blue-ecume-75"
+  },
+  {
+    "name": "--color-blue-france-50",
+    "path": "color.blue-france.50",
+    "group": "color",
+    "type": "color",
+    "css": "#F5F5FE",
+    "description": "DSFR $blue-france-975"
+  },
+  {
+    "name": "--color-blue-france-100",
+    "path": "color.blue-france.100",
+    "group": "color",
+    "type": "color",
+    "css": "#ECECFE",
+    "description": "DSFR $blue-france-950"
+  },
+  {
+    "name": "--color-blue-france-200",
+    "path": "color.blue-france.200",
+    "group": "color",
+    "type": "color",
+    "css": "#E3E3FD",
+    "description": "DSFR $blue-france-925"
+  },
+  {
+    "name": "--color-blue-france-300",
+    "path": "color.blue-france.300",
+    "group": "color",
+    "type": "color",
+    "css": "#CACAFB",
+    "description": "DSFR $blue-france-850"
+  },
+  {
+    "name": "--color-blue-france-400",
+    "path": "color.blue-france.400",
+    "group": "color",
+    "type": "color",
+    "css": "#8585F6",
+    "description": "DSFR $blue-france-moon-625"
+  },
+  {
+    "name": "--color-blue-france-500",
+    "path": "color.blue-france.500",
+    "group": "color",
+    "type": "color",
+    "css": "#6A6AF4",
+    "description": "DSFR $blue-france-main-525"
+  },
+  {
+    "name": "--color-blue-france-600",
+    "path": "color.blue-france.600",
+    "group": "color",
+    "type": "color",
+    "css": "#313178",
+    "description": "DSFR $blue-france-200"
+  },
+  {
+    "name": "--color-blue-france-700",
+    "path": "color.blue-france.700",
+    "group": "color",
+    "type": "color",
+    "css": "#272747",
+    "description": "DSFR $blue-france-125"
+  },
+  {
+    "name": "--color-blue-france-800",
+    "path": "color.blue-france.800",
+    "group": "color",
+    "type": "color",
+    "css": "#000091",
+    "description": "DSFR $blue-france-sun-113"
+  },
+  {
+    "name": "--color-blue-france-900",
+    "path": "color.blue-france.900",
+    "group": "color",
+    "type": "color",
+    "css": "#21213F",
+    "description": "DSFR $blue-france-100"
+  },
+  {
+    "name": "--color-blue-france-950",
+    "path": "color.blue-france.950",
+    "group": "color",
+    "type": "color",
+    "css": "#1B1B35",
+    "description": "DSFR $blue-france-75"
+  },
+  {
+    "name": "--color-brown-cafe-creme-50",
+    "path": "color.brown-cafe-creme.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FBF6ED",
+    "description": "DSFR $brown-cafe-creme-975"
+  },
+  {
+    "name": "--color-brown-cafe-creme-100",
+    "path": "color.brown-cafe-creme.100",
+    "group": "color",
+    "type": "color",
+    "css": "#F7ECDB",
+    "description": "DSFR $brown-cafe-creme-950"
+  },
+  {
+    "name": "--color-brown-cafe-creme-200",
+    "path": "color.brown-cafe-creme.200",
+    "group": "color",
+    "type": "color",
+    "css": "#F4E3C7",
+    "description": "DSFR $brown-cafe-creme-925"
+  },
+  {
+    "name": "--color-brown-cafe-creme-300",
+    "path": "color.brown-cafe-creme.300",
+    "group": "color",
+    "type": "color",
+    "css": "#ECD7A2",
+    "description": "DSFR $brown-cafe-creme-moon-885"
+  },
+  {
+    "name": "--color-brown-cafe-creme-400",
+    "path": "color.brown-cafe-creme.400",
+    "group": "color",
+    "type": "color",
+    "css": "#E7CA8E",
+    "description": "DSFR $brown-cafe-creme-850"
+  },
+  {
+    "name": "--color-brown-cafe-creme-500",
+    "path": "color.brown-cafe-creme.500",
+    "group": "color",
+    "type": "color",
+    "css": "#D1B781",
+    "description": "DSFR $brown-cafe-creme-main-782"
+  },
+  {
+    "name": "--color-brown-cafe-creme-600",
+    "path": "color.brown-cafe-creme.600",
+    "group": "color",
+    "type": "color",
+    "css": "#685C48",
+    "description": "DSFR $brown-cafe-creme-sun-383"
+  },
+  {
+    "name": "--color-brown-cafe-creme-700",
+    "path": "color.brown-cafe-creme.700",
+    "group": "color",
+    "type": "color",
+    "css": "#423925",
+    "description": "DSFR $brown-cafe-creme-200"
+  },
+  {
+    "name": "--color-brown-cafe-creme-800",
+    "path": "color.brown-cafe-creme.800",
+    "group": "color",
+    "type": "color",
+    "css": "#2E2A21",
+    "description": "DSFR $brown-cafe-creme-125"
+  },
+  {
+    "name": "--color-brown-cafe-creme-900",
+    "path": "color.brown-cafe-creme.900",
+    "group": "color",
+    "type": "color",
+    "css": "#28241C",
+    "description": "DSFR $brown-cafe-creme-100"
+  },
+  {
+    "name": "--color-brown-cafe-creme-950",
+    "path": "color.brown-cafe-creme.950",
+    "group": "color",
+    "type": "color",
+    "css": "#211D16",
+    "description": "DSFR $brown-cafe-creme-75"
+  },
+  {
+    "name": "--color-brown-caramel-50",
+    "path": "color.brown-caramel.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FBF5F2",
+    "description": "DSFR $brown-caramel-975"
+  },
+  {
+    "name": "--color-brown-caramel-100",
+    "path": "color.brown-caramel.100",
+    "group": "color",
+    "type": "color",
+    "css": "#F7EBE5",
+    "description": "DSFR $brown-caramel-950"
+  },
+  {
+    "name": "--color-brown-caramel-200",
+    "path": "color.brown-caramel.200",
+    "group": "color",
+    "type": "color",
+    "css": "#F3E2D9",
+    "description": "DSFR $brown-caramel-925"
+  },
+  {
+    "name": "--color-brown-caramel-300",
+    "path": "color.brown-caramel.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FBD8AB",
+    "description": "DSFR $brown-caramel-moon-901"
+  },
+  {
+    "name": "--color-brown-caramel-400",
+    "path": "color.brown-caramel.400",
+    "group": "color",
+    "type": "color",
+    "css": "#EAC7B2",
+    "description": "DSFR $brown-caramel-850"
+  },
+  {
+    "name": "--color-brown-caramel-500",
+    "path": "color.brown-caramel.500",
+    "group": "color",
+    "type": "color",
+    "css": "#C08C65",
+    "description": "DSFR $brown-caramel-main-648"
+  },
+  {
+    "name": "--color-brown-caramel-600",
+    "path": "color.brown-caramel.600",
+    "group": "color",
+    "type": "color",
+    "css": "#845D48",
+    "description": "DSFR $brown-caramel-sun-425"
+  },
+  {
+    "name": "--color-brown-caramel-700",
+    "path": "color.brown-caramel.700",
+    "group": "color",
+    "type": "color",
+    "css": "#4B3525",
+    "description": "DSFR $brown-caramel-200"
+  },
+  {
+    "name": "--color-brown-caramel-800",
+    "path": "color.brown-caramel.800",
+    "group": "color",
+    "type": "color",
+    "css": "#332821",
+    "description": "DSFR $brown-caramel-125"
+  },
+  {
+    "name": "--color-brown-caramel-900",
+    "path": "color.brown-caramel.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2C221C",
+    "description": "DSFR $brown-caramel-100"
+  },
+  {
+    "name": "--color-brown-caramel-950",
+    "path": "color.brown-caramel.950",
+    "group": "color",
+    "type": "color",
+    "css": "#251C16",
+    "description": "DSFR $brown-caramel-75"
+  },
+  {
+    "name": "--color-brown-opera-50",
+    "path": "color.brown-opera.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FBF5F2",
+    "description": "DSFR $brown-opera-975"
+  },
+  {
+    "name": "--color-brown-opera-100",
+    "path": "color.brown-opera.100",
+    "group": "color",
+    "type": "color",
+    "css": "#F7ECE4",
+    "description": "DSFR $brown-opera-950"
+  },
+  {
+    "name": "--color-brown-opera-200",
+    "path": "color.brown-opera.200",
+    "group": "color",
+    "type": "color",
+    "css": "#F3E2D7",
+    "description": "DSFR $brown-opera-925"
+  },
+  {
+    "name": "--color-brown-opera-300",
+    "path": "color.brown-opera.300",
+    "group": "color",
+    "type": "color",
+    "css": "#EAC7AD",
+    "description": "DSFR $brown-opera-850"
+  },
+  {
+    "name": "--color-brown-opera-400",
+    "path": "color.brown-opera.400",
+    "group": "color",
+    "type": "color",
+    "css": "#E6BE92",
+    "description": "DSFR $brown-opera-moon-820"
+  },
+  {
+    "name": "--color-brown-opera-500",
+    "path": "color.brown-opera.500",
+    "group": "color",
+    "type": "color",
+    "css": "#BD987A",
+    "description": "DSFR $brown-opera-main-680"
+  },
+  {
+    "name": "--color-brown-opera-600",
+    "path": "color.brown-opera.600",
+    "group": "color",
+    "type": "color",
+    "css": "#745B47",
+    "description": "DSFR $brown-opera-sun-395"
+  },
+  {
+    "name": "--color-brown-opera-700",
+    "path": "color.brown-opera.700",
+    "group": "color",
+    "type": "color",
+    "css": "#493625",
+    "description": "DSFR $brown-opera-200"
+  },
+  {
+    "name": "--color-brown-opera-800",
+    "path": "color.brown-opera.800",
+    "group": "color",
+    "type": "color",
+    "css": "#322821",
+    "description": "DSFR $brown-opera-125"
+  },
+  {
+    "name": "--color-brown-opera-900",
+    "path": "color.brown-opera.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2B221C",
+    "description": "DSFR $brown-opera-100"
+  },
+  {
+    "name": "--color-brown-opera-950",
+    "path": "color.brown-opera.950",
+    "group": "color",
+    "type": "color",
+    "css": "#241C17",
+    "description": "DSFR $brown-opera-75"
+  },
+  {
+    "name": "--color-feedback-error-100",
+    "path": "color.feedback.error.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FFE9E9",
+    "description": "DSFR $error-950"
+  },
+  {
+    "name": "--color-feedback-error-400",
+    "path": "color.feedback.error.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FF5655",
+    "description": "DSFR $error-625"
+  },
+  {
+    "name": "--color-feedback-error-600",
+    "path": "color.feedback.error.600",
+    "group": "color",
+    "type": "color",
+    "css": "#CE0500",
+    "description": "DSFR $error-425"
+  },
+  {
+    "name": "--color-feedback-error-900",
+    "path": "color.feedback.error.900",
+    "group": "color",
+    "type": "color",
+    "css": "#391C1C",
+    "description": "DSFR $error-100"
+  },
+  {
+    "name": "--color-feedback-info-100",
+    "path": "color.feedback.info.100",
+    "group": "color",
+    "type": "color",
+    "css": "#E8EDFF",
+    "description": "DSFR $info-950"
+  },
+  {
+    "name": "--color-feedback-info-400",
+    "path": "color.feedback.info.400",
+    "group": "color",
+    "type": "color",
+    "css": "#518FFF",
+    "description": "DSFR $info-625"
+  },
+  {
+    "name": "--color-feedback-info-600",
+    "path": "color.feedback.info.600",
+    "group": "color",
+    "type": "color",
+    "css": "#0063CB",
+    "description": "DSFR $info-425"
+  },
+  {
+    "name": "--color-feedback-info-900",
+    "path": "color.feedback.info.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1D2437",
+    "description": "DSFR $info-100"
+  },
+  {
+    "name": "--color-feedback-success-100",
+    "path": "color.feedback.success.100",
+    "group": "color",
+    "type": "color",
+    "css": "#B8FEC9",
+    "description": "DSFR $success-950"
+  },
+  {
+    "name": "--color-feedback-success-400",
+    "path": "color.feedback.success.400",
+    "group": "color",
+    "type": "color",
+    "css": "#27A658",
+    "description": "DSFR $success-625"
+  },
+  {
+    "name": "--color-feedback-success-600",
+    "path": "color.feedback.success.600",
+    "group": "color",
+    "type": "color",
+    "css": "#18753C",
+    "description": "DSFR $success-425"
+  },
+  {
+    "name": "--color-feedback-success-900",
+    "path": "color.feedback.success.900",
+    "group": "color",
+    "type": "color",
+    "css": "#19271D",
+    "description": "DSFR $success-100"
+  },
+  {
+    "name": "--color-feedback-warning-400",
+    "path": "color.feedback.warning.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FC5D00",
+    "description": "DSFR $warning-625"
+  },
+  {
+    "name": "--color-feedback-warning-600",
+    "path": "color.feedback.warning.600",
+    "group": "color",
+    "type": "color",
+    "css": "#B34000",
+    "description": "DSFR $warning-425"
+  },
+  {
+    "name": "--color-feedback-warning-900",
+    "path": "color.feedback.warning.900",
+    "group": "color",
+    "type": "color",
+    "css": "#361E19",
+    "description": "DSFR $warning-100"
+  },
+  {
+    "name": "--color-focus-500",
+    "path": "color.focus.500",
+    "group": "color",
+    "type": "color",
+    "css": "#0A76F6",
+    "description": "DSFR $focus-525"
+  },
+  {
+    "name": "--color-green-archipel-50",
+    "path": "color.green-archipel.50",
+    "group": "color",
+    "type": "color",
+    "css": "#E5FBFD",
+    "description": "DSFR $green-archipel-975"
+  },
+  {
+    "name": "--color-green-archipel-100",
+    "path": "color.green-archipel.100",
+    "group": "color",
+    "type": "color",
+    "css": "#C7F6FC",
+    "description": "DSFR $green-archipel-950"
+  },
+  {
+    "name": "--color-green-archipel-200",
+    "path": "color.green-archipel.200",
+    "group": "color",
+    "type": "color",
+    "css": "#A6F2FA",
+    "description": "DSFR $green-archipel-925"
+  },
+  {
+    "name": "--color-green-archipel-300",
+    "path": "color.green-archipel.300",
+    "group": "color",
+    "type": "color",
+    "css": "#60E0EB",
+    "description": "DSFR $green-archipel-850"
+  },
+  {
+    "name": "--color-green-archipel-400",
+    "path": "color.green-archipel.400",
+    "group": "color",
+    "type": "color",
+    "css": "#34BAB5",
+    "description": "DSFR $green-archipel-moon-716"
+  },
+  {
+    "name": "--color-green-archipel-500",
+    "path": "color.green-archipel.500",
+    "group": "color",
+    "type": "color",
+    "css": "#009099",
+    "description": "DSFR $green-archipel-main-557"
+  },
+  {
+    "name": "--color-green-archipel-600",
+    "path": "color.green-archipel.600",
+    "group": "color",
+    "type": "color",
+    "css": "#006A6F",
+    "description": "DSFR $green-archipel-sun-391"
+  },
+  {
+    "name": "--color-green-archipel-700",
+    "path": "color.green-archipel.700",
+    "group": "color",
+    "type": "color",
+    "css": "#233E41",
+    "description": "DSFR $green-archipel-200"
+  },
+  {
+    "name": "--color-green-archipel-800",
+    "path": "color.green-archipel.800",
+    "group": "color",
+    "type": "color",
+    "css": "#1F2C2E",
+    "description": "DSFR $green-archipel-125"
+  },
+  {
+    "name": "--color-green-archipel-900",
+    "path": "color.green-archipel.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1A2628",
+    "description": "DSFR $green-archipel-100"
+  },
+  {
+    "name": "--color-green-archipel-950",
+    "path": "color.green-archipel.950",
+    "group": "color",
+    "type": "color",
+    "css": "#152021",
+    "description": "DSFR $green-archipel-75"
+  },
+  {
+    "name": "--color-green-bourgeon-50",
+    "path": "color.green-bourgeon.50",
+    "group": "color",
+    "type": "color",
+    "css": "#E6FEDA",
+    "description": "DSFR $green-bourgeon-975"
+  },
+  {
+    "name": "--color-green-bourgeon-100",
+    "path": "color.green-bourgeon.100",
+    "group": "color",
+    "type": "color",
+    "css": "#C9FCAC",
+    "description": "DSFR $green-bourgeon-950"
+  },
+  {
+    "name": "--color-green-bourgeon-200",
+    "path": "color.green-bourgeon.200",
+    "group": "color",
+    "type": "color",
+    "css": "#A9FB68",
+    "description": "DSFR $green-bourgeon-925"
+  },
+  {
+    "name": "--color-green-bourgeon-300",
+    "path": "color.green-bourgeon.300",
+    "group": "color",
+    "type": "color",
+    "css": "#95E257",
+    "description": "DSFR $green-bourgeon-850"
+  },
+  {
+    "name": "--color-green-bourgeon-400",
+    "path": "color.green-bourgeon.400",
+    "group": "color",
+    "type": "color",
+    "css": "#99C221",
+    "description": "DSFR $green-bourgeon-moon-759"
+  },
+  {
+    "name": "--color-green-bourgeon-500",
+    "path": "color.green-bourgeon.500",
+    "group": "color",
+    "type": "color",
+    "css": "#68A532",
+    "description": "DSFR $green-bourgeon-main-640"
+  },
+  {
+    "name": "--color-green-bourgeon-600",
+    "path": "color.green-bourgeon.600",
+    "group": "color",
+    "type": "color",
+    "css": "#447049",
+    "description": "DSFR $green-bourgeon-sun-425"
+  },
+  {
+    "name": "--color-green-bourgeon-700",
+    "path": "color.green-bourgeon.700",
+    "group": "color",
+    "type": "color",
+    "css": "#2A401A",
+    "description": "DSFR $green-bourgeon-200"
+  },
+  {
+    "name": "--color-green-bourgeon-800",
+    "path": "color.green-bourgeon.800",
+    "group": "color",
+    "type": "color",
+    "css": "#232D1D",
+    "description": "DSFR $green-bourgeon-125"
+  },
+  {
+    "name": "--color-green-bourgeon-900",
+    "path": "color.green-bourgeon.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1E2719",
+    "description": "DSFR $green-bourgeon-100"
+  },
+  {
+    "name": "--color-green-bourgeon-950",
+    "path": "color.green-bourgeon.950",
+    "group": "color",
+    "type": "color",
+    "css": "#182014",
+    "description": "DSFR $green-bourgeon-75"
+  },
+  {
+    "name": "--color-green-emeraude-50",
+    "path": "color.green-emeraude.50",
+    "group": "color",
+    "type": "color",
+    "css": "#E3FDEB",
+    "description": "DSFR $green-emeraude-975"
+  },
+  {
+    "name": "--color-green-emeraude-100",
+    "path": "color.green-emeraude.100",
+    "group": "color",
+    "type": "color",
+    "css": "#C3FAD5",
+    "description": "DSFR $green-emeraude-950"
+  },
+  {
+    "name": "--color-green-emeraude-200",
+    "path": "color.green-emeraude.200",
+    "group": "color",
+    "type": "color",
+    "css": "#9EF9BE",
+    "description": "DSFR $green-emeraude-925"
+  },
+  {
+    "name": "--color-green-emeraude-300",
+    "path": "color.green-emeraude.300",
+    "group": "color",
+    "type": "color",
+    "css": "#6FE49D",
+    "description": "DSFR $green-emeraude-850"
+  },
+  {
+    "name": "--color-green-emeraude-400",
+    "path": "color.green-emeraude.400",
+    "group": "color",
+    "type": "color",
+    "css": "#34CB6A",
+    "description": "DSFR $green-emeraude-moon-753"
+  },
+  {
+    "name": "--color-green-emeraude-500",
+    "path": "color.green-emeraude.500",
+    "group": "color",
+    "type": "color",
+    "css": "#00A95F",
+    "description": "DSFR $green-emeraude-main-632"
+  },
+  {
+    "name": "--color-green-emeraude-600",
+    "path": "color.green-emeraude.600",
+    "group": "color",
+    "type": "color",
+    "css": "#297254",
+    "description": "DSFR $green-emeraude-sun-425"
+  },
+  {
+    "name": "--color-green-emeraude-700",
+    "path": "color.green-emeraude.700",
+    "group": "color",
+    "type": "color",
+    "css": "#21402C",
+    "description": "DSFR $green-emeraude-200"
+  },
+  {
+    "name": "--color-green-emeraude-800",
+    "path": "color.green-emeraude.800",
+    "group": "color",
+    "type": "color",
+    "css": "#1E2E23",
+    "description": "DSFR $green-emeraude-125"
+  },
+  {
+    "name": "--color-green-emeraude-900",
+    "path": "color.green-emeraude.900",
+    "group": "color",
+    "type": "color",
+    "css": "#19271E",
+    "description": "DSFR $green-emeraude-100"
+  },
+  {
+    "name": "--color-green-emeraude-950",
+    "path": "color.green-emeraude.950",
+    "group": "color",
+    "type": "color",
+    "css": "#142018",
+    "description": "DSFR $green-emeraude-75"
+  },
+  {
+    "name": "--color-green-menthe-50",
+    "path": "color.green-menthe.50",
+    "group": "color",
+    "type": "color",
+    "css": "#DFFDF7",
+    "description": "DSFR $green-menthe-975"
+  },
+  {
+    "name": "--color-green-menthe-100",
+    "path": "color.green-menthe.100",
+    "group": "color",
+    "type": "color",
+    "css": "#BAFAEE",
+    "description": "DSFR $green-menthe-950"
+  },
+  {
+    "name": "--color-green-menthe-200",
+    "path": "color.green-menthe.200",
+    "group": "color",
+    "type": "color",
+    "css": "#8BF8E7",
+    "description": "DSFR $green-menthe-925"
+  },
+  {
+    "name": "--color-green-menthe-300",
+    "path": "color.green-menthe.300",
+    "group": "color",
+    "type": "color",
+    "css": "#73E0CF",
+    "description": "DSFR $green-menthe-850"
+  },
+  {
+    "name": "--color-green-menthe-400",
+    "path": "color.green-menthe.400",
+    "group": "color",
+    "type": "color",
+    "css": "#21AB8E",
+    "description": "DSFR $green-menthe-moon-652"
+  },
+  {
+    "name": "--color-green-menthe-500",
+    "path": "color.green-menthe.500",
+    "group": "color",
+    "type": "color",
+    "css": "#009081",
+    "description": "DSFR $green-menthe-main-548"
+  },
+  {
+    "name": "--color-green-menthe-600",
+    "path": "color.green-menthe.600",
+    "group": "color",
+    "type": "color",
+    "css": "#37635F",
+    "description": "DSFR $green-menthe-sun-373"
+  },
+  {
+    "name": "--color-green-menthe-700",
+    "path": "color.green-menthe.700",
+    "group": "color",
+    "type": "color",
+    "css": "#223F3A",
+    "description": "DSFR $green-menthe-200"
+  },
+  {
+    "name": "--color-green-menthe-800",
+    "path": "color.green-menthe.800",
+    "group": "color",
+    "type": "color",
+    "css": "#1F2D2A",
+    "description": "DSFR $green-menthe-125"
+  },
+  {
+    "name": "--color-green-menthe-900",
+    "path": "color.green-menthe.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1A2624",
+    "description": "DSFR $green-menthe-100"
+  },
+  {
+    "name": "--color-green-menthe-950",
+    "path": "color.green-menthe.950",
+    "group": "color",
+    "type": "color",
+    "css": "#15201E",
+    "description": "DSFR $green-menthe-75"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-50",
+    "path": "color.green-tilleul-verveine.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF7DA",
+    "description": "DSFR $green-tilleul-verveine-975"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-100",
+    "path": "color.green-tilleul-verveine.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FCEEAC",
+    "description": "DSFR $green-tilleul-verveine-950"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-200",
+    "path": "color.green-tilleul-verveine.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FBE769",
+    "description": "DSFR $green-tilleul-verveine-925"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-300",
+    "path": "color.green-tilleul-verveine.300",
+    "group": "color",
+    "type": "color",
+    "css": "#E2CF58",
+    "description": "DSFR $green-tilleul-verveine-850"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-400",
+    "path": "color.green-tilleul-verveine.400",
+    "group": "color",
+    "type": "color",
+    "css": "#D8C634",
+    "description": "DSFR $green-tilleul-verveine-moon-817"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-500",
+    "path": "color.green-tilleul-verveine.500",
+    "group": "color",
+    "type": "color",
+    "css": "#B7A73F",
+    "description": "DSFR $green-tilleul-verveine-main-707"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-600",
+    "path": "color.green-tilleul-verveine.600",
+    "group": "color",
+    "type": "color",
+    "css": "#66673D",
+    "description": "DSFR $green-tilleul-verveine-sun-418"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-700",
+    "path": "color.green-tilleul-verveine.700",
+    "group": "color",
+    "type": "color",
+    "css": "#3F3A20",
+    "description": "DSFR $green-tilleul-verveine-200"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-800",
+    "path": "color.green-tilleul-verveine.800",
+    "group": "color",
+    "type": "color",
+    "css": "#2D2A1D",
+    "description": "DSFR $green-tilleul-verveine-125"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-900",
+    "path": "color.green-tilleul-verveine.900",
+    "group": "color",
+    "type": "color",
+    "css": "#272419",
+    "description": "DSFR $green-tilleul-verveine-100"
+  },
+  {
+    "name": "--color-green-tilleul-verveine-950",
+    "path": "color.green-tilleul-verveine.950",
+    "group": "color",
+    "type": "color",
+    "css": "#201E14",
+    "description": "DSFR $green-tilleul-verveine-75"
+  },
+  {
+    "name": "--color-grey-0",
+    "path": "color.grey.0",
+    "group": "color",
+    "type": "color",
+    "css": "#FFFFFF",
+    "description": "DSFR $grey-1000"
+  },
+  {
+    "name": "--color-grey-50",
+    "path": "color.grey.50",
+    "group": "color",
+    "type": "color",
+    "css": "#F6F6F6",
+    "description": "DSFR $grey-975"
+  },
+  {
+    "name": "--color-grey-100",
+    "path": "color.grey.100",
+    "group": "color",
+    "type": "color",
+    "css": "#EEEEEE",
+    "description": "DSFR $grey-950"
+  },
+  {
+    "name": "--color-grey-150",
+    "path": "color.grey.150",
+    "group": "color",
+    "type": "color",
+    "css": "#E5E5E5",
+    "description": "DSFR $grey-925"
+  },
+  {
+    "name": "--color-grey-200",
+    "path": "color.grey.200",
+    "group": "color",
+    "type": "color",
+    "css": "#DDDDDD",
+    "description": "DSFR $grey-900"
+  },
+  {
+    "name": "--color-grey-300",
+    "path": "color.grey.300",
+    "group": "color",
+    "type": "color",
+    "css": "#CECECE",
+    "description": "DSFR $grey-850"
+  },
+  {
+    "name": "--color-grey-500",
+    "path": "color.grey.500",
+    "group": "color",
+    "type": "color",
+    "css": "#929292",
+    "description": "DSFR $grey-625"
+  },
+  {
+    "name": "--color-grey-600",
+    "path": "color.grey.600",
+    "group": "color",
+    "type": "color",
+    "css": "#666666",
+    "description": "DSFR $grey-425"
+  },
+  {
+    "name": "--color-grey-700",
+    "path": "color.grey.700",
+    "group": "color",
+    "type": "color",
+    "css": "#3A3A3A",
+    "description": "DSFR $grey-200"
+  },
+  {
+    "name": "--color-grey-750",
+    "path": "color.grey.750",
+    "group": "color",
+    "type": "color",
+    "css": "#353535",
+    "description": "DSFR $grey-175"
+  },
+  {
+    "name": "--color-grey-800",
+    "path": "color.grey.800",
+    "group": "color",
+    "type": "color",
+    "css": "#2A2A2A",
+    "description": "DSFR $grey-125"
+  },
+  {
+    "name": "--color-grey-850",
+    "path": "color.grey.850",
+    "group": "color",
+    "type": "color",
+    "css": "#242424",
+    "description": "DSFR $grey-100"
+  },
+  {
+    "name": "--color-grey-900",
+    "path": "color.grey.900",
+    "group": "color",
+    "type": "color",
+    "css": "#1E1E1E",
+    "description": "DSFR $grey-75"
+  },
+  {
+    "name": "--color-grey-950",
+    "path": "color.grey.950",
+    "group": "color",
+    "type": "color",
+    "css": "#161616",
+    "description": "DSFR $grey-50"
+  },
+  {
+    "name": "--color-orange-terre-battue-50",
+    "path": "color.orange-terre-battue.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF4F2",
+    "description": "DSFR $orange-terre-battue-975"
+  },
+  {
+    "name": "--color-orange-terre-battue-100",
+    "path": "color.orange-terre-battue.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEE9E5",
+    "description": "DSFR $orange-terre-battue-950"
+  },
+  {
+    "name": "--color-orange-terre-battue-200",
+    "path": "color.orange-terre-battue.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDDFD8",
+    "description": "DSFR $orange-terre-battue-925"
+  },
+  {
+    "name": "--color-orange-terre-battue-300",
+    "path": "color.orange-terre-battue.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FCC0B0",
+    "description": "DSFR $orange-terre-battue-850"
+  },
+  {
+    "name": "--color-orange-terre-battue-400",
+    "path": "color.orange-terre-battue.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FF732C",
+    "description": "DSFR $orange-terre-battue-moon-672"
+  },
+  {
+    "name": "--color-orange-terre-battue-500",
+    "path": "color.orange-terre-battue.500",
+    "group": "color",
+    "type": "color",
+    "css": "#E4794A",
+    "description": "DSFR $orange-terre-battue-main-645"
+  },
+  {
+    "name": "--color-orange-terre-battue-600",
+    "path": "color.orange-terre-battue.600",
+    "group": "color",
+    "type": "color",
+    "css": "#755348",
+    "description": "DSFR $orange-terre-battue-sun-370"
+  },
+  {
+    "name": "--color-orange-terre-battue-700",
+    "path": "color.orange-terre-battue.700",
+    "group": "color",
+    "type": "color",
+    "css": "#543125",
+    "description": "DSFR $orange-terre-battue-200"
+  },
+  {
+    "name": "--color-orange-terre-battue-800",
+    "path": "color.orange-terre-battue.800",
+    "group": "color",
+    "type": "color",
+    "css": "#382621",
+    "description": "DSFR $orange-terre-battue-125"
+  },
+  {
+    "name": "--color-orange-terre-battue-900",
+    "path": "color.orange-terre-battue.900",
+    "group": "color",
+    "type": "color",
+    "css": "#31201C",
+    "description": "DSFR $orange-terre-battue-100"
+  },
+  {
+    "name": "--color-orange-terre-battue-950",
+    "path": "color.orange-terre-battue.950",
+    "group": "color",
+    "type": "color",
+    "css": "#281A16",
+    "description": "DSFR $orange-terre-battue-75"
+  },
+  {
+    "name": "--color-pink-macaron-50",
+    "path": "color.pink-macaron.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF4F2",
+    "description": "DSFR $pink-macaron-975"
+  },
+  {
+    "name": "--color-pink-macaron-100",
+    "path": "color.pink-macaron.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEE9E6",
+    "description": "DSFR $pink-macaron-950"
+  },
+  {
+    "name": "--color-pink-macaron-200",
+    "path": "color.pink-macaron.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDDFDA",
+    "description": "DSFR $pink-macaron-925"
+  },
+  {
+    "name": "--color-pink-macaron-300",
+    "path": "color.pink-macaron.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FCC0B4",
+    "description": "DSFR $pink-macaron-850"
+  },
+  {
+    "name": "--color-pink-macaron-400",
+    "path": "color.pink-macaron.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FFB7AE",
+    "description": "DSFR $pink-macaron-moon-833"
+  },
+  {
+    "name": "--color-pink-macaron-500",
+    "path": "color.pink-macaron.500",
+    "group": "color",
+    "type": "color",
+    "css": "#E18B76",
+    "description": "DSFR $pink-macaron-main-689"
+  },
+  {
+    "name": "--color-pink-macaron-600",
+    "path": "color.pink-macaron.600",
+    "group": "color",
+    "type": "color",
+    "css": "#8D533E",
+    "description": "DSFR $pink-macaron-sun-406"
+  },
+  {
+    "name": "--color-pink-macaron-700",
+    "path": "color.pink-macaron.700",
+    "group": "color",
+    "type": "color",
+    "css": "#52312A",
+    "description": "DSFR $pink-macaron-200"
+  },
+  {
+    "name": "--color-pink-macaron-800",
+    "path": "color.pink-macaron.800",
+    "group": "color",
+    "type": "color",
+    "css": "#352724",
+    "description": "DSFR $pink-macaron-125"
+  },
+  {
+    "name": "--color-pink-macaron-900",
+    "path": "color.pink-macaron.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2E211F",
+    "description": "DSFR $pink-macaron-100"
+  },
+  {
+    "name": "--color-pink-macaron-950",
+    "path": "color.pink-macaron.950",
+    "group": "color",
+    "type": "color",
+    "css": "#261B19",
+    "description": "DSFR $pink-macaron-75"
+  },
+  {
+    "name": "--color-pink-tuile-50",
+    "path": "color.pink-tuile.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF4F3",
+    "description": "DSFR $pink-tuile-975"
+  },
+  {
+    "name": "--color-pink-tuile-100",
+    "path": "color.pink-tuile.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEE9E7",
+    "description": "DSFR $pink-tuile-950"
+  },
+  {
+    "name": "--color-pink-tuile-200",
+    "path": "color.pink-tuile.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDDFDB",
+    "description": "DSFR $pink-tuile-925"
+  },
+  {
+    "name": "--color-pink-tuile-300",
+    "path": "color.pink-tuile.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FCBFB7",
+    "description": "DSFR $pink-tuile-850"
+  },
+  {
+    "name": "--color-pink-tuile-400",
+    "path": "color.pink-tuile.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FF9575",
+    "description": "DSFR $pink-tuile-moon-750"
+  },
+  {
+    "name": "--color-pink-tuile-500",
+    "path": "color.pink-tuile.500",
+    "group": "color",
+    "type": "color",
+    "css": "#CE614A",
+    "description": "DSFR $pink-tuile-main-556"
+  },
+  {
+    "name": "--color-pink-tuile-600",
+    "path": "color.pink-tuile.600",
+    "group": "color",
+    "type": "color",
+    "css": "#A94645",
+    "description": "DSFR $pink-tuile-sun-425"
+  },
+  {
+    "name": "--color-pink-tuile-700",
+    "path": "color.pink-tuile.700",
+    "group": "color",
+    "type": "color",
+    "css": "#55302A",
+    "description": "DSFR $pink-tuile-200"
+  },
+  {
+    "name": "--color-pink-tuile-800",
+    "path": "color.pink-tuile.800",
+    "group": "color",
+    "type": "color",
+    "css": "#372624",
+    "description": "DSFR $pink-tuile-125"
+  },
+  {
+    "name": "--color-pink-tuile-900",
+    "path": "color.pink-tuile.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2F211F",
+    "description": "DSFR $pink-tuile-100"
+  },
+  {
+    "name": "--color-pink-tuile-950",
+    "path": "color.pink-tuile.950",
+    "group": "color",
+    "type": "color",
+    "css": "#281B19",
+    "description": "DSFR $pink-tuile-75"
+  },
+  {
+    "name": "--color-purple-glycine-50",
+    "path": "color.purple-glycine.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF3FD",
+    "description": "DSFR $purple-glycine-975"
+  },
+  {
+    "name": "--color-purple-glycine-100",
+    "path": "color.purple-glycine.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEE7FC",
+    "description": "DSFR $purple-glycine-950"
+  },
+  {
+    "name": "--color-purple-glycine-200",
+    "path": "color.purple-glycine.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDDBFA",
+    "description": "DSFR $purple-glycine-925"
+  },
+  {
+    "name": "--color-purple-glycine-300",
+    "path": "color.purple-glycine.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FBB8F6",
+    "description": "DSFR $purple-glycine-850"
+  },
+  {
+    "name": "--color-purple-glycine-400",
+    "path": "color.purple-glycine.400",
+    "group": "color",
+    "type": "color",
+    "css": "#CE70CC",
+    "description": "DSFR $purple-glycine-moon-630"
+  },
+  {
+    "name": "--color-purple-glycine-500",
+    "path": "color.purple-glycine.500",
+    "group": "color",
+    "type": "color",
+    "css": "#A558A0",
+    "description": "DSFR $purple-glycine-main-494"
+  },
+  {
+    "name": "--color-purple-glycine-600",
+    "path": "color.purple-glycine.600",
+    "group": "color",
+    "type": "color",
+    "css": "#6E445A",
+    "description": "DSFR $purple-glycine-sun-319"
+  },
+  {
+    "name": "--color-purple-glycine-700",
+    "path": "color.purple-glycine.700",
+    "group": "color",
+    "type": "color",
+    "css": "#502E4D",
+    "description": "DSFR $purple-glycine-200"
+  },
+  {
+    "name": "--color-purple-glycine-800",
+    "path": "color.purple-glycine.800",
+    "group": "color",
+    "type": "color",
+    "css": "#332632",
+    "description": "DSFR $purple-glycine-125"
+  },
+  {
+    "name": "--color-purple-glycine-900",
+    "path": "color.purple-glycine.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2C202B",
+    "description": "DSFR $purple-glycine-100"
+  },
+  {
+    "name": "--color-purple-glycine-950",
+    "path": "color.purple-glycine.950",
+    "group": "color",
+    "type": "color",
+    "css": "#251A24",
+    "description": "DSFR $purple-glycine-75"
+  },
+  {
+    "name": "--color-red-marianne-50",
+    "path": "color.red-marianne.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF4F4",
+    "description": "DSFR $red-marianne-975"
+  },
+  {
+    "name": "--color-red-marianne-100",
+    "path": "color.red-marianne.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEE9E9",
+    "description": "DSFR $red-marianne-950"
+  },
+  {
+    "name": "--color-red-marianne-200",
+    "path": "color.red-marianne.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDDEDE",
+    "description": "DSFR $red-marianne-925"
+  },
+  {
+    "name": "--color-red-marianne-300",
+    "path": "color.red-marianne.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FCBFBF",
+    "description": "DSFR $red-marianne-850"
+  },
+  {
+    "name": "--color-red-marianne-400",
+    "path": "color.red-marianne.400",
+    "group": "color",
+    "type": "color",
+    "css": "#F95C5E",
+    "description": "DSFR $red-marianne-moon-625"
+  },
+  {
+    "name": "--color-red-marianne-500",
+    "path": "color.red-marianne.500",
+    "group": "color",
+    "type": "color",
+    "css": "#E1000F",
+    "description": "DSFR $red-marianne-main-472"
+  },
+  {
+    "name": "--color-red-marianne-600",
+    "path": "color.red-marianne.600",
+    "group": "color",
+    "type": "color",
+    "css": "#C9191E",
+    "description": "DSFR $red-marianne-sun-425"
+  },
+  {
+    "name": "--color-red-marianne-700",
+    "path": "color.red-marianne.700",
+    "group": "color",
+    "type": "color",
+    "css": "#5E2A2B",
+    "description": "DSFR $red-marianne-200"
+  },
+  {
+    "name": "--color-red-marianne-800",
+    "path": "color.red-marianne.800",
+    "group": "color",
+    "type": "color",
+    "css": "#3B2424",
+    "description": "DSFR $red-marianne-125"
+  },
+  {
+    "name": "--color-red-marianne-900",
+    "path": "color.red-marianne.900",
+    "group": "color",
+    "type": "color",
+    "css": "#331F1F",
+    "description": "DSFR $red-marianne-100"
+  },
+  {
+    "name": "--color-red-marianne-950",
+    "path": "color.red-marianne.950",
+    "group": "color",
+    "type": "color",
+    "css": "#2B1919",
+    "description": "DSFR $red-marianne-75"
+  },
+  {
+    "name": "--color-yellow-moutarde-50",
+    "path": "color.yellow-moutarde.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF5E8",
+    "description": "DSFR $yellow-moutarde-975"
+  },
+  {
+    "name": "--color-yellow-moutarde-100",
+    "path": "color.yellow-moutarde.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEEBD0",
+    "description": "DSFR $yellow-moutarde-950"
+  },
+  {
+    "name": "--color-yellow-moutarde-200",
+    "path": "color.yellow-moutarde.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDE2B5",
+    "description": "DSFR $yellow-moutarde-925"
+  },
+  {
+    "name": "--color-yellow-moutarde-300",
+    "path": "color.yellow-moutarde.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FFCA00",
+    "description": "DSFR $yellow-moutarde-moon-860"
+  },
+  {
+    "name": "--color-yellow-moutarde-400",
+    "path": "color.yellow-moutarde.400",
+    "group": "color",
+    "type": "color",
+    "css": "#FCC63A",
+    "description": "DSFR $yellow-moutarde-850"
+  },
+  {
+    "name": "--color-yellow-moutarde-500",
+    "path": "color.yellow-moutarde.500",
+    "group": "color",
+    "type": "color",
+    "css": "#C3992A",
+    "description": "DSFR $yellow-moutarde-main-679"
+  },
+  {
+    "name": "--color-yellow-moutarde-600",
+    "path": "color.yellow-moutarde.600",
+    "group": "color",
+    "type": "color",
+    "css": "#695240",
+    "description": "DSFR $yellow-moutarde-sun-348"
+  },
+  {
+    "name": "--color-yellow-moutarde-700",
+    "path": "color.yellow-moutarde.700",
+    "group": "color",
+    "type": "color",
+    "css": "#453820",
+    "description": "DSFR $yellow-moutarde-200"
+  },
+  {
+    "name": "--color-yellow-moutarde-800",
+    "path": "color.yellow-moutarde.800",
+    "group": "color",
+    "type": "color",
+    "css": "#30291D",
+    "description": "DSFR $yellow-moutarde-125"
+  },
+  {
+    "name": "--color-yellow-moutarde-900",
+    "path": "color.yellow-moutarde.900",
+    "group": "color",
+    "type": "color",
+    "css": "#2A2319",
+    "description": "DSFR $yellow-moutarde-100"
+  },
+  {
+    "name": "--color-yellow-moutarde-950",
+    "path": "color.yellow-moutarde.950",
+    "group": "color",
+    "type": "color",
+    "css": "#231D14",
+    "description": "DSFR $yellow-moutarde-75"
+  },
+  {
+    "name": "--color-yellow-tournesol-50",
+    "path": "color.yellow-tournesol.50",
+    "group": "color",
+    "type": "color",
+    "css": "#FEF6E3",
+    "description": "DSFR $yellow-tournesol-975"
+  },
+  {
+    "name": "--color-yellow-tournesol-100",
+    "path": "color.yellow-tournesol.100",
+    "group": "color",
+    "type": "color",
+    "css": "#FEECC2",
+    "description": "DSFR $yellow-tournesol-950"
+  },
+  {
+    "name": "--color-yellow-tournesol-200",
+    "path": "color.yellow-tournesol.200",
+    "group": "color",
+    "type": "color",
+    "css": "#FDE39C",
+    "description": "DSFR $yellow-tournesol-925"
+  },
+  {
+    "name": "--color-yellow-tournesol-300",
+    "path": "color.yellow-tournesol.300",
+    "group": "color",
+    "type": "color",
+    "css": "#FFE552",
+    "description": "DSFR $yellow-tournesol-moon-922"
+  },
+  {
+    "name": "--color-yellow-tournesol-400",
+    "path": "color.yellow-tournesol.400",
+    "group": "color",
+    "type": "color",
+    "css": "#EFCB3A",
+    "description": "DSFR $yellow-tournesol-850"
+  },
+  {
+    "name": "--color-yellow-tournesol-500",
+    "path": "color.yellow-tournesol.500",
+    "group": "color",
+    "type": "color",
+    "css": "#C8AA39",
+    "description": "DSFR $yellow-tournesol-main-731"
+  },
+  {
+    "name": "--color-yellow-tournesol-600",
+    "path": "color.yellow-tournesol.600",
+    "group": "color",
+    "type": "color",
+    "css": "#716043",
+    "description": "DSFR $yellow-tournesol-sun-407"
+  },
+  {
+    "name": "--color-yellow-tournesol-700",
+    "path": "color.yellow-tournesol.700",
+    "group": "color",
+    "type": "color",
+    "css": "#43391A",
+    "description": "DSFR $yellow-tournesol-200"
+  },
+  {
+    "name": "--color-yellow-tournesol-800",
+    "path": "color.yellow-tournesol.800",
+    "group": "color",
+    "type": "color",
+    "css": "#302A1A",
+    "description": "DSFR $yellow-tournesol-125"
+  },
+  {
+    "name": "--color-yellow-tournesol-900",
+    "path": "color.yellow-tournesol.900",
+    "group": "color",
+    "type": "color",
+    "css": "#292416",
+    "description": "DSFR $yellow-tournesol-100"
+  },
+  {
+    "name": "--color-yellow-tournesol-950",
+    "path": "color.yellow-tournesol.950",
+    "group": "color",
+    "type": "color",
+    "css": "#221D11",
+    "description": "DSFR $yellow-tournesol-75"
+  }
+]

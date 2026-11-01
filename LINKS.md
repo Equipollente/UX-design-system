@@ -176,6 +176,10 @@ Les 146 tokens vivent dans la collection **Design tokens** du même fichier, en 
 Tablet, Mobile, Paper). Ils ne s'éditent pas dans le code : on modifie la variable dans Figma, on
 ré-exporte dans `tokens/*.tokens.json`, puis `npm run tokens`.
 
+La palette du Système de design de l'État vit dans une **seconde collection**, **DSFR** (228 couleurs,
+un seul mode), importée depuis la page `new colors` (`836:1625`). Elle s'exporte seule dans
+`tokens/DSFR.tokens.json` et sort dans `tokens-dsfr.css`, à part du compte ci-dessus.
+
 ## Le dépôt et le site
 
 | Quoi | Où |

@@ -334,3 +334,23 @@ page décide de la garder.
 
 `← ` [Select.astro](../src/design-system/components/Select.astro)
 
+
+## La palette de l'État est une collection à part, pas un groupe de plus
+
+Pour qu'un projet — Prof Hub, d'abord — réutilise les composants avec la palette du Système de
+design de l'État, les 228 couleurs entrent dans une **seconde collection Figma, DSFR**, et non dans
+*Design tokens*. Elle s'exporte seule (`tokens/DSFR.tokens.json`) et sort dans `tokens-dsfr.css`, que
+rien ne charge par défaut : un projet qui garde la palette d'origine ne paie pas 228 variables.
+
+Les paliers suivent ton échelle, du plus clair au plus foncé : 50 à 950, la teinte `main` du DSFR
+toujours en 500 ; `grey` a ses 14 pas, les couleurs fonctionnelles reprennent `feedback`. Le nom DSFR
+d'origine reste dans la description de chaque variable. Le `error` du DSFR n'est **pas** renommé
+`danger` : `color.feedback.danger.600` existe déjà, et les deux fichiers auraient défini la même
+variable, le DSFR écrasant le rouge d'erreur en silence. `build-tokens.mjs` refuse désormais un nom
+déjà pris.
+
+**Pas encore fait** : les composants lisent `accent`, `neutral` et `highlight`. Pour qu'une palette
+les remplace, ces rôles doivent pointer vers une famille — et `bg-default`, `bg-surface`,
+`bg-section` sont des hex écrits en dur, qu'il faudra d'abord lier.
+
+`← ` [LINKS.md](../LINKS.md)

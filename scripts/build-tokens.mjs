@@ -346,6 +346,67 @@ if (avant) {
   }
 }
 
+// --- La palette DSFR, à part --------------------------------------------------
+//
+// Collection Figma « DSFR », exportée seule dans tokens/DSFR.tokens.json. Elle ne
+// se mêle ni à tokens.css ni au compte du système : un projet qui garde la palette
+// d'origine ne la charge pas, un projet qui adopte celle de l'État importe
+// tokens-dsfr.css. Les noms suivent la règle de tout le reste (`color.blue-france.500`
+// → `--color-blue-france-500`) ; la description de chaque variable garde le nom DSFR.
+const DSFR_SOURCE = join(ROOT, 'tokens', 'DSFR.tokens.json');
+let dsfrCount = 0;
+
+if (existsSync(DSFR_SOURCE)) {
+  const dsfr = flatten(JSON.parse(readFileSync(DSFR_SOURCE, 'utf8'))).map((t) => ({
+    name: cssName(t.path),
+    path: t.path,
+    group: t.path.split('.')[0],
+    type: t.type,
+    css: toCss(t),
+    description: t.description,
+  }));
+
+  // Pas de composant ni d'ombre ici : une palette ne porte que des couleurs, et
+  // un nom qui existe déjà dans le système écraserait silencieusement l'un des deux.
+  const horsPalette = dsfr.filter((t) => t.type !== 'color');
+  const doublons = dsfr.filter((t) => resolved.some((r) => r.name === t.name));
+  if (horsPalette.length || doublons.length) {
+    throw new Error(
+      `tokens/DSFR.tokens.json : ${horsPalette.length} token(s) qui ne sont pas des couleurs, ` +
+        `${doublons.length} nom(s) déjà pris par le système` +
+        (doublons.length ? ` (${doublons.slice(0, 3).map((t) => t.name).join(', ')}…)` : '') +
+        '.',
+    );
+  }
+
+  const dsfrPad = Math.max(...dsfr.map((t) => t.name.length)) + 1;
+  const dsfrLines = [
+    '/* GÉNÉRÉ — ne pas éditer à la main.',
+    ' * Source : tokens/DSFR.tokens.json (collection Figma « DSFR », palette du',
+    ' * Système de design de l’État). Régénérer avec `npm run tokens`.',
+    ' * Non chargé par défaut : à importer par les projets qui adoptent cette palette.',
+    ' */',
+    '',
+    ':root {',
+  ];
+  let famille;
+  for (const t of dsfr) {
+    const parts = t.path.split('.');
+    const courante = parts.slice(1, -1).join('.');
+    if (famille !== undefined && courante !== famille) dsfrLines.push('');
+    famille = courante;
+    dsfrLines.push(`  ${(t.name + ':').padEnd(dsfrPad + 1)} ${t.css};`);
+  }
+  dsfrLines.push('}');
+
+  writeFileSync(join(ROOT, 'src/design-system/styles/tokens-dsfr.css'), dsfrLines.join('\n') + '\n');
+  writeFileSync(
+    join(ROOT, 'src/design-system/data/tokens-dsfr.json'),
+    JSON.stringify(dsfr, null, 2) + '\n',
+  );
+  dsfrCount = dsfr.length;
+}
+
 const perGroup = Object.keys(GROUP_TITLES)
   .map((g) => `${g} ${resolved.filter((t) => t.group === g).length}`)
   .join(', ');
@@ -353,3 +414,8 @@ console.log(
   `${resolved.length} tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json`
 );
 console.log(`  ${perGroup}`);
+if (dsfrCount) {
+  console.log(
+    `${dsfrCount} couleurs DSFR → src/design-system/styles/tokens-dsfr.css, src/design-system/data/tokens-dsfr.json (hors du compte)`
+  );
+}

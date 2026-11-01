@@ -52,6 +52,10 @@ Si une valeur paraît fausse, la correction va **dans Figma**, puis dans l'expor
 un composant. Les deux fichiers générés sont versionnés parce que `npm run dev` ne lance pas
 `npm run tokens` : un clone frais serait cassé sans eux.
 
+La palette de l'État (DSFR, 228 couleurs) est une collection à part : `tokens/DSFR.tokens.json` →
+`styles/tokens-dsfr.css`, **non chargé par défaut** — un projet qui l'adopte l'importe. Hors du compte
+des tokens du système.
+
 ## Les icônes ne s'écrivent pas non plus dans le code
 
 Même contrat que les tokens, même raison. Les 63 icônes sont les composants de la page Figma
