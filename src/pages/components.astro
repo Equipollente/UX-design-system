@@ -585,7 +585,7 @@ const modalProps = [
         <strong>Les trois remplies tiennent par une seule règle :</strong> fond au cran 100 d'une
         rampe, encre au cran 800 de la même rampe. La paire ne se dissocie pas — c'est elle qui porte
         le contraste, et chacune dépasse 8:1. La quatrième n'a pas de fond : liseré
-        {' '}<code>color.accent.500</code>, encre <code>color.text.accent</code>. C'est tout le jeu : il n'y
+        {' '}<code>color.action.primary.bg</code>, encre <code>color.text.accent</code>. C'est tout le jeu : il n'y
         a pas de cinquième couleur à composer, et un tag n'a jamais deux couleurs à la fois.
       </p>
       <p class="section-note">
@@ -629,7 +629,7 @@ const modalProps = [
         <strong>Un seul levier, et il ne vaut que pour l'<code>outline</code>.</strong>
         {' '}<code>--tag-color</code> reprend d'un coup le liseré et l'encre — jamais l'un sans l'autre.
         Elle se pose en <code>style</code> sur un tag, ou sur un ancêtre pour toute une rangée, et le
-        repli reste <code>color.accent.500</code>. Le dessin, la graisse, le rayon et l'espacement ne
+        repli reste <code>color.action.primary.bg</code>. Le dessin, la graisse, le rayon et l'espacement ne
         se reprennent pas : un tag qui change de dessin n'est plus un tag.
         <br />
         <strong>Sur une variante remplie, elle ne fait rien</strong> — elle n'y toucherait que
@@ -642,7 +642,7 @@ const modalProps = [
         système : au pire, sur <code>color.bg.section</code>, accent 800 mesure 11,2:1, neutral 800
         9:1 et highlight 800 6,7:1 (WCAG 1.4.3) — le liseré suivant la même couleur, 1.4.11 passe par
         surcroît. Les crans plus clairs ne tiennent pas : highlight 700 tombe à 4,2:1 sur cette même
-        surface, et <code>color.feedback.danger.500</code> à 3,9:1.
+        surface, et <code>color.feedback.danger.solid</code> à 3,9:1.
       </p>
 
       <p class="flag">

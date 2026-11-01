@@ -179,15 +179,15 @@ import Button from 'ux-design-system/components/Button.astro';
   .builder-head, .panel-label { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
   .builder-head { padding: var(--space-xl); border-bottom: 1px solid var(--color-border-default); }
   .builder-head h2, .how-it-works h2, .snippet-context h2 { margin: 0; }
-  .status { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-pill); background: var(--color-highlight-200); color: var(--color-neutral-900); font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); }
+  .status { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-pill); background: var(--color-bg-celebrate); color: var(--color-text-default); font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); }
   .builder-grid { display: grid; grid-template-columns: minmax(15rem, .8fr) minmax(20rem, 1.2fr); }
   .controls { padding: var(--space-xl); border-right: 1px solid var(--color-border-default); }
   fieldset { margin: 0 0 var(--space-xl); padding: 0; border: 0; }
   legend { margin-bottom: var(--space-sm); font-family: var(--font-family-heading); font-weight: var(--font-weight-bold); }
   .choice-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
   .choice-row label { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; padding: 0 var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); cursor: pointer; font-size: var(--font-size-body-sm); }
-  .choice-row label:has(input:checked) { border-color: var(--color-accent-500); background: var(--color-accent-100); color: var(--color-neutral-900); }
-  input[type='radio'] { accent-color: var(--color-accent-500); }
+  .choice-row label:has(input:checked) { border-color: var(--color-border-accent); background: var(--color-category-accent-bg); color: var(--color-text-default); }
+  input[type='radio'] { accent-color: var(--color-action-primary-bg); }
   .select-label { display: block; margin-bottom: var(--space-xs); color: var(--color-text-muted); font-size: var(--font-size-body-sm); }
   select, #label-input { width: 100%; min-height: 44px; margin-bottom: var(--space-sm); padding: 0 var(--space-sm); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); background: var(--color-bg-default); color: var(--color-text-default); font: inherit; }
   .compact { margin-top: var(--space-sm); }
@@ -196,19 +196,19 @@ import Button from 'ux-design-system/components/Button.astro';
   .tip span { color: var(--color-text-muted); }
   .result-column { display: grid; align-content: start; }
   .preview-panel, .code-panel { padding: var(--space-xl); }
-  .code-panel { border-top: 1px solid var(--color-border-default); background: var(--color-neutral-900); color: var(--color-neutral-100); }
+  .code-panel { border-top: 1px solid var(--color-border-default); background: var(--ramp-neutral-900); color: var(--color-bg-neutral); }
   .panel-label { margin-bottom: var(--space-md); color: var(--color-text-muted); font-size: var(--font-size-caption); font-weight: var(--font-weight-bold); letter-spacing: var(--font-letter-spacing-wide); text-transform: uppercase; }
-  .code-panel .panel-label { color: var(--color-neutral-400); }
+  .code-panel .panel-label { color: var(--ramp-neutral-400); }
   .preview-stage { display: grid; min-height: 13rem; place-items: center; padding: var(--space-xl); background: var(--color-bg-surface); }
   .preview-stage svg { width: var(--icon-size, 24px); height: var(--icon-size, 24px); flex: 0 0 auto; }
   pre { overflow-x: auto; margin: 0; padding: var(--space-lg); border-radius: var(--radius-sm); background: var(--color-bg-section); }
-  .code-panel pre { background: #242225; color: var(--color-neutral-100); }
+  .code-panel pre { background: #242225; color: var(--color-bg-neutral); }
   code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: var(--font-size-body-sm); }
-  .copy-button { width: 100%; min-height: 44px; margin-top: var(--space-md); border: 1px solid var(--color-accent-300); border-radius: var(--radius-sm); background: var(--color-accent-500); color: white; font: inherit; font-weight: var(--font-weight-bold); cursor: pointer; }
-  .copy-button:hover { background: var(--color-accent-600); }
+  .copy-button { width: 100%; min-height: 44px; margin-top: var(--space-md); border: 1px solid var(--ramp-accent-300); border-radius: var(--radius-sm); background: var(--color-action-primary-bg); color: white; font: inherit; font-weight: var(--font-weight-bold); cursor: pointer; }
+  .copy-button:hover { background: var(--color-action-primary-bg-hover); }
   .how-it-works { padding: var(--space-layout-96) 0; }
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); margin-top: var(--space-xl); }
-  .steps article { padding-top: var(--space-lg); border-top: 2px solid var(--color-accent-500); }
+  .steps article { padding-top: var(--space-lg); border-top: 2px solid var(--color-border-accent); }
   .steps span { color: var(--color-text-accent); font-family: var(--font-family-heading); font-weight: var(--font-weight-bold); }
   .steps h3 { margin: var(--space-lg) 0 var(--space-sm); }
   .steps p { margin: 0; color: var(--color-text-muted); }

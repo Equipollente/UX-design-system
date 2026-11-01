@@ -13,9 +13,9 @@ const colorFamilies = [
   { key: 'color.border.', label: 'Bordures' },
   { key: 'color.feedback.', label: 'Feedback' },
   { key: 'color.text.', label: 'Texte' },
-  { key: 'color.neutral.', label: 'Rampe neutre' },
-  { key: 'color.accent.', label: 'Rampe accent — indigo' },
-  { key: 'color.highlight.', label: 'Rampe highlight — lime' },
+  { key: 'ramp.neutral.', label: 'Rampe neutre' },
+  { key: 'ramp.accent.', label: 'Rampe accent — indigo' },
+  { key: 'ramp.highlight.', label: 'Rampe highlight — lime' },
 ];
 
 const fontSizes = byPrefix('font.size.');
@@ -378,7 +378,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
 
           <p class="flag">
             <strong>Les couleurs d'ombre ne suivent pas l'encre.</strong> Elles valent
-            {' '}<code>color.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
+            {' '}<code>ramp.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
             avec la couleur : on ne peut pas pointer l'encre et n'en changer que la transparence.
             Les trois sont donc des couleurs littérales. Si l'encre du système change, elles sont à
             reprendre à la main — c'est le seul point du groupe qui puisse dériver.
@@ -523,7 +523,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
   /* — espacements — */
   .ruler .bar {
     height: var(--space-md);
-    background: var(--color-accent-500);
+    background: var(--color-bg-feature);
     border-radius: var(--radius-sm);
   }
 
@@ -550,7 +550,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     display: block;
     width: var(--space-2xl);
     height: var(--space-2xl);
-    background: var(--color-accent-500);
+    background: var(--color-bg-feature);
     border-radius: var(--radius-pill);
     transition: transform var(--demo-duration) var(--demo-easing);
   }
@@ -631,7 +631,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
   .opacity-box {
     width: 7rem;
     height: 4rem;
-    background: var(--color-accent-500);
+    background: var(--color-bg-feature);
     border-radius: var(--radius-md);
   }
 
