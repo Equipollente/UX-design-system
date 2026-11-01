@@ -32,6 +32,7 @@ const FALLBACKS = {
 
 // Titres des blocs de tokens.css, dans l'ordre d'émission.
 const GROUP_TITLES = {
+  ramp: 'Rampes — les couleurs brutes, que seuls les rôles de color.* lisent',
   color: 'Couleurs',
   space: 'Espacements',
   radius: 'Rayons',
@@ -58,18 +59,42 @@ const read = (mode) =>
 const cssName = (path) =>
   '--' + path.split('.').join('-').replace(/\s+/g, '-').toLowerCase();
 
+/**
+ * Un token de l'export. Quand l'alias traverse deux collections (un rôle de
+ * `Design tokens` qui pointe vers `Primitives`), Figma n'écrit pas `{chemin}` mais la
+ * valeur déjà résolue, et nomme la cible dans `com.figma.aliasData`. On rétablit
+ * l'alias : sinon la chaîne meurt à l'export et le CSS ne garde qu'un hex.
+ *
+ * Seulement vers « Primitives », la seule collection que ce script lit en plus de la
+ * sienne : un alias vers n'importe quelle autre (`layout.Root Font Size` → `Scale`,
+ * dans « Responsive ») pointerait vers un token absent, alors que la valeur résolue,
+ * elle, est exacte et suffit.
+ */
+function token(path, node) {
+  const alias = node.$extensions?.['com.figma.aliasData'];
+  const versRampe = alias?.targetVariableSetName === 'Primitives';
+  return {
+    path: path.join('.'),
+    type: node.$type,
+    value: versRampe && typeof node.$value !== 'string' ? `{${alias.targetVariableName.split('/').join('.')}}` : node.$value,
+    description: node.$description ?? '',
+  };
+}
+
 /** Aplatit l'arbre DTCG en liste ordonnée de tokens. */
 function flatten(node, path = [], out = []) {
   for (const [key, value] of Object.entries(node)) {
+    // `$root` : Figma l'écrit quand une variable (`feedback/success`) a le même nom qu'un
+    // groupe qui en contient d'autres (`feedback/success/bg`). C'est la variable du groupe
+    // lui-même, pas une métadonnée — l'ignorer ferait disparaître `--color-feedback-success`.
+    if (key === '$root' && value && value.$type) {
+      out.push(token(path, value));
+      continue;
+    }
     if (key.startsWith('$')) continue;
     if (value && typeof value === 'object') {
       if (value.$type) {
-        out.push({
-          path: [...path, key].join('.'),
-          type: value.$type,
-          value: value.$value,
-          description: value.$description ?? '',
-        });
+        out.push(token([...path, key], value));
       } else {
         flatten(value, [...path, key], out);
       }
@@ -134,7 +159,17 @@ const round = (n) => parseFloat(n.toFixed(4));
 
 // --- Lecture -----------------------------------------------------------------
 
-const base = flatten(read(BASE_MODE));
+// La collection Figma « Primitives » (les rampes brutes) s'exporte à part : un seul
+// mode, donc un seul fichier. Les rôles de color.* y pointent par alias, et un alias
+// vers un token que ce script n'a pas lu sortirait en `var(--ramp-…)` sans définition,
+// c'est-à-dire sans couleur et sans un mot. Si le fichier manque alors que des rôles
+// en dépendent, on refuse de construire.
+const PRIMITIVES_SOURCE = join(ROOT, 'tokens', 'Primitives.tokens.json');
+const rampes = existsSync(PRIMITIVES_SOURCE)
+  ? flatten(JSON.parse(readFileSync(PRIMITIVES_SOURCE, 'utf8')))
+  : [];
+
+const base = [...rampes, ...flatten(read(BASE_MODE))];
 
 // Sert à convertir font.size.* en rem. Déclaré par le système lui-même.
 const rootFontSize = base.find((t) => t.path === 'layout.Root Font Size').value;
@@ -201,6 +236,20 @@ const lines = [
   '',
   ':root {',
 ];
+
+// Un alias dont la cible n'est pas dans l'export ne s'écrit pas : voir PRIMITIVES_SOURCE.
+const cibles = new Set(resolved.map((t) => t.name));
+const orphelins = resolved.filter((t) => t.alias && !cibles.has(t.alias));
+
+if (orphelins.length) {
+  throw new Error(
+    `${orphelins.length} alias pointent vers un token absent de l'export : ` +
+      `${orphelins.slice(0, 3).map((t) => `${t.name} → ${t.alias}`).join(', ')}` +
+      `${orphelins.length > 3 ? '…' : ''}.\n` +
+      `Si la cible est une rampe (--ramp-…), exporte aussi la collection « Primitives » ` +
+      `dans tokens/Primitives.tokens.json.`,
+  );
+}
 
 // GROUP_TITLES décide de ce qui est émis, et pas seulement de l'ordre : un
 // groupe qui n'y figure pas serait filtré par la boucle ci-dessous et

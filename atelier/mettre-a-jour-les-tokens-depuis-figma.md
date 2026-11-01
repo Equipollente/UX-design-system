@@ -16,6 +16,11 @@ C'est la seule source. Une valeur qui paraît fausse se corrige ici, jamais dans
 Le plugin d'export, les quatre modes : Desktop, Tablet, Mobile, Paper. Ré-exporter **les quatre**
 même si un seul a bougé — le script les compare entre eux pour savoir ce qui varie par appareil.
 
+Puis la collection **Primitives** (un seul mode), à part. Le plugin nomme le fichier d'après le
+mode — `Valeur.tokens.json` — et le range dans un dossier `Primitives/` : à la dépose, il devient
+`Primitives.tokens.json`. Les rôles de `color.*` y pointent par alias ; sans ce fichier, le script
+refuse de construire.
+
 ⚠️ **Toujours le même plugin.** Le format attendu porte `com.figma.variableId` dans le fichier.
 Un autre exportateur produit un format voisin mais pas identique, et réécrit les quatre fichiers en
 entier pour six lignes changées.
@@ -35,6 +40,7 @@ Desktop.tokens.json
 Tablet.tokens.json
 Mobile.tokens.json
 Paper.tokens.json
+Primitives.tokens.json
 ```
 
 ## 4. Lancer la conversion
