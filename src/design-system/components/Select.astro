@@ -1080,7 +1080,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
      au focus, le nœud reprend le fond du survol et l'encre par défaut : la ligne
      choisie ne s'éteint pas pour autant, sa coche reste. */
   .select-row:has(input:checked) {
-    background: var(--color-accent-500);
+    background: var(--color-action-primary-bg);
     color: var(--color-text-on-accent);
   }
 
@@ -1220,9 +1220,9 @@ const classes = ['select', className].filter(Boolean).join(' ');
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-lg);
-    border: var(--border-width-default) solid var(--color-accent-500);
+    border: var(--border-width-default) solid var(--color-action-primary-bg);
     border-radius: var(--radius-pill);
-    background: var(--color-accent-500);
+    background: var(--color-action-primary-bg);
     color: var(--color-text-on-accent);
     font-family: var(--font-family-body);
     font-size: var(--font-size-ui);
@@ -1235,8 +1235,8 @@ const classes = ['select', className].filter(Boolean).join(' ');
   }
 
   .select-chip:hover {
-    background: var(--color-accent-600);
-    border-color: var(--color-accent-600);
+    background: var(--color-action-primary-bg-hover);
+    border-color: var(--color-action-primary-bg-hover);
   }
 
   .select-chip:focus-visible {
