@@ -106,6 +106,8 @@
   --color-bg-section:                     var(--ramp-accent-50);
   --color-bg-feature:                     var(--ramp-accent-500);
   --color-bg-celebrate:                   var(--ramp-highlight-200);
+  --color-bg-neutral:                     var(--ramp-neutral-100);
+  --color-bg-selection:                   var(--ramp-accent-100);
 
   --color-border-default:                 var(--ramp-accent-100);
   --color-border-strong:                  var(--ramp-neutral-300);
@@ -121,6 +123,7 @@
   --color-feedback-danger-bg:             var(--ramp-red-100);
   --color-feedback-danger-border:         var(--ramp-red-300);
   --color-feedback-danger-text:           var(--ramp-red-800);
+  --color-feedback-danger-solid:          var(--ramp-red-500);
   --color-feedback-warning-bg:            var(--ramp-sun-100);
   --color-feedback-warning-border:        var(--ramp-sun-300);
   --color-feedback-warning-text:          var(--ramp-sun-800);
@@ -132,6 +135,7 @@
   --color-feedback-success-bg:            var(--ramp-green-100);
   --color-feedback-success-border:        var(--ramp-green-300);
   --color-feedback-success-text:          var(--ramp-green-800);
+  --color-feedback-success-solid:         var(--ramp-green-500);
   --color-feedback-success:               #48A66B;
 
   --color-neutral-100:                    #F3F2F5;
@@ -174,6 +178,7 @@
   --color-text-on-danger:                 var(--ramp-white);
   --color-text-on-success:                var(--ramp-neutral-900);
   --color-text-on-warning:                var(--ramp-neutral-900);
+  --color-text-accent-hover:              var(--ramp-accent-600);
 
   --color-clay-100:                       #FFEDE4;
   --color-clay-200:                       #FFD6C2;
@@ -224,6 +229,7 @@
   --color-action-destructive-bg:          var(--ramp-red-500);
   --color-action-destructive-bg-hover:    var(--ramp-red-600);
   --color-action-destructive-bg-pressed:  var(--ramp-red-700);
+  --color-action-ghost-bg-hover:          var(--ramp-neutral-100);
 
   --color-category-clay-bg:               var(--ramp-clay-100);
   --color-category-clay-border:           var(--ramp-clay-300);
@@ -237,6 +243,15 @@
   --color-category-rose-bg:               var(--ramp-rose-100);
   --color-category-rose-border:           var(--ramp-rose-300);
   --color-category-rose-text:             var(--ramp-rose-800);
+  --color-category-accent-bg:             var(--ramp-accent-100);
+  --color-category-accent-border:         var(--ramp-accent-300);
+  --color-category-accent-text:           var(--ramp-accent-800);
+  --color-category-highlight-bg:          var(--ramp-highlight-100);
+  --color-category-highlight-border:      var(--ramp-highlight-300);
+  --color-category-highlight-text:        var(--ramp-highlight-800);
+  --color-category-neutral-bg:            var(--ramp-neutral-100);
+  --color-category-neutral-border:        var(--ramp-neutral-300);
+  --color-category-neutral-text:          var(--ramp-neutral-800);
 
   /* ── Espacements ───────────────────────────────────────────────────────────── */
   --space-xs:                             4px;

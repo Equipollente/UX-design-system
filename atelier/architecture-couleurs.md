@@ -141,6 +141,23 @@ Si aucun composant (Tag, Chip, cartes mémo) ne les lit à l'arrivée, les rampe
 
 ---
 
+## Rôles ajoutés à l'usage
+
+Nés de l'inventaire des lectures de rampe restantes dans les composants (règle 4 : un rôle existe
+parce qu'il est lu). Tous à valeur identique à la lecture qu'ils remplacent.
+
+| Rôle | Alias | Lu par |
+|---|---|---|
+| `action/ghost/bg-hover` | `neutral/100` | Checkbox, Radio, Chip, Select (survol d'une ligne ou d'une case) |
+| `text/accent-hover` | `accent/600` | AddImage (libellé survolé) |
+| `bg/neutral` | `neutral/100` | TabList, TabPanel |
+| `bg/selection` | `accent/100` | `::selection` de global.css |
+| `category/accent·highlight·neutral/{bg,border,text}` | `100` · `300` · `800` | Tag |
+| `feedback/danger/solid`, `feedback/success/solid` | `red/500`, `green/500` | FieldLabel, AddImage, Modal (rouge plein en texte court ou en icône) |
+
+`feedback/*/solid` n'était pas bloqué par les anciens noms, contrairement à ce qui était écrit plus
+haut : `feedback/success` sort en `$root` et `build-tokens.mjs` le garde.
+
 ## Pas maintenant (règle 4)
 
 `data-viz/series-*`, `state/hover-overlay`, `utility/scrim`, `bg/inverse`, tout mode sombre : aucun
