@@ -155,6 +155,16 @@ parce qu'il est lu). Tous à valeur identique à la lecture qu'ils remplacent.
 | `category/accent·highlight·neutral/{bg,border,text}` | `100` · `300` · `800` | Tag |
 | `feedback/danger/solid`, `feedback/success/solid` | `red/500`, `green/500` | FieldLabel, AddImage, Modal (rouge plein en texte court ou en icône) |
 
+Et, pour les lectures qu'aucun rôle existant ne couvrait sans changer une couleur :
+
+| Rôle | Alias | Lu par |
+|---|---|---|
+| `text/secondary` | `neutral/700` | Modal (corps du dialogue, tel que Figma le lie) |
+| `border/accent` | `accent/500` | Tag (liseré qui suit `--tag-color`) |
+| `border/hover` | `neutral/500` | champs survolés (global.css) |
+| `action/toggle/bg-off` | `neutral/300` | Toggle éteint — 1,29:1, écart noté dans arbitrages.md |
+| `progress/track`, `progress/fill` | `neutral/400`, `accent/300` | AddImage |
+
 `feedback/*/solid` n'était pas bloqué par les anciens noms, contrairement à ce qui était écrit plus
 haut : `feedback/success` sort en `$root` et `build-tokens.mjs` le garde.
 

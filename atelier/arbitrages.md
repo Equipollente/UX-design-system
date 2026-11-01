@@ -51,6 +51,10 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Button | `21:47` · `334:1233` · `334:1283` | le survol du secondaire ne bougeait pas en lg et md, et empruntait `bg/section` en sm | — | *réglé — 31/08, dans Figma seul* |
 | Link | `613:4816` | sans icône le lien mesure 41 de haut ; le code impose 44 (`min-height`) que Figma ne porte pas | /components → Link | ouvert |
 | ~~Button~~ | `334:1283` · `334:1233` · `21:47` | ~~Primary, Secondary et Alert n'ont d'état Focus qu'en sm~~ | — | *réglé — 27/10, états Focus créés en md et lg* |
+| Chip | `351:273` | le code lit désormais `color/border/control` (`accent/400`, 4,66:1) pour le trait non sélectionné ; Figma garde `accent/300`, qui tombe à 2,88:1 sur surface | /formulaire → Chip | ouvert — à rebrancher dans Figma |
+| Chip · champs | — | l'encre désactivée lit `color/text/disabled` (`neutral/500`) dans le code ; Figma lie encore `neutral/400` (voir aussi Checkbox) | /formulaire → Chip | ouvert — à rebrancher dans Figma |
+| Toggle | — | la piste éteinte (`neutral/300`) ne fait que 1,29:1 sur le blanc : WCAG 1.4.11 en demande 3. Le code la lit par `color/action/toggle/bg-off`, valeur inchangée | /formulaire → Toggle | ouvert — la couleur de la piste est à choisir dans Figma |
+| AddImage | — | l'état d'échec est un fond lavande (`accent/100`) avec un message rouge ; un fond `feedback/danger/bg` dirait plus clairement l'erreur | /formulaire → AddImage | ouvert — à redessiner dans Figma |
 | Radio | `340:879` | libellé à 14 px / 120 %, quand FieldLabel est à 15 / 112 | /formulaire → Radio | ouvert |
 | Checkbox | `340:842` | même écart de libellé, et encre désactivée en `neutral/400` | /formulaire → Checkbox | ouvert |
 | Select | `340:933` | **le nœud existait, et le code a été écrit sans lui** — « spécifié en conversation » | /formulaire → Select | ouvert |
