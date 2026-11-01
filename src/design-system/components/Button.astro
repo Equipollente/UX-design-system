@@ -160,9 +160,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
 
   /* — variantes — */
   .btn-primary {
-    --btn-bg: var(--color-accent-500);
-    --btn-bg-hover: var(--color-accent-600);
-    --btn-bg-active: var(--color-accent-700);
+    --btn-bg: var(--color-action-primary-bg);
+    --btn-bg-hover: var(--color-action-primary-bg-hover);
+    --btn-bg-active: var(--color-action-primary-bg-pressed);
     --icon-color: var(--color-neutral-100);
     color: var(--color-text-on-accent);
   }
@@ -173,9 +173,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
      sur la brume lavande du secondaire, on n'est plus sur le blanc.
      L'icône suit le libellé — Figma la lie à color/neutral/900, la même encre. */
   .btn-secondary {
-    --btn-bg: var(--color-bg-surface);
-    --btn-bg-hover: var(--color-accent-100);
-    --btn-bg-active: var(--color-accent-200);
+    --btn-bg: var(--color-action-secondary-bg);
+    --btn-bg-hover: var(--color-action-secondary-bg-hover);
+    --btn-bg-active: var(--color-action-secondary-bg-pressed);
     color: var(--color-text-default);
   }
 
@@ -184,10 +184,10 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
      que vaut color/text/on-accent. currentColor suffit donc, et l'icône suit le
      libellé sans qu'on ait à la viser. */
   .btn-alert {
-    --btn-bg: var(--color-feedback-danger-500);
-    --btn-bg-hover: var(--color-feedback-danger-600);
-    --btn-bg-active: var(--color-feedback-danger-700);
-    color: var(--color-text-on-accent);
+    --btn-bg: var(--color-action-destructive-bg);
+    --btn-bg-hover: var(--color-action-destructive-bg-hover);
+    --btn-bg-active: var(--color-action-destructive-bg-pressed);
+    color: var(--color-text-on-danger);
   }
 
   /* Le rond. Même fond et même encre que le secondaire : Figma lui donne
@@ -196,9 +196,9 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
      taille, le rembourrage horizontal disparaît, la largeur minimale aussi — et
      le rayon, qui est déjà celui de la pilule, fait le reste : un cercle. */
   .btn-icon {
-    --btn-bg: var(--color-bg-surface);
-    --btn-bg-hover: var(--color-accent-100);
-    --btn-bg-active: var(--color-accent-200);
+    --btn-bg: var(--color-action-secondary-bg);
+    --btn-bg-hover: var(--color-action-secondary-bg-hover);
+    --btn-bg-active: var(--color-action-secondary-bg-pressed);
     --btn-px: 0;
     --btn-min-w: 0;
     width: var(--btn-h);
