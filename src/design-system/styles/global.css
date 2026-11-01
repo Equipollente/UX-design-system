@@ -201,7 +201,7 @@ input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='searc
 select:hover,
 textarea:hover,
 .field-box:hover {
-  border-color: var(--color-neutral-500);
+  border-color: var(--color-border-hover);
 }
 
 /* — désactivé — écrit après le survol : à spécificité égale c'est l'ordre qui
