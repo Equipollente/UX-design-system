@@ -492,7 +492,8 @@
         "$extensions": {
           "com.figma.variableId": "VariableID:3:38",
           "com.figma.scopes": [
-            "TEXT_FILL"
+            "TEXT_FILL",
+            "STROKE"
           ],
           "com.figma.codeSyntax": {
             "WEB": "var(--color-text-default)"
@@ -521,7 +522,8 @@
         "$extensions": {
           "com.figma.variableId": "VariableID:3:39",
           "com.figma.scopes": [
-            "TEXT_FILL"
+            "TEXT_FILL",
+            "STROKE"
           ],
           "com.figma.codeSyntax": {
             "WEB": "var(--color-text-muted)"
@@ -550,7 +552,8 @@
         "$extensions": {
           "com.figma.variableId": "VariableID:3:40",
           "com.figma.scopes": [
-            "TEXT_FILL"
+            "TEXT_FILL",
+            "STROKE"
           ],
           "com.figma.codeSyntax": {
             "WEB": "var(--color-text-accent)"
@@ -608,7 +611,8 @@
         "$extensions": {
           "com.figma.variableId": "VariableID:3:42",
           "com.figma.scopes": [
-            "TEXT_FILL"
+            "TEXT_FILL",
+            "STROKE"
           ],
           "com.figma.codeSyntax": {
             "WEB": "var(--color-text-on-accent-soft)"
@@ -916,6 +920,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.24705882370471954,
+              0.16862745583057404,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#3F2BFF"
+          },
+          "$description": "Couleur forte de l’action hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19950",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:fcde7e46747b93f02baa58e7e414b546904e3f57/-1:-1",
+              "targetVariableName": "ramp/accent/500",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "secondary": {
@@ -1008,6 +1040,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.5490196347236633,
+              0.4901960790157318,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#8C7DFF"
+          },
+          "$description": "Couleur forte de l’action hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19951",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:85936f045f415fd6eee77734422ef9ac827f0119/-1:-1",
+              "targetVariableName": "ramp/accent/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "destructive": {
@@ -1096,6 +1156,34 @@
             "com.figma.aliasData": {
               "targetVariableId": "VariableID:ad6de963b2fa08e1b19eeb225d68fb0b8841197c/-1:-1",
               "targetVariableName": "ramp/red/700",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8627451062202454,
+              0.14901961386203766,
+              0.14901961386203766
+            ],
+            "alpha": 1,
+            "hex": "#DC2626"
+          },
+          "$description": "Couleur forte de l’action hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19952",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:541317b1f9b3f140e255d7bd7c9ed50019d92882/-1:-1",
+              "targetVariableName": "ramp/red/500",
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
@@ -1301,7 +1389,8 @@
             "com.figma.variableId": "VariableID:840:16972",
             "com.figma.scopes": [
               "FRAME_FILL",
-              "SHAPE_FILL"
+              "SHAPE_FILL",
+              "STROKE"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-feedback-warning-solid)"
@@ -1421,7 +1510,8 @@
             "com.figma.variableId": "VariableID:840:16976",
             "com.figma.scopes": [
               "FRAME_FILL",
-              "SHAPE_FILL"
+              "SHAPE_FILL",
+              "STROKE"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-feedback-info-solid)"
@@ -1540,7 +1630,8 @@
           "$extensions": {
             "com.figma.variableId": "VariableID:844:17028",
             "com.figma.scopes": [
-              "ALL_FILLS"
+              "ALL_FILLS",
+              "STROKE"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-feedback-success-solid)"
@@ -1659,7 +1750,8 @@
           "$extensions": {
             "com.figma.variableId": "VariableID:844:17027",
             "com.figma.scopes": [
-              "ALL_FILLS"
+              "ALL_FILLS",
+              "STROKE"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-feedback-danger-solid)"
@@ -1763,6 +1855,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.886274516582489,
+              0.4117647111415863,
+              0.239215686917305
+            ],
+            "alpha": 1,
+            "hex": "#E2693D"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19877",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:78a48690122bbd6df92dfbbc2007e44399e349dd/-1:-1",
+              "targetVariableName": "ramp/clay/500",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "teal": {
@@ -1849,6 +1969,34 @@
             "com.figma.aliasData": {
               "targetVariableId": "VariableID:d9e34b8102675ce83fee6df615c8379aaa050d9f/-1:-1",
               "targetVariableName": "ramp/teal/800",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.13333334028720856,
+              0.658823549747467,
+              0.6078431606292725
+            ],
+            "alpha": 1,
+            "hex": "#22A89B"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19878",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:9c5d583993d1d2cef537a3e5ac1d1357762b1c68/-1:-1",
+              "targetVariableName": "ramp/teal/500",
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
@@ -1943,6 +2091,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9686274528503418,
+              0.729411780834198,
+              0.18039216101169586
+            ],
+            "alpha": 1,
+            "hex": "#F7BA2E"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19879",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:2917776e92b9c7ca27081588676e60e9e9ebfcb1/-1:-1",
+              "targetVariableName": "ramp/sun/400",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "rose": {
@@ -2029,6 +2205,34 @@
             "com.figma.aliasData": {
               "targetVariableId": "VariableID:c62f5b63c6408eeb1dadc11f5cbf6cd278f6375d/-1:-1",
               "targetVariableName": "ramp/rose/800",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8705882430076599,
+              0.1882352977991104,
+              0.5215686559677124
+            ],
+            "alpha": 1,
+            "hex": "#DE3085"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19880",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:6872009bbe0a1ec9112539f149fe80a71018af99/-1:-1",
+              "targetVariableName": "ramp/rose/500",
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
@@ -2123,6 +2327,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.24705882370471954,
+              0.16862745583057404,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#3F2BFF"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19881",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:fcde7e46747b93f02baa58e7e414b546904e3f57/-1:-1",
+              "targetVariableName": "ramp/accent/500",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "highlight": {
@@ -2213,6 +2445,34 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.6196078658103943,
+              0.729411780834198,
+              0.2549019753932953
+            ],
+            "alpha": 1,
+            "hex": "#9EBA41"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19882",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:4d69ead52fdb99bc291e5f353dc292ca92dfa94a/-1:-1",
+              "targetVariableName": "ramp/highlight/500",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "neutral": {
@@ -2299,6 +2559,34 @@
             "com.figma.aliasData": {
               "targetVariableId": "VariableID:f2259920262ffe70a6760baf1f447db34f2f2609/-1:-1",
               "targetVariableName": "ramp/neutral/800",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.6627451181411743,
+              0.6470588445663452,
+              0.6901960968971252
+            ],
+            "alpha": 1,
+            "hex": "#A9A5B0"
+          },
+          "$description": "Pastille, icône, remplissage fort de la catégorie.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:872:19883",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:57cae227cd49c4b65891951996024d31a9d03cf2/-1:-1",
+              "targetVariableName": "ramp/neutral/500",
               "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
               "targetVariableSetName": "Primitives"
             }
