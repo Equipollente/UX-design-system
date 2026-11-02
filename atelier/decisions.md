@@ -475,7 +475,7 @@ dessinaient chacun la même ligne autour d'un contrôle différent ; le changer 
 instances. Les propriétés des onze jeux de la famille passent en minuscules, comme les champs, et la variante
 `State5` de la ligne de création — identique à `Default`, sans aucune instance — est supprimée.
 
-**Le Chip n'en fait pas partie.** `forms/Select Menu Item Chips` (351:273) est le composant Chip du système, avec sa
+**Le Chip n'en fait pas partie.** `forms/Chip` (351:273, ex `forms/Select Menu Item Chips`, rangé dans la frame Chip le 02/11) est le composant Chip du système, avec sa
 propre section et son propre fichier de code ; l'avoir fondu dans `_SelectItem` aurait retiré un composant public. Une
 première passe l'avait fait, et a été défaite : les 112 pastilles du fichier sont revenues sur le Chip, intactes.
 
