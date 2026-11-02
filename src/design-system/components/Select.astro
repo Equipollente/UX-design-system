@@ -6,7 +6,7 @@
 // flottante, la recherche, les groupes, la création d'une option et l'affichage
 // de ce qui est choisi sont les mêmes. C'est ce que dessine le nœud 340:933
 // (`forms/Select`) : une seule boîte, dont l'état `Open` accroche la liste
-// `forms/Select List Combined` (778:4266).
+// `_SelectPanel` (778:4266, ex `forms/Select List Combined`).
 //
 // Ce n'est pas un menu : un menu déclenche des actions, un select renseigne une
 // valeur qu'un formulaire enverra. Et ce n'est pas un champ texte à suggestions :
@@ -38,8 +38,8 @@
 // script, et le clavier est celui du navigateur — Entrée ouvre, Tab parcourt,
 // Espace coche, les flèches changent de radio.
 //
-// Une ligne de choix unique n'est pas une case : c'est `forms/Single Select Menu
-// Item` (777:1216) — le libellé et une coche à droite, qui n'apparaît que sur la
+// Une ligne de choix unique n'est pas une case : c'est `_SelectItem`
+// `type=single` (863:39983) — le libellé et une coche à droite, qui n'apparaît que sur la
 // ligne choisie, laquelle prend le fond d'accent. Le radio natif qui la porte est
 // étendu sur toute la ligne et rendu transparent : on clique n'importe où, et le
 // focus se voit sur la ligne.
@@ -70,7 +70,7 @@
 // recherche, un groupe dont rien ne correspond disparaît avec son nom.
 //
 // Trois compléments, chacun une prop, et chacun à sa place dans la liste — c'est
-// la règle du nœud `forms/Select List Combined` :
+// la règle du nœud `_SelectPanel` :
 // — `searchable` pose un champ de recherche **en haut**. Il prend le focus à
 //   l'ouverture, filtre les options à chaque lettre — sans casse ni accents, sur
 //   ce que l'option contient — et dit quand rien ne correspond. Le filtre ne
@@ -81,8 +81,8 @@
 //   épinglée est une case cochée, comme celle d'une option — même pour un choix
 //   unique, c'est le dessin du nœud : la décocher retire le choix. La zone
 //   n'existe que s'il y a un choix ;
-// — `creatable` pose **en bas** la ligne « Créer une option » (`forms/Select
-//   Menu Item Create Option`, 777:1968). Elle devient un champ où l'on tape le
+// — `creatable` pose **en bas** la ligne « Créer une option » (`_SelectItem`
+//   `type=create`, 863:39983). Elle devient un champ où l'on tape le
 //   nom et, validé, l'option entre dans la liste, choisie. Avec la recherche et un
 //   texte tapé, elle dit « Créer « ce texte » » et crée aussitôt ; elle disparaît
 //   si l'option existe déjà. Le champ n'envoie rien d'autre que ses choix : la
@@ -108,11 +108,10 @@
 // × validation × text, et les propriétés label?, hint?, value, placeholder, comme
 // les props de ce fichier ; `text` vaut `value` pour un choix fait, `placeholder`
 // pour une boîte vide, en `text/muted`), 778:4266
-// `forms/Select List Combined` (la liste, 10 variantes : `List` single ou multi ×
-// `Search` × `Create option` × `Selected`), 777:1349 `forms/Select List`
-// (simple ou groupée), 777:1216 `forms/Single Select Menu Item`, 586:4868
-// `forms/Multi Select Menu Item`, 777:1968 `forms/Select Menu Item Create
-// Option`, 586:5379 `forms/Menu Group Label` et 586:4921 `forms/Chip Remove`.
+// `_SelectPanel` (la liste : `type` single ou multiple, et les booléens `searchable?`,
+// `creatable?`, `showSelected?`, comme les props de ce fichier), 777:1349 `forms/Select List`
+// (simple ou groupée), 863:39983 `_SelectItem` (une ligne : `type` multiple, single ou create, qui
+// remplace trois jeux), 586:5379 `forms/Menu Group Label` et 586:4921 `forms/Chip Remove`.
 // Chaque mesure y est liée à une variable.
 //
 // La validation — erreur, succès, aide — vient de `error`, `success` et `hint`, un
@@ -402,7 +401,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
             {
               showSelected && (
                 /* Ce qui est choisi, épinglé : une case cochée par choix, dessinée
-                   comme celle d'une option (`forms/Multi Select Menu Item`), même
+                   comme celle d'une option (`_SelectItem` `type=multiple`), même
                    pour un choix unique. La décocher retire le choix. Elle n'a pas de
                    `name` : elle ne s'envoie pas, la vraie est dans la liste. Les
                    lignes existent toutes, cachées : le script n'a qu'à les montrer,
@@ -1045,8 +1044,8 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :
      on doit toujours savoir laquelle on survole et laquelle a le focus. C'est la
-     ligne du Menu Item (340:972) avec une case devant — `forms/Multi Select Menu
-     Item`, 586:4868 : rembourrage 8 / 12, rayon `radius/md`, survol
+     ligne du Menu Item (340:972) avec une case devant — `_SelectItem`
+     `type=multiple`, 863:39983 : rembourrage 8 / 12, rayon `radius/md`, survol
      `neutral/100`. Les deux listes, à un et à plusieurs choix, ont le même
      rythme. */
   .select-list :global(.checkbox) {
@@ -1065,7 +1064,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
     font-weight: var(--font-weight-semibold);
   }
 
-  /* Une ligne de choix unique — `forms/Single Select Menu Item`, 777:1216. Le
+  /* Une ligne de choix unique — `_SelectItem` `type=single`, 863:39983. Le
      libellé et une coche à droite ; rembourrage `space/sm` et `space/md`, rayon
      `radius/md`, libellé en `font/size/ui` medium. Le radio natif la couvre en
      entier et ne se voit pas : c'est la ligne qui montre l'état. */
@@ -1155,7 +1154,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
     flex-direction: column;
   }
 
-  /* La ligne de création — `forms/Select Menu Item Create Option`, 777:1968 : la
+  /* La ligne de création — `_SelectItem` `type=create`, 863:39983 : la
      ligne d'une option, de la hauteur du petit bouton, avec un plus à droite. */
   .select-create[hidden] {
     display: none;

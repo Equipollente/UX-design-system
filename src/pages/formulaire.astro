@@ -543,7 +543,7 @@ const exemplesMultiple: Exemple[] = [
         <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur, ou plusieurs avec
         {' '}<code>multiple</code>, dans une liste. Nœud Figma <code>340:933</code>
         {' '}(<code>forms/Select</code>), dont l'état <code>Open</code> accroche la liste
-        {' '}<code>forms/Select List Combined</code> (<code>778:4266</code>).
+        {' '}<code>_SelectPanel</code> (<code>778:4266</code>).
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni un menu — un menu déclenche des actions, celui-ci
         renseigne une valeur qu'un formulaire enverra — ni un champ à suggestions : la liste est
@@ -662,15 +662,15 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Nœuds Figma.</strong> La boîte est <code>forms/Select</code> (<code>340:933</code>),
-        dont l'état <code>Open</code> accroche <code>forms/Select List Combined</code>
-        {' '}(<code>778:4266</code>) : dix variantes, <code>List</code> (<code>single</code> ou
-        {' '}<code>multi</code>) × <code>Search</code> × <code>Create option</code> ×
-        {' '}<code>Selected</code>. Son contenu est <code>forms/Select List</code>
+        dont l'état <code>Open</code> accroche <code>_SelectPanel</code>
+        {' '}(<code>778:4266</code>) : deux variantes, <code>type</code> (<code>single</code> ou
+        {' '}<code>multiple</code>), et trois booléens — <code>searchable?</code>,
+        {' '}<code>creatable?</code>, <code>showSelected?</code> — qui portent les trois compléments de la
+        liste, comme les props du code. Son contenu est <code>forms/Select List</code>
         {' '}(<code>777:1349</code>, simple ou groupée, ses noms de groupe en
         {' '}<code>forms/Menu Group Label</code>, <code>586:5379</code>), faite de
-        {' '}<code>forms/Single Select Menu Item</code> (<code>777:1216</code>) ou
-        {' '}<code>forms/Multi Select Menu Item</code> (<code>586:4868</code>). La ligne de création est
-        {' '}<code>forms/Select Menu Item Create Option</code> (<code>777:1968</code>), la pastille
+        {' '}<code>_SelectItem</code> (<code>863:39983</code>) : une ligne de choix unique, multiple, ou la ligne
+        {' '}qui crée une option, selon sa propriété <code>type</code>. La pastille
         {' '}<code>forms/Chip Remove</code> (<code>586:4921</code>). Chaque mesure y est liée à une
         variable.
       </p>

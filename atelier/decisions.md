@@ -466,3 +466,35 @@ Le texte par défaut est « Value » et « Placeholder », les mêmes pour les d
 d'exemple qui variaient (« Untitled project », « Enter your text here… », « Choose… ») sont partis avec.
 Le Select, qui dessine un « Choose… », sera traité à son tour. La poignée de redimensionnement de la zone de texte
 n'est pas dessinée : c'est le navigateur qui la pose, et elle diffère d'un système à l'autre.
+
+## Les lignes de la liste du Select sont un seul jeu, `_SelectItem`
+
+*02/11.* Les trois jeux de lignes — `Single Select Menu Item`, `Multi Select Menu Item`, `Select Menu Item Create
+Option` — deviennent un jeu interne, `_SelectItem`, avec `type` (multiple, single, create), `selected` et `state`. Ils
+dessinaient chacun la même ligne autour d'un contrôle différent ; le changer demandait trois gestes, sur 319
+instances. Les propriétés des onze jeux de la famille passent en minuscules, comme les champs, et la variante
+`State5` de la ligne de création — identique à `Default`, sans aucune instance — est supprimée.
+
+**Le Chip n'en fait pas partie.** `forms/Select Menu Item Chips` (351:273) est le composant Chip du système, avec sa
+propre section et son propre fichier de code ; l'avoir fondu dans `_SelectItem` aurait retiré un composant public. Une
+première passe l'avait fait, et a été défaite : les 112 pastilles du fichier sont revenues sur le Chip, intactes.
+
+Reste à ranger : les jeux de liste (`Select List`, `Combined`, `Search`, `Count`, `Count chips`, `Select Chips`), dont
+`Search`, `Count` et `Count chips` n'ont aucune instance et sont des états de donnée plus que des composants.
+
+## La liste du Select devient `_SelectPanel`, avec des booléens
+
+*02/11.* `Select List Combined` (778:4266) s'appelle `_SelectPanel`. Ses dix variantes — `List` × `Search` × `Create
+option` × `Selected` — tombent à deux : `type` (single ou multiple), et trois booléens, `searchable?`, `creatable?` et
+`showSelected?`, qui sont les noms des props du code. Les neuf instances du fichier gardent leur rendu ; l'une d'elles
+cachait ses choix épinglés par une surcharge, que le booléen a remplacée.
+
+**Décidé, pas encore fait.** La boîte `Select` perd son état `open` au profit d'un booléen `open?` qui montre ce panneau,
+comme le `menu?` du Select de Primer ; et le code se coupe en `Select` (un choix), `MultiSelect` (plusieurs) et
+`_SelectPanel` (la liste partagée), sans native — la liste reste dessinée. `creatable` reste sur les deux. Ce n'est pas
+un détail pour les sites qui consomment le paquet, mais c'est la décision de Judith, qui les gère.
+
+**Ce qui bloque l'état `open`.** Dix instances du fichier s'accrochent aux variantes `open` du Select — elles vivent
+dans les jeux de démonstration `Select List Search`, `Count` et `Count chips` (aucune instance extérieure). Les retirer
+sans les refaire casserait ces démonstrations : il faut d'abord les redessiner, comme variantes `type` du contenu du
+panneau (items, empty, max), à la manière du `Content` de Primer.
