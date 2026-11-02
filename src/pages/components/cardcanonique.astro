@@ -11,7 +11,7 @@ import PlaygroundButtons from '../../design-system/layouts/blocks/PlaygroundButt
 import PlaygroundImage from '../../design-system/layouts/blocks/PlaygroundImage.astro';
 import PlaygroundTags from '../../design-system/layouts/blocks/PlaygroundTags.astro';
 import PlaygroundText from '../../design-system/layouts/blocks/PlaygroundText.astro';
-import TextField from '../../design-system/components/TextField.astro';
+import Input from '../../design-system/components/Input.astro';
 import Tag from '../../design-system/components/Tag.astro';
 import { iconNames } from '../../design-system/lib/icons';
 import { withBase } from '../../design-system/lib/url';
@@ -97,14 +97,14 @@ import { withBase } from '../../design-system/lib/url';
 
   <div slot="playground-controls">
     <PlaygroundText id="text">
-      <TextField id="cardcanonique-playground-title" name="text-title" label="Titre" value="Carte avec actions" />
-      <TextField
+      <Input id="cardcanonique-playground-title" name="text-title" label="Titre" value="Carte avec actions" />
+      <Input
         id="cardcanonique-playground-subtitle"
         name="text-subtitle"
         label="Sous-titre"
         value="Les actions sont distinctes du lien de la carte."
       />
-      <TextField id="cardcanonique-playground-meta" name="text-meta" label="Meta" value="Exemple" />
+      <Input id="cardcanonique-playground-meta" name="text-meta" label="Meta" value="Exemple" />
     </PlaygroundText>
     <PlaygroundTags id="tags-top" tags={[{ label: 'En cours', variant: 'accent' }]} />
     <PlaygroundTags
@@ -119,7 +119,7 @@ import { withBase } from '../../design-system/lib/url';
       ]}
     />
     <PlaygroundImage id="image">
-      <TextField
+      <Input
         id="cardcanonique-playground-image-alt"
         name="image-alt"
         label="Texte alternatif"

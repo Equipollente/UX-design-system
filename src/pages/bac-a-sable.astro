@@ -18,7 +18,7 @@ import Tag from '../design-system/components/Tag.astro';
 import Icon from '../design-system/components/Icon.astro';
 import Card from '../design-system/components/Card.astro';
 import Modal from '../design-system/components/Modal.astro';
-import TextField from '../design-system/components/TextField.astro';
+import Input from '../design-system/components/Input.astro';
 import Select from '../design-system/components/Select.astro';
 import TextArea from '../design-system/components/TextArea.astro';
 import Radio from '../design-system/components/Radio.astro';
@@ -160,7 +160,7 @@ const defautModal = `<Modal
 // Les sept types qu'on peut poser dans une pile. L'ordre est celui de
 // /formulaire, et il est aussi celui des imports que le code produit.
 const typesChamp = [
-  { cle: 'TextField', nom: 'Champ texte' },
+  { cle: 'Input', nom: 'Champ texte' },
   { cle: 'Select', nom: 'Select' },
   { cle: 'TextArea', nom: 'Zone de texte' },
   { cle: 'Radio', nom: 'Radio (groupe)' },
@@ -193,11 +193,11 @@ const cleChamp = (t: string, r: boolean, d: boolean) => `${t}|${r ? 'r' : '-'}|$
 // exemple qui montre les deux façons dont un champ se remplit — on écrit, ou on
 // choisit. Sans JavaScript, c'est ce qui reste à l'écran, et c'est du code juste.
 const defautFormulaireEntete = `---
-import TextField from 'ux-design-system/components/TextField.astro';
+import Input from 'ux-design-system/components/Input.astro';
 import Select from 'ux-design-system/components/Select.astro';
 ---`;
 
-const defautFormulaire = `<TextField id="ton-nom" label="Ton nom" required />
+const defautFormulaire = `<Input id="ton-nom" label="Ton nom" required />
 
 <Select
   id="sujet"
@@ -1311,8 +1311,8 @@ import { withBase } from 'ux-design-system/lib/url';
       <div class="banque" data-banque aria-hidden="true">
         {
           combos.map(({ r, d }) => (
-            <span data-champ={cleChamp('TextField', r, d)}>
-              <TextField
+            <span data-champ={cleChamp('Input', r, d)}>
+              <Input
                 id={`bq-textfield-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
                 label={SENTINELLE}
                 placeholder=""
@@ -2270,7 +2270,7 @@ import { withBase } from 'ux-design-system/lib/url';
     // un fieldset : c'est la legend qui porte le nom du groupe, aucune prop ne le
     // fait. `liste` dit que le champ se nourrit d'une suite de choix.
     const TYPES = {
-      TextField: { liste: false, requis: true, groupe: false },
+      Input: { liste: false, requis: true, groupe: false },
       Select: { liste: true, requis: true, groupe: false },
       TextArea: { liste: false, requis: true, groupe: false },
       Radio: { liste: true, requis: false, groupe: true },
@@ -2286,7 +2286,7 @@ import { withBase } from 'ux-design-system/lib/url';
     // frappe les efface. Ils servent aussi à savoir, quand on change le type d'une
     // rangée, si le libellé a été touché — s'il ne l'a pas été, il suit le type.
     const DEPART: Record<Type, { libelle: string; choix: string }> = {
-      TextField: { libelle: 'Ton nom', choix: '' },
+      Input: { libelle: 'Ton nom', choix: '' },
       Select: { libelle: 'Sujet', choix: 'Devis, Question, Autre' },
       TextArea: { libelle: 'Ton message', choix: '' },
       Radio: { libelle: 'Format de l’échange', choix: 'Visio, Téléphone' },
@@ -2381,7 +2381,7 @@ import { withBase } from 'ux-design-system/lib/url';
 
     for (const bouton of atelierFormulaire.querySelectorAll<HTMLButtonElement>('[data-ajouter]')) {
       bouton.addEventListener('click', () => {
-        ajouter('TextField');
+        ajouter('Input');
         numeroter();
         rafraichir();
         // Le focus va sur le libellé qu'on vient de créer, et son mot de départ est
@@ -2586,7 +2586,7 @@ import { withBase } from 'ux-design-system/lib/url';
     // blocs de code : sans JavaScript on lit ce code-là, avec JavaScript on
     // manipule ce formulaire-ci, et les deux disent la même chose. La case du
     // premier champ est donc cochée ici aussi.
-    ajouter('TextField');
+    ajouter('Input');
     ajouter('Select');
     const premier = rangs()[0]?.querySelector<HTMLInputElement>('.rang-requis');
     if (premier) premier.checked = true;

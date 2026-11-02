@@ -4,7 +4,7 @@
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import DocExample from '../design-system/layouts/blocks/DocExample.astro';
 import FieldLabel from '../design-system/components/FieldLabel.astro';
-import TextField from '../design-system/components/TextField.astro';
+import Input from '../design-system/components/Input.astro';
 import Select from '../design-system/components/Select.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
@@ -33,7 +33,7 @@ const labelProps = [
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
-const textFieldProps = [
+const inputProps = [
   ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
   ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
   ['type', "'text' | 'email' | 'tel' | 'url' | 'search'", "'text'", 'Ce que le champ accepte. Les types d’une seule ligne, et eux seuls.'],
@@ -42,6 +42,9 @@ const textFieldProps = [
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
   ['maxlength', 'number', '—', 'La limite de caractères. Ici elle ne compte rien : c’est Text Area qui a le compteur.'],
   ['autocomplete', 'string', '—', 'Ce que le navigateur a le droit de proposer. Un nom, une adresse, un code.'],
+  ['hint', 'string', '—', 'L’aide : ce que le champ attend, lue avant que personne ne se trompe. Désignée par aria-describedby.'],
+  ['error', 'string', '—', 'Le message d’erreur. Pose aria-invalid, passe le trait en rouge et remplace l’aide.'],
+  ['success', 'string', '—', 'Le message de succès. Remplace l’aide, et cède à error : un seul message à la fois.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
@@ -72,6 +75,9 @@ const selectProps = [
   ['createQueryLabel', 'string', 'Créer « {q} »', 'La ligne de création quand un texte est tapé dans la recherche. {q} vaut ce texte.'],
   ['createPlaceholder', 'string', 'Nom de l’option', 'L’invite du champ où l’on tape le nom de l’option créée.'],
   ['requiredMessage', 'string', 'Choisir au moins une option.', 'multiple — ce que le navigateur dit si required et rien n’est coché.'],
+  ['hint', 'string', '—', 'L’aide : ce que le champ attend, lue avant que personne ne se trompe. Désignée par aria-describedby.'],
+  ['error', 'string', '—', 'Le message d’erreur. Passe le trait de la boîte en rouge et remplace l’aide. Ni un groupe ni un bouton ne portent aria-invalid : c’est le message qui dit l’erreur.'],
+  ['success', 'string', '—', 'Le message de succès. Remplace l’aide, et cède à error : un seul message à la fois.'],
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire, le même pour tous les contrôles.'],
   ['required', 'boolean', 'false', 'Au moins un choix. Pose l’astérisque.'],
   ['disabled', 'boolean', 'false', 'Éteint le champ entier, et la boîte ne s’ouvre plus.'],
@@ -116,6 +122,9 @@ const textAreaProps = [
   ['rows', 'number', '2 (natif)', 'Le nombre de lignes visibles. C’est la hauteur du champ, exprimée en lignes.'],
   ['maxlength', 'number', '—', 'La limite de caractères. C’est elle qui allume le compteur.'],
   ['showCount', 'boolean', 'false', 'Montre le compteur. Sans maxlength, il n’y a rien à compter.'],
+  ['hint', 'string', '—', 'L’aide : ce que le champ attend, lue avant que personne ne se trompe. Désignée par aria-describedby.'],
+  ['error', 'string', '—', 'Le message d’erreur. Pose aria-invalid, passe le trait en rouge et remplace l’aide.'],
+  ['success', 'string', '—', 'Le message de succès. Remplace l’aide, et cède à error : un seul message à la fois.'],
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque sur le libellé et l’attribut sur le champ.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — libellé et champ.'],
@@ -317,14 +326,14 @@ const exemplesMultiple: Exemple[] = [
       </div>
     </section>
 
-    <!-- ── Text field ────────────────────────────────────── -->
+    <!-- ── Input ────────────────────────────────────── -->
     <section>
-      <h2>Text field</h2>
+      <h2>Input</h2>
 
       <p class="section-note">
         <strong>Ce qu'il est.</strong> Une ligne où quelqu'un tape du texte — un nom, une adresse,
         un sujet. Ce que le système ne peut pas proposer d'avance. Nœud Figma <code>23:29</code>,
-        six variantes.
+        neuf variantes — trois états, trois validations.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni <code>Text Area</code>, qui est la même chose sur
         plusieurs lignes et qui compte ses caractères ; ni <code>Select</code>, dont la liste est
@@ -351,19 +360,31 @@ const exemplesMultiple: Exemple[] = [
       <div class="demo demo-fields">
         <div class="demo-case">
           <p class="demo-name">default — sur son invite</p>
-          <TextField id="sujet-a" label="Sujet" placeholder="Ce dont tu veux parler" />
+          <Input id="sujet-a" label="Sujet" placeholder="Ce dont tu veux parler" />
         </div>
         <div class="demo-case">
           <p class="demo-name">required</p>
-          <TextField id="sujet-b" label="Sujet" placeholder="Ce dont tu veux parler" required />
+          <Input id="sujet-b" label="Sujet" placeholder="Ce dont tu veux parler" required />
         </div>
         <div class="demo-case">
           <p class="demo-name">rempli — type="email"</p>
-          <TextField id="sujet-c" label="Adresse e-mail" type="email" value="bonjour@exemple.fr" />
+          <Input id="sujet-c" label="Adresse e-mail" type="email" value="bonjour@exemple.fr" />
         </div>
         <div class="demo-case">
           <p class="demo-name">disabled + required</p>
-          <TextField id="sujet-d" label="Sujet" placeholder="Ce dont tu veux parler" required disabled />
+          <Input id="sujet-d" label="Sujet" placeholder="Ce dont tu veux parler" required disabled />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">hint</p>
+          <Input id="sujet-e" label="Adresse e-mail" type="email" hint="Celle de ton compte, pas une adresse de travail." />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">error</p>
+          <Input id="sujet-f" label="Adresse e-mail" type="email" value="bonjour@exemple" error="Il manque l’extension : .fr, .com…" required />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">success</p>
+          <Input id="sujet-g" label="Adresse e-mail" type="email" value="bonjour@exemple.fr" success="Cette adresse est disponible." />
         </div>
       </div>
 
@@ -375,7 +396,7 @@ const exemplesMultiple: Exemple[] = [
         </thead>
         <tbody>
           {
-            textFieldProps.map(([nom, type, defaut, note]) => (
+            inputProps.map(([nom, type, defaut, note]) => (
               <tr>
                 <td><code>{nom}</code></td>
                 <td><code>{type}</code></td>
@@ -397,27 +418,37 @@ const exemplesMultiple: Exemple[] = [
         texte part.
       </p>
 
-      <p class="flag">
-        <strong>La variante <code>Multiline</code> n'est pas implémentée.</strong> Elle dessine ce
-        que <code>Text Area</code> fait déjà, avec son propre nœud et son compteur. Deux composants
-        pour une même chose se sépareraient au premier changement — c'est celui qui a le compteur
-        qui reste.
+      <p class="section-note">
+        <strong>L'erreur, le succès et l'aide sont dans le nœud.</strong> Trois props —
+        {' '}<code>error</code>, <code>success</code> et <code>hint</code> — et un seul message à la
+        fois : l'erreur l'emporte sur le succès, qui l'emporte sur l'aide. Une erreur pose
+        {' '}<code>aria-invalid</code> sur le champ, et tout message est désigné par
+        {' '}<code>aria-describedby</code> : le lecteur d'écran le lit en entrant. Le message n'est
+        pas une alerte, il ne s'annonce pas à la frappe, pour ne pas couvrir la dictée du texte. Son
+        icône sépare l'erreur du succès sans passer par la couleur seule (WCAG 1.4.1).
+      </p>
+
+      <p class="section-note">
+        <strong>La variante multiligne est sortie du nœud.</strong> Elle dessinait ce que
+        {' '}<code>Text Area</code> fait déjà, avec son propre compteur ; deux composants pour une même
+        chose se seraient séparés au premier changement. Le jeu s'appelle maintenant
+        {' '}<code>forms/Input</code>, le nom du code.
       </p>
 
       <p class="flag">
-        <strong>Le nœud n'a ni état désactivé ni état d'erreur</strong>, et sa description dit
-        pourquoi : en inventer un reviendrait à inventer des couleurs. <code>disabled</code> est
-        pourtant écrit, parce que les six autres champs le portent et qu'il ne tient qu'à
-        {' '}<code>opacity/disabled</code>, qui existe déjà. L'erreur, elle, ne l'est pas : elle
-        demanderait une encre, un trait et un message qui n'existent nulle part. C'est la seule
-        chose qui manque à ce champ pour être complet, et elle se dessine dans Figma.
+        <strong>Le trait du succès ne tient pas les 3:1.</strong> Il lit
+        {' '}<code>color/feedback/success/solid</code>, à <strong>2,7:1</strong> sur le fond du champ :
+        aucun token de trait vert n'atteint le seuil de WCAG 1.4.11. Le message, avec sa coche,
+        porte l'état — le trait ne le porte pas seul. Un token plus foncé se crée dans Figma ;
+        l'écart est dans <code>arbitrages.md</code>, avec l'icône du message, qui prend
+        {' '}<code>button/icon-size/sm</code> (20) faute d'un cran plus petit.
       </p>
 
       <p class="section-note">
         <strong>Les trois champs se dessinent au même endroit.</strong> Police, encre, fond, trait,
         rayon, rembourrage, hauteur, survol, état éteint : tout est écrit une fois dans
         {' '}<code>global.css</code>, en recette de balise — à côté de celle du <code>h2</code> et du
-        {' '}<code>p</code>. Text field, Text Area et Select ne déclarent plus que leur place et ce
+        {' '}<code>p</code>. Input, Text Area et Select ne déclarent plus que leur place et ce
         qui leur est propre : le chevron pour l'un, le compteur pour l'autre. Ce qui change là a
         déjà changé pour les trois, comme <code>FieldLabel</code> le fait du libellé.
       </p>
@@ -466,6 +497,22 @@ const exemplesMultiple: Exemple[] = [
           </DocExample>
         ))
       }
+
+      <h3>Validation</h3>
+      <div class="demo demo-fields">
+        <div class="demo-case">
+          <p class="demo-name">hint</p>
+          <Select id="pays-a" label="Pays" options={['France', 'Belgique', 'Suisse']} hint="Celui où tu vis aujourd'hui." />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">error</p>
+          <Select id="pays-b" label="Pays" options={['France', 'Belgique', 'Suisse']} error="Choisis un pays." required />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">success</p>
+          <Select id="pays-c" label="Pays" options={['France', 'Belgique', 'Suisse']} value="France" success="Livraison possible." />
+        </div>
+      </div>
 
       <h3>Props</h3>
       <div class="table-scroll">
@@ -528,7 +575,7 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Ce champ porte enfin un trait au repos.</strong> Sa boîte n'en avait aucun, là où
-        Text field et Text Area en portaient un de 1 — trois champs voisins, deux dessins. Le nœud a
+        Input et Text Area en portaient un de 1 — trois champs voisins, deux dessins. Le nœud a
         été redessiné, et ses quatre états lisent maintenant <code>border/default</code> : le même
         trait que les deux autres, à la même épaisseur et du même côté. Le fond
         {' '}<code>bg/surface</code>, lui, n'a pas changé.
@@ -1076,6 +1123,16 @@ const exemplesMultiple: Exemple[] = [
             value="Une refonte du parcours d’inscription."
             rows={5}
             disabled
+          />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">error</p>
+          <TextArea
+            id="desc-e"
+            label="Description"
+            value="Trop court."
+            rows={5}
+            error="Dis-nous en un peu plus : trois phrases au moins."
           />
         </div>
       </div>

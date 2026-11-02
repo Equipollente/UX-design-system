@@ -1,5 +1,5 @@
 ---
-// TextField — une ligne où quelqu'un tape du texte. Un nom, une adresse, un
+// Input — une ligne où quelqu'un tape du texte. Un nom, une adresse, un
 // sujet : ce qui tient sur une ligne et que le système ne peut pas proposer
 // d'avance.
 //
@@ -10,17 +10,18 @@
 // part dans le système.
 //
 // Le libellé n'est pas dessiné ici : il vient de FieldLabel, comme dans tous les
-// autres champs. Le dessin de la boîte non plus — police, encre, fond, trait,
+// autres champs. Le message sous la boîte non plus : il vient de _FieldMessage. Le dessin de la boîte non plus — police, encre, fond, trait,
 // rayon, rembourrage, hauteur, survol, désactivé : tout est la recette de balise
 // de global.css, partagée mot pour mot avec Text Area et Select. C'est ce qui
 // garantit que les trois champs sont identiques, et ce fichier ne déclare plus
 // que la place du sien.
 //
-// Nœud Figma : 23:29 — `forms/Field`, 6 variantes (Text · Multiline ×
-// Default · Hover · Focused). Il porte le nom d'un tiroir, `forms/`, et un nom
-// générique, `Field` : le code l'appelle TextField, parce que « field » désigne
-// aussi bien le select et la zone de texte, et que c'est déjà le nom de la
-// classe qui les enveloppe tous les trois. Le décalage est écrit dans LINKS.md.
+// Nœud Figma : 23:29 — `forms/Input`, 12 variantes (state × validation) et cinq
+// propriétés de contenu : label, label?, required?, hint?, value. Le nom est celui
+// du code depuis le 02/11 ; avant, le nœud s'appelait `forms/Field`, puis
+// `forms/Text Field`, et portait une variante multiligne, qui est Text Area et
+// en est sortie. Le nom d'un composant qui porte un champ de saisie est celui de la
+// balise qu'il habille — c'est aussi celui de Primer.
 //
 // Ce nœud est resté hors du sprint des formulaires du 27/08, qui avait relevé
 // les neuf composants de la plage 340–355 : celui-ci est en 23, dessiné bien
@@ -50,14 +51,19 @@
 // `bg/surface` ne diffèrent que par le canal bleu). Ils ont été redessinés sur
 // lui.
 //
-// ⚠️ Le nœud n'a ni état désactivé ni état d'erreur, et sa description dit
-// pourquoi : en inventer un reviendrait à inventer des couleurs. `disabled` est
-// pourtant écrit — dans la recette, pour les trois champs à la fois — parce
-// qu'il ne tient qu'à `opacity/disabled`, qui existe déjà. L'erreur, elle, n'est
-// pas écrite : elle demanderait une encre, un trait et un message qui n'existent
-// nulle part. Les deux écarts sont signalés dans la doc.
+// La validation — erreur, succès, aide — vient de trois props, `error`, `success`
+// et `hint`, et d'un seul message à la fois : l'erreur l'emporte sur le succès,
+// qui l'emporte sur l'aide (lib/field-message.ts). Une erreur pose `aria-invalid`
+// sur la balise ; tout message est désigné par `aria-describedby`, que le lecteur
+// d'écran lit en entrant dans le champ. Le trait suit le verdict — rouge, vert —
+// par `data-validation`, que lit la recette de global.css.
+//
+// Ce que Figma dessine encore sans que le code le suive : l'état `read-only` n'y
+// est pas, et aucune vue ne le demande.
 
 import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
+import { resolveFieldMessage } from '../lib/field-message';
 
 interface Props {
   /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
@@ -72,6 +78,12 @@ interface Props {
   name?: string;
   maxlength?: number;
   autocomplete?: string;
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Pose `aria-invalid` et passe le trait en rouge. Il remplace l'aide. */
+  error?: string;
+  /** Le message de succès. Il remplace l'aide, et cède à l'erreur. */
+  success?: string;
   required?: boolean;
   disabled?: boolean;
   class?: string;
@@ -86,11 +98,19 @@ const {
   name,
   maxlength,
   autocomplete,
+  hint,
+  error,
+  success,
   required = false,
   disabled = false,
   class: className,
   ...rest
 } = Astro.props;
+
+// Un seul message, et la balise le désigne : la lecture d'un champ commence par ce
+// qu'il demande, et finit par ce qui cloche.
+const message = resolveFieldMessage({ hint, error, success });
+const messageId = `${id}-message`;
 
 const classes = ['field', className].filter(Boolean).join(' ');
 ---
@@ -108,7 +128,12 @@ const classes = ['field', className].filter(Boolean).join(' ');
     autocomplete={autocomplete}
     required={required}
     disabled={disabled}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={message ? messageId : undefined}
+    data-validation={message && message.type !== 'hint' ? message.type : undefined}
   />
+
+  {message && <FieldMessage type={message.type} id={messageId}>{message.text}</FieldMessage>}
 </div>
 
 <style>

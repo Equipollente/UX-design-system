@@ -1,7 +1,7 @@
 ---
 import Button from '../../components/Button.astro';
 import Select from '../../components/Select.astro';
-import TextField from '../../components/TextField.astro';
+import Input from '../../components/Input.astro';
 import Toggle from '../../components/Toggle.astro';
 import { iconNames } from '../../lib/icons';
 
@@ -27,7 +27,7 @@ const actionRows = actions.length > 0 ? actions : [{ label: 'Nouvelle action', v
     <div class="playground-button-list" data-playground-button-list>
       {actionRows.map((action, index) => (
         <div class="playground-button-row" data-playground-button-row>
-          <TextField
+          <Input
             id={`${id}-label-${index + 1}`}
             name="action-label"
             label="Libellé"
@@ -56,7 +56,7 @@ const actionRows = actions.length > 0 ? actions : [{ label: 'Nouvelle action', v
 
     <template data-playground-button-template>
       <div class="playground-button-row" data-playground-button-row>
-        <TextField id={`${id}-label-template`} name="action-label" label="Libellé" value="Nouveau bouton" />
+        <Input id={`${id}-label-template`} name="action-label" label="Libellé" value="Nouveau bouton" />
         <div class="playground-button-options">
           <Select id={`${id}-variant-template`} name="action-variant" label="Variante" options={['primary', 'secondary', 'alert']} value="primary" />
           <Select id={`${id}-icon-template`} name="action-icon" label="Icône" options={['', ...iconNames]} value="" />

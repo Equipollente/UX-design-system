@@ -1,0 +1,75 @@
+---
+// _FieldMessage — ce que dit un champ sous sa boîte, et rien d'autre. Pièce
+// interne : Input, TextArea et Select la posent, personne ne la pose seule.
+// Le préfixe `_` le dit, comme `_ToggleSwitch` chez Primer.
+//
+// Trois sortes de message, un seul dessin : une erreur (un triangle), un succès
+// (une coche), une aide (rien devant le texte). L'icône n'est pas là pour décorer :
+// c'est elle qui sépare l'erreur du succès sans passer par la couleur seule
+// (WCAG 1.4.1). Elle est `aria-hidden`, parce que le sens est déjà dans les mots
+// et que le champ porte `aria-invalid` quand il est en erreur.
+//
+// Ce n'est pas une alerte. Il n'est pas une région vivante : un message qui
+// apparaît à la frappe n'a pas à interrompre la dictée du texte. Le champ le
+// désigne par `aria-describedby`, et un lecteur d'écran le lit en entrant dedans.
+//
+// Nœud Figma : 859:37946 — `_FieldMessage`, trois variantes (error · success ·
+// hint). Il remplace les vingt-huit cadres que les trois champs dessinaient chacun
+// de leur côté : si l'icône, la couleur ou l'écart change, c'est ici et là-bas
+// une seule fois.
+//
+// Mesures — liées, aucune en dur :
+// — écart entre l'icône et le texte → `space/xs` ;
+// — icône → `button/icon-size/sm`, le plus petit cran qui existe (20), faute d'un
+//   token plus petit ; c'est un écart noté dans arbitrages.md ;
+// — texte 14 / 120 % en Regular → `font/size/ui`, `font/line-height/snug`.
+
+import Icon from './Icon.astro';
+import type { FieldMessageType } from '../lib/field-message';
+
+interface Props {
+  /** Ce que dit le message. Il décide de l'encre et de l'icône. */
+  type: FieldMessageType;
+  /** L'`id` que le champ désigne par `aria-describedby`. */
+  id: string;
+  class?: string;
+}
+
+const { type, id, class: className } = Astro.props;
+const icon = type === 'error' ? 'alert-triangle' : type === 'success' ? 'check' : undefined;
+const classes = ['field-message', `field-message-${type}`, className].filter(Boolean).join(' ');
+---
+
+<p class={classes} id={id}>
+  {icon && <Icon name={icon} />}<span class="field-message-text"><slot /></span>
+</p>
+
+<style>
+  .field-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0;
+    /* La taille d'icône descend par héritage jusqu'au <svg>, comme dans le bouton. */
+    --icon-size: var(--button-icon-size-sm);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-ui);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--font-line-height-snug);
+  }
+
+  /* L'encre : le « text » de chaque famille de feedback, pas son « solid » — les
+     deux ne tiennent pas le même seuil sur le fond de la page. L'aide reste en
+     muted, comme tout ce qui est secondaire. */
+  .field-message-error {
+    color: var(--color-feedback-danger-text);
+  }
+
+  .field-message-success {
+    color: var(--color-feedback-success-text);
+  }
+
+  .field-message-hint {
+    color: var(--color-text-muted);
+  }
+</style>

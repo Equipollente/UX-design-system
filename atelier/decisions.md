@@ -419,3 +419,21 @@ au survol. Une flèche en fin de libellé (`iconEnd`) aide à reconnaître ce qu
 Le Ghost n'est **pas redessiné** pour autant : il garde sa taille, sa pilule et son anneau. Le dessin `Link`
 reste dans Figma (`613:4816`), rangé dans la liste des non-intégrés de LINKS.md ; un lien qui devrait se
 lire comme du texte, soulignement compris, se rouvrirait à ce moment-là.
+
+## Le champ texte s'appelle Input
+
+*02/11.* `TextField` devient `Input`, dans Figma (`forms/Input`) et dans le code
+([Input.astro](../src/design-system/components/Input.astro)). Le nom d'un composant qui habille un champ de
+saisie est celui de la balise : c'est celui de Primer, et c'est ce qu'un designer attend. « Field » désignait
+aussi bien le select et la zone de texte, et n'était déjà plus le nom d'un seul objet.
+
+Le nœud est aussi normalisé sur ses voisins : `state=disabled` (copié de Text Area : opacité de la boîte,
+encre `text/disabled`), `validation` (`error`, `success`), et la propriété `value`, que Text Area et Select
+avaient déjà. La description du nœud, qui disait « pas d'état désactivé ni d'erreur », est réécrite.
+
+**C'est un changement cassant pour qui consomme le paquet.** `ux-design-system/components/TextField.astro`
+n'existe plus : un site qui l'importe doit passer à `Input.astro`. Le renommage doit donc partir avec une
+version mineure en 0.x, et le portfolio — s'il emploie le champ — change son import le même jour.
+
+**Pas fusionné avec `forms/search`.** On l'avait pris pour un doublon de l'Input ; ses quatorze instances
+sont toutes dans les listes du Select, c'est la recherche de la liste. Elle reste une pièce du Select.

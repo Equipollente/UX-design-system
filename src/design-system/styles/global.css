@@ -122,7 +122,7 @@ pre {
  * déclarations de typographie, trois fois, et trois boîtes qui divergeaient sans
  * que rien ne l'ait décidé.
  *
- * La liste de types est celle de la prop `type` de TextField, mot pour mot. Elle
+ * La liste de types est celle de la prop `type` de Input, mot pour mot. Elle
  * tient dehors `checkbox`, `radio`, `file` et `range` : leur dessin appartient à
  * Checkbox, Radio, Toggle, Chip et AddImage, qui posent tous `appearance: none`
  * et leur propre géométrie, et qu'une recette de champ écraserait.
@@ -202,6 +202,31 @@ select:hover,
 textarea:hover,
 .field-box:hover {
   border-color: var(--color-border-hover);
+}
+
+/* — validation — Le trait prend la couleur du verdict, et la garde au survol : un
+ * champ en erreur qui reprendrait son gris dès que la souris passe dessus
+ * cacherait ce qu'on est en train de lire. Écrit après le survol, avant le
+ * désactivé — à spécificité égale c'est l'ordre qui tranche, et un champ éteint
+ * n'affiche plus de verdict. Le focus n'est pas touché : son anneau garde sa
+ * couleur, comme dans Figma.
+ *
+ * L'erreur lit `border/danger` (4,3:1 sur le fond). Le succès lit `success/solid`,
+ * à 2,7:1 : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11. Ce n'est
+ * pas ce qui porte l'état — le message, avec son icône, le porte, et le trait ne
+ * l'accompagne que pour la forme. L'écart est dans arbitrages.md. */
+input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search'])[data-validation='error'],
+select[data-validation='error'],
+textarea[data-validation='error'],
+.field-box[data-validation='error'] {
+  border-color: var(--color-border-danger);
+}
+
+input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search'])[data-validation='success'],
+select[data-validation='success'],
+textarea[data-validation='success'],
+.field-box[data-validation='success'] {
+  border-color: var(--color-feedback-success-solid);
 }
 
 /* — désactivé — écrit après le survol : à spécificité égale c'est l'ordre qui

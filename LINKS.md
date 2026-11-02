@@ -45,8 +45,9 @@ le `LINKS.md` du dossier `portfolio`.
 | Case Study List | [`222-814`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=222-814) | [CaseStudyList.astro](src/design-system/components/CaseStudyList.astro) |
 | Home (la pile en situation, 3 états — section de la page Templates, ancienne page HP) | [`729-3`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=729-3) | [templates/home.astro](src/pages/templates/home.astro) |
 | FieldLabel | — (spécifié en conversation) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
-| _FieldMessage (pièce interne : l'icône et le texte sous un champ en erreur ou en succès ; Text Field, Text Area et Select la posent) | [`859-37946`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=859-37946) | — (pas encore codée) |
-| Text Field (jeu de variantes `state` × `validation`, avec `label`, `label?`, `required?` et `hint?` ; la variante multiligne en est sortie, c'est Text Area, et Form Group, retiré le 02/11, y est fondu) | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | [TextField.astro](src/design-system/components/TextField.astro) |
+| _FieldMessage (pièce interne : l'icône et le texte sous un champ en erreur ou en succès ; Input, Text Area et Select la posent) | [`859-37946`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=859-37946) | [_FieldMessage.astro](src/design-system/components/_FieldMessage.astro), choix du message dans [field-message.ts](src/design-system/lib/field-message.ts) |
+| _FieldLabel (pièce interne : le libellé d'un champ, avec son astérisque `required?` ; Input, Text Area et Select la posent en instance exposée) | [`861-38240`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=861-38240) | [FieldLabel.astro](src/design-system/components/FieldLabel.astro) |
+| Input (jeu de variantes `state` × `validation`, avec `label`, `label?`, `required?`, `hint?` et `value` ; la variante multiligne en est sortie, c'est Text Area, et Form Group, retiré le 02/11, y est fondu) | [`23-29`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=23-29) | [Input.astro](src/design-system/components/Input.astro) |
 | Select (la boîte, 5 états dont `Open`) | [`340-933`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=340-933) | [Select.astro](src/design-system/components/Select.astro) |
 | Select List Combined (la liste : `List` single · multi × `Search` × `Create option` × `Selected`) | [`778-4266`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=778-4266) | [Select.astro](src/design-system/components/Select.astro) |
 | Select List (la liste simple ou groupée) | [`777-1349`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=777-1349) | [Select.astro](src/design-system/components/Select.astro) |
@@ -91,11 +92,9 @@ Quatrième décalage, tranché dans l'autre sens : la variante `Lime` du Tag con
 de couleur pour lire un nom de rôle. C'est la variante qu'il faut renommer — ligne ouverte dans
 [arbitrages.md](atelier/arbitrages.md).
 
-Cinquième décalage, et il porte deux noms d'un coup : Figma appelle le champ texte `forms/Field`.
-`forms/` est un nom de tiroir, comme le `Section.` d'Intro ; `Field` désigne n'importe quel champ —
-le select et la zone de texte compris — et c'est déjà le nom de la classe qui les enveloppe tous les
-trois. Le code l'appelle `TextField`. Renommage à trancher côté Figma, ligne ouverte dans
-[arbitrages.md](atelier/arbitrages.md).
+Cinquième décalage, réglé le 02/11 : Figma appelait le champ texte `forms/Field`, puis
+`forms/Text Field`, quand le code disait `TextField`. Les deux s'appellent maintenant `Input` —
+`forms/Input` dans Figma, [Input.astro](src/design-system/components/Input.astro) dans le code.
 
 **Ce nœud est resté invisible pendant tout le sprint des formulaires.** Il n'était ni dans le tableau
 ci-dessus, ni dans la liste des non-intégrés : le sprint du 27/08 avait relevé les neuf composants de

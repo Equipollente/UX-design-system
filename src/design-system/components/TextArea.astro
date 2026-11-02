@@ -8,12 +8,13 @@
 // n'est pas non plus un éditeur : rien ici ne met en gras, n'insère de lien ni
 // ne garde de mise en forme.
 //
-// Nœud Figma : 343:273 — 4 variantes d'état, plus `Show Count`.
+// Nœud Figma : 343:273 — `forms/Text Area`, 12 variantes (state × validation) ;
+// propriétés label, value, count, count?. Le message sous la boîte est `_FieldMessage`.
 //
 // Le libellé vient de FieldLabel, comme dans tous les autres champs. Le dessin
 // de la boîte vient de global.css — police, encre, fond, trait, rayon,
 // rembourrage, survol, désactivé, et `resize: vertical`, qui vaut pour toute
-// zone de texte du système. La recette est partagée mot pour mot avec Text field
+// zone de texte du système. La recette est partagée mot pour mot avec Input
 // et Select ; ce fichier ne déclare plus que la place de la zone et son
 // compteur.
 //
@@ -42,6 +43,11 @@
 // 245 contre 255. Les trois champs foncent maintenant leur trait, le geste que
 // le nœud du champ texte dessinait déjà, et 343:273 a été redessiné dessus.
 //
+// La validation — erreur, succès, aide — vient de `error`, `success` et `hint`, un
+// seul message à la fois (lib/field-message.ts). Une erreur pose `aria-invalid` ;
+// tout message est désigné par `aria-describedby`. Le compteur, lui, reste sous le
+// message, à droite : c'est lui qui ferme la colonne.
+//
 // Ce que Figma déclare et qui n'est pas ici :
 // — la casse `TITLE` du libellé : elle capitaliserait chaque mot du texte que
 //   l'appelant donne, ce qui est faux dès qu'un libellé porte un nom propre ou
@@ -51,6 +57,8 @@
 //   un arbitrage de dessin, pas une mécanique — il se tranche dans Figma.
 
 import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
+import { resolveFieldMessage } from '../lib/field-message';
 
 interface Props {
   /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
@@ -67,6 +75,12 @@ interface Props {
   maxlength?: number;
   /** Montre le compteur. Sans `maxlength`, il n'y a rien à compter. */
   showCount?: boolean;
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Pose `aria-invalid` et passe le trait en rouge. Il remplace l'aide. */
+  error?: string;
+  /** Le message de succès. Il remplace l'aide, et cède à l'erreur. */
+  success?: string;
   name?: string;
   required?: boolean;
   disabled?: boolean;
@@ -81,6 +95,9 @@ const {
   rows,
   maxlength,
   showCount = false,
+  hint,
+  error,
+  success,
   name,
   required = false,
   disabled = false,
@@ -92,6 +109,8 @@ const {
 // « 12 / 500 » dit combien il en reste.
 const count = showCount && maxlength ? { current: (value ?? '').length, max: maxlength } : null;
 const countId = `${id}-count`;
+const message = resolveFieldMessage({ hint, error, success });
+const messageId = `${id}-message`;
 
 const classes = ['field', className].filter(Boolean).join(' ');
 ---
@@ -107,8 +126,13 @@ const classes = ['field', className].filter(Boolean).join(' ');
     placeholder={placeholder}
     required={required}
     disabled={disabled}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={message ? messageId : undefined}
+    data-validation={message && message.type !== 'hint' ? message.type : undefined}
     data-count-for={count ? countId : undefined}>{value}</textarea
   >
+
+  {message && <FieldMessage type={message.type} id={messageId}>{message.text}</FieldMessage>}
 
   {
     count && (
@@ -146,7 +170,7 @@ const classes = ['field', className].filter(Boolean).join(' ');
 }
 
 <style>
-  /* 5 — la mesure du nœud, et celle que Text field et Select emploient déjà. */
+  /* 5 — la mesure du nœud, et celle que Input et Select emploient déjà. */
   .field {
     display: flex;
     flex-direction: column;
@@ -154,7 +178,7 @@ const classes = ['field', className].filter(Boolean).join(' ');
   }
 
   /* La zone ne déclare que sa place. Tout son dessin est la recette de balise de
-     global.css, qu'elle partage mot pour mot avec Text field et Select. La
+     global.css, qu'elle partage mot pour mot avec Input et Select. La
      hauteur, elle, ne s'écrit pas du tout : c'est `rows` qui la tient, en lignes
      plutôt qu'en pixels. */
   textarea {

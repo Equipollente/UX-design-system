@@ -61,7 +61,7 @@ La page fournit uniquement les deux contenus propres au composant :
 ```astro
 <ComponentDetailLayout ...>
   <div slot="playground-controls">
-    <!-- TextField, Select, Checkbox, etc. propres au composant. -->
+    <!-- Input, Select, Checkbox, etc. propres au composant. -->
   </div>
 
   <div slot="playground">
@@ -100,7 +100,7 @@ documenté. Ils rendent uniquement ses contrôles ; la page conserve la lecture 
 |---|---|---|---|
 | `PlaygroundButtons` | `id`, `actions?` | Aucun slot ; les lignes sont générées par le groupe | Actions configurables, avec libellé, variante et icône ; ajout et suppression de lignes |
 | `PlaygroundTags` | `id`, `tags?` | Aucun slot ; les lignes sont générées par le groupe | Une collection de tags ; utiliser une instance par slot ou zone (`tags-top`, `tags-bottom`) |
-| `PlaygroundText` | `id`, `label?` | Les `TextField` et `Select` propres au texte | Texte optionnel dont les champs sont fournis par la page |
+| `PlaygroundText` | `id`, `label?` | Les `Input` et `Select` propres au texte | Texte optionnel dont les champs sont fournis par la page |
 | `PlaygroundImage` | `id`, `label?` | Les champs propres à l'image, au minimum le texte alternatif | Image optionnelle dont les champs sont fournis par la page |
 
 Le `id` est le contrat de raccordement du groupe : il doit être unique dans le playground et être
@@ -108,7 +108,7 @@ réutilisé pour les trois éléments suivants :
 
 ```astro
 <PlaygroundText id="text">
-  <TextField id="card-title" name="text-title" label="Titre" value="Titre" />
+  <Input id="card-title" name="text-title" label="Titre" value="Titre" />
 </PlaygroundText>
 
 <CardText data-playground-preview="text" ... />
@@ -141,10 +141,10 @@ Exemple de composition pour une carte :
   tags={[{ label: 'Gouache', variant: 'outline' }]}
 />
 <PlaygroundText id="text">
-  <TextField id="card-title" name="text-title" label="Titre" value="Titre" />
+  <Input id="card-title" name="text-title" label="Titre" value="Titre" />
 </PlaygroundText>
 <PlaygroundImage id="image">
-  <TextField id="card-alt" name="image-alt" label="Texte alternatif" value="Description" />
+  <Input id="card-alt" name="image-alt" label="Texte alternatif" value="Description" />
 </PlaygroundImage>
 ```
 

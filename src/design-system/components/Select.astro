@@ -45,7 +45,7 @@
 // focus se voit sur la ligne.
 //
 // La boîte fermée est le bouton, et il porte `.field-box` : la recette de
-// global.css le dessine mot pour mot comme Text field et Text Area — trait, fond,
+// global.css le dessine mot pour mot comme Input et Text Area — trait, fond,
 // rayon, hauteur `control/height`, survol. Son chevron se pose de la même façon.
 //
 // La liste flotte, et rien n'y est écrit à la main. C'est un `popover` natif :
@@ -111,10 +111,21 @@
 // `forms/Multi Select Menu Item`, 777:1968 `forms/Select Menu Item Create
 // Option`, 586:5379 `forms/Menu Group Label` et 586:4921 `forms/Chip Remove`.
 // Chaque mesure y est liée à une variable.
+//
+// La validation — erreur, succès, aide — vient de `error`, `success` et `hint`, un
+// seul message à la fois (lib/field-message.ts), posé sous la boîte et ses
+// pastilles. Le fieldset le désigne par `aria-describedby`, avec la région de
+// limite quand il y en a une. Il ne pose pas `aria-invalid` : ni un groupe ni un
+// bouton ne le portent en ARIA, et le poser sur une balise qui ne le comprend pas
+// ne dirait rien au lecteur d'écran. C'est donc le message qui dit l'erreur, en
+// toutes lettres ; le trait de la boîte en rouge n'est que son accompagnement.
+// Ouvert, le champ garde son message sous la boîte et la liste s'ouvre dessous.
 
 import FieldLabel from './FieldLabel.astro';
 import Checkbox from './Checkbox.astro';
 import Icon from './Icon.astro';
+import FieldMessage from './_FieldMessage.astro';
+import { resolveFieldMessage } from '../lib/field-message';
 
 type Option = string | { value: string; label: string };
 interface OptionGroup {
@@ -179,6 +190,12 @@ interface Props {
   requiredMessage?: string;
   /** Le nom envoyé par le formulaire, le même pour tous les contrôles. */
   name?: string;
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Passe le trait de la boîte en rouge. Il remplace l'aide. */
+  error?: string;
+  /** Le message de succès. Il remplace l'aide, et cède à l'erreur. */
+  success?: string;
   /** Au moins un choix. Pose l'astérisque. */
   required?: boolean;
   disabled?: boolean;
@@ -211,6 +228,9 @@ const {
   createPlaceholder = "Nom de l'option",
   requiredMessage = 'Choisir au moins une option.',
   name,
+  hint,
+  error,
+  success,
   required = false,
   disabled = false,
   class: className,
@@ -250,6 +270,14 @@ const summary = multiple
     : fill(count === 1 ? countOneLabel : countLabel, count)
   : (items.find((o) => chosen.includes(o.value))?.label ?? placeholder);
 
+const message = resolveFieldMessage({ hint, error, success });
+const messageId = `${id}-message`;
+// Le fieldset désigne la région de limite, et le message : les deux se lisent à l'entrée.
+const describedBy =
+  [multiple && max !== undefined ? `${id}-status` : undefined, message ? messageId : undefined]
+    .filter(Boolean)
+    .join(' ') || undefined;
+
 const statusId = `${id}-status`;
 const listId = `${id}-list`;
 // Le nom d'ancre lie la liste à sa boîte. Il est unique comme l'`id` dont il
@@ -262,7 +290,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
   class={classes}
   id={id}
   disabled={disabled}
-  aria-describedby={multiple && max !== undefined ? statusId : undefined}
+  aria-describedby={describedBy}
   data-select
   data-multiple={multiple ? '' : undefined}
   data-max={multiple ? max : undefined}
@@ -281,7 +309,13 @@ const classes = ['select', className].filter(Boolean).join(' ');
       en propriétés posées sur la boîte, que la feuille de style lit. Un champ
       éteint ne s'ouvre pas — le `disabled` du fieldset atteint le bouton. */}
   <div class="select-control" style={`--select-anchor: ${anchor}; --select-visible-options: ${visibleOptions}`}>
-    <button type="button" class="field-box select-box" popovertarget={listId} data-trigger>
+    <button
+      type="button"
+      class="field-box select-box"
+      popovertarget={listId}
+      data-trigger
+      data-validation={message && message.type !== 'hint' ? message.type : undefined}
+    >
       <span class:list={['select-summary', count === 0 && 'select-summary-empty']} data-summary>
         {summary}
       </span>
@@ -427,6 +461,8 @@ const classes = ['select', className].filter(Boolean).join(' ');
       </ul>
     )
   }
+
+  {message && <FieldMessage type={message.type} id={messageId}>{message.text}</FieldMessage>}
 
   {
     multiple && max !== undefined && (
