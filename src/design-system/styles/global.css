@@ -214,7 +214,8 @@ textarea:hover,
  * L'erreur lit `border/danger` (4,3:1 sur le fond). Le succès lit `success/solid`,
  * à 2,7:1 : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11. Ce n'est
  * pas ce qui porte l'état — le message, avec son icône, le porte, et le trait ne
- * l'accompagne que pour la forme. L'écart est dans arbitrages.md. */
+ * l'accompagne que pour la forme. Le trait ne change pas : le succès teinte en plus
+ * le fond du champ, `feedback/success/bg`. L'écart est dans arbitrages.md. */
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search'])[data-validation='error'],
 select[data-validation='error'],
 textarea[data-validation='error'],
@@ -227,6 +228,7 @@ select[data-validation='success'],
 textarea[data-validation='success'],
 .field-box[data-validation='success'] {
   border-color: var(--color-feedback-success-solid);
+  background: var(--color-feedback-success-bg);
 }
 
 /* — désactivé — écrit après le survol : à spécificité égale c'est l'ordre qui
@@ -238,6 +240,7 @@ select:disabled,
 textarea:disabled,
 fieldset:disabled .field-box {
   border-color: var(--color-border-default);
+  background: var(--color-bg-surface);
   color: var(--color-text-disabled);
   opacity: var(--opacity-disabled);
   cursor: not-allowed;

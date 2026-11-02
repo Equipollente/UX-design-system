@@ -33,7 +33,7 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Objet | Nœud | L'écart | Écrit dans | État |
 |---|---|---|---|---|
 | ~~Button~~ | `854:41729` | ~~`height`, `padding-y` et `icon-size` ne s'accordent pas~~ | /components → Button | *réglé — 02/11, le composant ne porte plus de `padding-y` : la hauteur seule dimensionne le bouton, comme le code. Les variables `button/padding-y/*` existent toujours, lues ailleurs* |
-| Input · Textarea · Select | `23:29` · `343:273` · `340:933` | le trait du succès lit `color/feedback/success/solid`, à 2,7:1 sur `bg/surface` : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11 ; le message avec son icône porte l'état, le trait ne l'est pas seul | /formulaire | ouvert |
+| Input · Textarea · Select | `23:29` · `343:273` · `340:933` | le trait du succès lit `color/feedback/success/solid`, à 2,7:1 sur `bg/surface` : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11 ; le message avec son icône porte l'état, le trait ne l'est pas seul | /formulaire | *traits laissés tels quels — 02/11 ; le fond du champ prend `feedback/success/bg` pour que le succès ne tienne pas au seul trait. dessiné dans Figma sur les huit variantes de chaque champ, le désactivé excepté (il perd son verdict, trait et fond)* |
 | Input · Textarea · Select | `23:29` · `343:273` · `340:933` | l'icône du message prend `button/icon-size/sm` (20) faute d'un token plus petit ; `check` sert au succès faute d'un `circle-check` | /formulaire | ouvert |
 | Tag | `19:12` | la variante `Lime` porte un nom de couleur ; sa rampe s'appelle `highlight` | /components → Tag | ouvert |
 | Nav | `24:5` | la description décrit encore l'ancienne barre | /components → Nav | ouvert |
