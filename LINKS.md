@@ -31,7 +31,7 @@ le `LINKS.md` du dossier `portfolio`.
 | Composant | Nœud | Code |
 | --- | --- | --- |
 | Icon (les 71 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
-| Button (un seul jeu de variantes : `Variant` × `Size` × `State`, dont la variante Icon, le bouton rond) | [`854-41729`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=854-41729) | [Button.astro](src/design-system/components/Button.astro) |
+| Button (un seul jeu de variantes : `variant` × `size` × `state`, dont la variante Icon, le bouton rond) | [`854-41729`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=854-41729) | [Button.astro](src/design-system/components/Button.astro) |
 | Link (jeu d'états : Default, Hover, Pressed, Disabled, Focus) | [`613-4816`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=613-4816) | [Link.astro](src/design-system/components/Link.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
