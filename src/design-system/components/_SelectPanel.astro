@@ -246,8 +246,9 @@ const {
        variables, comme le cadre de 585:1410 la suit dans Figma. */
     max-height: calc(
       var(--select-visible-options) * (var(--control-size) + 2 * var(--space-sm)) +
-        2 * var(--space-xs) + 2 * var(--border-width-default) + var(--select-search-block, 0px) +
-        var(--select-footer-block, 0px)
+        2 * var(--space-xs) + 2 * var(--border-width-default) +
+        var(--select-search-block, calc(0 * var(--space-xs))) +
+        var(--select-footer-block, calc(0 * var(--space-xs)))
     );
     /* Ce n'est pas le cadre qui défile, ce sont ses options : la recherche et le
        pied restent à leur place sans avoir à flotter au-dessus d'elles. Le cadre
