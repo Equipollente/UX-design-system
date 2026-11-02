@@ -3,7 +3,7 @@
 // sujet : ce qui tient sur une ligne et que le système ne peut pas proposer
 // d'avance.
 //
-// Ce n'est pas Text Area, qui est la même chose sur plusieurs lignes et qui
+// Ce n'est pas Textarea, qui est la même chose sur plusieurs lignes et qui
 // compte ses caractères. Ce n'est pas Select non plus : là, la liste est close
 // et on ne peut rien écrire qui n'y soit pas. Et ce n'est pas un champ de
 // recherche à suggestions — la liste qui s'ouvrirait dessous n'existe nulle
@@ -12,14 +12,18 @@
 // Le libellé n'est pas dessiné ici : il vient de FieldLabel, comme dans tous les
 // autres champs. Le message sous la boîte non plus : il vient de _FieldMessage. Le dessin de la boîte non plus — police, encre, fond, trait,
 // rayon, rembourrage, hauteur, survol, désactivé : tout est la recette de balise
-// de global.css, partagée mot pour mot avec Text Area et Select. C'est ce qui
+// de global.css, partagée mot pour mot avec Textarea et Select. C'est ce qui
 // garantit que les trois champs sont identiques, et ce fichier ne déclare plus
 // que la place du sien.
 //
-// Nœud Figma : 23:29 — `forms/Input`, 12 variantes (state × validation) et cinq
-// propriétés de contenu : label, label?, required?, hint?, value. Le nom est celui
+// Nœud Figma : 23:29 — `forms/Input`, 24 variantes (state × validation × text) ;
+// propriétés label?, hint?, value, placeholder — les mêmes noms que les props de ce
+// fichier. `text` vaut `value` ou `placeholder` : un champ vide montre son exemple
+// en `text/muted`, un champ rempli sa valeur en `text/default`, comme le code, qui
+// sépare les deux props. Le libellé est `_FieldLabel` (le mot et l'astérisque se
+// règlent sur l'instance exposée). Le nom est celui
 // du code depuis le 02/11 ; avant, le nœud s'appelait `forms/Field`, puis
-// `forms/Text Field`, et portait une variante multiligne, qui est Text Area et
+// `forms/Text Field`, et portait une variante multiligne, qui est Textarea et
 // en est sortie. Le nom d'un composant qui porte un champ de saisie est celui de la
 // balise qu'il habille — c'est aussi celui de Primer.
 //
@@ -39,7 +43,7 @@
 //
 // Le rembourrage du nœud valait 6 / 14, que rien ne liait — 14 n'existe dans le
 // système que comme rayon. Il a été redessiné à 12 / 16, ceux du bouton : c'est
-// le geste déjà fait sur Text Area le 27/08, et les trois champs s'espacent
+// le geste déjà fait sur Textarea le 27/08, et les trois champs s'espacent
 // maintenant pareil. Contre une hauteur fixe de 44, le rembourrage vertical ne
 // pousse rien — le navigateur centre le texte d'un `input` lui-même. La recette
 // le remet tout de même à zéro : un `select`, lui, coupe ses jambages si on le
@@ -137,7 +141,7 @@ const classes = ['field', className].filter(Boolean).join(' ');
 </div>
 
 <style>
-  /* 5 — la mesure du nœud, et celle que Select et Text Area emploient déjà. */
+  /* 5 — la mesure du nœud, et celle que Select et Textarea emploient déjà. */
   .field {
     display: flex;
     flex-direction: column;
@@ -145,7 +149,7 @@ const classes = ['field', className].filter(Boolean).join(' ');
   }
 
   /* Le champ ne déclare que sa place. Tout son dessin est la recette de balise
-     de global.css, qu'il partage mot pour mot avec Text Area et Select : il n'y
+     de global.css, qu'il partage mot pour mot avec Textarea et Select : il n'y
      a rien à écrire ici pour l'obtenir, et rien à changer ici pour le changer.
      La largeur, elle, est du placement — la recette habille, elle ne place pas. */
   input {

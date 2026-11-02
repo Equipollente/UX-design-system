@@ -437,3 +437,32 @@ version mineure en 0.x, et le portfolio — s'il emploie le champ — change son
 
 **Pas fusionné avec `forms/search`.** On l'avait pris pour un doublon de l'Input ; ses quatorze instances
 sont toutes dans les listes du Select, c'est la recherche de la liste. Elle reste une pièce du Select.
+
+## La zone de texte s'appelle Textarea
+
+*02/11.* `TextArea` devient `Textarea`, dans Figma (`forms/Textarea`) et dans le code
+([Textarea.astro](../src/design-system/components/Textarea.astro)), par la même règle que l'Input : le nom d'un
+composant qui habille un champ de saisie est celui de la balise.
+
+Le nœud est normalisé sur l'Input : une description, qui manquait ; `hint?`, que le code portait déjà ;
+`showCount?` au lieu de `count?`, pour que la propriété Figma porte le nom de la prop `showCount` ; une largeur
+fixe de 260 comme l'Input, au lieu de celle du mot « Description ». Le libellé passe par `_FieldLabel`.
+
+**Même changement cassant** que pour `Input` : `ux-design-system/components/TextArea.astro` n'existe plus. Les
+deux renommages partent dans la même version mineure.
+
+Restent ouverts, parce que ce sont des choix de dessin : le placeholder, que le code distingue d'une valeur et
+que Figma ne dessine pas ; et la poignée de redimensionnement (`resize: vertical`).
+
+## Le placeholder se dessine : `text` = value ou placeholder
+
+*02/11.* Input et Textarea gagnent une propriété de variante `text`, qui vaut `value` ou `placeholder`, et deux
+propriétés de texte, `value` et `placeholder`. C'est le découpage du code, qui sépare les deux props et leur donne
+deux encres — `text/default` pour ce qui est écrit, `text/muted` pour l'exemple qui disparaît à la première frappe.
+Avant, Figma n'avait qu'un texte, en noir : un champ vide était impossible à dessiner, et un exemple avait l'air
+d'une valeur. La solution est celle de Primer (« text type »).
+
+Le texte par défaut est « Value » et « Placeholder », les mêmes pour les deux composants. Les trois textes
+d'exemple qui variaient (« Untitled project », « Enter your text here… », « Choose… ») sont partis avec.
+Le Select, qui dessine un « Choose… », sera traité à son tour. La poignée de redimensionnement de la zone de texte
+n'est pas dessinée : c'est le navigateur qui la pose, et elle diffère d'un système à l'autre.

@@ -9,7 +9,7 @@ import Select from '../design-system/components/Select.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
 import Toggle from '../design-system/components/Toggle.astro';
-import TextArea from '../design-system/components/TextArea.astro';
+import Textarea from '../design-system/components/Textarea.astro';
 import Chip from '../design-system/components/Chip.astro';
 import AddImage from '../design-system/components/AddImage.astro';
 import EditImageGallery from '../design-system/components/EditImageGallery.astro';
@@ -40,7 +40,7 @@ const inputProps = [
   ['value', 'string', '—', 'Le texte déjà saisi.'],
   ['placeholder', 'string', '—', 'Un exemple, pas une consigne : il disparaît à la première frappe.'],
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
-  ['maxlength', 'number', '—', 'La limite de caractères. Ici elle ne compte rien : c’est Text Area qui a le compteur.'],
+  ['maxlength', 'number', '—', 'La limite de caractères. Ici elle ne compte rien : c’est Textarea qui a le compteur.'],
   ['autocomplete', 'string', '—', 'Ce que le navigateur a le droit de proposer. Un nom, une adresse, un code.'],
   ['hint', 'string', '—', 'L’aide : ce que le champ attend, lue avant que personne ne se trompe. Désignée par aria-describedby.'],
   ['error', 'string', '—', 'Le message d’erreur. Pose aria-invalid, passe le trait en rouge et remplace l’aide.'],
@@ -114,7 +114,7 @@ const toggleProps = [
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
-const textAreaProps = [
+const textareaProps = [
   ['id', 'string', '—', 'Lie le libellé au champ, et sert de name si aucun n’est donné.'],
   ['label', 'string', '—', 'Le texte du libellé. Rendu par FieldLabel, jamais réécrit ici.'],
   ['value', 'string', '—', 'Le contenu déjà saisi.'],
@@ -335,7 +335,7 @@ const exemplesMultiple: Exemple[] = [
         un sujet. Ce que le système ne peut pas proposer d'avance. Nœud Figma <code>23:29</code>,
         neuf variantes — trois états, trois validations.
         <br />
-        <strong>Ce qu'il n'est pas.</strong> Ni <code>Text Area</code>, qui est la même chose sur
+        <strong>Ce qu'il n'est pas.</strong> Ni <code>Textarea</code>, qui est la même chose sur
         plusieurs lignes et qui compte ses caractères ; ni <code>Select</code>, dont la liste est
         close ; ni un champ à suggestions — la liste qui s'ouvrirait dessous n'existe nulle part
         dans le système.
@@ -413,7 +413,7 @@ const exemplesMultiple: Exemple[] = [
         <strong>Le rembourrage du nœud valait 6 / 14, que rien ne liait.</strong> 14 n'existe dans
         le système que comme rayon, et 6 n'existe pas du tout. Le nœud a été redessiné à
         {' '}<strong>12 / 16</strong>, les deux <code>button/padding-*/sm</code> — le geste déjà fait
-        sur <code>Text Area</code> le 27/08. Les trois champs s'espacent maintenant pareil. Contre
+        sur <code>Textarea</code> le 27/08. Les trois champs s'espacent maintenant pareil. Contre
         une hauteur fixe de 44, le rembourrage vertical ne pousse rien : il dit seulement d'où le
         texte part.
       </p>
@@ -430,7 +430,7 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>La variante multiligne est sortie du nœud.</strong> Elle dessinait ce que
-        {' '}<code>Text Area</code> fait déjà, avec son propre compteur ; deux composants pour une même
+        {' '}<code>Textarea</code> fait déjà, avec son propre compteur ; deux composants pour une même
         chose se seraient séparés au premier changement. Le jeu s'appelle maintenant
         {' '}<code>forms/Input</code>, le nom du code.
       </p>
@@ -448,14 +448,14 @@ const exemplesMultiple: Exemple[] = [
         <strong>Les trois champs se dessinent au même endroit.</strong> Police, encre, fond, trait,
         rayon, rembourrage, hauteur, survol, état éteint : tout est écrit une fois dans
         {' '}<code>global.css</code>, en recette de balise — à côté de celle du <code>h2</code> et du
-        {' '}<code>p</code>. Input, Text Area et Select ne déclarent plus que leur place et ce
+        {' '}<code>p</code>. Input, Textarea et Select ne déclarent plus que leur place et ce
         qui leur est propre : le chevron pour l'un, le compteur pour l'autre. Ce qui change là a
         déjà changé pour les trois, comme <code>FieldLabel</code> le fait du libellé.
       </p>
 
       <p class="section-note">
         <strong>Les trois survols n'en font plus qu'un, et c'est celui-ci.</strong> Le trait fonce en
-        {' '}<code>neutral/500</code>, le fond ne bouge pas. Text Area et Select grisaient le leur en
+        {' '}<code>neutral/500</code>, le fond ne bouge pas. Textarea et Select grisaient le leur en
         {' '}<code>neutral/100</code> — un cran qui ne se voit pas : <code>#F3F2F5</code> et
         {' '}<code>#F3F0FF</code> ne diffèrent que par le canal bleu, 245 contre 255. Les deux nœuds
         ont été redessinés sur celui-ci.
@@ -575,7 +575,7 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Ce champ porte enfin un trait au repos.</strong> Sa boîte n'en avait aucun, là où
-        Input et Text Area en portaient un de 1 — trois champs voisins, deux dessins. Le nœud a
+        Input et Textarea en portaient un de 1 — trois champs voisins, deux dessins. Le nœud a
         été redessiné, et ses quatre états lisent maintenant <code>border/default</code> : le même
         trait que les deux autres, à la même épaisseur et du même côté. Le fond
         {' '}<code>bg/surface</code>, lui, n'a pas changé.
@@ -653,7 +653,7 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Il porte un script</strong>, chargé une seule fois pour tous les champs de la page,
-        et il le justifie comme TextArea : sans lui, au premier
+        et il le justifie comme Textarea : sans lui, au premier
         clic, la boîte dit « 2 sélectionnés » quand il y en a trois, et les pastilles montrent des
         choix qui n'en sont plus — l'affichage serait faux. Le navigateur ne sait pas non plus borner
         le nombre de cases cochées, ni exiger qu'au moins une le soit. Sans le script, on choisit et on
@@ -1062,13 +1062,14 @@ const exemplesMultiple: Exemple[] = [
       </p>
     </section>
 
-    <!-- ── Text Area ───────────────────────────── -->
+    <!-- ── Textarea ───────────────────────────── -->
     <section>
-      <h2>Text Area</h2>
+      <h2>Textarea</h2>
 
       <p class="section-note">
         <strong>Ce qu'elle est.</strong> Un champ pour du texte qui court sur plusieurs lignes. Nœud
-        Figma <code>343:273</code>, quatre états plus <code>Show Count</code>.
+        Figma <code>343:273</code>, douze variantes — quatre états, trois validations — et
+        {' '}<code>showCount?</code>, <code>hint?</code>, <code>label?</code>.
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni un champ texte — un champ texte tient sur une ligne
         et se remplit d'un nom, d'un courriel, d'un nombre, quelque chose dont on connaît la forme ;
@@ -1089,7 +1090,7 @@ const exemplesMultiple: Exemple[] = [
       <div class="demo demo-fields">
         <div class="demo-case">
           <p class="demo-name">default — sur son invite</p>
-          <TextArea
+          <Textarea
             id="desc-a"
             label="Description"
             placeholder="Ce que vous voulez me raconter du projet"
@@ -1098,7 +1099,7 @@ const exemplesMultiple: Exemple[] = [
         </div>
         <div class="demo-case">
           <p class="demo-name">rempli</p>
-          <TextArea
+          <Textarea
             id="desc-b"
             label="Description"
             value="Une refonte du parcours d’inscription, à mener avec l’équipe produit."
@@ -1107,7 +1108,7 @@ const exemplesMultiple: Exemple[] = [
         </div>
         <div class="demo-case">
           <p class="demo-name">required</p>
-          <TextArea
+          <Textarea
             id="desc-c"
             label="Description"
             placeholder="Ce que vous voulez me raconter du projet"
@@ -1117,7 +1118,7 @@ const exemplesMultiple: Exemple[] = [
         </div>
         <div class="demo-case">
           <p class="demo-name">disabled</p>
-          <TextArea
+          <Textarea
             id="desc-d"
             label="Description"
             value="Une refonte du parcours d’inscription."
@@ -1127,7 +1128,7 @@ const exemplesMultiple: Exemple[] = [
         </div>
         <div class="demo-case">
           <p class="demo-name">error</p>
-          <TextArea
+          <Textarea
             id="desc-e"
             label="Description"
             value="Trop court."
@@ -1147,7 +1148,7 @@ const exemplesMultiple: Exemple[] = [
       <div class="demo demo-fields">
         <div class="demo-case">
           <p class="demo-name">showCount + maxlength</p>
-          <TextArea
+          <Textarea
             id="desc-e"
             label="Description"
             placeholder="Ce que vous voulez me raconter du projet"
@@ -1158,7 +1159,7 @@ const exemplesMultiple: Exemple[] = [
         </div>
         <div class="demo-case">
           <p class="demo-name">showCount + maxlength — déjà rempli</p>
-          <TextArea
+          <Textarea
             id="desc-f"
             label="Description"
             value="Une refonte du parcours d’inscription, à mener avec l’équipe produit."
@@ -1187,7 +1188,7 @@ const exemplesMultiple: Exemple[] = [
         </thead>
         <tbody>
           {
-            textAreaProps.map(([nom, type, defaut, note]) => (
+            textareaProps.map(([nom, type, defaut, note]) => (
               <tr>
                 <td><code>{nom}</code></td>
                 <td><code>{type}</code></td>
@@ -1202,7 +1203,7 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>L'écart au libellé est tranché, et il vaut 5.</strong> Les deux nœuds le disaient
-        déjà — <code>control/field-gap</code> le nomme, et Text Area et Select s'espacent donc
+        déjà — <code>control/field-gap</code> le nomme, et Textarea et Select s'espacent donc
         pareil. Le rembourrage aussi : le nœud a été redessiné sur les 12 / 16 du bouton, que le code
         écrivait déjà. La boîte porte enfin son trait, et le champ désactivé s'atténue au lieu de
         compter sur l'encre de son libellé.

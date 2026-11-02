@@ -118,7 +118,7 @@ pre {
 
 /* Les champs. Le dessin d'un champ est une recette de balise, au même titre que
  * celle d'un h2 : il n'y a rien à écrire dans le composant pour l'obtenir. Text
- * field, Text Area et Select l'écrivaient chacun de leur côté — les mêmes six
+ * field, Textarea et Select l'écrivaient chacun de leur côté — les mêmes six
  * déclarations de typographie, trois fois, et trois boîtes qui divergeaient sans
  * que rien ne l'ait décidé.
  *

@@ -45,7 +45,7 @@
 // focus se voit sur la ligne.
 //
 // La boîte fermée est le bouton, et il porte `.field-box` : la recette de
-// global.css le dessine mot pour mot comme Input et Text Area — trait, fond,
+// global.css le dessine mot pour mot comme Input et Textarea — trait, fond,
 // rayon, hauteur `control/height`, survol. Son chevron se pose de la même façon.
 //
 // La liste flotte, et rien n'y est écrit à la main. C'est un `popover` natif :
@@ -516,7 +516,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
 </fieldset>
 
 {/* Un script, chargé une fois pour tous les Select de la page. Il se justifie par
-    un échec mesurable, le même que celui de TextArea : sans lui, au premier clic,
+    un échec mesurable, le même que celui de Textarea : sans lui, au premier clic,
     la boîte dit « 2 sélectionnés » quand il y en a trois, ou le libellé d'hier, et
     les pastilles montrent des choix qui n'en sont plus — l'affichage n'est pas
     dégradé, il est faux. La limite non plus ne tient pas : le navigateur ne sait
@@ -1284,7 +1284,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
     --icon-size: var(--button-icon-size-sm);
   }
 
-  /* Le message de limite, dans le dessin du compteur de TextArea : rangé à
+  /* Le message de limite, dans le dessin du compteur de Textarea : rangé à
      droite, sous la boîte. */
   .select-status {
     margin-bottom: 0;

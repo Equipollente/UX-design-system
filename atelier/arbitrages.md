@@ -33,8 +33,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Objet | Nœud | L'écart | Écrit dans | État |
 |---|---|---|---|---|
 | ~~Button~~ | `854:41729` | ~~`height`, `padding-y` et `icon-size` ne s'accordent pas~~ | /components → Button | *réglé — 02/11, le composant ne porte plus de `padding-y` : la hauteur seule dimensionne le bouton, comme le code. Les variables `button/padding-y/*` existent toujours, lues ailleurs* |
-| Field · Text Area · Select | `23:29` · `343:273` · `340:933` | le trait du succès lit `color/feedback/success/solid`, à 2,7:1 sur `bg/surface` : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11 ; le message avec son icône porte l'état, le trait ne l'est pas seul | /formulaire | ouvert |
-| Field · Text Area · Select | `23:29` · `343:273` · `340:933` | l'icône du message prend `button/icon-size/sm` (20) faute d'un token plus petit ; `check` sert au succès faute d'un `circle-check` | /formulaire | ouvert |
+| Input · Textarea · Select | `23:29` · `343:273` · `340:933` | le trait du succès lit `color/feedback/success/solid`, à 2,7:1 sur `bg/surface` : aucun token de trait vert n'atteint les 3:1 de WCAG 1.4.11 ; le message avec son icône porte l'état, le trait ne l'est pas seul | /formulaire | ouvert |
+| Input · Textarea · Select | `23:29` · `343:273` · `340:933` | l'icône du message prend `button/icon-size/sm` (20) faute d'un token plus petit ; `check` sert au succès faute d'un `circle-check` | /formulaire | ouvert |
 | Tag | `19:12` | la variante `Lime` porte un nom de couleur ; sa rampe s'appelle `highlight` | /components → Tag | ouvert |
 | Nav | `24:5` | la description décrit encore l'ancienne barre | /components → Nav | ouvert |
 | Cards | `334:1129` | le composant n'a aucune description : la doctrine n'engage que le code | /components → Card | ouvert |
@@ -73,10 +73,10 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | ~~Text field~~ | `23:29` | ~~**ni état désactivé ni état d'erreur**~~ | /formulaire → Input | *réglé — 02/11, `state=disabled` copié de Text Area (opacité de la boîte, encre `text/disabled`) et `validation` error / success, avec `_FieldMessage`* |
 | ~~Text field~~ | `23:29` | ~~la variante `Multiline` dessine ce que Text Area fait déjà, avec son propre nœud et son compteur~~ | /formulaire → Input | *réglé — 02/11, la variante est sortie du nœud ; c'est Text Area* |
 | ~~Text field · Text Area · Select~~ | `23:29` · `343:273` · `340:933` | ~~trois champs voisins, trois survols : le premier change son trait, les deux autres leur fond~~ | /formulaire → Text field | *réglé — 31/08, dans Figma seul, les trois foncent leur trait en `neutral/500`* |
-| Input · Text Area · Select | `23:29` · `343:273` · `340:933` | le trait de la boîte ne vaut que 1,28:1 sur son fond, et le fond 1,12:1 sur le blanc — WCAG 1.4.11 en demande 3 | /formulaire → Text field | ouvert |
+| Input · Textarea · Select | `23:29` · `343:273` · `340:933` | le trait de la boîte ne vaut que 1,28:1 sur son fond, et le fond 1,12:1 sur le blanc — WCAG 1.4.11 en demande 3 | /formulaire → Text field | ouvert |
 | Text Area · Select | `343:273` · `340:933` | l'écart libellé ↔ champ | /formulaire → Text Area | *réglé — 27/08, `control/field-gap` = 5* |
-| Text Area | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Text Area | ouvert |
-| Text Area | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Text Area | ouvert |
+| Textarea | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Textarea | ouvert |
+| Textarea | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Textarea | ouvert |
 | Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
 | ~~Add Image~~ | `343:315`, `418:1020` | ~~le nœud dessine aussi l'état `add` en trait pointillé ; le code le gardait plein~~ | /formulaire → Add Image | *réglé — 31/08, `add`/`in-progress`/`fail` partagent maintenant le même trait pointillé* |

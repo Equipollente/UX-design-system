@@ -1,5 +1,5 @@
 ---
-// TextArea — un champ pour du texte qui court sur plusieurs lignes.
+// Textarea — un champ pour du texte qui court sur plusieurs lignes.
 //
 // Ce n'est pas un champ texte : un champ texte tient sur une ligne et se remplit
 // d'un nom, d'un courriel, d'un nombre — quelque chose dont on connaît la forme.
@@ -8,8 +8,11 @@
 // n'est pas non plus un éditeur : rien ici ne met en gras, n'insère de lien ni
 // ne garde de mise en forme.
 //
-// Nœud Figma : 343:273 — `forms/Text Area`, 12 variantes (state × validation) ;
-// propriétés label, value, count, count?. Le message sous la boîte est `_FieldMessage`.
+// Nœud Figma : 343:273 — `forms/Textarea`, 24 variantes (state × validation × text) ;
+// propriétés label?, hint?, showCount?, value, placeholder, count — les mêmes noms que les props
+// de ce fichier. Le libellé est `_FieldLabel` et le message `_FieldMessage`, posés en
+// instances exposées : le mot du libellé, l'astérisque et le texte du message se
+// règlent sur elles, pas sur la zone.
 //
 // Le libellé vient de FieldLabel, comme dans tous les autres champs. Le dessin
 // de la boîte vient de global.css — police, encre, fond, trait, rayon,

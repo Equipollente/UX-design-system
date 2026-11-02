@@ -20,7 +20,7 @@ import Card from '../design-system/components/Card.astro';
 import Modal from '../design-system/components/Modal.astro';
 import Input from '../design-system/components/Input.astro';
 import Select from '../design-system/components/Select.astro';
-import TextArea from '../design-system/components/TextArea.astro';
+import Textarea from '../design-system/components/Textarea.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
 import Toggle from '../design-system/components/Toggle.astro';
@@ -162,7 +162,7 @@ const defautModal = `<Modal
 const typesChamp = [
   { cle: 'Input', nom: 'Champ texte' },
   { cle: 'Select', nom: 'Select' },
-  { cle: 'TextArea', nom: 'Zone de texte' },
+  { cle: 'Textarea', nom: 'Zone de texte' },
   { cle: 'Radio', nom: 'Radio (groupe)' },
   { cle: 'Checkbox', nom: 'Case à cocher' },
   { cle: 'Toggle', nom: 'Interrupteur' },
@@ -1337,8 +1337,8 @@ import { withBase } from 'ux-design-system/lib/url';
         }
         {
           combos.map(({ r, d }) => (
-            <span data-champ={cleChamp('TextArea', r, d)}>
-              <TextArea
+            <span data-champ={cleChamp('Textarea', r, d)}>
+              <Textarea
                 id={`bq-textarea-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
                 label={SENTINELLE}
                 required={r}
@@ -2272,7 +2272,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const TYPES = {
       Input: { liste: false, requis: true, groupe: false },
       Select: { liste: true, requis: true, groupe: false },
-      TextArea: { liste: false, requis: true, groupe: false },
+      Textarea: { liste: false, requis: true, groupe: false },
       Radio: { liste: true, requis: false, groupe: true },
       Checkbox: { liste: false, requis: true, groupe: false },
       Toggle: { liste: false, requis: false, groupe: false },
@@ -2288,7 +2288,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const DEPART: Record<Type, { libelle: string; choix: string }> = {
       Input: { libelle: 'Ton nom', choix: '' },
       Select: { libelle: 'Sujet', choix: 'Devis, Question, Autre' },
-      TextArea: { libelle: 'Ton message', choix: '' },
+      Textarea: { libelle: 'Ton message', choix: '' },
       Radio: { libelle: 'Format de l’échange', choix: 'Visio, Téléphone' },
       Checkbox: { libelle: 'J’accepte d’être recontacté', choix: '' },
       Toggle: { libelle: 'Recevoir les nouvelles', choix: '' },
