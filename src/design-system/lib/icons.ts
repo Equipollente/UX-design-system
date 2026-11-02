@@ -5,6 +5,7 @@
 // ne se vérifiait qu'en production, sur un 404.
 
 import aiTools from '../icons/ai-tools.svg';
+import alertTriangle from '../icons/alert-triangle.svg';
 import arrowNarrowDown from '../icons/arrow-narrow-down.svg';
 import arrowNarrowLeft from '../icons/arrow-narrow-left.svg';
 import arrowNarrowRight from '../icons/arrow-narrow-right.svg';
@@ -29,6 +30,7 @@ import crown02 from '../icons/crown-02.svg';
 import disciplines from '../icons/disciplines.svg';
 import documentPedagogicalMaterial from '../icons/document-pedagogical-material.svg';
 import edit from '../icons/edit.svg';
+import edit3 from '../icons/edit-3.svg';
 import expand04 from '../icons/expand-04.svg';
 import filePlus from '../icons/file-plus.svg';
 import fileText from '../icons/file-text.svg';
@@ -51,25 +53,32 @@ import luggage2 from '../icons/luggage-2.svg';
 import mailEdit from '../icons/mail-edit.svg';
 import mainComponent from '../icons/main-component.svg';
 import menuRight from '../icons/menu-right.svg';
+import microphone2 from '../icons/microphone-2.svg';
 import passport1 from '../icons/passport-1.svg';
+import people2 from '../icons/people-2.svg';
 import pin2 from '../icons/pin-2.svg';
 import plus from '../icons/plus.svg';
 import podcast from '../icons/podcast.svg';
+import politique from '../icons/politique.svg';
 import pressArticleSource from '../icons/press-article-source.svg';
 import quoteDown from '../icons/quote-down.svg';
 import route from '../icons/route.svg';
 import save from '../icons/save.svg';
+import science from '../icons/science.svg';
 import search2 from '../icons/search-2.svg';
 import siteInstitutionnel from '../icons/site-institutionnel.svg';
 import star2 from '../icons/star-2.svg';
 import stickyNote from '../icons/sticky-note.svg';
+import targetArrow from '../icons/target-arrow.svg';
 import telescope from '../icons/telescope.svg';
 import timeline from '../icons/timeline.svg';
 import trash from '../icons/trash.svg';
+import trendUpSquare from '../icons/trend-up-square.svg';
 import usersCheck from '../icons/users-check.svg';
 
 export const icons = {
   'ai-tools': aiTools,
+  'alert-triangle': alertTriangle,
   'arrow-narrow-down': arrowNarrowDown,
   'arrow-narrow-left': arrowNarrowLeft,
   'arrow-narrow-right': arrowNarrowRight,
@@ -94,6 +103,7 @@ export const icons = {
   'disciplines': disciplines,
   'document-pedagogical-material': documentPedagogicalMaterial,
   'edit': edit,
+  'edit-3': edit3,
   'expand-04': expand04,
   'file-plus': filePlus,
   'file-text': fileText,
@@ -116,21 +126,27 @@ export const icons = {
   'mail-edit': mailEdit,
   'main-component': mainComponent,
   'menu-right': menuRight,
+  'microphone-2': microphone2,
   'passport-1': passport1,
+  'people-2': people2,
   'pin-2': pin2,
   'plus': plus,
   'podcast': podcast,
+  'politique': politique,
   'press-article-source': pressArticleSource,
   'quote-down': quoteDown,
   'route': route,
   'save': save,
+  'science': science,
   'search-2': search2,
   'site-institutionnel': siteInstitutionnel,
   'star-2': star2,
   'sticky-note': stickyNote,
+  'target-arrow': targetArrow,
   'telescope': telescope,
   'timeline': timeline,
   'trash': trash,
+  'trend-up-square': trendUpSquare,
   'users-check': usersCheck,
 } as const;
 
