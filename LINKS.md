@@ -15,7 +15,7 @@ le `LINKS.md` du dossier `portfolio`.
 | --- | --- | --- |
 | Foundations | Couleurs, typo, espacements, rayons, ombres — la source des tokens | [`5:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=5-2) |
 | Icons | Les icônes sources — exportées dans `icons/`, générées par `npm run icons` | [`45:395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) |
-| Actions | Button (trois tailles), Link | [`723:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-2) |
+| Actions | Button (jeu unique, ghost compris) ; Link dessiné, non intégré | [`723:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-2) |
 | Forms | Les champs et leurs compléments : Field, Select, Multi Select, Text Area, Radio, Checkbox, Toggle, Chip, médias | [`19:2`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-2) |
 | Navigation | Nav, Avatar-Button, Carousel Nav, Tabs | [`723:3`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=723-3) |
 | Cards | Toutes les cartes : CardDefault, Cards (ancien), Case Study, CardGrid, listes | [`478:6791`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=478-6791) |
@@ -32,7 +32,6 @@ le `LINKS.md` du dossier `portfolio`.
 | --- | --- | --- |
 | Icon (les 71 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
 | Button (un seul jeu de variantes : `variant` × `size` × `state`, dont la variante Icon, le bouton rond) | [`854-41729`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=854-41729) | [Button.astro](src/design-system/components/Button.astro) |
-| Link (jeu d'états : Default, Hover, Pressed, Disabled, Focus) | [`613-4816`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=613-4816) | [Link.astro](src/design-system/components/Link.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
 | Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |
@@ -130,7 +129,7 @@ Ce que les `flag` de `/components` demandent, rassemblé ici parce que c'est la 
 | Le point de rupture (`767px`) | six media queries dans `src/`, plus `build-tokens.mjs` | Une variable de build, pas un token CSS : une custom property ne peut pas figurer dans une media query |
 | ~~Un emploi pour la variante `Alert`~~ | — | **Réglé — 31/08.** Le nœud `418:1020` (« Add Image process ») dessine le « supprimer » de son état `success` en `Alert` ; `EditImageGallery` (`355:1396`) suit, le sien passe de `secondary` à `alert` |
 
-Les composants Figma pas encore intégrés : `Cards/UXVision`, `Cards/Metric Highlight`,
+Les composants Figma pas encore intégrés : `Link` ([`613-4816`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=613-4816), retiré du code le 02/11 : le Ghost du Button le remplace), `Cards/UXVision`, `Cards/Metric Highlight`,
 `Cards/User Quote` (page Cards), `Role` (page Content), et `Research Finding`, un cadre dessiné à la main sans composant, rangé dans « À trier ». Les sept objets
 de formulaire en sont sortis le 27/08.
 

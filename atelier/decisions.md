@@ -403,3 +403,19 @@ navigue est un Link, ce qui agit sans poids est un Ghost.
 
 Un token créé pour l'occasion : `color/action/ghost/bg-pressed`, alias de `ramp/neutral/200`, dans le même
 schéma que le Secondary (survol 100, appui 200). `bg-hover` existait déjà.
+
+## Le Ghost remplace Link, qui sort du code
+
+*02/11.* Le composant Link est retiré du code et de la doc. Aucune vue ne l'utilisait — il n'apparaissait que
+dans sa propre démonstration — et la règle du dépôt veut qu'un composant sans appelant ne se maintienne pas.
+Le Ghost du Button porte ce qu'il portait : avec `href`, le Button rend déjà un `<a>`, donc un Ghost avec
+`href` est le lien autonome.
+
+Cela **corrige l'entrée précédente**, qui gardait Link à part. Le raisonnement sur la différence tient
+toujours — un lien se reconnaissait à son soulignement, un Ghost a un lavis au survol —, mais le soulignement
+n'était plus un argument pour entretenir un composant que personne n'appelait. Ce qui est perdu : ce signe
+au survol. Une flèche en fin de libellé (`iconEnd`) aide à reconnaître ce qui se clique.
+
+Le Ghost n'est **pas redessiné** pour autant : il garde sa taille, sa pilule et son anneau. Le dessin `Link`
+reste dans Figma (`613:4816`), rangé dans la liste des non-intégrés de LINKS.md ; un lien qui devrait se
+lire comme du texte, soulignement compris, se rouvrirait à ce moment-là.

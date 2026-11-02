@@ -37,10 +37,10 @@
 //
 // La cinquième, `ghost`, est l'action sans fond : de l'encre, rien autour au repos, et un
 // lavis neutre au survol puis à l'appui (color/action/ghost/bg-hover et bg-pressed).
-// Elle déclenche quelque chose, avec peu de poids — « Annuler », un outil dans une barre.
-// Ce n'est pas un Link : un lien mène quelque part et se reconnaît à son soulignement,
-// un Ghost garde la taille, la pilule et l'anneau du bouton. Elle est née de l'« invisible »
-// de Primer, que Figma nomme ghost ici.
+// Elle porte une action de peu de poids — « Annuler », un outil dans une barre — et, avec
+// `href`, le lien autonome que portait le composant Link, retiré : le Ghost le remplace sans
+// être redessiné, et garde la taille, la pilule et l'anneau du bouton. Elle est née de
+// l'« invisible » de Primer, que Figma nomme ghost ici.
 //
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il

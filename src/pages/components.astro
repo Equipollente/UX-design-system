@@ -4,7 +4,6 @@
 import { withBase } from '../design-system/lib/url';
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
-import Link from '../design-system/components/Link.astro';
 import Tag from '../design-system/components/Tag.astro';
 import CardDefault from '../design-system/components/cards/CardDefault.astro';
 import CardActions from '../design-system/components/cards/CardActions.astro';
@@ -62,14 +61,6 @@ const buttonProps = [
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
 
-const linkProps = [
-  ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
-  ['iconEnd', 'IconName', '—', 'Nom d’une icône du système, posée après le libellé.'],
-  ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
-  ['disabled', 'boolean', 'false', 'Sans href seulement : un <a> ne se désactive pas.'],
-  ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
-  ['style', 'string', '—', 'Surcharge ponctuelle : --link-color, --link-color-active.'],
-];
 const navProps = [
   ['links', '{ href, label, icon? }[]', '—', 'Les items. Le composant ne les connaît pas d’avance.'],
   ['current', 'string', '—', 'Chemin courant. Aucun item actif s’il ne correspond à aucun href.'],
@@ -336,7 +327,13 @@ const modalProps = [
         </div>
 
         <div class="btn-row">
-          {buttonSizes.map((size) => <Button variant="secondary" size={size}>Secondaire {size}</Button>)}
+          {
+            buttonSizes.map((size) => (
+              <Button variant="secondary" size={size} icon="mail-edit">
+                Secondaire {size}
+              </Button>
+            ))
+          }
         </div>
 
         <div class="btn-row">
@@ -350,7 +347,13 @@ const modalProps = [
         </div>
 
         <div class="btn-row">
-          {buttonSizes.map((size) => <Button variant="ghost" size={size}>Annuler {size}</Button>)}
+          {
+            buttonSizes.map((size) => (
+              <Button variant="ghost" size={size} iconEnd="arrow-narrow-right">
+                Annuler {size}
+              </Button>
+            ))
+          }
         </div>
 
         <div class="btn-row last">
@@ -363,12 +366,11 @@ const modalProps = [
       </div>
 
       <p class="section-note">
-        <strong>Le Ghost est l'action sans fond, pas un lien.</strong> Il déclenche quelque chose avec peu
-        de poids visuel — « Annuler », un outil dans une barre — et garde la taille, la pilule et l'anneau de
-        focus du bouton. Au repos il n'y a rien autour de l'encre ; le lavis
-        {' '}<code>color.action.ghost.bg-hover</code> apparaît au survol, et
-        {' '}<code>bg-pressed</code> à l'appui. Ce qui mène quelque part et se reconnaît à son soulignement,
-        c'est <em>Link</em>.
+        <strong>Le Ghost est l'action sans fond.</strong> Il porte ce que portait le composant Link : une
+        action de peu de poids — « Annuler », un outil dans une barre, un lien autonome quand on lui donne
+        un <code>href</code>. Il garde la taille, la pilule et l'anneau de focus du bouton. Au repos il n'y a
+        rien autour de l'encre ; le lavis <code>color.action.ghost.bg-hover</code> apparaît au survol, et
+        {' '}<code>bg-pressed</code> à l'appui.
       </p>
 
       <p class="section-note">
@@ -502,66 +504,6 @@ const modalProps = [
           ))
         }
       </ul>
-    </section>
-
-    <!-- ── Link ─────────────────────────────────────────────────────────── -->
-    <section>
-      <h2>Link</h2>
-
-      <p class="section-note">
-        <strong>Ce qu'il est.</strong> Un texte qui mène quelque part, sans fond : l'action la plus
-        discrète d'une vue, avec une icône à droite si l'on veut.
-        <br />
-        <strong>Ce qu'il n'est pas.</strong> Ni un <em>Button</em> — il n'a ni fond, ni taille, ni
-        variante, et l'action principale d'une vue n'est jamais un lien — ni un texte coloré : sans son
-        soulignement au survol, rien ne le distinguerait d'un mot posé là.
-        <br />
-        <span class="source">Composant Figma <code>613:4816</code>.</span>
-      </p>
-
-      <div class="demo">
-        <div class="btn-row last">
-          <Link href="#link">Lien</Link>
-          <Link href="#link" iconEnd="arrow-narrow-right">Lien avec icône</Link>
-          <Link disabled>Lien désactivé</Link>
-        </div>
-      </div>
-
-      <p class="section-note">
-        <strong>Le survol souligne, l'appui grise.</strong> Au repos le libellé est à
-        {' '}<code>color.text.default</code>, sans trait ; au survol il est souligné, sans changer de
-        couleur ; à l'appui il passe à <code>color.text.muted</code>, sans soulignement. Le soulignement
-        est le seul signe qui sépare un lien d'un texte (WCAG 1.4.1 : la couleur seule ne suffit pas).
-        Tabulez pour voir l'anneau de focus, qui entoure la zone cliquable et non le texte.
-      </p>
-
-      <h3>Props</h3>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Rôle</th></tr>
-          </thead>
-          <tbody>
-            {
-              linkProps.map(([nom, type, defaut, role]) => (
-                <tr>
-                  <td><code>{nom}</code></td>
-                  <td><code>{type}</code></td>
-                  <td>{defaut}</td>
-                  <td>{role}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <p class="flag">
-        <strong>Écart à arbitrer côté Figma.</strong> Le dessin pose <code>space.md</code> tout autour
-        du texte : avec l'icône de 24 px le lien mesure 48 de haut, mais sans elle il n'en fait que 41.
-        Le code ajoute <code>min-height: var(--button-height-sm)</code> (44) pour que la cible tienne
-        dans les deux cas — le composant Figma ne porte pas cette hauteur minimale.
-      </p>
     </section>
 
     <!-- ── Tag ──────────────────────────────────────────────────────────── -->
