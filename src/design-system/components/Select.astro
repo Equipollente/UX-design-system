@@ -5,7 +5,7 @@
 // ce que la boîte annonce, pas le dessin du champ. La boîte fermée, la liste
 // flottante, la recherche, les groupes, la création d'une option et l'affichage
 // de ce qui est choisi sont les mêmes. C'est ce que dessine le nœud 340:933
-// (`forms/Select`) : une seule boîte, dont l'état `Open` accroche la liste
+// (`forms/Select`) : une seule boîte, dont le booléen `open?` montre la liste
 // `_SelectPanel` (778:4266, ex `forms/Select List Combined`).
 //
 // Ce n'est pas un menu : un menu déclenche des actions, un select renseigne une
@@ -104,8 +104,8 @@
 // connaît pas la langue du site qui l'emploie. `{n}`, `{max}` et `{q}` y sont
 // remplacés.
 //
-// Nœuds Figma : 340:933 `forms/Select` (la boîte, 30 variantes : state — dont `open` —
-// × validation × text, et les propriétés label?, hint?, value, placeholder, comme
+// Nœuds Figma : 340:933 `forms/Select` (la boîte, 24 variantes : state × validation ×
+// text, et les propriétés label?, hint?, open?, value, placeholder, comme
 // les props de ce fichier ; `text` vaut `value` pour un choix fait, `placeholder`
 // pour une boîte vide, en `text/muted`), 778:4266
 // `_SelectPanel` (la liste : `type` single ou multiple, et les booléens `searchable?`,

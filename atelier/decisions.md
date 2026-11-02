@@ -498,3 +498,11 @@ un détail pour les sites qui consomment le paquet, mais c'est la décision de J
 dans les jeux de démonstration `Select List Search`, `Count` et `Count chips` (aucune instance extérieure). Les retirer
 sans les refaire casserait ces démonstrations : il faut d'abord les redessiner, comme variantes `type` du contenu du
 panneau (items, empty, max), à la manière du `Content` de Primer.
+
+**Fait le même jour : la boîte du Select n'a plus d'état `open`.** Elle porte `open?`, un booléen qui montre un
+`_SelectPanel` en instance exposée, comme le `menu?` de Primer : 24 variantes (état × validation × texte) au lieu de
+30. Les trois jeux de démonstration — `Select List Search`, `Count`, `Count chips` — qui s'accrochaient aux variantes
+`open` sont supprimés. Leurs cas (fermé, ouvert, recherche tapée, aucun résultat, création, choix épinglés, maximum
+atteint, pastilles) sont redessinés dans une frame « Cas », en instances du `Select` et de `_SelectPanel` avec le
+contenu de l'emplacement : **ce sont des cas de contenu, pas des variantes**, parce que le panneau a des emplacements,
+là où le `Content` de Primer n'en a pas.
