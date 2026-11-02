@@ -108,6 +108,8 @@
   --color-bg-celebrate:                   var(--ramp-highlight-200);
   --color-bg-neutral:                     var(--ramp-neutral-100);
   --color-bg-selection:                   var(--ramp-accent-100);
+  --color-bg-control:                     var(--ramp-accent-500);
+  --color-bg-control-hover:               var(--ramp-accent-600);
 
   --color-border-default:                 var(--ramp-accent-100);
   --color-border-strong:                  var(--ramp-neutral-300);

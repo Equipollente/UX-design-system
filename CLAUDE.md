@@ -45,7 +45,7 @@ serait plus un composant.
 
 ## Les tokens ne s'écrivent pas dans le code
 
-La source de vérité est Figma. Les 279 variables sont exportées dans `tokens/*.tokens.json` (4 modes :
+La source de vérité est Figma. Les 281 variables sont exportées dans `tokens/*.tokens.json` (4 modes :
 Desktop, Tablet, Mobile, Paper), puis `npm run tokens` en fait `styles/tokens.css` et `data/tokens.json`.
 
 Deux étages pour la couleur : `Primitives` (exportée à part dans `tokens/Primitives.tokens.json`) porte les rampes
