@@ -540,3 +540,12 @@ un fieldset à liste flottante. Le script du Select est donc ré-initialisable �
 tient à `window.initSelect` — et l'atelier « formulaire » remonte chaque champ : une ligne clonée par choix, son id, celui
 de sa liste, le `popovertarget` du bouton et l'ancre de la liste, puis `initSelect` sur chaque fieldset. `MultiSelect`
 y est un huitième type, avec ses quatre états dans la banque.
+
+**Les cas du Select et du MultiSelect sont séparés, la boîte reste commune dans le code (02/11).** La frame « Cas »
+montrait huit cas en cases à cocher posés sur la boîte du Select simple : des cas de MultiSelect sur le mauvais
+composant. Chacun a désormais les siens — cinq en radios dans la frame Select, huit en cases à cocher dans la frame
+MultiSelect, où les pastilles sont la variante `display=chips` de la boîte et non plus une pièce ajoutée. La fusion en un
+seul `Select` à prop `multiple` a été examinée et écartée : la valeur change de forme (`value` ou `values`) et cinq
+props ne valent que pour le multiple, d'où une union discriminée ou des props ignorées en silence ; deux façades fines
+sur `_Select` les refusent à la compilation, et ajouter une prop à l'une est sans risque quand en retirer casse les
+sites. Le partage voulu — boîte, liste, script — existe déjà côté code ; côté Figma, la boîte est dessinée deux fois.
