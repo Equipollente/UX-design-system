@@ -506,3 +506,19 @@ panneau (items, empty, max), à la manière du `Content` de Primer.
 atteint, pastilles) sont redessinés dans une frame « Cas », en instances du `Select` et de `_SelectPanel` avec le
 contenu de l'emplacement : **ce sont des cas de contenu, pas des variantes**, parce que le panneau a des emplacements,
 là où le `Content` de Primer n'en a pas.
+
+## Select et MultiSelect sont deux composants, sur une pièce interne
+
+*02/11.* `Select` n'accepte plus que le choix unique ; `MultiSelect`, qui était un alias de `<Select multiple>`, devient
+le champ à plusieurs choix. La prop `multiple` disparaît : c'est le nom du composant qui le dit. `max`, `display`,
+`showSelected`, `values` et les mots du compteur ne sont offerts qu'à `MultiSelect`, et `npm run check` les refuse sur
+`Select`. `creatable` et `searchable` restent sur les deux, par décision de Judith. La coupe se fait par métier et non
+par pièce : la liste est la même, dessinée, sans `<select>` natif.
+
+**Changement cassant, assumé** : un site qui écrit `<Select multiple>` doit passer à `<MultiSelect>`. Judith gère les
+sites qui consomment le paquet.
+
+**Fait à moitié.** Le champ, la liste et le script restent ensemble dans `_Select.astro` (1 304 lignes), que les deux
+façades habillent. `_SelectPanel` — la liste, qui est déjà une pièce à part dans Figma — n'en est pas encore tiré :
+le script de 780 lignes relie la boîte, la liste et les pastilles par des attributs `data-*` sur un conteneur unique, et
+il n'y a aucun test automatique. À faire avec un cas d'essai pour chaque comportement.

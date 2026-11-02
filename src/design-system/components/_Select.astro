@@ -1,5 +1,13 @@
 ---
-// Select — un champ qui fait choisir une valeur, ou plusieurs, dans une liste.
+// _Select — le champ qui fait choisir une valeur, ou plusieurs, dans une liste, et
+// rien d'autre : la pièce interne que Select et MultiSelect habillent.
+//
+// Personne ne le pose seul. Select y fixe `multiple` à faux, MultiSelect à vrai,
+// et chacun ne laisse passer que les props qui ont un sens pour son cas : un
+// maximum de choix n'a pas lieu d'être sur un choix unique, et `npm run check` le
+// refuse. Ce fichier garde le tout — les deux cas partagent la même liste
+// dessinée, le même script et la même boîte — jusqu'à ce que la liste, `_SelectPanel`,
+// en soit tirée à son tour.
 //
 // Un seul champ pour les deux cas : `multiple` change ce que la liste contient et
 // ce que la boîte annonce, pas le dessin du champ. La boîte fermée, la liste

@@ -6,6 +6,7 @@ import DocExample from '../design-system/layouts/blocks/DocExample.astro';
 import FieldLabel from '../design-system/components/FieldLabel.astro';
 import Input from '../design-system/components/Input.astro';
 import Select from '../design-system/components/Select.astro';
+import MultiSelect from '../design-system/components/MultiSelect.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
 import Toggle from '../design-system/components/Toggle.astro';
@@ -25,6 +26,7 @@ import {
   demoGalleryImages,
 } from './_demo';
 
+const multipleOnly = ['multiple', 'values', 'max', 'display', 'showSelected', 'countOneLabel', 'countLabel', 'maxLabel', 'removeLabel', 'requiredMessage'];
 const labelProps = [
   ['for', 'string', '—', 'L’id du champ que ce libellé nomme. C’est ce qui les lie. Sans objet en légende.'],
   ['as', "'label' | 'legend'", "'label'", 'legend quand le libellé nomme un groupe, en premier enfant d’un fieldset.'],
@@ -198,24 +200,25 @@ const litteral = (v: any, pad = '', ligne = false): string => {
   return String(v);
 };
 
-const codeSelect = (props: Record<string, any>) => {
+const codeSelect = (props: Record<string, any>, composant = 'Select') => {
   const attrs = Object.entries(props).map(([k, v]) =>
     v === true ? `  ${k}` : typeof v === 'string' ? `  ${k}="${v}"` : `  ${k}={${litteral(v, '  ')}}`,
   );
-  return `---\nimport Select from 'ux-design-system/components/Select.astro';\n---\n\n<Select\n${attrs.join('\n')}\n/>`;
+  return `---\nimport ${composant} from 'ux-design-system/components/${composant}.astro';\n---\n\n<${composant}\n${attrs.join('\n')}\n/>`;
 };
+
+const selectPropsUnique = selectProps.filter(([nom]) => !multipleOnly.includes(nom as string));
+const multiSelectProps = selectProps.filter(([nom]) => nom !== 'multiple' && nom !== 'value');
 
 const exemplesUnique: Exemple[] = [
   { cle: 'u-simple', titre: 'Simple', description: 'Une liste, un choix. La liste se referme dès qu’on a choisi.',
     props: { id: 'u-simple', label: 'Pays', options: pays, placeholder: 'Choisir un pays' } },
-  { cle: 'u-epingle', titre: 'Avec le choix épinglé', description: '`showSelected` garde le choix visible en bas de la liste, même quand elle défile.',
-    props: { id: 'u-epingle', label: 'Pays', options: destinations, value: 'Canada', showSelected: true } },
   { cle: 'u-recherche', titre: 'Avec recherche', description: '`searchable` pose un champ en haut de la liste. Il filtre à chaque lettre, sans tenir compte des accents.',
     props: { id: 'u-recherche', label: 'Pays', options: destinations, placeholder: 'Choisir un pays', searchable: true } },
   { cle: 'u-creation', titre: 'Avec création d’option', description: '`creatable` ajoute en bas la ligne « Créer une option ». La page reçoit l’événement `select-create` et garde la nouvelle option.',
     props: { id: 'u-creation', label: 'Pays', options: pays, placeholder: 'Choisir un pays', creatable: true } },
-  { cle: 'u-tout', titre: 'Recherche, création et choix épinglé', description: 'Les trois ensemble : la recherche en haut, le choix et la création en bas.',
-    props: { id: 'u-tout', label: 'Pays', options: destinations, value: 'Canada', searchable: true, creatable: true, showSelected: true } },
+  { cle: 'u-tout', titre: 'Recherche, création et choix épinglé', description: 'La recherche en haut, la création en bas.',
+    props: { id: 'u-tout', label: 'Pays', options: destinations, value: 'Canada', searchable: true, creatable: true } },
   { cle: 'u-groupe', titre: 'Options groupées', description: 'Une option peut être un groupe `{ label, options }`. `disabled` éteint tout le groupe.',
     props: { id: 'u-groupe', label: 'Destination', options: destinationsGroupees, value: 'Japon', searchable: true } },
   { cle: 'u-requis', titre: 'Obligatoire', description: '`required` pose l’astérisque et exige un choix à l’envoi.',
@@ -225,22 +228,22 @@ const exemplesUnique: Exemple[] = [
 ];
 
 const exemplesMultiple: Exemple[] = [
-  { cle: 'm-simple', titre: 'Simple', description: '`multiple` fait cocher plusieurs options. La boîte dit combien sont choisies.',
-    props: { id: 'm-simple', label: 'Destinations', options: destinations, multiple: true, placeholder: 'Choisir des destinations' } },
+  { cle: 'm-simple', titre: 'Simple', description: 'Un MultiSelect fait cocher plusieurs options. La boîte dit combien sont choisies.',
+    props: { id: 'm-simple', label: 'Destinations', options: destinations, placeholder: 'Choisir des destinations' } },
   { cle: 'm-epingle', titre: 'Avec les choix épinglés', description: '`showSelected` garde les choix visibles en bas de la liste. Décocher une ligne retire le choix.',
-    props: { id: 'm-epingle', label: 'Destinations', options: destinations, multiple: true, values: ['France', 'Japon'], showSelected: true } },
+    props: { id: 'm-epingle', label: 'Destinations', options: destinations, values: ['France', 'Japon'], showSelected: true } },
   { cle: 'm-recherche', titre: 'Avec recherche', description: '`searchable` pose un champ en haut de la liste. Un choix masqué par le filtre reste choisi.',
-    props: { id: 'm-recherche', label: 'Destinations', options: destinations, multiple: true, values: ['Grèce'], searchable: true } },
+    props: { id: 'm-recherche', label: 'Destinations', options: destinations, values: ['Grèce'], searchable: true } },
   { cle: 'm-creation', titre: 'Avec création d’option', description: '`creatable` ajoute en bas la ligne « Créer une option ». La nouvelle option est choisie aussitôt.',
-    props: { id: 'm-creation', label: 'Destinations', options: destinations, multiple: true, placeholder: 'Choisir des destinations', creatable: true } },
+    props: { id: 'm-creation', label: 'Destinations', options: destinations, placeholder: 'Choisir des destinations', creatable: true } },
   { cle: 'm-tout', titre: 'Recherche, création et choix épinglés', description: 'Les trois ensemble : la recherche en haut, les choix et la création en bas.',
-    props: { id: 'm-tout', label: 'Destinations', options: destinations, multiple: true, values: ['France', 'Japon'], searchable: true, creatable: true, showSelected: true } },
+    props: { id: 'm-tout', label: 'Destinations', options: destinations, values: ['France', 'Japon'], searchable: true, creatable: true, showSelected: true } },
   { cle: 'm-pastilles', titre: 'Pastilles et limite', description: '`display="chips"` montre les choix en pastilles qu’on retire d’un clic. `max` borne leur nombre.',
-    props: { id: 'm-pastilles', label: 'Destinations', options: destinations, multiple: true, values: ['France', 'Japon'], max: 3, display: 'chips' } },
+    props: { id: 'm-pastilles', label: 'Destinations', options: destinations, values: ['France', 'Japon'], max: 3, display: 'chips' } },
   { cle: 'm-groupe', titre: 'Options groupées', description: 'Avec la recherche, un groupe dont rien ne correspond disparaît avec son nom.',
-    props: { id: 'm-groupe', label: 'Destinations', options: destinationsGroupees, multiple: true, values: ['Japon'], searchable: true } },
+    props: { id: 'm-groupe', label: 'Destinations', options: destinationsGroupees, values: ['Japon'], searchable: true } },
   { cle: 'm-eteint', titre: 'Désactivé', description: '`disabled` éteint le champ entier.',
-    props: { id: 'm-eteint', label: 'Destinations', options: destinations, multiple: true, values: ['Belgique'], disabled: true } },
+    props: { id: 'm-eteint', label: 'Destinations', options: destinations, values: ['Belgique'], disabled: true } },
 ];
 ---
 
@@ -476,8 +479,8 @@ const exemplesMultiple: Exemple[] = [
       <h2>Select</h2>
 
       <p class="section-note">
-        Un champ qui fait choisir une valeur, ou plusieurs avec <code>multiple</code>, dans une
-        liste. Nœud Figma <code>340:933</code>.
+        Un champ qui fait choisir une valeur dans une
+        liste — pour en choisir plusieurs, c'est <code>MultiSelect</code>. Nœud Figma <code>340:933</code>.
       </p>
 
       <h3>Choix unique</h3>
@@ -492,11 +495,33 @@ const exemplesMultiple: Exemple[] = [
       <h3>Choix multiple</h3>
       {
         exemplesMultiple.map((e) => (
-          <DocExample title={e.titre} description={e.description} code={codeSelect(e.props)}>
-            <Select {...e.props} />
+          <DocExample title={e.titre} description={e.description} code={codeSelect(e.props, 'MultiSelect')}>
+            <MultiSelect {...e.props} />
           </DocExample>
         ))
       }
+
+      <h3>Props de MultiSelect</h3>
+      <div class="table-scroll">
+        <table>
+        <caption>Props de MultiSelect</caption>
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Défaut</th><th>Ce qu'elle fait</th></tr>
+        </thead>
+        <tbody>
+          {
+            multiSelectProps.map(([nom, type, defaut, note]) => (
+              <tr>
+                <td><code>{nom}</code></td>
+                <td><code>{type}</code></td>
+                <td>{defaut}</td>
+                <td>{note}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </table>
+      </div>
 
       <h3>Validation</h3>
       <div class="demo demo-fields">
@@ -523,7 +548,7 @@ const exemplesMultiple: Exemple[] = [
         </thead>
         <tbody>
           {
-            selectProps.map(([nom, type, defaut, note]) => (
+            selectPropsUnique.map(([nom, type, defaut, note]) => (
               <tr>
                 <td><code>{nom}</code></td>
                 <td><code>{type}</code></td>
@@ -540,8 +565,7 @@ const exemplesMultiple: Exemple[] = [
         <summary>Notes de conception</summary>
         <h3>Choix unique</h3>
       <p class="section-note">
-        <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur, ou plusieurs avec
-        {' '}<code>multiple</code>, dans une liste. Nœud Figma <code>340:933</code>
+        <strong>Ce qu'il est.</strong> Un champ qui fait choisir une valeur dans une liste. Nœud Figma <code>340:933</code>
         {' '}(<code>forms/Select</code>), dont le booléen <code>open?</code> montre la liste
         {' '}<code>_SelectPanel</code> (<code>778:4266</code>).
         <br />
@@ -556,7 +580,7 @@ const exemplesMultiple: Exemple[] = [
         recherche, la création d'une option et le choix épinglé en bas, y compris pour une valeur
         seule : une liste ouverte par le système d'exploitation est hors d'atteinte du CSS. C'est
         maintenant un <code>&lt;fieldset&gt;</code>, un bouton qui ouvre une liste flottante, et des
-        radios — des cases avec <code>multiple</code> — qui portent le même <code>name</code>. Le
+        radios, qui portent le même <code>name</code>. Le
         formulaire envoie ce qui est choisi, et le clavier reste celui du navigateur : Entrée ouvre,
         Tab parcourt, les flèches changent de ligne. Un choix unique referme la liste dès qu'on a
         choisi.
@@ -608,9 +632,10 @@ const exemplesMultiple: Exemple[] = [
         liste fermée, et qui dit combien sont choisies.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni un groupe de Chips à plat : la liste est repliée,
-        elle ne prend sa place qu'à la demande. Ce n'est pas non plus un autre composant :
-        {' '}<code>MultiSelect</code> n'est plus que le Select avec <code>multiple</code>, gardé
-        importable pour que les sites qui l'emploient ne changent rien.
+        elle ne prend sa place qu'à la demande. Ce n'est pas non plus Select, qui n'en prend
+        qu'un : le nombre maximal, les pastilles et les choix épinglés n'ont de sens que pour plusieurs,
+        et c'est <code>MultiSelect</code> qui les porte. Les deux partagent la même liste dessinée, dans
+        {' '}<code>_Select</code>.
       </p>
 
       <p class="section-note">
@@ -637,8 +662,8 @@ const exemplesMultiple: Exemple[] = [
 
 
       <p class="section-note">
-        Les props sont celles du tableau de la section précédente : <code>multiple</code> y est posé
-        d'office, et celles qui ne valent que pour lui y sont marquées.
+        Les props sont celles du tableau « Props de MultiSelect » : <code>multiple</code> y est posé
+        d'office par le composant, et un choix unique se dit par <code>values</code>.
       </p>
 
       <p class="section-note">

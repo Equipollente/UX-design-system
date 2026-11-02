@@ -1,15 +1,27 @@
 ---
-// MultiSelect — le Select, à plusieurs choix.
+// MultiSelect — un champ qui fait choisir **plusieurs** valeurs dans une liste.
 //
-// Ce n'est plus un composant à part : le Select a absorbé le champ à plusieurs
-// choix, et celui-ci n'est que `<Select multiple>`. Il reste importable pour que
-// les sites qui l'emploient ne changent rien. Tout se lit dans Select.astro.
+// La boîte dit combien de choix sont faits (« 2 sélectionnés »), ou, avec
+// `display="chips"`, les montre en pastilles qu'on retire d'un clic. `max` borne
+// leur nombre, `showSelected` épingle les choix en bas de la liste, et la liste
+// reste ouverte pour qu'on en coche d'autres. Ce n'est pas Select, qui n'en prend
+// qu'un et ne porte aucune de ces props : un maximum n'a pas de sens pour un seul
+// choix.
+//
+// Nœud Figma : 865:54238 — `forms/MultiSelect`, 48 variantes (state × validation ×
+// text × display), propriétés label?, hint?, open?, value, placeholder. La boîte ne
+// contient pas la liste : `open?` montre `_SelectPanel` (778:4266), en `type=multiple`,
+// et `display=chips` pose les pastilles (`forms/Select Chips`) sous la boîte.
+//
+// Le dessin, la recherche, les groupes, la création d'une option, le script et le
+// style sont dans _Select.astro, que Select partage. Ce fichier ne fait que fixer
+// `multiple` à vrai, et retirer `value` : plusieurs choix se disent par `values`.
 
-import Select from './Select.astro';
+import SelectBase from './_Select.astro';
 
-type Props = Omit<Parameters<typeof Select>[0], 'multiple' | 'value'>;
+type Props = Omit<Parameters<typeof SelectBase>[0], 'multiple' | 'value'>;
 
 const props = Astro.props as Props;
 ---
 
-<Select {...props} multiple />
+<SelectBase {...props} multiple />
