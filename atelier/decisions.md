@@ -522,3 +522,14 @@ sites qui consomment le paquet.
 façades habillent. `_SelectPanel` — la liste, qui est déjà une pièce à part dans Figma — n'en est pas encore tiré :
 le script de 780 lignes relie la boîte, la liste et les pastilles par des attributs `data-*` sur un conteneur unique, et
 il n'y a aucun test automatique. À faire avec un cas d'essai pour chaque comportement.
+
+**`_SelectPanel` est tiré de `_Select` (02/11).** La liste — recherche, options en cases ou en radios, groupes, pied avec
+les choix épinglés et la création — est son propre fichier, avec son style (338 lignes) et les modèles d'une option
+créée, qui doivent porter son identifiant de style et non celui de la boîte. `_Select.astro` passe de 1 304 à 855
+lignes et garde la boîte, les pastilles, le message de limite et le script. Le script ne bouge pas : il relie ces
+morceaux par les `data-*` du fieldset, et le couper aurait déplacé des attributs sans rien séparer.
+
+Vérifié sans test automatique, par comparaison : le HTML de chacun des dix-huit champs de `/formulaire` est identique avant
+et après (modèles compris), la liste a le même cadre, la même largeur que sa boîte et la même ombre, une ligne cochée a
+son fond d'accent et sa coche, les chevrons se renversent, la recherche filtre et se vide à la fermeture, et une
+option créée — dont la ligne vient d'un modèle — est stylée comme les autres.

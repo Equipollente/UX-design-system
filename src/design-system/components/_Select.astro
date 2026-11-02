@@ -5,9 +5,9 @@
 // Personne ne le pose seul. Select y fixe `multiple` à faux, MultiSelect à vrai,
 // et chacun ne laisse passer que les props qui ont un sens pour son cas : un
 // maximum de choix n'a pas lieu d'être sur un choix unique, et `npm run check` le
-// refuse. Ce fichier garde le tout — les deux cas partagent la même liste
-// dessinée, le même script et la même boîte — jusqu'à ce que la liste, `_SelectPanel`,
-// en soit tirée à son tour.
+// refuse. Ce fichier garde la boîte, les pastilles, le message de limite et le script ; la liste,
+// avec son style, est `_SelectPanel`, que les deux cas partagent. Le script reste ici : il
+// relie la boîte, la liste et les pastilles par des attributs data-* du fieldset.
 //
 // Un seul champ pour les deux cas : `multiple` change ce que la liste contient et
 // ce que la boîte annonce, pas le dessin du champ. La boîte fermée, la liste
@@ -132,7 +132,7 @@
 // Ouvert, le champ garde son message sous la boîte et la liste s'ouvre dessous.
 
 import FieldLabel from './FieldLabel.astro';
-import Checkbox from './Checkbox.astro';
+import SelectPanel from './_SelectPanel.astro';
 import Icon from './Icon.astro';
 import FieldMessage from './_FieldMessage.astro';
 import { resolveFieldMessage } from '../lib/field-message';
@@ -333,123 +333,25 @@ const classes = ['select', className].filter(Boolean).join(' ');
       <Icon name="chevron-top" class="select-chevron select-chevron-open" />
     </button>
 
-    <div class="select-list" id={listId} popover data-list>
-      {
-        searchable && (
-          /* Le champ de recherche n'a pas de `name` : il filtre la liste, il
-             n'est pas envoyé. Son libellé n'est pas affiché — la légende du
-             groupe dit déjà de quoi il s'agit — mais il est lu. */
-          <div class="select-search">
-            <input
-              type="search"
-              class="select-search-input"
-              aria-label={searchLabel}
-              placeholder={searchPlaceholder}
-              autocomplete="off"
-              data-search
-            />
-            <Icon name="search-2" class="select-search-icon" />
-          </div>
-        )
-      }
-      <div class="select-options" data-options>
-        {
-          blocks.map((block) => {
-            const rows = block.items.map((o) => {
-              const checked = chosen.includes(o.value);
-              const off = disabled || o.locked || (full && !checked);
-              return multiple ? (
-                <Checkbox
-                  id={o.inputId}
-                  label={o.label}
-                  name={fieldName}
-                  value={o.value}
-                  checked={checked}
-                  disabled={off}
-                  data-row
-                  data-label={o.label}
-                  data-locked={o.locked ? '' : undefined}
-                />
-              ) : (
-                /* Une ligne de choix unique : le radio la couvre en entier. */
-                <label class="select-row" data-row data-label={o.label} data-locked={o.locked ? '' : undefined}>
-                  <input
-                    type="radio"
-                    class="select-row-input"
-                    id={o.inputId}
-                    name={fieldName}
-                    value={o.value}
-                    checked={checked}
-                    disabled={off}
-                    required={required && o === items[0]}
-                  />
-                  <span class="select-row-label">{o.label}</span>
-                  <Icon name="check" class="select-row-check" />
-                </label>
-              );
-            });
-            /* Un groupe est ce que serait un <optgroup> : un `group` que son
-               nom désigne. Le nom n'est pas une case, il ne prend pas le focus. */
-            return block.label ? (
-              <div class="select-group" role="group" aria-labelledby={block.labelId} data-group>
-                <p class="select-group-label" id={block.labelId}>{block.label}</p>
-                {rows}
-              </div>
-            ) : (
-              rows
-            );
-          })
-        }
-        {searchable && <p class="select-empty" role="status" data-empty></p>}
-      </div>
-
-      {
-        (showSelected || creatable) && (
-          <div class="select-footer">
-            {
-              showSelected && (
-                /* Ce qui est choisi, épinglé : une case cochée par choix, dessinée
-                   comme celle d'une option (`_SelectItem` `type=multiple`), même
-                   pour un choix unique. La décocher retire le choix. Elle n'a pas de
-                   `name` : elle ne s'envoie pas, la vraie est dans la liste. Les
-                   lignes existent toutes, cachées : le script n'a qu'à les montrer,
-                   comme les pastilles. */
-                <div class="select-picked-zone" data-picked-zone hidden={count === 0}>
-                  {items.map((o) => (
-                    <div hidden={!chosen.includes(o.value)} data-picked-for={o.inputId}>
-                      <Checkbox id={`${o.inputId}-pin`} label={o.label} name="" checked />
-                    </div>
-                  ))}
-                </div>
-              )
-            }
-            {
-              creatable && (
-                <div class="select-create" data-create>
-                  <button type="button" class="select-create-open" data-create-open>
-                    <span data-create-text>{createLabel}</span>
-                    <Icon name="plus" class="select-create-icon" />
-                  </button>
-                  <div class="select-create-edit" data-create-edit hidden>
-                    <input
-                      type="text"
-                      class="select-create-input"
-                      aria-label={createLabel}
-                      placeholder={createPlaceholder}
-                      autocomplete="off"
-                      data-create-input
-                    />
-                    <button type="button" class="select-create-confirm" aria-label={createLabel} data-create-confirm>
-                      <Icon name="plus" class="select-create-icon" />
-                    </button>
-                  </div>
-                </div>
-              )
-            }
-          </div>
-        )
-      }
-    </div>
+    <SelectPanel
+      listId={listId}
+      blocks={blocks}
+      items={items}
+      chosen={chosen}
+      count={count}
+      full={full}
+      multiple={multiple}
+      required={required}
+      disabled={disabled}
+      fieldName={fieldName}
+      searchable={searchable}
+      searchLabel={searchLabel}
+      searchPlaceholder={searchPlaceholder}
+      showSelected={showSelected}
+      creatable={creatable}
+      createLabel={createLabel}
+      createPlaceholder={createPlaceholder}
+    />
   </div>
 
   {
@@ -487,40 +389,17 @@ const classes = ['select', className].filter(Boolean).join(' ');
   }
 
   {
-    creatable && (
-      /* Les trois modèles d'une option créée : sa ligne, sa ligne épinglée, sa
-         pastille. Le script les remplit — `__ID__`, `__VALUE__`, `__LABEL__` — et
-         les pose ; ils ne s'affichent pas. */
-      <>
-        <template data-template="row">
-          {multiple ? (
-            <Checkbox id="__ID__" label="__LABEL__" name={fieldName} value="__VALUE__" checked data-row data-label="__LABEL__" />
-          ) : (
-            <label class="select-row" data-row data-label="__LABEL__">
-              <input type="radio" class="select-row-input" id="__ID__" name={fieldName} value="__VALUE__" checked />
-              <span class="select-row-label">__LABEL__</span>
-              <Icon name="check" class="select-row-check" />
-            </label>
-          )}
-        </template>
-        {showSelected && (
-          <template data-template="picked">
-            <div data-picked-for="__ID__">
-              <Checkbox id="__ID__-pin" label="__LABEL__" name="" checked />
-            </div>
-          </template>
-        )}
-        {multiple && display === 'chips' && (
-          <template data-template="chip">
-            <li data-chip-for="__ID__">
-              <button type="button" class="select-chip" aria-label={`${removeLabel} __LABEL__`} data-remove="__ID__">
-                __LABEL__
-                <Icon name="close" class="select-chip-icon" />
-              </button>
-            </li>
-          </template>
-        )}
-      </>
+    creatable && multiple && display === 'chips' && (
+      /* Le modèle d'une pastille créée. Le script la remplit — `__ID__`, `__LABEL__` — et la
+         pose ; elle ne s'affiche pas. Elle vit ici, avec le style des pastilles. */
+      <template data-template="chip">
+        <li data-chip-for="__ID__">
+          <button type="button" class="select-chip" aria-label={`${removeLabel} __LABEL__`} data-remove="__ID__">
+            __LABEL__
+            <Icon name="close" class="select-chip-icon" />
+          </button>
+        </li>
+      </template>
     )
   }
 </fieldset>
@@ -902,346 +781,9 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   /* Ouverte, le chevron change de sens. Ce sont deux icônes du registre plutôt
      qu'une rotation : un angle écrit ici serait une valeur sans variable. */
-  .select-control:not(:has(.select-list:popover-open)) .select-chevron-open,
-  .select-control:has(.select-list:popover-open) .select-chevron-closed {
+  :global(.select-control:not(:has(.select-list:popover-open))) .select-chevron-open,
+  :global(.select-control:has(.select-list:popover-open)) .select-chevron-closed {
     display: none;
-  }
-
-  /* La liste flottante. Le navigateur la pose dans sa couche réservée ; il ne
-     reste qu'à l'accrocher. Elle tombe sous la boîte, à l'écart du libellé
-     (5), en prend exactement la largeur, et passe au-dessus quand la place
-     manque en bas. Les marges et l'encart que le navigateur donne à un popover
-     — centré au milieu de l'écran — s'effacent. */
-  .select-list {
-    position-anchor: var(--select-anchor);
-    inset: auto;
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    margin: var(--control-field-gap) 0 0;
-    position-try-fallbacks: flip-block;
-    /* Sept lignes, puis la liste défile. Une ligne mesure la case
-       (`control/size`, 18 — plus haute que le libellé, 16,8) et son rembourrage
-       (`space/sm` dessus et dessous), soit 34 ; s'y ajoutent le rembourrage et le
-       trait du cadre. Rien n'est mesuré à la main : la hauteur suit ses
-       variables, comme le cadre de 585:1410 la suit dans Figma. */
-    max-height: calc(
-      var(--select-visible-options) * (var(--control-size) + 2 * var(--space-sm)) +
-        2 * var(--space-xs) + 2 * var(--border-width-default) + var(--select-search-block, 0px) +
-        var(--select-footer-block, 0px)
-    );
-    /* Ce n'est pas le cadre qui défile, ce sont ses options : la recherche et le
-       pied restent à leur place sans avoir à flotter au-dessus d'elles. Le cadre
-       ne coupe rien — l'anneau de focus du champ déborde de son rembourrage. */
-    overflow: visible;
-    /* Son cadre est celui de la boîte — même trait, même rayon — et l'ombre
-       `shadow/md` du système la détache de ce qu'elle recouvre. Le rembourrage
-       se partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la
-       boîte, et le libellé d'une option tombe à l'aplomb du texte de la boîte. */
-    padding: var(--space-xs);
-    background: var(--color-bg-default);
-    color: var(--color-text-default);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-  }
-
-  /* `display` seulement ouverte : posé sans condition, il l'emporterait sur le
-     `display: none` que le navigateur donne à un popover fermé. */
-  .select-list:popover-open {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  /* Avec la recherche, la liste grandit de la hauteur d'un champ (`control/height`,
-     celle de la recette) et de l'écart qui la sépare des options : les sept
-     lignes restent sept. Le pied de même, d'une ligne de création (`button/height/sm`)
-     et de son écart. */
-  .select-list:has(.select-search) {
-    --select-search-block: calc(var(--control-height) + 2 * var(--space-xs));
-  }
-
-  .select-list:has(.select-create) {
-    --select-footer-block: calc(var(--button-height-sm) + var(--space-xs));
-  }
-
-  .select-options {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-
-  /* Le champ de recherche. Tout son dessin est la recette des champs de
-     global.css — `type="search"` y est déjà ; il ne déclare que sa place et
-     celle de sa loupe, posée comme le chevron de la boîte. */
-  .select-search {
-    position: relative;
-    display: flex;
-    flex: none;
-  }
-
-  .select-search-input {
-    width: 100%;
-    padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
-  }
-
-  /* La croix que le navigateur pose dans un champ de recherche tomberait sous
-     la loupe : elle s'efface, Escape vide déjà le champ. */
-  .select-search-input::-webkit-search-cancel-button {
-    appearance: none;
-  }
-
-  .select-search-icon {
-    position: absolute;
-    right: var(--button-padding-x-sm);
-    top: 50%;
-    translate: 0 -50%;
-    --icon-size: var(--button-icon-size-sm);
-    color: var(--color-text-muted);
-    pointer-events: none;
-  }
-
-  /* Un groupe d'options. Son nom range la liste sans attirer l'œil : le petit
-     corps des libellés, en capitales et en encre atténuée, avec l'interlettrage
-     large que le système donne à ses capitales (celui du h6). Il s'aligne sur
-     le bord des cases, et prend de l'air au-dessus pour séparer les groupes. */
-  .select-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .select-group-label {
-    margin: 0;
-    padding: var(--space-sm) var(--space-md) var(--space-xs);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-wider);
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-  }
-
-  .select-group.select-filtered {
-    display: none;
-  }
-
-  /* Une option écartée par le filtre. Une classe plutôt que `hidden` : le
-     `display: flex` de la ligne l'emporterait sur celui du navigateur. */
-  .select-list :global([data-row].select-filtered) {
-    display: none;
-  }
-
-  /* Rien ne correspond : la liste le dit, à la place d'une ligne, et le
-     message est annoncé. Vide, il ne prend aucune place. */
-  .select-empty {
-    margin: 0;
-    padding: var(--space-sm) var(--space-md);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-muted);
-  }
-
-  .select-empty:empty {
-    display: none;
-  }
-
-  /* Chaque option est une ligne qui réagit en entier, pas seulement sa case :
-     on doit toujours savoir laquelle on survole et laquelle a le focus. C'est la
-     ligne du Menu Item (340:972) avec une case devant — `_SelectItem`
-     `type=multiple`, 863:39983 : rembourrage 8 / 12, rayon `radius/md`, survol
-     `neutral/100`. Les deux listes, à un et à plusieurs choix, ont le même
-     rythme. */
-  .select-list :global(.checkbox) {
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-  }
-
-  .select-list :global(.checkbox:not(.checkbox-disabled):hover),
-  .select-list :global(.checkbox:has(input:focus-visible)) {
-    background: var(--color-action-ghost-bg-hover);
-  }
-
-  /* Une option cochée se lit aussi par son mot, pas seulement par sa case
-     (WCAG 1.4.1). Le libellé est déjà en medium : c'est le cran au-dessus. */
-  .select-list :global(.checkbox:has(input:checked) .field-label) {
-    font-weight: var(--font-weight-semibold);
-  }
-
-  /* Une ligne de choix unique — `_SelectItem` `type=single`, 863:39983. Le
-     libellé et une coche à droite ; rembourrage `space/sm` et `space/md`, rayon
-     `radius/md`, libellé en `font/size/ui` medium. Le radio natif la couvre en
-     entier et ne se voit pas : c'est la ligne qui montre l'état. */
-  .select-row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-default);
-    cursor: pointer;
-  }
-
-  .select-row-input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: inherit;
-  }
-
-  /* La coche n'est là que sur la ligne choisie. Elle prend la place qu'elle
-     tient dans le nœud : 20, comme le chevron. */
-  .select-row-check {
-    --icon-size: var(--button-icon-size-sm);
-    flex: none;
-    visibility: hidden;
-  }
-
-  /* — hover — */
-  .select-row:not(:has(input:disabled)):hover {
-    background: var(--color-action-ghost-bg-hover);
-  }
-
-  /* — focused — Le fond du survol et l'anneau du système. */
-  .select-row:has(input:focus-visible) {
-    background: var(--color-action-ghost-bg-hover);
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
-  }
-
-  /* — selected — Le fond d'accent, l'encre qui s'y lit, la coche. Au survol et
-     au focus, le nœud reprend le fond du survol et l'encre par défaut : la ligne
-     choisie ne s'éteint pas pour autant, sa coche reste. */
-  .select-row:has(input:checked) {
-    background: var(--color-action-primary-bg);
-    color: var(--color-text-on-accent);
-  }
-
-  .select-row:has(input:checked) .select-row-check {
-    visibility: visible;
-  }
-
-  .select-row:has(input:checked):not(:has(input:disabled)):hover,
-  .select-row:has(input:checked):has(input:focus-visible) {
-    background: var(--color-action-ghost-bg-hover);
-    color: var(--color-text-default);
-  }
-
-  /* — disabled — */
-  .select-row:has(input:disabled) {
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
-  }
-
-  /* Le pied : ce qui est choisi, puis la création. Un trait le sépare des
-     options — celui du cadre — et les deux zones s'espacent comme tout le reste. */
-  .select-footer {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    gap: var(--space-xs);
-    padding-top: var(--space-xs);
-    border-top: var(--border-width-default) solid var(--color-border-default);
-  }
-
-  .select-picked-zone {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* La ligne de création — `_SelectItem` `type=create`, 863:39983 : la
-     ligne d'une option, de la hauteur du petit bouton, avec un plus à droite. */
-  .select-create[hidden] {
-    display: none;
-  }
-
-  .select-create-open,
-  .select-create-edit {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    width: 100%;
-    min-height: var(--button-height-sm);
-    padding: var(--space-sm) var(--space-md);
-    border: 0;
-    border-radius: var(--radius-md);
-    background: transparent;
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-default);
-    text-align: left;
-  }
-
-  .select-create-open {
-    cursor: pointer;
-  }
-
-  .select-create-open[hidden],
-  .select-create-edit[hidden] {
-    display: none;
-  }
-
-  .select-create-open:hover {
-    background: var(--color-action-ghost-bg-hover);
-  }
-
-  .select-create-open:focus-visible {
-    background: var(--color-action-ghost-bg-hover);
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
-  }
-
-  .select-create-icon {
-    --icon-size: var(--button-icon-size-sm);
-    flex: none;
-  }
-
-  /* Taper le nom : la ligne prend l'anneau de focus du nœud, et le champ n'a ni
-     fond ni trait — c'est la ligne qui les porte. */
-  .select-create-edit {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
-  }
-
-  .select-create-input {
-    flex: 1;
-    min-width: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    font: inherit;
-    color: inherit;
-  }
-
-  .select-create-confirm {
-    display: inline-flex;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .select-create-confirm:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
   }
 
   /* Les pastilles. Elles se rangent et passent à la ligne comme des mots. */
