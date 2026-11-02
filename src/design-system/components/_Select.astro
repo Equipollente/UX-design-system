@@ -419,8 +419,13 @@ const classes = ['select', className].filter(Boolean).join(' ');
   const escape = (text: string) =>
     text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  for (const root of document.querySelectorAll<HTMLFieldSetElement>('[data-select]')) {
-    if (root.disabled) continue;
+  // Un champ s'initialise une fois, et se rejoue pour un champ ajouté après coup : le bac à
+  // sable en clone, et un clone n'a ni les écouteurs ni l'état de son modèle. `ready` évite
+  // d'écouter deux fois le même fieldset.
+  const ready = new WeakSet<HTMLFieldSetElement>();
+  const init = (root: HTMLFieldSetElement) => {
+    if (root.disabled || ready.has(root)) return;
+    ready.add(root);
 
     const multiple = root.hasAttribute('data-multiple');
     const {
@@ -710,7 +715,12 @@ const classes = ['select', className].filter(Boolean).join(' ');
     );
 
     sync();
-  }
+  };
+
+  for (const root of document.querySelectorAll<HTMLFieldSetElement>('[data-select]')) init(root);
+
+  // La porte d'entrée d'une page qui ajoute des champs après le chargement.
+  (window as unknown as { initSelect: typeof init }).initSelect = init;
 </script>
 
 <style>

@@ -533,3 +533,10 @@ Vérifié sans test automatique, par comparaison : le HTML de chacun des dix-hui
 et après (modèles compris), la liste a le même cadre, la même largeur que sa boîte et la même ombre, une ligne cochée a
 son fond d'accent et sa coche, les chevrons se renversent, la recherche filtre et se vide à la fermeture, et une
 option créée — dont la ligne vient d'un modèle — est stylée comme les autres.
+
+**Le bac à sable clone les listes sans les copier telles quelles (02/11).** Un Select cloné depuis la banque
+gardait un seul choix `⟨choix⟩`, des ids en double et aucun écouteur : la copie d'un `<select>` natif ne vaut plus pour
+un fieldset à liste flottante. Le script du Select est donc ré-initialisable — `init(root)` garde un `WeakSet`, et se
+tient à `window.initSelect` — et l'atelier « formulaire » remonte chaque champ : une ligne clonée par choix, son id, celui
+de sa liste, le `popovertarget` du bouton et l'ancre de la liste, puis `initSelect` sur chaque fieldset. `MultiSelect`
+y est un huitième type, avec ses quatre états dans la banque.

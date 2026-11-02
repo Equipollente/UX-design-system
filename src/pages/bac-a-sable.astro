@@ -20,6 +20,7 @@ import Card from '../design-system/components/Card.astro';
 import Modal from '../design-system/components/Modal.astro';
 import Input from '../design-system/components/Input.astro';
 import Select from '../design-system/components/Select.astro';
+import MultiSelect from '../design-system/components/MultiSelect.astro';
 import Textarea from '../design-system/components/Textarea.astro';
 import Radio from '../design-system/components/Radio.astro';
 import Checkbox from '../design-system/components/Checkbox.astro';
@@ -157,11 +158,12 @@ const defautModal = `<Modal
 />`;
 
 // ── L'atelier du formulaire ────────────────────────────────────────────────
-// Les sept types qu'on peut poser dans une pile. L'ordre est celui de
+// Les huit types qu'on peut poser dans une pile. L'ordre est celui de
 // /formulaire, et il est aussi celui des imports que le code produit.
 const typesChamp = [
   { cle: 'Input', nom: 'Champ texte' },
   { cle: 'Select', nom: 'Select' },
+  { cle: 'MultiSelect', nom: 'Choix multiple' },
   { cle: 'Textarea', nom: 'Zone de texte' },
   { cle: 'Radio', nom: 'Radio (groupe)' },
   { cle: 'Checkbox', nom: 'Case à cocher' },
@@ -1337,6 +1339,19 @@ import { withBase } from 'ux-design-system/lib/url';
         }
         {
           combos.map(({ r, d }) => (
+            <span data-champ={cleChamp('MultiSelect', r, d)}>
+              <MultiSelect
+                id={`bq-multiselect-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
+                label={SENTINELLE}
+                options={[SENTINELLE_CHOIX]}
+                required={r}
+                disabled={d}
+              />
+            </span>
+          ))
+        }
+        {
+          combos.map(({ r, d }) => (
             <span data-champ={cleChamp('Textarea', r, d)}>
               <Textarea
                 id={`bq-textarea-${r ? 'r' : 'n'}-${d ? 'd' : 'n'}`}
@@ -2263,8 +2278,9 @@ import { withBase } from 'ux-design-system/lib/url';
     // second mot de la banque, celui de l'option du select, n'a pas besoin d'être
     // connu ici : cette option-là sert de modèle et on la clone.
     const SENTINELLE = '⟨libellé⟩';
+    const SENTINELLE_CHOIX = '⟨choix⟩';
 
-    // Les sept types, et tout ce que le script a besoin de savoir d'eux. `requis`
+    // Les huit types, et tout ce que le script a besoin de savoir d'eux. `requis`
     // dit si le composant accepte `required` — Radio, Toggle et Chip ne l'ont pas.
     // `groupe` dit qu'un seul réglage produit plusieurs balises, et qu'il leur faut
     // un fieldset : c'est la legend qui porte le nom du groupe, aucune prop ne le
@@ -2272,6 +2288,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const TYPES = {
       Input: { liste: false, requis: true, groupe: false },
       Select: { liste: true, requis: true, groupe: false },
+      MultiSelect: { liste: true, requis: true, groupe: false },
       Textarea: { liste: false, requis: true, groupe: false },
       Radio: { liste: true, requis: false, groupe: true },
       Checkbox: { liste: false, requis: true, groupe: false },
@@ -2288,6 +2305,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const DEPART: Record<Type, { libelle: string; choix: string }> = {
       Input: { libelle: 'Ton nom', choix: '' },
       Select: { libelle: 'Sujet', choix: 'Devis, Question, Autre' },
+      MultiSelect: { libelle: 'Destinations', choix: 'France, Japon, Grèce' },
       Textarea: { libelle: 'Ton message', choix: '' },
       Radio: { libelle: 'Format de l’échange', choix: 'Visio, Téléphone' },
       Checkbox: { libelle: 'J’accepte d’être recontacté', choix: '' },
@@ -2492,6 +2510,39 @@ import { withBase } from 'ux-design-system/lib/url';
       for (const l of el.querySelectorAll('label[for]')) l.setAttribute('for', id);
     };
 
+    // Un Select ou un MultiSelect n'est plus un <select> natif : c'est un fieldset, un
+    // bouton, une liste flottante et une ligne par choix. On clone donc la ligne que le
+    // composant a rendue autant de fois qu'il y a de choix, et on reprend les liens que le
+    // clone tient encore de la banque — son id, celui de sa liste, le bouton qui l'ouvre et
+    // l'ancre de la liste. Sans ça, deux champs s'accrocheraient à la même liste.
+    const monterSelect = (el: HTMLElement, c: Champ) => {
+      el.id = c.id;
+      const liste = el.querySelector<HTMLElement>('[data-list]');
+      if (liste) liste.id = `${c.id}-list`;
+      el.querySelector('[data-trigger]')?.setAttribute('popovertarget', `${c.id}-list`);
+      el.querySelector<HTMLElement>('.select-control')?.style.setProperty('--select-anchor', `--select-${c.id}`);
+      const options = el.querySelector('[data-options]');
+      const modele = options?.querySelector<HTMLElement>('[data-row]');
+      if (!options || !modele) return;
+      options.replaceChildren(
+        ...c.choix.map((mot, i) => {
+          const ligne = modele.cloneNode(true) as HTMLElement;
+          const id = `${c.id}-${i}`;
+          ligne.dataset.label = mot;
+          poserTexte(ligne, SENTINELLE_CHOIX, mot);
+          const entree = ligne.querySelector<HTMLInputElement>('input');
+          if (entree) {
+            entree.id = id;
+            entree.name = c.id;
+            entree.value = mot;
+            entree.checked = false;
+          }
+          for (const l of ligne.querySelectorAll('label[for]')) l.setAttribute('for', id);
+          return ligne;
+        }),
+      );
+    };
+
     const poser = (c: Champ) => {
       if (TYPES[c.type].groupe) {
         // Le groupe est un fieldset parce que rien d'autre ne peut porter son nom :
@@ -2521,25 +2572,13 @@ import { withBase } from 'ux-design-system/lib/url';
       const el = exemplaire(c.type, c.requis, c.eteint);
       if (!el) return null;
       poserTexte(el, SENTINELLE, c.libelle);
+
+      if (c.type === 'Select' || c.type === 'MultiSelect') {
+        monterSelect(el, c);
+        return el;
+      }
       nommer(el, c.id, c.id);
 
-      if (c.type === 'Select') {
-        // Les options sont du HTML nu, et c'est le composant qui les a rendues :
-        // on clone la sienne autant de fois qu'il y a de choix plutôt que d'en
-        // fabriquer une.
-        const select = el.querySelector('select');
-        const modele = select?.querySelector('option');
-        if (select && modele) {
-          select.replaceChildren(
-            ...c.choix.map((mot) => {
-              const o = modele.cloneNode(true) as HTMLOptionElement;
-              o.value = mot;
-              o.textContent = mot;
-              return o;
-            }),
-          );
-        }
-      }
       return el;
     };
 
@@ -2559,7 +2598,7 @@ import { withBase } from 'ux-design-system/lib/url';
 
     const baliseChamp = (c: Champ) => {
       const a = [`id="${c.id}"`, `label="${attr(c.libelle)}"`];
-      if (c.type === 'Select') a.push(`options={[${c.choix.map(chaine).join(', ')}]}`);
+      if (c.type === 'Select' || c.type === 'MultiSelect') a.push(`options={[${c.choix.map(chaine).join(', ')}]}`);
       if (c.requis) a.push('required');
       if (c.eteint) a.push('disabled');
       return baliser(c.type, a, null);
@@ -2609,6 +2648,9 @@ import { withBase } from 'ux-design-system/lib/url';
       pile?.replaceChildren(
         ...champs.map((c) => poser(c)).filter((el): el is HTMLElement => Boolean(el)),
       );
+      // Un clone n'a ni écouteurs ni état : le script du Select les pose champ par champ.
+      const initSelect = (window as unknown as { initSelect?: (r: HTMLFieldSetElement) => void }).initSelect;
+      for (const f of pile?.querySelectorAll<HTMLFieldSetElement>('[data-select]') ?? []) initSelect?.(f);
 
       if (vide) {
         vide.textContent = champs.length
