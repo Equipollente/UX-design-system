@@ -1,10 +1,9 @@
 ---
 // Bouton du système. Toutes les dimensions viennent des tokens button.*.
 //
-// Les tokens height, padding-y et icon-size sont sur-déterminés dans l'export
-// Figma (md : 16 + 24 + 16 = 56 ≠ 48). C'est la hauteur qui prime — la
-// dimension que les $description rattachent à WCAG 2.5.5 — et le padding
-// vertical n'est pas appliqué. Voir la note sur /foundations.
+// C'est la hauteur qui dimensionne le bouton — la dimension que les $description
+// rattachent à WCAG 2.5.5. Figma ne porte plus de padding vertical sur ce composant
+// (réglé le 02/11) : les variables button/padding-y/* existent encore, lues ailleurs.
 //
 // Chaque taille pose ses variables locales (--btn-h, --btn-px, --btn-gap,
 // --btn-icon, --btn-min-w) et chaque variante ses trois fonds (--btn-bg,
@@ -13,7 +12,7 @@
 // supplémentaire. C'est ce que font le Nav pour son bouton d'action et le
 // Carousel pour ses flèches, que Figma pose sur color.bg.default.
 //
-// Le secondaire n'a pas de liseré, et Figma n'en a jamais dessiné : le nœud 21:32
+// Le secondaire n'a pas de liseré, et Figma n'en a jamais dessiné : le nœud 854:41655
 // ne porte qu'un fond. Le trait qui vivait ici était hérité du portfolio, entré
 // avec l'extraction du système, et il n'a jamais eu de source. Il valait
 // color/border/default sur le fond lavande du bouton — 1,28:1, là où WCAG 1.4.11
@@ -28,7 +27,7 @@
 //
 // La quatrième variante, `icon`, est le bouton rond : l'icône seule, sur le fond du
 // secondaire, dans un cercle dont le diamètre est la hauteur de la taille (Figma
-// 612:2 et suivants, variante Icon des trois jeux). Elle remplace ce que le Carousel
+// 854:41703 et ses voisins, variante Icon des trois tailles). Elle remplace ce que le Carousel
 // et la page Icônes réécrivaient chacun de leur côté — retirer la largeur minimale,
 // annoncer le bouton — et que l'appelant devait savoir pour l'écrire. Elle ne rend
 // ni libellé ni `iconEnd`, comme le dessin : Figma retire le texte et la seconde
@@ -214,7 +213,7 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
   }
 
   /* Désactivé : Figma ne change pas le fond, il baisse l'opacité de tout le
-     bouton à 45 % (états Disabled, 21:11 et 21:26). Le contraste tombe
+     bouton à 45 % (états Disabled, 854:41683 et 854:41667). Le contraste tombe
      alors sous le seuil — c'est admis, WCAG 1.4.3 exempte les contrôles
      inactifs. Le Carousel s'en sert pour ses flèches en bout de piste. */
   .btn:disabled {

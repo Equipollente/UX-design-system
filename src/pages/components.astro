@@ -321,7 +321,7 @@ const modalProps = [
         {' '}<em>Tag</em> — ni un objet qu'on répète : deux boutons primaires dans une vue, et aucun des deux
         n'est principal. Pour naviguer à l'intérieur du Nav, c'est un lien qu'il faut, pas un bouton.
         <br />
-        <span class="source">Description du composant Figma <code>21:47</code>.</span>
+        <span class="source">Description du composant Figma <code>854:41729</code>.</span>
       </p>
 
       <div class="demo">
@@ -454,24 +454,20 @@ const modalProps = [
         n'a pas : ils n'ont pas été touchés, et la bascule se décide avec eux.
       </p>
 
-      <p class="flag">
-        <strong>Écart à arbitrer côté Figma.</strong> Les trois familles <code>height</code>,
-        {' '}<code>padding-y</code> et <code>icon-size</code> sont sur-déterminées et ne s'accordent pas : en
-        taille md, <code>16 + 24 + 16 = 56 px</code> alors que <code>--button-height-md</code> vaut 48.
-        Seule la taille sm est cohérente. Ici la hauteur prime — c'est la dimension que les descriptions
-        rattachent à WCAG 2.5.5 — et le padding vertical n'est pas appliqué.
+      <p class="section-note">
+        <strong>Une seule dimension décide.</strong> Le composant Figma ne porte plus de marge verticale :
+        la hauteur dimensionne le bouton, et c'est la dimension que les descriptions rattachent à
+        WCAG 2.5.5. Les variables <code>button.padding-y</code> existent toujours, lues par d'autres objets.
       </p>
 
       <p class="flag">
-        <strong>Ce que Figma déclare et que le code n'a pas.</strong> Le composant Figma porte quatre
-        variantes (<code>Primary</code>, <code>Secondary</code>, <code>Ghost</code>, <code>CTA</code>) et
-        quatre états (<code>Default</code>, <code>Hover</code>, <code>Pressed</code>,
-        {' '}<code>Disabled</code>). Le code implémente deux variantes et les quatre états : ni
-        {' '}<code>Ghost</code> ni <code>CTA</code>. À intégrer le jour où une vue en a besoin — pas avant.
-        L'état désactivé, lui, est arrivé avec les flèches du carrousel : Figma ne change pas le fond, il
-        baisse l'opacité de tout le bouton à 45 % (<code>21:11</code>,
-        {' '}<code>21:26</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3 exempte les contrôles
-        inactifs.
+        <strong>Ce que Figma a et que la doc ne disait pas.</strong> Le jeu Figma est unique : trois
+        propriétés (<code>Variant</code>, <code>Size</code>, <code>State</code>), quatre variantes
+        (<code>Primary</code>, <code>Secondary</code>, <code>Alert</code>, <code>Icon</code>) et cinq états,
+        {' '}<code>Focus</code> compris. Le code les suit tous. L'état désactivé est arrivé avec les flèches
+        du carrousel : Figma ne change pas le fond, il baisse l'opacité de tout le bouton à 45 %
+        (<code>854:41683</code>, <code>854:41667</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3
+        exempte les contrôles inactifs.
       </p>
 
       <h3>Tokens</h3>

@@ -31,7 +31,7 @@ FINI QUAND
 
 ### OBJET
 
-Le nom de code, le nœud Figma, ou les deux : `Button`, `21:47`. Pour un composant pas encore
+Le nom de code, le nœud Figma, ou les deux : `Button`, `854:41729`. Pour un composant pas encore
 intégré, son nom Figma suffit — il est déjà dans [LINKS.md](../LINKS.md).
 
 C'est la ligne qui rapporte le plus. Sans elle, la première chose que fait le dev est de traduire
@@ -142,7 +142,7 @@ qu'elles passent avant la moindre lecture longue.
 Une demande complète :
 
 ```
-OBJET            Button (21:47)
+OBJET            Button (854:41729)
 POUR QUI         la barre de doc — aujourd'hui c'est un lien stylé à la main
 FIGMA            fait, Ghost est dessinée avec ses quatre états
 AUJOURD'HUI      deux variantes, primaire et secondaire, toutes deux avec un fond
