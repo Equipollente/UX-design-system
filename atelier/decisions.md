@@ -56,7 +56,7 @@ nom, vérifié à la compilation.
 
 ## Une variante ne s'intègre que quand une vue en a besoin
 
-`Ghost` et `CTA` sur Button : décrits dans Figma, volontairement absents du code. Intégrer par
+`CTA` sur Button : décrit dans Figma, volontairement absent du code. Intégrer par
 anticipation, c'est maintenir du code que personne n'appelle et documenter des états que personne ne
 voit.
 
@@ -386,3 +386,20 @@ décoratifs de la page Fondations et des nœuds de maquette (`neutral/400`, `neu
 maquette plutôt que de système.
 
 `←` [atelier/architecture-couleurs.md](architecture-couleurs.md), [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md)
+
+## Ghost entre dans le Button, et Link reste à part
+
+*02/11.* Le Button gagne la variante `ghost` : l'action sans fond, à faible poids visuel — « Annuler », un
+outil dans une barre. Elle vient de l'« invisible » du Button de Primer, que le dessin nomme ici `ghost`.
+Elle entre non par anticipation mais parce que Judith l'a demandée, et qu'une action sans fond n'a pas de
+chemin plus court : le point de surcharge `--btn-bg: transparent` ne donne ni le lavis au survol ni celui
+à l'appui.
+
+**Link ne devient pas une variante du Button.** Un lien mène quelque part et se reconnaît à son
+soulignement au survol (WCAG 1.4.1) ; un Ghost déclenche une action et garde la taille, la pilule et
+l'anneau du bouton. Fusionner demandait à la variante de redéfinir presque tout — forme, marges, survol,
+focus — et d'imposer `size` à un objet qui n'en a pas. La règle est l'intention, pas l'apparence : ce qui
+navigue est un Link, ce qui agit sans poids est un Ghost.
+
+Un token créé pour l'occasion : `color/action/ghost/bg-pressed`, alias de `ramp/neutral/200`, dans le même
+schéma que le Secondary (survol 100, appui 200). `bg-hover` existait déjà.

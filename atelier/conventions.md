@@ -83,7 +83,7 @@ a déjà fait ; il ne déplace rien et ne dessine rien.
 
 ## 9. Une variante ne s'intègre que le jour où une vue en a besoin
 
-`Ghost` et `CTA` sur Button : décrits dans Figma, volontairement absents du code. Pas avant. La même
+`CTA` sur Button : décrit dans Figma, volontairement absent du code. Pas avant. La même
 politique vaut pour les procédures de ce dossier.
 
 Il existe un second chemin d'entrée, plus étroit, ouvert par les Tag remplies : quand le point de

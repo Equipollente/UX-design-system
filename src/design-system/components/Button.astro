@@ -35,6 +35,13 @@
 // donc le composant refuse de se compiler sans `icon` et sans `aria-label`
 // (WCAG 4.1.2 : un contrôle expose un nom).
 //
+// La cinquième, `ghost`, est l'action sans fond : de l'encre, rien autour au repos, et un
+// lavis neutre au survol puis à l'appui (color/action/ghost/bg-hover et bg-pressed).
+// Elle déclenche quelque chose, avec peu de poids — « Annuler », un outil dans une barre.
+// Ce n'est pas un Link : un lien mène quelque part et se reconnaît à son soulignement,
+// un Ghost garde la taille, la pilule et l'anneau du bouton. Elle est née de l'« invisible »
+// de Primer, que Figma nomme ghost ici.
+//
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
 // en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
@@ -43,7 +50,7 @@ import Icon from './Icon.astro';
 import type { IconName } from '../lib/icons';
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'alert' | 'icon';
+  variant?: 'primary' | 'secondary' | 'alert' | 'icon' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   /** Nom d'une icône du système. Posée avant le label. Seule, et obligatoire, avec `variant="icon"`. */
@@ -201,6 +208,15 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-px: 0;
     --btn-min-w: 0;
     width: var(--btn-h);
+    color: var(--color-text-default);
+  }
+
+  /* Rien au repos : le lavis n'apparaît qu'au survol et à l'appui, comme dans Figma.
+     Le désactivé baisse l'opacité du bouton entier, il n'a donc pas de fond à lui. */
+  .btn-ghost {
+    --btn-bg: transparent;
+    --btn-bg-hover: var(--color-action-ghost-bg-hover);
+    --btn-bg-active: var(--color-action-ghost-bg-pressed);
     color: var(--color-text-default);
   }
 

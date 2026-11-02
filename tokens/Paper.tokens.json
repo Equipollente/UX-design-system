@@ -1132,6 +1132,33 @@
               "targetVariableSetName": "Primitives"
             }
           }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.929411768913269,
+              0.9254902005195618,
+              0.9372549057006836
+            ],
+            "alpha": 1,
+            "hex": "#EDECEF"
+          },
+          "$description": "Lavis d’appui de l’action sans fond au repos : le bouton Ghost pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:855:38352",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:b78848d83848e53ea7cf42648b90cadf307a7027/-1:-1",
+              "targetVariableName": "ramp/neutral/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
         }
       },
       "toggle": {

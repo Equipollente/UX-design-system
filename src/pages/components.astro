@@ -44,9 +44,9 @@ const buttonSizes = ['sm', 'md', 'lg'] as const;
 const buttonProps = [
   [
     'variant',
-    `'primary' | 'secondary' | 'alert' | 'icon'`,
+    `'primary' | 'secondary' | 'alert' | 'icon' | 'ghost'`,
     'primary',
-    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Icon est le bouton rond : l’icône seule, sans libellé, et il exige icon et aria-label.',
+    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Icon est le bouton rond : l’icône seule, sans libellé, et il exige icon et aria-label. Ghost est l’action sans fond, à faible poids visuel.',
   ],
   ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
   ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
@@ -349,6 +349,10 @@ const modalProps = [
           }
         </div>
 
+        <div class="btn-row">
+          {buttonSizes.map((size) => <Button variant="ghost" size={size}>Annuler {size}</Button>)}
+        </div>
+
         <div class="btn-row last">
           {
             buttonSizes.map((size) => (
@@ -357,6 +361,15 @@ const modalProps = [
           }
         </div>
       </div>
+
+      <p class="section-note">
+        <strong>Le Ghost est l'action sans fond, pas un lien.</strong> Il déclenche quelque chose avec peu
+        de poids visuel — « Annuler », un outil dans une barre — et garde la taille, la pilule et l'anneau de
+        focus du bouton. Au repos il n'y a rien autour de l'encre ; le lavis
+        {' '}<code>color.action.ghost.bg-hover</code> apparaît au survol, et
+        {' '}<code>bg-pressed</code> à l'appui. Ce qui mène quelque part et se reconnaît à son soulignement,
+        c'est <em>Link</em>.
+      </p>
 
       <p class="section-note">
         <strong>Le bouton rond est le secondaire sans libellé.</strong> Même fond
@@ -463,7 +476,7 @@ const modalProps = [
       <p class="flag">
         <strong>Ce que Figma a et que la doc ne disait pas.</strong> Le jeu Figma est unique : trois
         propriétés (<code>Variant</code>, <code>Size</code>, <code>State</code>), quatre variantes
-        (<code>Primary</code>, <code>Secondary</code>, <code>Alert</code>, <code>Icon</code>) et cinq états,
+        (<code>primary</code>, <code>secondary</code>, <code>alert</code>, <code>icon</code>, <code>ghost</code>) et cinq états,
         {' '}<code>Focus</code> compris. Le code les suit tous. L'état désactivé est arrivé avec les flèches
         du carrousel : Figma ne change pas le fond, il baisse l'opacité de tout le bouton à 45 %
         (<code>854:41683</code>, <code>854:41667</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3
