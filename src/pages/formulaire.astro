@@ -115,6 +115,7 @@ const toggleProps = [
   ['label', 'string', '—', 'Ce que l’interrupteur allume. Un état, pas une action : « Notifications », pas « Notifier ».'],
   ['name', 'string', 'id', 'Le nom envoyé si l’interrupteur est dans un formulaire.'],
   ['checked', 'boolean', 'false', 'Allumé à l’ouverture.'],
+  ['hint', 'string', '—', 'L’aide : ce que l’interrupteur change, dite sous le libellé et désignée par aria-describedby.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
@@ -1004,21 +1005,13 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Ce qu'il est.</strong> Un interrupteur : deux positions, et l'effet suit la bascule.
-        Nœud Figma <code>340:912</code>, huit variantes — <code>Value</code> × <code>State</code>.
+        Nœud Figma <code>878:69950</code>, six variantes — <code>state</code> × <code>checked</code>, plus
+        {' '}<code>hint?</code> — sur la pièce interne <code>_ToggleInput</code> (<code>878:69938</code>), qui dessine la piste et la pastille.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni une case à cocher — une case enregistre une intention
         que l'envoi du formulaire ira chercher, un interrupteur agit tout de suite, et c'est pourquoi
         il ne s'accompagne jamais d'un bouton « Valider » — ni un bouton : un bouton fait une chose
         et retombe, un interrupteur tient un état qu'on peut relire sur lui.
-      </p>
-
-      <p class="section-note">
-        <strong>La piste tombe juste, et c'est la bonne surprise du sprint.</strong> Ses 40 de large
-        sont <code>space-xl + space-lg</code> — <strong>24 + 16, exactement</strong>. La pastille est
-        {' '}<code>space/lg</code>, soit 16 pile. Son retrait dans la piste est
-        {' '}<code>space/xs</code>, soit (24 − 16) / 2 = 4. Et sa course est
-        {' '}<code>space/lg</code> : 40 − 16 − 4 − 4 = 16. Quatre mesures, quatre tokens, aucun
-        chiffre écrit à la main.
       </p>
 
       <h3>Les états, un par un</h3>
@@ -1040,7 +1033,18 @@ const exemplesMultiple: Exemple[] = [
           <p class="demo-name">disabled — on</p>
           <Toggle id="int-d" label="Notifications par courriel" checked disabled />
         </div>
+        <div class="demo-case">
+          <p class="demo-name">hint</p>
+          <Toggle id="int-e" label="Rappels de rendez-vous" hint="Un message la veille, jamais le week-end." />
+        </div>
       </div>
+
+      <p class="section-note">
+        <strong>Allumé</strong> lit <code>bg/control</code>, éteint <code>action/toggle/bg-off</code>.
+        {' '}<strong>Désactivé</strong> passe au gris plein du système — <code>category/neutral/solid</code>,
+        allumé comme éteint : c'est la pastille qui dit encore la position. <strong>Pas de survol</strong>,
+        comme Checkbox et Radio. <strong>Focused</strong> pose l'anneau du système en <code>outline</code>.
+      </p>
 
       <p class="section-note">
         <strong>Le libellé nomme un état, pas une action.</strong> « Notifications par courriel »,
@@ -1079,12 +1083,6 @@ const exemplesMultiple: Exemple[] = [
         sont pas écrits mais calculés. Si l'une des deux bouge dans Figma, les deux autres suivent
         toutes seules. L'écart au libellé, lui, est passé à 8 dans le nœud : les trois contrôles
         compacts s'espacent enfin pareil.
-      </p>
-
-      <p class="flag">
-        <strong>Le libellé n'a pas la typographie du nœud</strong> — 14 px / 120 % et
-        {' '}<code>neutral/400</code> dans Figma, 15 px / 112 % et <em>muted</em> dans
-        {' '}<code>FieldLabel</code>. Même écart que pour Radio et Checkbox, même arbitrage.
       </p>
     </section>
 
