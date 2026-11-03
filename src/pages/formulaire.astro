@@ -102,6 +102,8 @@ const checkboxProps = [
   ['name', 'string', 'id', 'Le nom envoyé par le formulaire.'],
   ['value', 'string', 'on', 'Ce que le formulaire enverra si la case est cochée.'],
   ['checked', 'boolean', 'false', 'Cochée à l’ouverture.'],
+  ['indeterminate', 'boolean', 'false', 'Ni cochée ni décochée : « certaines des cases d’un groupe le sont ». Elle l’emporte sur checked, et le premier clic la remplace par cochée ou décochée.'],
+  ['hint', 'string', '—', 'L’aide : ce que cocher entraîne, dite sous le libellé et désignée par aria-describedby.'],
   ['required', 'boolean', 'false', 'Pose l’astérisque et l’attribut. A du sens ici : une case peut être seule.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
@@ -888,7 +890,8 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Ce qu'elle est.</strong> Une case qui se coche et se décoche toute seule. Nœud Figma
-        {' '}<code>340:842</code>, huit variantes — <code>Checked</code> × <code>State</code>.
+        {' '}<code>873:51740</code>, douze variantes — <code>state</code> × <code>checked</code> × <code>indeterminate</code> —
+        sur la pièce interne <code>_CheckboxInput</code> (<code>873:51724</code>), qui dessine la case seule.
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni un radio — un radio ne se relâche qu'en en
         choisissant un autre, et n'a de sens qu'en groupe — ni un interrupteur : un
@@ -897,10 +900,11 @@ const exemplesMultiple: Exemple[] = [
       </p>
 
       <p class="section-note">
-        <strong>La coche n'est pas dessinée en CSS.</strong> C'est l'icône <code>check</code> du
-        registre, posée par-dessus la case et rendue insensible au clic — exactement comme
-        {' '}<code>Select</code> pose son chevron sur sa boîte. Le dessin du
-        système sert donc à deux endroits au lieu d'être refait ici.
+        <strong>Ni la coche ni le tiret ne sont dessinés en CSS.</strong> Ce sont les icônes
+        {' '}<code>check</code> et <code>minus</code> du registre, posées au centre de la case — à 10, soit la
+        case moins une marge de <code>space/xs</code> de chaque côté — et rendues insensibles au clic,
+        exactement comme <code>Select</code> pose son chevron sur sa boîte. Le dessin du système sert
+        donc à deux endroits au lieu d'être refait ici.
       </p>
 
       <p class="section-note">
@@ -945,11 +949,25 @@ const exemplesMultiple: Exemple[] = [
           <p class="demo-name">disabled + checked</p>
           <Checkbox id="case-e" label="M’envoyer le compte rendu" checked disabled />
         </div>
+        <div class="demo-case">
+          <p class="demo-name">indeterminate</p>
+          <Checkbox id="case-f" label="Tout sélectionner" indeterminate />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">disabled + indeterminate</p>
+          <Checkbox id="case-g" label="Tout sélectionner" indeterminate disabled />
+        </div>
+        <div class="demo-case">
+          <p class="demo-name">hint</p>
+          <Checkbox id="case-h" label="Recevoir la lettre" hint="Une fois par mois, et vous pouvez vous désabonner à tout moment." />
+        </div>
       </div>
 
       <p class="section-note">
-        <strong>Hover</strong> fonce l'accent d'un cran — <code>accent/600</code> au lieu de
-        {' '}<code>accent/500</code>. <strong>Focused</strong> pose l'anneau du
+        <strong>Pas de survol</strong> sur une case seule : il n'a de sens que dans une liste, où c'est la ligne
+        qui le porte (<code>_SelectItem</code>). <strong>Désactivée</strong>, la case passe au gris du système —
+        {' '}<code>category/neutral</code>, et <code>neutral/solid</code> une fois cochée —, plus à l'opacité.
+        <strong>Cochée ou indéterminée</strong>, elle lit <code>bg/control</code>. <strong>Focused</strong> pose l'anneau du
         système — <code>button/focus-ring-width</code> sur <code>color/border/focus</code>, en
         {' '}<code>outline</code> pour ne rien déplacer autour de lui. WCAG 2.4.7.
       </p>
@@ -981,19 +999,6 @@ const exemplesMultiple: Exemple[] = [
         posé cochée comme décochée, et c'est sa couleur qui change : le nœud ne le dessine que sur la
         case vide, mais un trait accent sur un fond accent se voit pareil — et la boîte garde alors
         la même taille dans les deux états, ce qui compte davantage.
-      </p>
-
-      <p class="flag">
-        <strong>L'épaisseur du tracé de la coche est celle de l'icône du registre</strong>, pas les 2
-        du nœud. C'est voulu : le même dessin sert partout ailleurs dans le système, et il ne se
-        redessine pas pour une case.
-      </p>
-
-      <p class="flag">
-        <strong>Le libellé n'a pas la typographie du nœud</strong> — 14 px / 120 % et
-        {' '}<code>neutral/400</code> dans Figma, 15 px / 112 % et <em>muted</em> dans
-        {' '}<code>FieldLabel</code>. Même écart que pour Radio, même arbitrage : le libellé partagé
-        l'emporte, et l'écart se tranche dans Figma.
       </p>
     </section>
 

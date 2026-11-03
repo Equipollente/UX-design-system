@@ -7,31 +7,27 @@
 // pas non plus un interrupteur : un Toggle applique son effet à l'instant où on
 // le bascule, une case attend l'envoi du formulaire.
 //
-// Nœud Figma : 340:842 — 8 variantes, Checked × State.
+// Nœud Figma : 873:51740 — 12 variantes, state × checked × indeterminate, plus `hint?` ;
+// la case seule est la pièce interne `_CheckboxInput` (873:51724).
 //
 // Le contrôle est natif mais son dessin vient du système : `appearance: none`
 // efface celui du navigateur, et tout ce qui le remplace est une variable. La
-// coche n'est pas dessinée en CSS — c'est l'icône `check` du registre, posée
-// par-dessus la case et rendue insensible au clic, exactement comme Select pose
-// son chevron sur le <select>. Le dessin du système sert donc à deux endroits au
-// lieu d'être refait ici.
+// coche et le tiret de l'état indéterminé ne sont pas dessinés en CSS — ce sont les
+// icônes `check` et `minus` du registre, posées au centre de la case à 10 (18 moins
+// une marge de `space/xs` de chaque côté) et rendues insensibles au clic, exactement
+// comme Select pose son chevron sur le <select>. Le dessin du système sert donc à
+// deux endroits au lieu d'être refait ici.
 //
 // Toutes les mesures viennent du nœud, et aucune n'est approchée :
 // — boîte 18 → `control/size` ;
 // — rayon → `radius/sm`, lié dans le nœud ;
 // — écart au libellé 8 → `space/sm`, lié dans le nœud ;
-// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus`.
+// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus` ;
+// — fond coché ou indéterminé → `bg/control` ; désactivé → `category/neutral/*`.
 //
 // Le trait est posé dans les deux états, et c'est sa couleur qui change : le nœud
 // ne le dessine que sur la case vide, mais un trait accent sur un fond accent se
 // voit pareil, et la boîte garde alors la même taille cochée ou non.
-//
-// Ce que Figma déclare et qui n'est pas ici :
-// — l'épaisseur de 2 du tracé de la coche : celle de l'icône du registre s'y
-//   substitue, puisque c'est le même dessin qui sert partout ailleurs ;
-// — la typographie du libellé (14 px, interligne 120 %) et son encre désactivée
-//   (neutral/400), qui ne sont pas celles de FieldLabel. Le libellé partagé
-//   l'emporte — c'est sa raison d'être.
 
 import FieldLabel from './FieldLabel.astro';
 import FieldMessage from './_FieldMessage.astro';
