@@ -34,6 +34,7 @@
 //   décide de tous les libellés du formulaire.
 
 import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
 
 interface Props {
   /** Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe. */
@@ -46,6 +47,8 @@ interface Props {
   value?: string;
   /** Le choix retenu à l'ouverture. Un seul du groupe doit le porter. */
   checked?: boolean;
+  /** L'aide : ce que ce choix entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`. */
+  hint?: string;
   disabled?: boolean;
   class?: string;
 }
@@ -56,12 +59,14 @@ const {
   name,
   value,
   checked = false,
+  hint,
   disabled = false,
   class: className,
   ...rest
 } = Astro.props;
 
 const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolean).join(' ');
+const messageId = `${id}-message`;
 ---
 
 <div class={classes} {...rest}>
@@ -73,15 +78,26 @@ const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolea
     value={value ?? id}
     checked={checked}
     disabled={disabled}
+    aria-describedby={hint ? messageId : undefined}
   />
   <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+  {hint && <FieldMessage type="hint" id={messageId}>{hint}</FieldMessage>}
 </div>
 
 <style>
+  /* Deux colonnes : le cercle, puis le texte. Le libellé est sur la première ligne,
+     l'aide sur la seconde, sous lui — le cercle reste centré sur le libellé, sans
+     qu'aucune mesure n'ait à le décaler. Même grille que Checkbox. */
   .radio {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    column-gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    row-gap: var(--space-xs); /* 4 — l'écart du LabelGroup */
+  }
+
+  .radio :global(.field-message) {
+    grid-column: 2;
   }
 
   /* Le cercle. `appearance: none` efface le dessin du navigateur ; tout ce qui
