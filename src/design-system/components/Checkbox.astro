@@ -48,6 +48,8 @@ interface Props {
   value?: string;
   /** Cochée à l'ouverture. */
   checked?: boolean;
+  /** Ni cochée ni décochée : « certaines des cases d'un groupe le sont ». Elle l'emporte sur `checked`, et le premier clic la remplace par cochée ou décochée. */
+  indeterminate?: boolean;
   /** L'aide : ce que cocher entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`. */
   hint?: string;
   /** Pose l'astérisque et l'attribut. A du sens ici : une case peut être seule. */
@@ -62,6 +64,7 @@ const {
   name,
   value,
   checked = false,
+  indeterminate = false,
   hint,
   required = false,
   disabled = false,
@@ -86,11 +89,13 @@ const messageId = `${id}-message`;
       checked={checked}
       required={required}
       disabled={disabled}
+      data-indeterminate={indeterminate ? '' : undefined}
       aria-describedby={hint ? messageId : undefined}
     />
     {/* La coche double l'état que la case porte déjà : elle est décorative, donc
         sans `label` — sans quoi elle serait annoncée en plus de « coché ». */}
-    <Icon name="check" class="checkbox-check" />
+    <Icon name="check" class="checkbox-mark checkbox-check" />
+    <Icon name="minus" class="checkbox-mark checkbox-minus" />
   </span>
   <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
   {hint && <FieldMessage type="hint" id={messageId}>{hint}</FieldMessage>}
@@ -147,24 +152,33 @@ const messageId = `${id}-message`;
     outline-offset: var(--button-focus-offset);
   }
 
-  /* — checked — Le trait suit le fond : la case cochée est d'un seul tenant. */
-  .checkbox-input:checked {
+  /* — checked, indeterminate — Le trait suit le fond : la case est d'un seul tenant. */
+  .checkbox-input:is(:checked, :indeterminate) {
     background: var(--checkbox-accent, var(--color-bg-control));
     border-color: var(--checkbox-accent, var(--color-bg-control));
   }
 
-  /* La coche est posée sur la case, à sa taille, et ne prend pas le clic : il
-     doit traverser jusqu'à l'input. Elle n'apparaît que cochée — `display` est un
-     mot-clé, là où une opacité aurait demandé une valeur que le système n'a pas. */
-  .checkbox-check {
+  /* La coche et le tiret sont posés au centre de la case, à 10 dans le nœud : la
+     case moins une marge de `space/xs` de chaque côté, soit 18 − 8. Rien n'est écrit
+     en dur, et les deux suivent la case si elle change. Ils ne prennent pas le
+     clic : il doit traverser jusqu'à l'input. Chacun n'apparaît que dans son état —
+     `display` est un mot-clé, là où une opacité aurait demandé une valeur que le
+     système n'a pas. */
+  .checkbox-mark {
     position: absolute;
-    inset: 0;
-    --icon-size: var(--checkbox-size, var(--control-size));
+    inset: var(--space-xs);
+    --icon-size: calc(var(--checkbox-size, var(--control-size)) - 2 * var(--space-xs));
     --icon-color: var(--color-text-on-accent);
     pointer-events: none;
   }
 
-  .checkbox-input:not(:checked) + .checkbox-check {
+  /* L'indéterminé l'emporte : une case à la fois cochée et indéterminée montre le tiret. */
+  .checkbox-input:not(:checked) + .checkbox-check,
+  .checkbox-input:indeterminate + .checkbox-check {
+    display: none;
+  }
+
+  .checkbox-input:not(:indeterminate) ~ .checkbox-minus {
     display: none;
   }
 
@@ -177,7 +191,7 @@ const messageId = `${id}-message`;
     border-color: var(--color-category-neutral-border);
   }
 
-  .checkbox-input:disabled:checked {
+  .checkbox-input:disabled:is(:checked, :indeterminate) {
     background: var(--color-category-neutral-solid);
     border-color: var(--color-category-neutral-solid);
   }
@@ -187,3 +201,11 @@ const messageId = `${id}-message`;
     cursor: not-allowed;
   }
 </style>
+
+{/* `indeterminate` n'existe pas en HTML : c'est une propriété de l'élément, qu'aucun attribut
+    ne pose. Le serveur marque donc la case, et ce script la lui donne au chargement. */}
+<script>
+  for (const input of document.querySelectorAll<HTMLInputElement>('input[data-indeterminate]')) {
+    input.indeterminate = true;
+  }
+</script>

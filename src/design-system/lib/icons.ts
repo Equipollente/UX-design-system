@@ -54,6 +54,7 @@ import mailEdit from '../icons/mail-edit.svg';
 import mainComponent from '../icons/main-component.svg';
 import menuRight from '../icons/menu-right.svg';
 import microphone2 from '../icons/microphone-2.svg';
+import minus from '../icons/minus.svg';
 import passport1 from '../icons/passport-1.svg';
 import people2 from '../icons/people-2.svg';
 import pin2 from '../icons/pin-2.svg';
@@ -127,6 +128,7 @@ export const icons = {
   'main-component': mainComponent,
   'menu-right': menuRight,
   'microphone-2': microphone2,
+  'minus': minus,
   'passport-1': passport1,
   'people-2': people2,
   'pin-2': pin2,
