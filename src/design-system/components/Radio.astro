@@ -96,21 +96,15 @@ const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolea
     border: var(--border-width-default) solid var(--color-border-default);
     /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
     cursor: pointer;
-    /* Le changement de fond suit la même durée que le bouton du système. */
+    /* Le changement de fond et de trait suit la même durée que le bouton du système. */
     transition:
       background-color var(--motion-duration-quick) var(--motion-easing-standard),
-      border-color var(--motion-duration-quick) var(--motion-easing-standard),
-      box-shadow var(--motion-duration-quick) var(--motion-easing-standard);
+      border-color var(--motion-duration-quick) var(--motion-easing-standard);
   }
 
   /* — default — */
   .radio-input {
     background: var(--radio-bg, var(--color-bg-surface));
-  }
-
-  /* — hover — */
-  .radio:not(.radio-disabled):hover .radio-input {
-    background: var(--radio-bg-hover, var(--color-action-ghost-bg-hover));
   }
 
   /* — focused — L'anneau du système remplace celui du navigateur. 2, la mesure
@@ -120,33 +114,28 @@ const classes = ['radio', disabled && 'radio-disabled', className].filter(Boolea
     outline-offset: var(--button-focus-offset);
   }
 
-  /* — selected — Le fond passe au blanc de l'encre sur accent, et l'anneau
-     intérieur de `space/xs` peint le reste. Le trait ayant déjà pris 1 de chaque
-     côté, il ne reste au centre que 16 − 4 − 4 = 8 : le point du nœud, sans
-     qu'aucune mesure soit écrite. Le trait passe à l'accent pour que le disque
-     soit d'un seul tenant. */
+  /* — selected — Le choix retenu est un anneau, sans point : le trait passe de 1 à 2
+     (`border/width/focus`) et prend la couleur de contrôle. Le trait étant dans la
+     boîte, le cercle ne grandit pas. */
   .radio-input:checked {
-    background: var(--color-text-on-accent);
-    border-color: var(--radio-accent, var(--color-action-primary-bg));
-    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent, var(--color-action-primary-bg));
+    border-width: var(--border-width-focus);
+    border-color: var(--radio-accent, var(--color-border-control));
   }
 
-  .radio:not(.radio-disabled):hover .radio-input:checked {
-    background: var(--color-text-on-accent);
-    border-color: var(--radio-accent-hover, var(--color-action-primary-bg-hover));
-    box-shadow: inset 0 0 0 var(--space-xs) var(--radio-accent-hover, var(--color-action-primary-bg-hover));
+  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui tranche.
+     Le cercle bascule vers le gris du système, comme le nœud : fond et trait
+     `category/neutral` vide, trait gris et fond `bg/surface` retenu. */
+  .radio-input:disabled {
+    background: var(--color-category-neutral-bg);
+    border-color: var(--color-category-neutral-border);
   }
 
-  /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et un contrôle désactivé ne doit pas prendre le survol. Le cercle
-     garde son dessin et s'atténue, exactement comme le nœud : rien ne bascule
-     vers un gris, c'est l'opacité seule qui dit « éteint ». */
+  .radio-input:disabled:checked {
+    background: var(--color-bg-surface);
+  }
+
   .radio-disabled .radio-input,
   .radio-disabled :global(.field-label) {
     cursor: not-allowed;
-  }
-
-  .radio-disabled .radio-input {
-    opacity: var(--opacity-disabled);
   }
 </style>
