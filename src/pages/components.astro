@@ -38,15 +38,16 @@ import {
 const buttonTokens = tokens.filter((t) => t.group === 'button');
 const cardTokens = tokens.filter((t) => t.group === 'card');
 const buttonSizes = ['sm', 'md', 'lg'] as const;
+const buttonHues = ['clay', 'teal', 'sun', 'rose', 'accent', 'highlight', 'neutral'] as const;
 
 // Les props sont recopiées des interface Props des composants. Une seule
 // définition existe dans le projet : celle du composant.
 const buttonProps = [
   [
     'variant',
-    `'primary' | 'secondary' | 'alert' | 'ghost'`,
+    `'primary' | 'secondary' | 'alert' | 'ghost' | 'clay' | 'teal' | 'sun' | 'rose' | 'accent' | 'highlight' | 'neutral'`,
     'primary',
-    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Ghost est l’action sans fond, à faible poids visuel.',
+    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Ghost est l’action sans fond, à faible poids visuel. Les sept teintes (clay à neutral) sont les boutons de catégorie : fond pâle, liseré, libellé de la teinte.',
   ],
   ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
   ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
@@ -357,6 +358,16 @@ const modalProps = [
           }
         </div>
 
+ <div class="btn-row">
+          {
+            buttonHues.map((hue) => (
+              <Button variant={hue} iconEnd="arrow-narrow-right">
+                {hue}
+              </Button>
+            ))
+          }
+        </div>
+
         <div class="btn-row last">
           {
             buttonSizes.map((size) => (
@@ -372,6 +383,16 @@ const modalProps = [
         un <code>href</code>. Il garde la taille, la pilule et l'anneau de focus du bouton. Au repos il n'y a
         rien autour de l'encre ; le lavis <code>color.action.ghost.bg-hover</code> apparaît au survol, et
         {' '}<code>bg-pressed</code> à l'appui.
+      </p>
+
+      <p class="section-note">
+        <strong>Les sept teintes de catégorie sont des boutons teintés.</strong> <code>clay</code>,
+        {' '}<code>teal</code>, <code>sun</code>, <code>rose</code>, <code>accent</code>, <code>highlight</code>
+        et <code>neutral</code> : un fond pâle (<code>color.action.&lt;teinte&gt;.bg</code>), un liseré, le
+        libellé de la teinte, et l'icône dans sa couleur forte (<code>color.action.&lt;teinte&gt;.solid</code>).
+        Au survol, puis à l'appui, le fond monte d'un cran (<code>bg-hover</code>, <code>bg-pressed</code>).
+        Elles servent un geste rattaché à une catégorie ; quand l'action est la principale de la vue,
+        c'est le primaire.
       </p>
 
       <p class="section-note">

@@ -37,6 +37,14 @@
 // être redessiné, et garde la taille, la pilule et l'anneau du bouton. Elle est née de
 // l'« invisible » de Primer, que Figma nomme ghost ici.
 //
+// Les sept teintes de catégorie — clay, teal, sun, rose, accent, highlight, neutral — sont les
+// variantes suivantes, dessinées dans Figma d'abord sur rose et sun puis déclinées. Chacune est
+// teintée, pas pleine : fond pâle (color/action/<teinte>/bg, qui alias color/category/<teinte>/bg),
+// un cran plus soutenu au survol puis à l'appui, liseré color/category/<teinte>/border, libellé
+// color/category/<teinte>/text, et l'icône en color/action/<teinte>/solid — la couleur forte de la
+// teinte, que le texte ne porte pas. Elles partagent la classe .btn-cat : seules les cinq variables
+// de teinte changent d'une variante à l'autre.
+//
 // Les icônes sont inlinées et n'ont pas de couleur propre : elles prennent celle du
 // bouton. Une seule flèche suffit donc pour le primaire et le secondaire — avant, il
 // en fallait deux fichiers, l'un pour le fond clair et l'autre pour l'accent.
@@ -44,8 +52,21 @@
 import Icon from './Icon.astro';
 import type { IconName } from '../lib/icons';
 
+const hues = ['clay', 'teal', 'sun', 'rose', 'accent', 'highlight', 'neutral'] as const;
+
 interface Props {
-  variant?: 'primary' | 'secondary' | 'alert' | 'ghost';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'alert'
+    | 'ghost'
+    | 'clay'
+    | 'teal'
+    | 'sun'
+    | 'rose'
+    | 'accent'
+    | 'highlight'
+    | 'neutral';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   /** Nom d'une icône du système. Posée avant le label. Une icône seule est un IconButton. */
@@ -83,7 +104,8 @@ const {
 } = Astro.props;
 
 const Tag = href ? 'a' : 'button';
-const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boolean).join(' ');
+const isHue = (hues as readonly string[]).includes(variant);
+const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, className].filter(Boolean).join(' ');
 ---
 
 <Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
@@ -188,6 +210,78 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
     --btn-bg-hover: var(--color-action-ghost-bg-hover);
     --btn-bg-active: var(--color-action-ghost-bg-pressed);
     color: var(--color-text-default);
+  }
+
+  /* Les sept teintes de catégorie. Le liseré est dessiné (1 px, color/category/<teinte>/border) :
+     c'est la seule variante qui en ait un. */
+  .btn-cat {
+    background: var(--btn-bg);
+    border-color: var(--btn-border);
+    color: var(--btn-text);
+    --icon-color: var(--btn-solid);
+  }
+
+  .btn-clay {
+    --btn-bg: var(--color-action-clay-bg);
+    --btn-bg-hover: var(--color-action-clay-bg-hover);
+    --btn-bg-active: var(--color-action-clay-bg-pressed);
+    --btn-border: var(--color-category-clay-border);
+    --btn-text: var(--color-category-clay-text);
+    --btn-solid: var(--color-action-clay-solid);
+  }
+
+  .btn-teal {
+    --btn-bg: var(--color-action-teal-bg);
+    --btn-bg-hover: var(--color-action-teal-bg-hover);
+    --btn-bg-active: var(--color-action-teal-bg-pressed);
+    --btn-border: var(--color-category-teal-border);
+    --btn-text: var(--color-category-teal-text);
+    --btn-solid: var(--color-action-teal-solid);
+  }
+
+  .btn-sun {
+    --btn-bg: var(--color-action-sun-bg);
+    --btn-bg-hover: var(--color-action-sun-bg-hover);
+    --btn-bg-active: var(--color-action-sun-bg-pressed);
+    --btn-border: var(--color-category-sun-border);
+    --btn-text: var(--color-category-sun-text);
+    --btn-solid: var(--color-action-sun-solid);
+  }
+
+  .btn-rose {
+    --btn-bg: var(--color-action-rose-bg);
+    --btn-bg-hover: var(--color-action-rose-bg-hover);
+    --btn-bg-active: var(--color-action-rose-bg-pressed);
+    --btn-border: var(--color-category-rose-border);
+    --btn-text: var(--color-category-rose-text);
+    --btn-solid: var(--color-action-rose-solid);
+  }
+
+  .btn-accent {
+    --btn-bg: var(--color-action-accent-bg);
+    --btn-bg-hover: var(--color-action-accent-bg-hover);
+    --btn-bg-active: var(--color-action-accent-bg-pressed);
+    --btn-border: var(--color-category-accent-border);
+    --btn-text: var(--color-category-accent-text);
+    --btn-solid: var(--color-action-accent-solid);
+  }
+
+  .btn-highlight {
+    --btn-bg: var(--color-action-highlight-bg);
+    --btn-bg-hover: var(--color-action-highlight-bg-hover);
+    --btn-bg-active: var(--color-action-highlight-bg-pressed);
+    --btn-border: var(--color-category-highlight-border);
+    --btn-text: var(--color-category-highlight-text);
+    --btn-solid: var(--color-action-highlight-solid);
+  }
+
+  .btn-neutral {
+    --btn-bg: var(--color-action-neutral-bg);
+    --btn-bg-hover: var(--color-action-neutral-bg-hover);
+    --btn-bg-active: var(--color-action-neutral-bg-pressed);
+    --btn-border: var(--color-category-neutral-border);
+    --btn-text: var(--color-category-neutral-text);
+    --btn-solid: var(--color-action-neutral-solid);
   }
 
   .btn:hover:not(:disabled) {

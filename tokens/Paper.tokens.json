@@ -1344,6 +1344,591 @@
             }
           }
         }
+      },
+      "rose": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.rose.bg}",
+          "$description": "Fond du bouton principal au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:70214",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg)"
+            }
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.7764706015586853,
+              0.8784313797950745
+            ],
+            "alpha": 1,
+            "hex": "#FFC6E0"
+          },
+          "$description": "Bouton principal survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:70215",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg-hover)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:8c2edcabcca1575cd071d3265c16bb753c69558c/-1:-1",
+              "targetVariableName": "ramp/rose/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.6000000238418579,
+              0.7803921699523926
+            ],
+            "alpha": 1,
+            "hex": "#FF99C7"
+          },
+          "$description": "Bouton principal pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:70216",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg-pressed)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:1d5726b9f6a0e050a3be9727f6b7a6084966691d/-1:-1",
+              "targetVariableName": "ramp/rose/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.rose.solid}",
+          "$description": "Couleur forte de l’action hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:70217",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "sun": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.sun.bg}",
+          "$description": "Fond du bouton principal au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:72210",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg)"
+            }
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.8941176533699036,
+              0.6039215922355652
+            ],
+            "alpha": 1,
+            "hex": "#FFE49A"
+          },
+          "$description": "Bouton principal survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:72211",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg-hover)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:368639a8779b02c1934bfc19fa62075904430042/-1:-1",
+              "targetVariableName": "ramp/sun/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.8235294222831726,
+              0.3921568691730499
+            ],
+            "alpha": 1,
+            "hex": "#FFD264"
+          },
+          "$description": "Bouton principal pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:72212",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-action-primary-bg-pressed)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:d4f270a554601b17f5e3077cd15ed5eefa21eb62/-1:-1",
+              "targetVariableName": "ramp/sun/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.sun.solid}",
+          "$description": "Couleur forte de l’action hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:881:72213",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "clay": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.clay.bg}",
+          "$description": "Fond du bouton clay au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:347",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.8392156958580017,
+              0.7607843279838562
+            ],
+            "alpha": 1,
+            "hex": "#FFD6C2"
+          },
+          "$description": "Bouton clay survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:348",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:e1d85e091652a5f7dbba54a6949bf0616fbd393d/-1:-1",
+              "targetVariableName": "ramp/clay/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              0.7215686440467834,
+              0.6000000238418579
+            ],
+            "alpha": 1,
+            "hex": "#FFB899"
+          },
+          "$description": "Bouton clay pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:349",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:6ccffde7418605be7483b8a0de9791ca6ffc0ea2/-1:-1",
+              "targetVariableName": "ramp/clay/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.clay.solid}",
+          "$description": "Couleur forte de l’action clay hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:350",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "teal": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.teal.bg}",
+          "$description": "Fond du bouton teal au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:351",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.7098039388656616,
+              0.929411768913269,
+              0.8980392217636108
+            ],
+            "alpha": 1,
+            "hex": "#B5EDE5"
+          },
+          "$description": "Bouton teal survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:352",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:6fbae32bccebe5bbbf15b4eedf80bffb40deadcb/-1:-1",
+              "targetVariableName": "ramp/teal/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.5176470875740051,
+              0.8666666746139526,
+              0.8196078538894653
+            ],
+            "alpha": 1,
+            "hex": "#84DDD1"
+          },
+          "$description": "Bouton teal pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:353",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:be7b15254dda2eb35b018cea6601fa0e86c39e36/-1:-1",
+              "targetVariableName": "ramp/teal/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.teal.solid}",
+          "$description": "Couleur forte de l’action teal hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:354",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "accent": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.accent.bg}",
+          "$description": "Fond du bouton accent au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:355",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.6980392336845398,
+              0.658823549747467,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#B2A8FF"
+          },
+          "$description": "Bouton accent survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:356",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:7fe91196e24ba0a2081909b748f44c6de098f1f5/-1:-1",
+              "targetVariableName": "ramp/accent/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.5490196347236633,
+              0.4901960790157318,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#8C7DFF"
+          },
+          "$description": "Bouton accent pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:357",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:85936f045f415fd6eee77734422ef9ac827f0119/-1:-1",
+              "targetVariableName": "ramp/accent/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.accent.solid}",
+          "$description": "Couleur forte de l’action accent hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:358",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "highlight": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.highlight.bg}",
+          "$description": "Fond du bouton highlight au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:359",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8823529481887817,
+              1,
+              0.5686274766921997
+            ],
+            "alpha": 1,
+            "hex": "#E1FF91"
+          },
+          "$description": "Bouton highlight survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:360",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:e8763e0736068e1f383e21b1b9d6e0445be54b35/-1:-1",
+              "targetVariableName": "ramp/highlight/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8117647171020508,
+              0.929411768913269,
+              0.48235294222831726
+            ],
+            "alpha": 1,
+            "hex": "#CFED7B"
+          },
+          "$description": "Bouton highlight pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:361",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:0ae11df6b6b8b2ba57cba0e6c4fabe3531493562/-1:-1",
+              "targetVariableName": "ramp/highlight/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.highlight.solid}",
+          "$description": "Couleur forte de l’action highlight hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:362",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
+      },
+      "neutral": {
+        "bg": {
+          "$type": "color",
+          "$value": "{color.category.neutral.bg}",
+          "$description": "Fond du bouton neutral au repos.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:363",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          }
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.929411768913269,
+              0.9254902005195618,
+              0.9372549057006836
+            ],
+            "alpha": 1,
+            "hex": "#EDECEF"
+          },
+          "$description": "Bouton neutral survolé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:364",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:b78848d83848e53ea7cf42648b90cadf307a7027/-1:-1",
+              "targetVariableName": "ramp/neutral/200",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "bg-pressed": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8941176533699036,
+              0.8823529481887817,
+              0.9098039269447327
+            ],
+            "alpha": 1,
+            "hex": "#E4E1E8"
+          },
+          "$description": "Bouton neutral pressé.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:365",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:fd8c3c59fcd5edd0ccf2c1f1a251aef140ef0445/-1:-1",
+              "targetVariableName": "ramp/neutral/300",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "solid": {
+          "$type": "color",
+          "$value": "{color.category.neutral.solid}",
+          "$description": "Couleur forte de l’action neutral hors du bouton : icône, pastille, barre.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:882:366",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE"
+            ]
+          }
+        }
       }
     },
     "feedback": {
@@ -2261,7 +2846,7 @@
           "$extensions": {
             "com.figma.variableId": "VariableID:840:16988",
             "com.figma.scopes": [
-              "TEXT_FILL"
+              "ALL_FILLS"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-category-rose-text)"
@@ -2290,8 +2875,7 @@
           "$extensions": {
             "com.figma.variableId": "VariableID:872:19880",
             "com.figma.scopes": [
-              "FRAME_FILL",
-              "SHAPE_FILL",
+              "ALL_FILLS",
               "STROKE"
             ],
             "com.figma.aliasData": {
