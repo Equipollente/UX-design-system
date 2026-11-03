@@ -31,7 +31,8 @@ le `LINKS.md` du dossier `portfolio`.
 | Composant | Nœud | Code |
 | --- | --- | --- |
 | Icon (les 71 icônes) | [`45-395`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-395) | [Icon.astro](src/design-system/components/Icon.astro), registre généré dans [icons.ts](src/design-system/lib/icons.ts) |
-| Button (un seul jeu de variantes : `variant` × `size` × `state`, dont la variante Icon, le bouton rond) | [`854-41729`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=854-41729) | [Button.astro](src/design-system/components/Button.astro) |
+| Button (un seul jeu de variantes : `variant` × `size` × `state` ; le bouton rond n'en fait plus partie, c'est IconButton) | [`854-41729`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=854-41729) | [Button.astro](src/design-system/components/Button.astro) |
+| IconButton (le bouton rond : 60 variantes, `variant` × `size` × `state`, plus `icon` ; page « ↳ Buttons ») | [`881-71005`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=881-71005) | [IconButton.astro](src/design-system/components/IconButton.astro), qui rend [Button.astro](src/design-system/components/Button.astro) |
 | Nav (jeu de variantes) | [`142-1458`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=142-1458) | [Nav.astro](src/design-system/components/Nav.astro) |
 | Avatar-Button | [`45-703`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=45-703) | prop `home` de Nav |
 | Tag | [`19-12`](https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=19-12) | [Tag.astro](src/design-system/components/Tag.astro) |

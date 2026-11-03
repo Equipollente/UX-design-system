@@ -1,0 +1,65 @@
+---
+// IconButton — le bouton rond : une icône, et rien d'autre.
+//
+// Ce n'est pas une variante de Button, et le dessin le dit depuis que Figma l'a sorti
+// du jeu Button : c'est un composant à part, `IconButton`, avec ses propres propriétés.
+// Un bouton à libellé et un bouton sans libellé ne se règlent pas pareil : le second n'a
+// ni texte, ni `iconEnd`, ni largeur minimale, et il doit porter son nom lui-même.
+//
+// Nœud Figma : 881:71005 — `IconButton`, 60 variantes, `variant` × `size` × `state`,
+// plus `icon`. Les variantes sont celles de Button — primary, secondary, alert, ghost —
+// et les trois tailles aussi : le diamètre vaut la hauteur de la taille
+// (`button/height/sm|md|lg`), donc les cibles tactiles de WCAG 2.5.5.
+//
+// Le dessin n'est pas refait ici : c'est celui de Button, qui rend ce composant. Les
+// fonds, l'encre, l'anneau de focus et le désactivé viennent de lui. Ne reste que la
+// boîte : la largeur vaut la hauteur, le rembourrage horizontal disparaît, la largeur
+// minimale aussi, et le rayon de la pilule fait un cercle.
+//
+// `aria-label` est obligatoire, et le composant refuse de se compiler sans lui : une
+// icône ne s'annonce pas, et sans nom un lecteur d'écran dit « bouton » et rien de plus
+// (WCAG 4.1.2). Même précaution pour `icon`, sans quoi il n'y aurait rien à voir.
+
+import Button from './Button.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  /** Nom d'une icône du système. Obligatoire : c'est tout ce que le bouton montre. */
+  icon: IconName;
+  /** Le nom du bouton, seul à être lu. Obligatoire. */
+  'aria-label': string;
+  /** Les mêmes que Button. Le secondaire est le défaut : c'est le rond d'origine. */
+  variant?: 'primary' | 'secondary' | 'alert' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  name?: string;
+  value?: string;
+  class?: string;
+  /** La surcharge ponctuelle de Button : --btn-bg, --btn-icon… */
+  style?: string;
+}
+
+const { icon, variant = 'secondary', size = 'md', class: className, ...rest } = Astro.props;
+
+if (!icon || !rest['aria-label']) {
+  throw new Error(
+    `IconButton : un bouton sans libellé demande \`icon\` et \`aria-label\` ` +
+      `(reçu icon=${icon ?? '—'}, aria-label=${rest['aria-label'] ?? '—'}).`,
+  );
+}
+
+const classes = ['icon-button', className].filter(Boolean).join(' ');
+---
+
+<Button variant={variant} size={size} icon={icon} class={classes} {...rest} />
+
+<style>
+  /* Le rond. La largeur vaut la hauteur de la taille, il n'y a plus de rembourrage à
+     la place d'un libellé, ni de largeur minimale à tenir : seul reste le diamètre. */
+  :global(.btn.icon-button) {
+    --btn-px: 0;
+    --btn-min-w: 0;
+    width: var(--btn-h);
+  }
+</style>

@@ -549,3 +549,11 @@ seul `Select` à prop `multiple` a été examinée et écartée : la valeur chan
 props ne valent que pour le multiple, d'où une union discriminée ou des props ignorées en silence ; deux façades fines
 sur `_Select` les refusent à la compilation, et ajouter une prop à l'une est sans risque quand en retirer casse les
 sites. Le partage voulu — boîte, liste, script — existe déjà côté code ; côté Figma, la boîte est dessinée deux fois.
+
+**Le bouton rond n'est plus une variante : c'est `IconButton` (03/11).** Figma a sorti la variante `icon` du
+jeu Button pour en faire un composant à part (881:71005, `variant` × `size` × `state`, plus `icon`). Le code suit :
+`Button` n'a plus que primary, secondary, alert et ghost, et `IconButton` le rend en lui retirant la largeur
+minimale et le rembourrage, avec un diamètre égal à la hauteur de la taille. Un bouton sans libellé n'a ni texte, ni
+`iconEnd`, ni largeur minimale, et doit porter son nom : `icon` et `aria-label` sont obligatoires, et le composant
+refuse de se compiler sans. Le secondaire reste son défaut, parce que c'est le rond d'origine. Cassant pour qui
+écrivait `<Button variant="icon">` : la bascule est `<IconButton icon="…" aria-label="…" />`.

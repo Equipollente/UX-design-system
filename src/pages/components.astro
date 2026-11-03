@@ -4,6 +4,7 @@
 import { withBase } from '../design-system/lib/url';
 import DocsLayout from '../design-system/layouts/DocsLayout.astro';
 import Button from '../design-system/components/Button.astro';
+import IconButton from '../design-system/components/IconButton.astro';
 import Tag from '../design-system/components/Tag.astro';
 import CardDefault from '../design-system/components/cards/CardDefault.astro';
 import CardActions from '../design-system/components/cards/CardActions.astro';
@@ -43,19 +44,19 @@ const buttonSizes = ['sm', 'md', 'lg'] as const;
 const buttonProps = [
   [
     'variant',
-    `'primary' | 'secondary' | 'alert' | 'icon' | 'ghost'`,
+    `'primary' | 'secondary' | 'alert' | 'ghost'`,
     'primary',
-    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Icon est le bouton rond : l’icône seule, sans libellé, et il exige icon et aria-label. Ghost est l’action sans fond, à faible poids visuel.',
+    'Primary porte l’action principale ; une seule par vue. Alert porte une action destructive. Ghost est l’action sans fond, à faible poids visuel.',
   ],
   ['size', `'sm' | 'md' | 'lg'`, 'md', 'Les trois hauteurs des tokens button.height.*.'],
   ['href', 'string', '—', 'Avec href, rend un <a> ; sans, un <button>.'],
-  ['icon', 'IconName', '—', 'Nom d’une icône du système. Posée avant le label. Obligatoire avec variant="icon".'],
+  ['icon', 'IconName', '—', 'Nom d’une icône du système. Posée avant le label. Une icône seule est un IconButton.'],
   ['iconEnd', 'IconName', '—', 'Idem, mais posée après le label. Cumulable avec icon.'],
   [
     'aria-label',
     'string',
     '—',
-    'Le nom du bouton quand aucun libellé ne le porte. Obligatoire dès que l’icône est seule : la variante icon refuse de se compiler sans.',
+    'Le nom du bouton quand aucun libellé ne le porte. Un IconButton le pose toujours.',
   ],
   ['type', `'button' | 'submit'`, 'button', 'Ignoré quand href est fourni.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
@@ -359,7 +360,7 @@ const modalProps = [
         <div class="btn-row last">
           {
             buttonSizes.map((size) => (
-              <Button variant="icon" size={size} icon="mail-edit" aria-label={`Écrire, taille ${size}`} />
+              <IconButton size={size} icon="mail-edit" aria-label={`Écrire, taille ${size}`} />
             ))
           }
         </div>
@@ -374,11 +375,13 @@ const modalProps = [
       </p>
 
       <p class="section-note">
-        <strong>Le bouton rond est le secondaire sans libellé.</strong> Même fond
-        {' '}(<code>color.bg.surface</code>, puis <code>accent 100</code> et <code>200</code>), même encre ;
-        seule la boîte change : sa largeur vaut sa hauteur, et le rayon de la pilule en fait un cercle.
-        Les trois diamètres sont les trois hauteurs du bouton, donc les cibles tactiles de WCAG 2.5.5.
-        Comme il n'a pas de texte, il ne se compile pas sans <code>icon</code> ni
+        <strong>Le bouton rond n'est pas une variante : c'est <code>IconButton</code>.</strong> Un bouton
+        sans libellé n'a ni texte, ni <code>iconEnd</code>, ni largeur minimale, et doit porter son nom
+        lui-même : il ne se règle pas comme un bouton à libellé, et Figma l'a sorti du jeu Button (nœud
+        {' '}<code>881:71005</code>, soixante variantes). Il rend Button, donc il en a les quatre variantes, les
+        trois tailles et les cinq états ; seule la boîte change — sa largeur vaut sa hauteur, et le rayon
+        de la pilule en fait un cercle. Les trois diamètres sont les trois hauteurs du bouton, donc les
+        cibles tactiles de WCAG 2.5.5. Il ne se compile pas sans <code>icon</code> ni
         {' '}<code>aria-label</code> : un contrôle expose un nom (WCAG 4.1.2).
       </p>
 
@@ -452,20 +455,20 @@ const modalProps = [
       <pre><code>{`<Button>Texte seul</Button>
 <Button icon="mail-edit">Icône à gauche</Button>
 <Button iconEnd="arrow-narrow-right">Icône à droite</Button>
-<Button variant="icon" icon="trash" aria-label="Supprimer" />`}</code></pre>
+<IconButton icon="trash" aria-label="Supprimer" />`}</code></pre>
       <p class="section-note">
         Les deux se cumulent : <code>icon</code> et <code>iconEnd</code> ensemble encadrent le libellé.
-        Le quatrième cas est la variante <code>icon</code>, et elle porte elle-même les deux précautions
+        Le quatrième cas est <code>IconButton</code>, et il porte lui-même les deux précautions
         qu'il fallait connaître : <strong>sans libellé, plus rien ne donne sa largeur au bouton</strong>
-        {' '}— elle retire donc sa largeur minimale — et <strong>une icône ne s'annonce pas</strong> :
+        {' '}— il retire donc sa largeur minimale — et <strong>une icône ne s'annonce pas</strong> :
         {' '}<code>aria-label</code> devient le seul nom du bouton, faute de quoi un lecteur d'écran dit
-        {' '}« bouton » et rien de plus. Elle refuse de se compiler sans lui.
+        {' '}« bouton » et rien de plus. Il refuse de se compiler sans lui.
       </p>
 
       <p class="flag">
         <strong>Deux appelants écrivent encore l'ancienne recette.</strong> Les flèches du Carousel et la
         page <a href={withBase('/icons')}>Icônes</a> retirent la largeur minimale à la main. Le Carousel
-        pose en plus <code>color.bg.default</code> à la place de la surface lavande, ce que la variante
+        pose en plus <code>color.bg.default</code> à la place de la surface lavande, ce qu'IconButton
         n'a pas : ils n'ont pas été touchés, et la bascule se décide avec eux.
       </p>
 
@@ -478,7 +481,7 @@ const modalProps = [
       <p class="flag">
         <strong>Ce que Figma a et que la doc ne disait pas.</strong> Le jeu Figma est unique : trois
         propriétés (<code>Variant</code>, <code>Size</code>, <code>State</code>), quatre variantes
-        (<code>primary</code>, <code>secondary</code>, <code>alert</code>, <code>icon</code>, <code>ghost</code>) et cinq états,
+        (<code>primary</code>, <code>secondary</code>, <code>alert</code>, <code>ghost</code>) et cinq états,
         {' '}<code>Focus</code> compris. Le code les suit tous. L'état désactivé est arrivé avec les flèches
         du carrousel : Figma ne change pas le fond, il baisse l'opacité de tout le bouton à 45 %
         (<code>854:41683</code>, <code>854:41667</code>). Le contraste passe alors sous le seuil — WCAG 1.4.3
