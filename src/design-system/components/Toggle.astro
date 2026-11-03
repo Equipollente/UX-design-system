@@ -122,11 +122,7 @@ const classes = ['toggle', disabled && 'toggle-disabled', className].filter(Bool
 
   /* — on — */
   .toggle-input:checked {
-    background: var(--toggle-accent, var(--color-action-primary-bg));
-  }
-
-  .toggle:not(.toggle-disabled):hover .toggle-input:checked {
-    background: var(--toggle-accent-hover, var(--color-action-primary-bg-hover));
+    background: var(--toggle-accent, var(--color-bg-control));
   }
 
   /* La pastille. 16 de côté, posée à (22 − 16) / 2 = 3 du bord, et parcourant
@@ -151,16 +147,14 @@ const classes = ['toggle', disabled && 'toggle-disabled', className].filter(Bool
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et un interrupteur désactivé ne doit pas prendre le survol. La
-     piste garde sa couleur et s'atténue, exactement comme le nœud : éteinte elle
-     reste `neutral/300`, allumée elle reste accent — on lit donc encore sa
-     position, ce qu'un gris uniforme effaçait. */
+     tranche. La piste passe au gris plein du système, `category/neutral/solid`,
+     allumée comme éteinte : c'est la pastille qui dit encore la position. */
+  .toggle-input:disabled {
+    background: var(--color-category-neutral-solid);
+  }
+
   .toggle-disabled .toggle-input,
   .toggle-disabled :global(.field-label) {
     cursor: not-allowed;
-  }
-
-  .toggle-disabled .toggle-control {
-    opacity: var(--opacity-disabled);
   }
 </style>
