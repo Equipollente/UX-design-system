@@ -36,6 +36,7 @@
 //   l'emporte — c'est sa raison d'être.
 
 import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
 
 interface Props {
   /** Lie le libellé au contrôle. Unique dans la page. */
@@ -46,6 +47,8 @@ interface Props {
   name?: string;
   /** Allumé à l'ouverture. */
   checked?: boolean;
+  /** L'aide : ce que l'interrupteur change, dite sous le libellé. Le champ la désigne par `aria-describedby`. */
+  hint?: string;
   disabled?: boolean;
   class?: string;
 }
@@ -55,12 +58,14 @@ const {
   label,
   name,
   checked = false,
+  hint,
   disabled = false,
   class: className,
   ...rest
 } = Astro.props;
 
 const classes = ['toggle', disabled && 'toggle-disabled', className].filter(Boolean).join(' ');
+const messageId = `${id}-message`;
 ---
 
 <div class={classes} {...rest}>
@@ -73,20 +78,31 @@ const classes = ['toggle', disabled && 'toggle-disabled', className].filter(Bool
       name={name ?? id}
       checked={checked}
       disabled={disabled}
+      aria-describedby={hint ? messageId : undefined}
     />
     {/* La pastille double l'état que la piste porte déjà : elle est décorative,
         et le clic doit traverser jusqu'à l'input. */}
     <span class="toggle-thumb" aria-hidden="true"></span>
   </span>
   <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+  {hint && <FieldMessage type="hint" id={messageId}>{hint}</FieldMessage>}
 </div>
 
 <style>
-  /* 8, comme Radio et Checkbox : les trois contrôles compacts s'espacent pareil. */
+  /* Deux colonnes : la piste, puis le texte. Le libellé est sur la première ligne,
+     l'aide sur la seconde, sous lui — la piste reste centrée sur le libellé, sans
+     qu'aucune mesure n'ait à la décaler. Même grille que Checkbox et Radio : 8 entre
+     les deux colonnes, 4 entre le libellé et l'aide. */
   .toggle {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    gap: var(--space-sm);
+    column-gap: var(--space-sm);
+    row-gap: var(--space-xs);
+  }
+
+  .toggle :global(.field-message) {
+    grid-column: 2;
   }
 
   .toggle-control {
