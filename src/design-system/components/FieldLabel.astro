@@ -37,7 +37,7 @@ interface Props {
   as?: 'label' | 'legend';
   /** Pose l'astérisque. Le champ doit porter `required` de son côté. */
   required?: boolean;
-  /** L'encre passe en muted. Le champ doit porter `disabled` de son côté. */
+  /** L'encre passe en `text/disabled`. Le champ doit porter `disabled` de son côté. */
   disabled?: boolean;
   class?: string;
 }
@@ -85,7 +85,7 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
 
   /* Désactivé : l'encre, et rien d'autre. */
   .field-label-disabled {
-    color: var(--color-text-muted); /* #6A676D */
+    color: var(--color-text-disabled); /* #A9A5B0 — la variante disabled=true du nœud */
   }
 
   /* L'astérisque hérite de tout le reste — taille, graisse, interligne — et ne
