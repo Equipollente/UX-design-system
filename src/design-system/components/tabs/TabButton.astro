@@ -44,13 +44,13 @@ const classes = ['tabs-tab', className].filter(Boolean).join(' ');
     position: relative;
     z-index: 1;
     display: inline-flex;
-    height: var(--button-height-md);
-    padding: var(--space-md);
+    height: var(--control-medium-size);
+    padding: var(--base-12);
     justify-content: center;
     align-items: center;
-    gap: var(--button-gap-sm);
-    --icon-size: var(--button-icon-size-md);
-    border-radius: var(--radius-lg);
+    gap: var(--control-small-gap);
+    --icon-size: var(--icon-medium);
+    border-radius: var(--border-radius-large);
     border: none;
     /* La pastille (fond visible de l'onglet actif) est portée par TabList :
        le bouton reste transparent dans les deux états. */
@@ -58,15 +58,15 @@ const classes = ['tabs-tab', className].filter(Boolean).join(' ');
   }
 
   .tabs-tab:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   button.tabs-tab {
-    color: var(--color-text-default);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-body);
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
     font-style: normal;
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--base-text-weight-medium);
   }
 </style>

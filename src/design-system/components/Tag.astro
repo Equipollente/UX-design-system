@@ -46,30 +46,30 @@ const classes = ['tag', `tag-${variant}`, className].filter(Boolean).join(' ');
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-pill);
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-ui);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-wide);
+    padding: var(--base-8) var(--base-12);
+    border-radius: var(--border-radius-full);
+    font-family: var(--font-stack-body);
+    font-weight: var(--base-text-weight-semibold);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-wide);
   }
 
   /* — les trois remplies : fond au cran 100, encre au cran 800 de la même rampe.
        La paire ne se dissocie pas : c'est elle qui porte le contraste. — */
   .tag-accent {
-    background: var(--color-category-accent-bg);
-    color: var(--color-category-accent-text);
+    background: var(--color-background-primary-subtle);
+    color: var(--color-text-primary-on-subtle);
   }
 
   .tag-lime {
-    background: var(--color-category-highlight-bg);
-    color: var(--color-category-highlight-text);
+    background: var(--color-background-highlight-subtle);
+    color: var(--color-text-highlight-on-subtle);
   }
 
   .tag-neutral {
-    background: var(--color-category-neutral-bg);
-    color: var(--color-category-neutral-text);
+    background: var(--color-background-neutral-subtle);
+    color: var(--color-text-neutral-on-subtle);
   }
 
   /* — l'outline : pas de fond, une seule couleur pour le liseré et l'encre — */
@@ -84,8 +84,8 @@ const classes = ['tag', `tag-${variant}`, className].filter(Boolean).join(' ');
 
        Sur une variante remplie, --tag-color ne fait rien : il n'y reprendrait
        que l'encre, donc déferait la paire 100/800 et son contraste. */
-    outline: 1px solid var(--tag-color, var(--color-border-accent));
+    outline: 1px solid var(--tag-color, var(--color-border-primary-strong));
     outline-offset: -1px;
-    color: var(--tag-color, var(--color-text-accent));
+    color: var(--tag-color, var(--color-text-primary-default));
   }
 </style>

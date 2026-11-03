@@ -1,26 +1,59 @@
 // Génère src/design-system/styles/tokens.css et src/design-system/data/tokens.json
-// depuis l'export de variables Figma (format W3C DTCG) dans tokens/.
+// depuis les exports de variables Figma (format W3C DTCG) rangés dans tokens/.
 //
-// La source de vérité est tokens/*.tokens.json — jamais les fichiers générés.
-// Pour mettre à jour : ré-exporter depuis Figma dans tokens/, puis `npm run tokens`.
+// La source de vérité est tokens/<collection>/*.tokens.json — jamais les fichiers
+// générés. Pour mettre à jour : ré-exporter les collections depuis Figma dans
+// tokens/, puis `npm run tokens`.
 //
-// Les 4 modes Figma (Desktop / Tablet / Mobile / Paper) sont identiques à
-// l'exception des 3 tokens du groupe layout. On lit donc Desktop pour tout, et
-// les trois autres uniquement pour ce groupe.
+// Une collection Figma = un dossier. Un mode Figma = un fichier.
+//
+//   primitives/   rampes brutes (--ramp-*), que seuls les rôles de color.* lisent
+//   semantic/     les rôles de couleur, en deux modes : Default (le :root) et
+//                 Prof Hub (un thème, [data-theme="prof-hub"])
+//   size/         l'échelle (--base-*), les traits, les rayons, les contrôles…
+//   typography/   les polices, les graisses, les tailles et les rôles de texte
+//   layout/       ce qui change selon l'appareil : Desktop est le :root, les trois
+//                 autres sont des media queries
+//   motion/       durées et courbes
+//   effects/      ombres, opacité, rapports
+//
+// DSFR.tokens.json reste à part : la palette de l'État n'est pas chargée par défaut.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_MODE = 'Desktop';
 
-// Les media queries viennent des `layout.Device Width` de chaque mode :
-// mobile 390, tablet 768, desktop 1200, paper 1060.
+// Une taille de police s'écrit en rem pour suivre le réglage du navigateur. Le rem
+// vaut 16 px par défaut dans tous les navigateurs : c'est une propriété de la
+// plateforme, pas une valeur de design — d'où sa place ici et pas dans Figma.
+const REM = 16;
+
+// Les media queries des modes de la collection Layout. Les largeurs de référence
+// (`viewport.width`) sont 390, 768, 1200 et 1060 : tablette de 768 à 1199, mobile
+// en dessous.
 const MODES = [
   { name: 'Tablet', query: '(min-width: 768px) and (max-width: 1199px)' },
   { name: 'Mobile', query: '(max-width: 767px)' },
   { name: 'Paper', query: 'print' },
+];
+
+// Les modes de couleur de la collection Semantic. Le premier est le :root.
+const THEME_BASE = 'Default';
+const THEMES = [{ name: 'Prof Hub', selector: '[data-theme="prof-hub"]' }];
+
+// Les collections lues, dans l'ordre d'émission. `prefix` : Figma n'écrit pas le nom
+// de la collection dans le chemin d'un token, et `duration.quick` ne dit pas de quoi
+// il est la durée. Le préfixe le dit (--motion-duration-quick).
+const SOURCES = [
+  { dir: 'primitives', mode: 'Valeur' },
+  { dir: 'semantic', mode: THEME_BASE },
+  { dir: 'size', mode: 'Valeur' },
+  { dir: 'typography', mode: 'Valeur' },
+  { dir: 'layout', mode: 'Desktop' },
+  { dir: 'motion', mode: 'Valeur', prefix: 'motion' },
+  { dir: 'effects', mode: 'Valeur' },
 ];
 
 // Ajoutées par le build, pas par Figma : les tokens ne portent que le nom de la
@@ -30,73 +63,93 @@ const FALLBACKS = {
   Inter: 'system-ui, -apple-system, sans-serif',
 };
 
-// Titres des blocs de tokens.css, dans l'ordre d'émission.
+// Titres des blocs de tokens.css, dans l'ordre d'émission. La clé est le premier
+// segment du chemin, sauf pour l'échelle de typographie (`base.text.*`), qui
+// partage son premier segment avec l'échelle d'espacement.
 const GROUP_TITLES = {
   ramp: 'Rampes — les couleurs brutes, que seuls les rôles de color.* lisent',
-  color: 'Couleurs',
-  space: 'Espacements',
-  radius: 'Rayons',
-  control: 'Contrôles — la géométrie d’une case, d’une piste, d’un champ',
-  border: 'Traits — les épaisseurs, et rien d’autre',
-  opacity: 'Opacités — l’atténuation d’un objet, pas sa couleur',
-  shadow: 'Ombres — les parties nommées, puis les ombres composées',
-  font: 'Typographie',
-  motion: 'Mouvement — durées et courbes',
-  button: 'Boutons — dimensions et cibles tactiles (WCAG 2.5.5 / 2.5.8 / 2.4.13)',
-  card: 'Carte — la taille et l’encre de ses trois lignes de texte',
+  color: 'Couleurs — les rôles',
+  base: 'Échelle — les valeurs brutes, que les contrôles et les piles lisent',
+  border: 'Traits — épaisseurs, rayons et anneau de focus',
+  breakpoint: 'Seuils de largeur',
+  viewport: 'Fenêtre — conditions de media query et largeur de référence',
+  stack: 'Piles — l’écart et la marge d’un groupe d’éléments',
+  section: 'Sections — l’espace entre les blocs d’une page',
+  control: 'Contrôles — hauteur, marges et écarts d’un bouton ou d’un champ',
+  controlStack: 'Contrôles voisins — l’écart entre deux contrôles',
+  icon: 'Icônes — la taille',
+  overlay: 'Surcouches — menus, popovers, modales',
   nav: 'Nav — la hauteur de la barre, lue par les pages qui se calent dessous',
+  fontStack: 'Polices — les familles',
+  'base-text': 'Typographie, échelle — graisses, tailles, interlignes, espacement des lettres',
+  text: 'Typographie, rôles — la police, la taille et la graisse d’un type de texte',
+  motion: 'Mouvement — durées et courbes',
+  shadow: 'Ombres — les parties nommées, puis les ombres composées',
+  opacity: 'Opacités — l’atténuation d’un objet, pas sa couleur',
   ratio: 'Rapports — les formes des images',
-  layout: 'Layout — métadonnées de mode Figma, informatives',
 };
 
-const read = (mode) =>
-  JSON.parse(readFileSync(join(ROOT, 'tokens', `${mode}.tokens.json`), 'utf8'));
+const groupOf = (path) => (path.startsWith('base.text.') ? 'base-text' : path.split('.')[0]);
 
-// `color.bg.default` → `--color-bg-default`. Figma déclare ces noms dans
-// $extensions["com.figma.codeSyntax"].WEB pour 88 tokens sur 109 et suit
-// exactement cette règle ; on l'applique uniformément pour couvrir aussi les 21
-// tokens button.* qui n'ont pas de nom déclaré.
+// `color.background.primary.bold` → `--color-background-primary-bold`. Les noms
+// Figma en camelCase (`lineHeight`, `paddingInline`, `fontStack`) deviennent des mots
+// séparés par des tirets : `--base-text-line-height-snug`.
 const cssName = (path) =>
-  '--' + path.split('.').join('-').replace(/\s+/g, '-').toLowerCase();
+  '--' +
+  path
+    .split('.')
+    .join('-')
+    .replace(/\s+/g, '-')
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+
+const read = (dir, mode) =>
+  JSON.parse(readFileSync(join(ROOT, 'tokens', dir, `${mode}.tokens.json`), 'utf8'));
 
 /**
  * Un token de l'export. Quand l'alias traverse deux collections (un rôle de
- * `Design tokens` qui pointe vers `Primitives`), Figma n'écrit pas `{chemin}` mais la
+ * `semantic` qui pointe vers `primitives`), Figma n'écrit pas `{chemin}` mais la
  * valeur déjà résolue, et nomme la cible dans `com.figma.aliasData`. On rétablit
  * l'alias : sinon la chaîne meurt à l'export et le CSS ne garde qu'un hex.
  *
- * Seulement vers « Primitives », la seule collection que ce script lit en plus de la
- * sienne : un alias vers n'importe quelle autre (`layout.Root Font Size` → `Scale`,
- * dans « Responsive ») pointerait vers un token absent, alors que la valeur résolue,
- * elle, est exacte et suffit.
+ * Seulement vers « Primitives », la seule collection dont les rôles dépendent : un
+ * alias vers n'importe quelle autre pointerait vers un token que ce script n'a pas
+ * lu, alors que la valeur résolue, elle, est exacte et suffit.
  */
-function token(path, node) {
+function token(path, node, prefix) {
   const alias = node.$extensions?.['com.figma.aliasData'];
-  const versRampe = alias?.targetVariableSetName === 'Primitives';
+  const versRampe = /Primitives$/.test(alias?.targetVariableSetName ?? '');
+  let value = node.$value;
+  if (versRampe && typeof value !== 'string') {
+    value = `{${alias.targetVariableName.split('/').join('.')}}`;
+  } else if (prefix && isAlias(value)) {
+    // Un alias dans une collection préfixée vise une variable de la même collection.
+    value = `{${prefix}.${aliasTarget(value)}}`;
+  }
   return {
     path: path.join('.'),
     type: node.$type,
-    value: versRampe && typeof node.$value !== 'string' ? `{${alias.targetVariableName.split('/').join('.')}}` : node.$value,
+    value,
     description: node.$description ?? '',
   };
 }
 
 /** Aplatit l'arbre DTCG en liste ordonnée de tokens. */
-function flatten(node, path = [], out = []) {
+function flatten(node, path = [], out = [], prefix) {
   for (const [key, value] of Object.entries(node)) {
     // `$root` : Figma l'écrit quand une variable (`feedback/success`) a le même nom qu'un
     // groupe qui en contient d'autres (`feedback/success/bg`). C'est la variable du groupe
     // lui-même, pas une métadonnée — l'ignorer ferait disparaître `--color-feedback-success`.
     if (key === '$root' && value && value.$type) {
-      out.push(token(path, value));
+      out.push(token(path, value, prefix));
       continue;
     }
     if (key.startsWith('$')) continue;
     if (value && typeof value === 'object') {
       if (value.$type) {
-        out.push(token([...path, key], value));
+        out.push(token([...path, key], value, prefix));
       } else {
-        flatten(value, [...path, key], out);
+        flatten(value, [...path, key], out, prefix);
       }
     }
   }
@@ -106,12 +159,14 @@ function flatten(node, path = [], out = []) {
 const isAlias = (v) => typeof v === 'string' && v.startsWith('{') && v.endsWith('}');
 const aliasTarget = (v) => v.slice(1, -1);
 
+const round = (n) => parseFloat(n.toFixed(4));
+
 /**
  * Valeur CSS d'un token.
  *
  * Un alias devient `var(--cible)` : la chaîne reste vivante en CSS, ce qui est
- * le comportement voulu (`color.text.on-accent` → `color.bg.default` → `#FFFFFF`
- * s'écrit `var(--color-bg-default)`, pas `#FFFFFF`).
+ * le comportement voulu (un rôle qui pointe vers une rampe s'écrit
+ * `var(--ramp-indigo-500)`, pas `#3F2BFF`).
  */
 function toCss(token) {
   const { path, type, value } = token;
@@ -122,15 +177,14 @@ function toCss(token) {
     const { alpha = 1, components } = value;
     if (alpha === 1) return value.hex;
     // Une couleur transparente ne s'écrit pas en hex sans devenir illisible :
-    // `#2F2D2E1A` ne dit pas 10 %. Les trois couleurs d'ombre sont les seules
-    // concernées aujourd'hui, et c'est exactement la forme que les composants
-    // portaient en dur avant d'être nommées.
+    // `#2F2D2E1A` ne dit pas 10 %. Les couleurs d'ombre sont les seules
+    // concernées aujourd'hui.
     const [r, g, b] = components.map((c) => Math.round(c * 255));
     return `rgb(${r} ${g} ${b} / ${round(alpha)})`;
   }
 
   if (type === 'string') {
-    if (path.startsWith('font.family.')) {
+    if (path.startsWith('fontStack.')) {
       const fallback = FALLBACKS[value];
       return fallback ? `"${value}", ${fallback}` : `"${value}"`;
     }
@@ -138,13 +192,12 @@ function toCss(token) {
   }
 
   // type === 'number' — l'unité dépend du groupe.
-  if (path.startsWith('font.line-height.')) return String(value / 100); // Figma stocke en %
-  if (path.startsWith('font.letter-spacing.')) return `${value / 100}em`; // idem
-  if (path.startsWith('font.weight.')) return String(value);
-  if (path.startsWith('font.size.')) return `${round(value / rootFontSize)}rem`;
+  if (path.includes('.lineHeight')) return String(value / 100); // Figma stocke en %
+  if (path.includes('.letterSpacing')) return `${value / 100}em`; // idem
+  if (/\.weight(\.|$)/.test(path) && (path.startsWith('base.text.') || path.startsWith('text.'))) return String(value);
+  if (path.startsWith('base.text.size.') || /^text\..+\.size$/.test(path)) return `${round(value / REM)}rem`;
   if (path.startsWith('motion.duration.')) return `${value}ms`; // Figma stocke le nombre nu
-  if (path === 'layout.Root Font Size') return `${value}px`;
-  if (path.startsWith('layout.')) return String(value);
+  if (path === 'viewport.scale') return String(value);
   if (path.startsWith('ratio.')) return String(value);
   // Figma stocke une opacité en pourcentage, exactement comme un interligne — et
   // pour la même raison : c'est ce que la liaison de variable attend côté dessin.
@@ -152,37 +205,38 @@ function toCss(token) {
   // le repli en pixels ci-dessous en aurait fait `50px` : une longueur là où le
   // navigateur attend un rapport, donc une déclaration jetée sans un mot.
   if (path.startsWith('opacity.')) return String(value / 100);
-  return `${value}px`; // space.*, radius.*, button.*, control.*, border.*
+  return `${value}px`; // base.*, border.*, control.*, stack.*, breakpoint.*, nav.*…
 }
-
-const round = (n) => parseFloat(n.toFixed(4));
 
 // --- Lecture -----------------------------------------------------------------
 
-// La collection Figma « Primitives » (les rampes brutes) s'exporte à part : un seul
-// mode, donc un seul fichier. Les rôles de color.* y pointent par alias, et un alias
-// vers un token que ce script n'a pas lu sortirait en `var(--ramp-…)` sans définition,
-// c'est-à-dire sans couleur et sans un mot. Si le fichier manque alors que des rôles
-// en dépendent, on refuse de construire.
-const PRIMITIVES_SOURCE = join(ROOT, 'tokens', 'Primitives.tokens.json');
-const rampes = existsSync(PRIMITIVES_SOURCE)
-  ? flatten(JSON.parse(readFileSync(PRIMITIVES_SOURCE, 'utf8')))
-  : [];
+for (const { dir, mode } of SOURCES) {
+  const f = join(ROOT, 'tokens', dir, `${mode}.tokens.json`);
+  if (!existsSync(f)) {
+    throw new Error(`Export manquant : tokens/${dir}/${mode}.tokens.json. Exporte la collection depuis Figma.`);
+  }
+}
 
-const base = [...rampes, ...flatten(read(BASE_MODE))];
-
-// Sert à convertir font.size.* en rem. Déclaré par le système lui-même.
-const rootFontSize = base.find((t) => t.path === 'layout.Root Font Size').value;
+const base = SOURCES.flatMap(({ dir, mode, prefix }) =>
+  flatten(read(dir, mode), prefix ? [prefix] : [], [], prefix),
+);
 
 const resolved = base.map((t) => ({
   name: cssName(t.path),
   path: t.path,
-  group: t.path.split('.')[0],
+  group: groupOf(t.path),
   type: t.type,
   css: toCss(t),
   alias: isAlias(t.value) ? cssName(aliasTarget(t.value)) : null,
   description: t.description,
 }));
+
+// Deux collections qui écrivent le même nom se marcheraient dessus sans un mot.
+const vus = new Map();
+for (const t of resolved) {
+  if (vus.has(t.name)) throw new Error(`Nom en double dans l'export : ${t.name} (${vus.get(t.name)} et ${t.path}).`);
+  vus.set(t.name, t.path);
+}
 
 // --- Émission de tokens.css --------------------------------------------------
 
@@ -230,14 +284,14 @@ const declare = (t) => `  ${(t.name + ':').padEnd(pad + 1)} ${t.css};`;
 
 const lines = [
   '/* GÉNÉRÉ — ne pas éditer à la main.',
-  ` * Source : tokens/${BASE_MODE}.tokens.json (export de variables Figma, format W3C DTCG).`,
+  ' * Source : tokens/<collection>/*.tokens.json (export de variables Figma, format W3C DTCG).',
   ' * Régénérer avec `npm run tokens`.',
   ' */',
   '',
   ':root {',
 ];
 
-// Un alias dont la cible n'est pas dans l'export ne s'écrit pas : voir PRIMITIVES_SOURCE.
+// Un alias dont la cible n'est pas dans l'export ne s'écrit pas : voir SOURCES.
 const cibles = new Set(resolved.map((t) => t.name));
 const orphelins = resolved.filter((t) => t.alias && !cibles.has(t.alias));
 
@@ -247,7 +301,7 @@ if (orphelins.length) {
       `${orphelins.slice(0, 3).map((t) => `${t.name} → ${t.alias}`).join(', ')}` +
       `${orphelins.length > 3 ? '…' : ''}.\n` +
       `Si la cible est une rampe (--ramp-…), exporte aussi la collection « Primitives » ` +
-      `dans tokens/Primitives.tokens.json.`,
+      `dans tokens/primitives/.`,
   );
 }
 
@@ -292,15 +346,34 @@ for (const [group, title] of Object.entries(GROUP_TITLES)) {
 
 lines.push('}');
 
-// Les blocs par mode ne redéfinissent que ce qui change réellement d'un export à
-// l'autre — la comparaison plus bas s'en charge, et c'est elle seule qui décide.
-// Aujourd'hui le groupe layout est le seul à varier, mais la règle ne le nomme
-// pas : le jour où une variable Figma porte une valeur par mode — une hauteur de
-// barre, par exemple — elle sort d'ici sans qu'on ait à revenir dans ce script.
-// Nommer le groupe faisait de ce filtre une deuxième décision, muette, qui
-// aurait ignoré la variable sans rien dire.
+// Les thèmes de couleur ne redéfinissent que ce qui change réellement d'un mode à
+// l'autre — la comparaison s'en charge, et c'est elle seule qui décide. Un thème
+// s'active en posant `data-theme="prof-hub"` sur <html> ou sur un conteneur.
+const themeOverrides = new Map(); // nom CSS → { thème: valeur }
+for (const { name, selector } of THEMES) {
+  const overrides = flatten(read('semantic', name))
+    .map((t) => ({ ...t, name: cssName(t.path) }))
+    .filter((t) => {
+      const baseToken = resolved.find((r) => r.name === t.name);
+      return baseToken && baseToken.css !== toCss(t);
+    });
+
+  if (!overrides.length) continue;
+
+  lines.push('', `/* Thème ${name} : les rôles de couleur qui changent. */`, `${selector} {`);
+  for (const t of overrides) {
+    lines.push(declare({ name: t.name, css: toCss(t) }));
+    themeOverrides.set(t.name, { ...(themeOverrides.get(t.name) ?? {}), [name]: toCss(t) });
+  }
+  lines.push('}');
+}
+
+// Les blocs par mode d'appareil ne redéfinissent que ce qui change réellement d'un
+// export à l'autre. Aujourd'hui c'est la largeur de référence, l'échelle et la
+// hauteur de la barre ; le jour où une variable de Layout porte une valeur par mode,
+// elle sort d'ici sans qu'on ait à revenir dans ce script.
 for (const { name, query } of MODES) {
-  const overrides = flatten(read(name))
+  const overrides = flatten(read('layout', name))
     .map((t) => ({ ...t, name: cssName(t.path) }))
     .filter((t) => {
       const baseToken = resolved.find((r) => r.name === t.name);
@@ -351,7 +424,11 @@ const literal = (name, seen = new Set()) => {
 writeFileSync(
   join(ROOT, 'src/design-system/data/tokens.json'),
   JSON.stringify(
-    resolved.map((t) => ({ ...t, resolved: t.alias ? literal(t.name) : t.css })),
+    resolved.map((t) => ({
+      ...t,
+      resolved: t.alias ? literal(t.name) : t.css,
+      ...(themeOverrides.has(t.name) ? { themes: themeOverrides.get(t.name) } : {}),
+    })),
     null,
     2
   ) + '\n'
@@ -359,7 +436,7 @@ writeFileSync(
 
 // --- La garde des deux familles en pourcentage -------------------------------
 //
-// `font/line-height` et `font/letter-spacing` sont les seules variables que Figma
+// Les interlignes et les espacements de lettres sont les seules variables que Figma
 // **ne sait pas lier** à un style de texte : une variable de type nombre transporte
 // le nombre et pas l'unité, et Figma applique alors des pixels. Le pourcentage est
 // donc tapé à la main dans chacun des styles, et rien dans Figma ne le rattache à
@@ -373,7 +450,7 @@ writeFileSync(
 // machine voit passer le changement. C'est le pendant du refus de construire sur un
 // groupe inconnu, en plus doux — ici il n'y a rien de cassé, seulement quelque chose
 // à aller vérifier ailleurs.
-const FAMILLES_EN_POURCENT = ['font.line-height.', 'font.letter-spacing.'];
+const FAMILLES_EN_POURCENT = ['base.text.lineHeight.', 'base.text.letterSpacing.'];
 
 if (avant) {
   const bouge = resolved.filter(
@@ -463,6 +540,9 @@ console.log(
   `${resolved.length} tokens → src/design-system/styles/tokens.css, src/design-system/data/tokens.json`
 );
 console.log(`  ${perGroup}`);
+if (themeOverrides.size) {
+  console.log(`  ${themeOverrides.size} rôles de couleur redéfinis par le thème Prof Hub`);
+}
 if (dsfrCount) {
   console.log(
     `${dsfrCount} couleurs DSFR → src/design-system/styles/tokens-dsfr.css, src/design-system/data/tokens-dsfr.json (hors du compte)`

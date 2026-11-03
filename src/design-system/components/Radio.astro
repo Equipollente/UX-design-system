@@ -84,8 +84,8 @@ const messageId = `${id}-message`;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    column-gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
-    row-gap: var(--space-xs); /* 4 — l'écart du LabelGroup */
+    column-gap: var(--base-8); /* 8 — l'itemSpacing du nœud */
+    row-gap: var(--base-4); /* 4 — l'écart du LabelGroup */
   }
 
   .radio :global(.field-message) {
@@ -98,10 +98,10 @@ const messageId = `${id}-message`;
     appearance: none;
     flex: none;
     margin: 0;
-    width: var(--radio-size, var(--control-size));
-    height: var(--radio-size, var(--control-size));
-    border-radius: var(--radius-pill);
-    border: var(--border-width-default) solid var(--color-border-default);
+    width: var(--radio-size, var(--base-20));
+    height: var(--radio-size, var(--base-20));
+    border-radius: var(--border-radius-full);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
     /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
     cursor: pointer;
     /* Le changement de fond et de trait suit la même durée que le bouton du système. */
@@ -112,34 +112,34 @@ const messageId = `${id}-message`;
 
   /* — default — */
   .radio-input {
-    background: var(--radio-bg, var(--color-bg-surface));
+    background: var(--radio-bg, var(--color-surface-raised));
   }
 
   /* — focused — L'anneau du système remplace celui du navigateur. 2, la mesure
      du nœud, et WCAG 2.4.7 est tenu. */
   .radio-input:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* — selected — Le choix retenu est un anneau, sans point : le trait passe de 1 à 2
      (`border/width/focus`) et prend la couleur de contrôle. Le trait étant dans la
      boîte, le cercle ne grandit pas. */
   .radio-input:checked {
-    border-width: var(--border-width-focus);
-    border-color: var(--radio-accent, var(--color-border-control));
+    border-width: var(--border-width-thick);
+    border-color: var(--radio-accent, var(--color-border-primary-default));
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui tranche.
      Le cercle bascule vers le gris du système, comme le nœud : fond et trait
      `category/neutral` vide, trait gris et fond `bg/surface` retenu. */
   .radio-input:disabled {
-    background: var(--color-category-neutral-bg);
-    border-color: var(--color-category-neutral-border);
+    background: var(--color-background-neutral-subtle);
+    border-color: var(--color-border-neutral-default);
   }
 
   .radio-input:disabled:checked {
-    background: var(--color-bg-surface);
+    background: var(--color-surface-raised);
   }
 
   .radio-disabled .radio-input,

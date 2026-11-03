@@ -112,23 +112,23 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
 
 <style>
   .modal {
-    /* 10px sépare le texte du groupe de boutons dans Figma : ni --space-sm (8)
-       ni --space-md (12) ne tombe juste. Signalé sur /components. */
+    /* 10px sépare le texte du groupe de boutons dans Figma : ni --base-8 (8)
+       ni --base-12 (12) ne tombe juste. Signalé sur /components. */
     --modal-gap: 10px;
     /* Aucune variable d'overlay dans la collection — comme les ombres avant le
        27/08, une valeur qui n'a pas encore de nom. Signalé sur /components. */
     --modal-scrim: rgb(0 0 0 / 0.5);
 
     width: 360px;
-    padding: var(--space-xl);
+    padding: var(--base-24);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: var(--space-xl);
+    gap: var(--base-24);
 
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border-default);
-    background: var(--color-bg-default);
+    border-radius: var(--border-radius-large);
+    border: 1px solid var(--color-border-base-subtle);
+    background: var(--color-surface-default);
     box-shadow: var(--shadow-lg);
     color: inherit;
   }
@@ -150,14 +150,14 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
      soit la variante — voir le pavé de tête. */
   .icon-frame {
     display: inline-flex;
-    padding: var(--space-lg);
-    border-radius: var(--radius-pill);
-    background: var(--color-bg-surface);
-    --icon-color: var(--color-text-accent);
+    padding: var(--base-16);
+    border-radius: var(--border-radius-full);
+    background: var(--color-surface-raised);
+    --icon-color: var(--color-text-primary-default);
   }
 
   .modal-alert .icon-frame {
-    --icon-color: var(--color-feedback-danger-solid);
+    --icon-color: var(--color-icon-danger);
   }
 
   .content {
@@ -172,8 +172,8 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
      titre sous ce que la page porte déjà, la taille reste celle de Figma. */
   .heading {
     margin: 0;
-    font-size: var(--font-size-heading);
-    color: var(--color-text-default);
+    font-size: var(--text-title-small-size);
+    color: var(--color-text-base-default);
   }
 
   /* Police, taille et interligne sont déjà ceux d'un <p> par défaut
@@ -182,7 +182,7 @@ const showSecondary = variant !== 'succes' && Boolean(secondary);
      text-muted (qui vaut neutral-600), mais celle que Figma lie réellement. */
   .body {
     margin: 0;
-    color: var(--color-text-secondary);
+    color: var(--color-text-base-muted);
   }
 
   .actions {

@@ -1354,15 +1354,15 @@ const exemplesMultiple: Exemple[] = [
           <tr><th>Token</th><th>Où</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>--space-sm</code> / <code>--space-lg</code></td><td>Rembourrage — 8 en y, 16 en x</td></tr>
-          <tr><td><code>--radius-pill</code></td><td>La forme de pastille</td></tr>
-          <tr><td><code>--color-bg-default</code></td><td>Fond au repos</td></tr>
+          <tr><td><code>--base-8</code> / <code>--base-16</code></td><td>Rembourrage — 8 en y, 16 en x</td></tr>
+          <tr><td><code>--border-radius-full</code></td><td>La forme de pastille</td></tr>
+          <tr><td><code>--color-surface-default</code></td><td>Fond au repos</td></tr>
           <tr><td><code>--color-neutral-100</code></td><td>Fond au survol</td></tr>
           <tr><td><code>--color-accent-500</code> / <code>--color-accent-600</code></td><td>Fond retenu, et retenu survolé</td></tr>
-          <tr><td><code>--color-text-default</code> / <code>--color-text-on-accent</code></td><td>Encre, selon le fond</td></tr>
+          <tr><td><code>--color-text-base-default</code> / <code>--color-text-primary-on-bold</code></td><td>Encre, selon le fond</td></tr>
           <tr><td><code>--color-neutral-400</code></td><td>Encre désactivée</td></tr>
-          <tr><td><code>--font-size-ui</code></td><td>0.875rem — les 14 du nœud</td></tr>
-          <tr><td><code>--font-weight-regular</code> / <code>--font-weight-medium</code></td><td>Au repos, puis retenu</td></tr>
+          <tr><td><code>--text-body-medium-size</code></td><td>0.875rem — les 14 du nœud</td></tr>
+          <tr><td><code>--base-text-weight-regular</code> / <code>--base-text-weight-medium</code></td><td>Au repos, puis retenu</td></tr>
         </tbody>
         </table>
       </div>
@@ -1663,47 +1663,47 @@ const exemplesMultiple: Exemple[] = [
   /* Les notes de conception : ce qui explique pourquoi le composant est fait ainsi.
      Elles ne sont pas faites pour être lues d'abord — elles restent repliées. */
   .doc-notes {
-    margin-top: var(--space-2xl);
-    padding-top: var(--space-lg);
-    border-top: var(--border-width-default) solid var(--color-border-default);
+    margin-top: var(--base-32);
+    padding-top: var(--base-16);
+    border-top: var(--border-width-default) solid var(--color-border-base-subtle);
   }
 
   .doc-notes > summary {
     cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-accent);
+    font-weight: var(--base-text-weight-medium);
+    color: var(--color-text-primary-default);
   }
 
   .doc-notes > summary:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   .doc-notes[open] > summary {
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--base-24);
   }
 
   .demo {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--base-12);
     align-items: flex-start;
-    padding: var(--space-xl);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    padding: var(--base-24);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
   }
 
   .demo-fields {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: var(--space-xl);
+    gap: var(--base-24);
     align-items: start;
   }
 
   .demo-case {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--base-8);
   }
 
   /* Une rangée de pastilles retombe à la ligne : c'est la mise en page de la
@@ -1712,7 +1712,7 @@ const exemplesMultiple: Exemple[] = [
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--base-12);
     align-items: center;
   }
 
@@ -1721,7 +1721,7 @@ const exemplesMultiple: Exemple[] = [
   .demo-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--base-12);
     margin: 0;
     padding: 0;
     border: none;
@@ -1729,29 +1729,29 @@ const exemplesMultiple: Exemple[] = [
 
   .demo-group legend {
     padding: 0;
-    margin-bottom: var(--space-md);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-default);
+    margin-bottom: var(--base-12);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-semibold);
+    color: var(--color-text-base-default);
   }
 
   /* Le nom de l'état, pas un libellé : plus petit, en capitales, muted — il ne
      doit pas se confondre avec le FieldLabel qu'il annonce. */
   .demo-name {
     margin: 0;
-    font-size: var(--font-size-body-sm);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-letter-spacing-wide);
+    font-size: var(--text-body-small-size);
+    font-weight: var(--base-text-weight-medium);
+    letter-spacing: var(--base-text-letter-spacing-wide);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   /* Meme conteneur que /components : un tableau de props deborde a 375, et c'est
      lui qui doit defiler, pas la page entiere. */
   .table-scroll {
     overflow-x: auto;
-    margin-top: var(--space-xl);
+    margin-top: var(--base-24);
   }
 
   table {
@@ -1759,32 +1759,32 @@ const exemplesMultiple: Exemple[] = [
        c'est le conteneur qui rattrape le depassement. */
     min-width: 100%;
     border-collapse: collapse;
-    font-size: var(--font-size-body-sm);
+    font-size: var(--text-body-small-size);
     text-align: left;
   }
 
   caption {
     text-align: left;
-    padding-bottom: var(--space-sm);
-    font-size: var(--font-size-body-sm);
-    letter-spacing: var(--font-letter-spacing-wide);
+    padding-bottom: var(--base-8);
+    font-size: var(--text-body-small-size);
+    letter-spacing: var(--base-text-letter-spacing-wide);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   th,
   td {
-    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
-    border-bottom: 1px solid var(--color-border-default);
+    padding: var(--base-8) var(--base-16) var(--base-8) 0;
+    border-bottom: 1px solid var(--color-border-base-subtle);
     vertical-align: top;
   }
 
   td {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   td:first-child {
-    color: var(--color-text-default);
+    color: var(--color-text-base-default);
     white-space: nowrap;
   }
 </style>

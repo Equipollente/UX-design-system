@@ -45,11 +45,13 @@ serait plus un composant.
 
 ## Les tokens ne s'écrivent pas dans le code
 
-La source de vérité est Figma. Les 309 variables sont exportées dans `tokens/*.tokens.json` (4 modes :
-Desktop, Tablet, Mobile, Paper), puis `npm run tokens` en fait `styles/tokens.css` et `data/tokens.json`.
+La source de vérité est Figma. Les 554 tokens sont exportés collection par collection, un dossier chacune, dans
+`tokens/` (`primitives`, `semantic`, `size`, `typography`, `layout`, `motion`, `effects`), puis `npm run tokens`
+en fait `styles/tokens.css` et `data/tokens.json`.
 
-Deux étages pour la couleur : `Primitives` (exportée à part dans `tokens/Primitives.tokens.json`) porte les rampes
-`--ramp-*`, et `Design tokens` porte les rôles (`--color-bg-*`, `-text-*`, `-action-*`…), tous des alias. **Un composant ne lit
+Deux étages pour la couleur : `primitives` porte les rampes `--ramp-*` (nommées d'après leur teinte : grey, indigo,
+lime…), et `semantic` porte les rôles (`--color-surface-*`, `-background-*`, `-text-*`, `-icon-*`, `-border-*`),
+tous des alias, en deux modes : Default (le `:root`) et Prof Hub (`[data-theme="prof-hub"]`). **Un composant ne lit
 qu'un rôle, jamais un `--ramp-*`.** Voir [atelier/decisions.md](atelier/decisions.md).
 
 Si une valeur paraît fausse, la correction va **dans Figma**, puis dans l'export — jamais en dur dans

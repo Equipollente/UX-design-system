@@ -60,23 +60,23 @@ const {
 <style>
   .component-page {
     display: grid;
-    grid-template-columns: calc(var(--space-layout-128) + var(--space-layout-128)) minmax(0, 1fr);
+    grid-template-columns: calc(var(--section-space-xlarge) + var(--section-space-xlarge)) minmax(0, 1fr);
     min-block-size: 100vh;
   }
 
   main {
     min-inline-size: 0;
-    padding: var(--space-2xl);
+    padding: var(--base-32);
   }
 
   @media (max-width: 767px) {
     .component-page {
       display: block;
-      padding-block-start: var(--space-layout-96);
+      padding-block-start: var(--section-space-large);
     }
 
     main {
-      padding: var(--space-2xl) var(--space-xl);
+      padding: var(--base-32) var(--base-24);
     }
   }
 </style>

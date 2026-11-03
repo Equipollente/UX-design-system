@@ -104,12 +104,12 @@ const defautIcone = '<Icon name="mail-edit" size="md" />';
 // Un style de texte n'est pas un composant : ses deux morceaux sont la règle
 // CSS et la balise qui la porte, et ils ne vont pas au même endroit du fichier.
 const defautRegle = `.mon-style {
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--font-line-height-body);
-  letter-spacing: var(--font-letter-spacing-normal);
-  color: var(--color-text-default);
+  font-family: var(--font-stack-body);
+  font-weight: var(--base-text-weight-regular);
+  font-size: var(--text-body-large-size);
+  line-height: var(--base-text-line-height-normal);
+  letter-spacing: var(--base-text-letter-spacing-normal);
+  color: var(--color-text-base-default);
 }`;
 
 const defautTexteHtml =
@@ -215,7 +215,7 @@ const defautFormulaireCss = `/* À poser sur ce qui entoure les champs — ton <
    qui les groupe. */
 .mes-champs {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--base-16);
 }
 
 /* Un groupe de radios ou de chips. Le fieldset ne sert qu'à porter le
@@ -228,19 +228,19 @@ const defautFormulaireCss = `/* À poser sur ce qui entoure les champs — ton <
 }
 
 .mes-champs legend {
-  margin-bottom: var(--control-field-gap);
+  margin-bottom: var(--stack-gap-condensed);
   padding: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-line-height-tight);
-  color: var(--color-text-default);
+  font-family: var(--font-stack-body);
+  font-size: var(--text-body-medium-size);
+  font-weight: var(--base-text-weight-medium);
+  line-height: var(--base-text-line-height-tight);
+  color: var(--color-text-base-default);
 }
 
 .mes-choix {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm) var(--space-lg);
+  gap: var(--base-8) var(--base-16);
 }`;
 
 const importStyles = `import 'ux-design-system/styles/tokens.css';
@@ -2699,25 +2699,25 @@ import { withBase } from 'ux-design-system/lib/url';
 <style>
   .atelier,
   #pannes {
-    scroll-margin-top: var(--space-xl);
+    scroll-margin-top: var(--base-24);
   }
 
   .sommaire ul {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs) var(--space-md);
-    margin: var(--space-lg) 0 0;
+    gap: var(--base-4) var(--base-12);
+    margin: var(--base-16) 0 0;
     padding: 0;
     list-style: none;
-    font-size: var(--font-size-body-sm);
+    font-size: var(--text-body-small-size);
   }
 
   /* Réglages à gauche, composant et code à droite. Sous 62rem tout s'empile —
      et les réglages restent au-dessus, parce que c'est par eux qu'on commence. */
   .etabli {
     display: grid;
-    gap: var(--space-xl);
-    margin-bottom: var(--space-2xl);
+    gap: var(--base-24);
+    margin-bottom: var(--base-32);
   }
 
   @media (min-width: 62rem) {
@@ -2730,10 +2730,10 @@ import { withBase } from 'ux-design-system/lib/url';
   .reglages {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
-    padding: var(--space-lg);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-md);
+    gap: var(--base-16);
+    padding: var(--base-16);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-medium);
   }
 
   .reglages fieldset {
@@ -2747,18 +2747,18 @@ import { withBase } from 'ux-design-system/lib/url';
   }
 
   .reglages legend {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--base-8);
     padding: 0;
-    font-family: var(--font-family-heading);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-label);
-    color: var(--color-text-default);
+    font-family: var(--font-stack-heading);
+    font-weight: var(--base-text-weight-bold);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-default);
   }
 
   .choix {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs);
+    gap: var(--base-4);
   }
 
   .choix.colonne {
@@ -2779,36 +2779,36 @@ import { withBase } from 'ux-design-system/lib/url';
 
   .choix span {
     display: block;
-    padding: var(--space-xs) var(--space-md);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-pill);
-    font-size: var(--font-size-body-sm);
+    padding: var(--base-4) var(--base-12);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-body-small-size);
     cursor: pointer;
     transition: background var(--motion-duration-quick) var(--motion-easing-standard, ease);
   }
 
   .choix label:hover span {
-    background: var(--color-bg-section);
+    background: var(--color-surface-sunken);
   }
 
   .choix input:checked + span {
-    background: var(--color-action-primary-bg);
-    border-color: var(--color-border-accent);
-    color: var(--color-text-on-accent);
+    background: var(--color-background-primary-bold);
+    border-color: var(--color-border-primary-strong);
+    color: var(--color-text-primary-on-bold);
   }
 
   .choix input:focus-visible + span,
   .case input:focus-visible + span {
-    outline: 2px solid var(--color-border-focus);
+    outline: 2px solid var(--color-border-base-focus);
     outline-offset: 2px;
   }
 
   .case {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    font-size: var(--font-size-body-sm);
+    gap: var(--base-8);
+    font-size: var(--text-body-small-size);
     cursor: pointer;
   }
 
@@ -2823,13 +2823,13 @@ import { withBase } from 'ux-design-system/lib/url';
   .reglages input[type='text'],
   .reglages select {
     width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-sm);
+    padding: var(--base-8) var(--base-12);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small);
     font-family: inherit;
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-default);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-default);
   }
 
   .reglages input[type='text'][hidden] {
@@ -2837,14 +2837,14 @@ import { withBase } from 'ux-design-system/lib/url';
   }
 
   .reglages input[type='text'][data-si] {
-    margin-top: var(--space-sm);
+    margin-top: var(--base-8);
   }
 
   .aide {
     max-width: none;
-    margin: var(--space-sm) 0 0;
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    margin: var(--base-8) 0 0;
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-muted);
   }
 
   .aide:empty {
@@ -2855,12 +2855,12 @@ import { withBase } from 'ux-design-system/lib/url';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-md);
-    margin: 0 0 var(--space-sm);
-    font-family: var(--font-family-heading);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    gap: var(--base-12);
+    margin: 0 0 var(--base-8);
+    font-family: var(--font-stack-heading);
+    font-weight: var(--base-text-weight-bold);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
   }
 
   .demo {
@@ -2868,11 +2868,11 @@ import { withBase } from 'ux-design-system/lib/url';
     align-items: center;
     justify-content: center;
     min-height: 8rem;
-    margin-bottom: var(--space-lg);
-    padding: var(--space-xl);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    margin-bottom: var(--base-16);
+    padding: var(--base-24);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
   }
 
   .demo-icone {
@@ -2882,7 +2882,7 @@ import { withBase } from 'ux-design-system/lib/url';
   /* Le texte se lit sur une mesure, pas centré dans une boîte. */
   .demo-texte {
     display: block;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--base-32) var(--base-24);
   }
 
   .apercu-texte {
@@ -2894,13 +2894,13 @@ import { withBase } from 'ux-design-system/lib/url';
      forme de balise. Le filet accentué le distingue d'une note de plus. */
   .trouvaille {
     max-width: none;
-    margin: 0 0 var(--space-lg);
-    padding: var(--space-md) var(--space-lg);
-    background: var(--color-bg-surface);
-    border-left: 3px solid var(--color-border-accent);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-default);
+    margin: 0 0 var(--base-16);
+    padding: var(--base-12) var(--base-16);
+    background: var(--color-surface-raised);
+    border-left: 3px solid var(--color-border-primary-strong);
+    border-radius: var(--border-radius-small);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-default);
   }
 
   .trouvaille[hidden],
@@ -2945,7 +2945,7 @@ import { withBase } from 'ux-design-system/lib/url';
      comme sur /components. */
   .demo-carte {
     align-items: flex-start;
-    background: var(--color-bg-surface);
+    background: var(--color-surface-raised);
   }
 
   .demo-carte .pv.is-on {
@@ -2988,20 +2988,20 @@ import { withBase } from 'ux-design-system/lib/url';
   /* Un emplacement est un réglage qui en contient d'autres : le cadre dit où il
      commence et où il finit. */
   .reglages fieldset.emplacement {
-    padding: var(--space-md);
-    background: var(--color-bg-default);
-    border-radius: var(--radius-sm);
+    padding: var(--base-12);
+    background: var(--color-surface-default);
+    border-radius: var(--border-radius-small);
   }
 
   .reglages fieldset.emplacement .case {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--base-12);
   }
 
   .rangs {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
+    gap: var(--base-8);
+    margin-bottom: var(--base-8);
   }
 
   .rangs:empty {
@@ -3012,10 +3012,10 @@ import { withBase } from 'ux-design-system/lib/url';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-sm);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-sm);
+    gap: var(--base-4);
+    padding: var(--base-8);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-small);
   }
 
   /* Le texte prend sa ligne, les listes se partagent la suivante : dans une
@@ -3038,45 +3038,45 @@ import { withBase } from 'ux-design-system/lib/url';
   .retirer,
   .deplacer {
     flex: none;
-    width: var(--button-height-sm);
-    height: var(--button-height-sm);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-sm);
+    width: var(--control-small-size);
+    height: var(--control-small-size);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small);
     font-family: inherit;
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-default);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-default);
     cursor: pointer;
   }
 
   .retirer:hover,
   .deplacer:hover:not(:disabled) {
-    background: var(--color-bg-section);
+    background: var(--color-surface-sunken);
   }
 
   /* Le tireté dit que rien n'est encore là : c'est un emplacement à remplir, pas
      une action au même rang que les autres. */
   .ajouter {
     width: 100%;
-    min-height: var(--button-height-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-bg-default);
-    border: 1px dashed var(--color-border-strong);
-    border-radius: var(--radius-sm);
+    min-height: var(--control-small-size);
+    padding: var(--base-8) var(--base-12);
+    background: var(--color-surface-default);
+    border: 1px dashed var(--color-border-base-strong);
+    border-radius: var(--border-radius-small);
     font-family: inherit;
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-default);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-default);
     cursor: pointer;
   }
 
   .ajouter:hover {
-    background: var(--color-bg-section);
+    background: var(--color-surface-sunken);
   }
 
   .retirer:focus-visible,
   .deplacer:focus-visible,
   .ajouter:focus-visible {
-    outline: 2px solid var(--color-border-focus);
+    outline: 2px solid var(--color-border-base-focus);
     outline-offset: 2px;
   }
 
@@ -3088,7 +3088,7 @@ import { withBase } from 'ux-design-system/lib/url';
   /* Les deux morceaux du code. Ils sont séparés parce qu'ils ne vont pas au même
      endroit du fichier — pas pour aérer. */
   .morceau {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--base-16);
   }
 
   /* Le numéro dit l'ordre des deux collages, pas une importance. */
@@ -3098,47 +3098,47 @@ import { withBase } from 'ux-design-system/lib/url';
     justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
-    margin-right: var(--space-xs);
-    background: var(--color-bg-section);
-    border-radius: var(--radius-pill);
-    color: var(--color-text-default);
+    margin-right: var(--base-4);
+    background: var(--color-surface-sunken);
+    border-radius: var(--border-radius-full);
+    color: var(--color-text-base-default);
   }
 
   .copier {
-    padding: var(--space-xs) var(--space-md);
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-pill);
+    padding: var(--base-4) var(--base-12);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-full);
     font-family: inherit;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-default);
+    font-weight: var(--base-text-weight-bold);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-default);
     cursor: pointer;
   }
 
   .copier:hover {
-    background: var(--color-bg-section);
+    background: var(--color-surface-sunken);
   }
 
   .copier:focus-visible {
-    outline: 2px solid var(--color-border-focus);
+    outline: 2px solid var(--color-border-base-focus);
     outline-offset: 2px;
   }
 
   pre {
-    margin: 0 0 var(--space-sm);
-    padding: var(--space-lg);
-    background: var(--color-bg-section);
-    border-radius: var(--radius-sm);
+    margin: 0 0 var(--base-8);
+    padding: var(--base-16);
+    background: var(--color-surface-sunken);
+    border-radius: var(--border-radius-small);
     overflow-x: auto;
   }
 
   .alerte,
   .lecture {
     max-width: none;
-    margin: calc(-1 * var(--space-md)) 0 var(--space-lg);
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    margin: calc(-1 * var(--base-12)) 0 var(--base-16);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-muted);
   }
 
   .alerte[hidden] {
@@ -3146,15 +3146,15 @@ import { withBase } from 'ux-design-system/lib/url';
   }
 
   .panne {
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--base-32);
   }
 
   .panne h3 {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--base-8);
   }
 
   .panne p {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--base-8);
   }
   /* ── L'atelier du formulaire ───────────────────────────────────────────── */
 
@@ -3169,7 +3169,7 @@ import { withBase } from 'ux-design-system/lib/url';
      espacement de doc qui lui ressemblerait. Si l'une bouge, l'autre bouge. */
   .mes-champs {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .mes-champs fieldset {
@@ -3179,19 +3179,19 @@ import { withBase } from 'ux-design-system/lib/url';
   }
 
   .mes-champs legend {
-    margin-bottom: var(--control-field-gap);
+    margin-bottom: var(--stack-gap-condensed);
     padding: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-tight);
-    color: var(--color-text-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-tight);
+    color: var(--color-text-base-default);
   }
 
   .mes-choix {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm) var(--space-lg);
+    gap: var(--base-8) var(--base-16);
   }
 
   /* La rangée d'un champ porte plus de contrôles que celle d'un tag : le type,
@@ -3220,7 +3220,7 @@ import { withBase } from 'ux-design-system/lib/url';
   .rang-ordre {
     display: flex;
     flex: none;
-    gap: var(--space-xs);
+    gap: var(--base-4);
     margin-left: auto;
   }
 

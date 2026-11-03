@@ -33,12 +33,12 @@ const classes = ['tabs-tabpanel', className].filter(Boolean).join(' ');
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-md);
+    gap: var(--base-12);
     align-self: stretch;
-    padding: var(--space-xl);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-strong);
-    background: var(--color-bg-neutral);
+    padding: var(--base-24);
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--color-border-base-strong);
+    background: var(--color-background-neutral-subtle);
   }
 
   /* display:flex ci-dessus écrase le display:none implicite de `hidden` : on le rétablit. */
@@ -47,7 +47,7 @@ const classes = ['tabs-tabpanel', className].filter(Boolean).join(' ');
   }
 
   .tabs-tabpanel:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 </style>

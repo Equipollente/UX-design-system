@@ -11,15 +11,16 @@ et aucune ne demande de savoir coder.
 
 C'est la seule source. Une valeur qui paraît fausse se corrige ici, jamais dans le code.
 
-## 2. Exporter les quatre modes
+## 2. Exporter les collections
 
-Le plugin d'export, les quatre modes : Desktop, Tablet, Mobile, Paper. Ré-exporter **les quatre**
-même si un seul a bougé — le script les compare entre eux pour savoir ce qui varie par appareil.
+Le plugin d'export, **une collection à la fois**, tous ses modes. Il produit un zip avec un fichier
+par mode (`Valeur.tokens.json`, ou `Default` et `Prof Hub` pour Semantic, ou `Desktop`, `Tablet`,
+`Mobile`, `Paper` pour Layout). Ré-exporter **tous les modes** d'une collection même si un seul a
+bougé — le script les compare entre eux pour savoir ce qui change par thème ou par appareil.
 
-Puis la collection **Primitives** (un seul mode), à part. Le plugin nomme le fichier d'après le
-mode — `Valeur.tokens.json` — et le range dans un dossier `Primitives/` : à la dépose, il devient
-`Primitives.tokens.json`. Les rôles de `color.*` y pointent par alias ; sans ce fichier, le script
-refuse de construire.
+Les collections : NEW-Primitives, NEW-Semantic, NEW Size, Typography, NEW Layout, NEW Motion,
+NEW Effects. Les rôles de `color.*` pointent vers les rampes par alias ; sans l'export des
+primitives, le script refuse de construire.
 
 ⚠️ **Toujours le même plugin.** Le format attendu porte `com.figma.variableId` dans le fichier.
 Un autre exportateur produit un format voisin mais pas identique, et réécrit les quatre fichiers en
@@ -27,21 +28,26 @@ entier pour six lignes changées.
 
 ## 3. Déposer les fichiers dans le dépôt
 
-Dans `tokens/`, en écrasant les anciens :
+Dans `tokens/`, un dossier par collection, en écrasant les anciens :
 
 ```
 C:\Users\judit\Documents\Claude\Projects\UX-design-system\tokens\
 ```
 
-Les noms doivent rester exactement ceux-là :
+Les noms de dossiers et de fichiers doivent rester exactement ceux-là :
 
 ```
-Desktop.tokens.json
-Tablet.tokens.json
-Mobile.tokens.json
-Paper.tokens.json
-Primitives.tokens.json
+primitives/Valeur.tokens.json
+semantic/Default.tokens.json
+semantic/Prof Hub.tokens.json
+size/Valeur.tokens.json
+typography/Valeur.tokens.json
+layout/Desktop.tokens.json   (puis Tablet, Mobile, Paper)
+motion/Valeur.tokens.json
+effects/Valeur.tokens.json
 ```
+
+`DSFR.tokens.json` reste à la racine de `tokens/`.
 
 ## 4. Lancer la conversion
 

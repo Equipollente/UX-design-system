@@ -89,34 +89,34 @@ const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outl
 <style>
   [data-playground-group='tags'] {
     display: grid;
-    gap: var(--space-md);
+    gap: var(--base-12);
     min-inline-size: 0;
     margin: 0;
-    padding: var(--space-lg);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-default);
+    padding: var(--base-16);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+    background: var(--color-surface-default);
   }
 
   legend {
-    padding-inline: var(--space-xs);
-    color: var(--color-text-default);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-tight);
+    padding-inline: var(--base-4);
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-tight);
   }
 
   .playground-tag-list {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .playground-tag-row {
     display: grid;
-    gap: var(--space-md);
-    padding-block-start: var(--space-md);
-    border-block-start: var(--border-width-default) solid var(--color-border-default);
+    gap: var(--base-12);
+    padding-block-start: var(--base-12);
+    border-block-start: var(--border-width-default) solid var(--color-border-base-subtle);
   }
 
   .playground-tag-row:first-child {
@@ -128,7 +128,7 @@ const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outl
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 
   @media (max-width: 767px) {

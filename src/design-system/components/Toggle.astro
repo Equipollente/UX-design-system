@@ -95,8 +95,8 @@ const messageId = `${id}-message`;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    column-gap: var(--space-sm);
-    row-gap: var(--space-xs);
+    column-gap: var(--base-8);
+    row-gap: var(--base-4);
   }
 
   .toggle :global(.field-message) {
@@ -113,9 +113,9 @@ const messageId = `${id}-message`;
   .toggle-input {
     appearance: none;
     margin: 0;
-    width: calc(var(--space-xl) + var(--space-lg));
-    height: var(--control-track-height);
-    border-radius: var(--radius-pill);
+    width: calc(var(--base-24) + var(--base-16));
+    height: var(--base-24);
+    border-radius: var(--border-radius-full);
     border: none;
     /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
     cursor: pointer;
@@ -124,19 +124,19 @@ const messageId = `${id}-message`;
 
   /* — off — */
   .toggle-input {
-    background: var(--toggle-bg, var(--color-action-toggle-bg-off));
+    background: var(--toggle-bg, var(--color-background-inactive));
   }
 
   /* — focused — L'anneau du système, en `outline` : il se pose par-dessus sans
      rien déplacer autour de lui. WCAG 2.4.7. */
   .toggle-input:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* — on — */
   .toggle-input:checked {
-    background: var(--toggle-accent, var(--color-bg-control));
+    background: var(--toggle-accent, var(--color-background-primary-bold));
   }
 
   /* La pastille. 16 de côté, posée à (22 − 16) / 2 = 3 du bord, et parcourant
@@ -145,26 +145,26 @@ const messageId = `${id}-message`;
      donc toutes seules si l'une des deux bouge dans Figma. */
   .toggle-thumb {
     position: absolute;
-    top: calc((var(--control-track-height) - var(--space-lg)) / 2);
-    left: calc((var(--control-track-height) - var(--space-lg)) / 2);
-    width: var(--space-lg);
-    height: var(--space-lg);
-    border-radius: var(--radius-pill);
-    background: var(--color-bg-default);
+    top: calc((var(--base-24) - var(--base-16)) / 2);
+    left: calc((var(--base-24) - var(--base-16)) / 2);
+    width: var(--base-16);
+    height: var(--base-16);
+    border-radius: var(--border-radius-full);
+    background: var(--color-surface-default);
     pointer-events: none;
     transition: translate var(--motion-duration-quick) var(--motion-easing-standard);
   }
 
   .toggle-input:checked + .toggle-thumb {
     /* 24 − 22 + 16 = 18. C'est largeur − pastille − 2 × retrait, développé. */
-    translate: calc(var(--space-xl) - var(--control-track-height) + var(--space-lg)) 0;
+    translate: calc(var(--base-24) - var(--base-24) + var(--base-16)) 0;
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
      tranche. La piste passe au gris plein du système, `category/neutral/solid`,
      allumée comme éteinte : c'est la pastille qui dit encore la position. */
   .toggle-input:disabled {
-    background: var(--color-category-neutral-solid);
+    background: var(--color-background-neutral-bold);
   }
 
   .toggle-disabled .toggle-input,

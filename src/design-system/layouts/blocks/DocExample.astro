@@ -63,27 +63,27 @@ const parts = description?.split('`') ?? [];
 
 <style>
   .doc-example {
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--base-32);
   }
 
   .doc-example-title {
-    margin: 0 0 var(--space-xs);
-    font-size: var(--font-size-heading);
+    margin: 0 0 var(--base-4);
+    font-size: var(--text-title-small-size);
   }
 
   .doc-example-description {
     max-width: 66ch;
-    margin: 0 0 var(--space-lg);
-    color: var(--color-text-muted);
+    margin: 0 0 var(--base-16);
+    color: var(--color-text-base-muted);
   }
 
   /* Le composant, seul sur son fond : c'est ce qu'on vient regarder. La hauteur
      minimale laisse sa liste s'ouvrir sans qu'on ait à défiler. */
   .doc-example-demo {
-    padding: var(--space-xl);
-    background: var(--color-bg-surface);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    padding: var(--base-24);
+    background: var(--color-surface-raised);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
   }
 
   .doc-example-demo > :global(*) {
@@ -91,32 +91,32 @@ const parts = description?.split('`') ?? [];
   }
 
   .doc-example-code {
-    margin-top: var(--space-md);
+    margin-top: var(--base-12);
   }
 
   .doc-example-code summary {
     display: inline-block;
     cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-accent);
+    font-weight: var(--base-text-weight-medium);
+    color: var(--color-text-primary-default);
   }
 
   .doc-example-code summary:focus-visible,
   .doc-example-copy:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* Le code est un bloc : un seul fond, pas une bande par ligne comme le fait
      `code` en ligne. */
   .doc-example-code pre {
-    margin: var(--space-md) 0 0;
-    padding: var(--space-lg);
+    margin: var(--base-12) 0 0;
+    padding: var(--base-16);
     overflow-x: auto;
-    background: var(--color-bg-surface);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-body-sm);
+    background: var(--color-surface-raised);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+    font-size: var(--text-body-small-size);
   }
 
   .doc-example-code pre code {
@@ -125,12 +125,12 @@ const parts = description?.split('`') ?? [];
   }
 
   .doc-example-copy {
-    margin-top: var(--space-sm);
-    padding: var(--space-sm) var(--space-lg);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-sm);
-    background: var(--color-bg-default);
-    color: var(--color-text-default);
+    margin-top: var(--base-8);
+    padding: var(--base-8) var(--base-16);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small);
+    background: var(--color-surface-default);
+    color: var(--color-text-base-default);
     font: inherit;
     cursor: pointer;
   }

@@ -85,7 +85,7 @@ const {
 
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5';
 // Le défaut n'émet pas de classe : sa valeur est déjà celle que tokens.css pose
-// sur --card-title-size. Une classe qui la redéclarerait la recopierait, et il
+// sur --text-title-large-size. Une classe qui la redéclarerait la recopierait, et il
 // faudrait dès lors la tenir à jour à deux endroits.
 const classes = [
   'card',
@@ -178,13 +178,13 @@ const hasActions = Astro.slots.has('actions');
     --card-media-shadow: var(--shadow-lg);
 
     display: flex;
-    gap: var(--space-2xl);
-    padding: var(--space-xl);
+    gap: var(--base-32);
+    padding: var(--base-24);
     /* Figma peint la carte en blanc sans lier la couleur : c'est exactement
        color.bg.default, et c'est ce qui est écrit ici plutôt que le blanc.
        Signalé sur /components. */
-    background: var(--color-bg-default);
-    border-radius: var(--radius-md);
+    background: var(--color-surface-default);
+    border-radius: var(--border-radius-medium);
     box-shadow: var(--card-shadow);
   }
 
@@ -201,7 +201,7 @@ const hasActions = Astro.slots.has('actions');
     width: 100%;
     height: var(--card-media-height, 324px);
     object-fit: cover;
-    border-radius: var(--radius-lg);
+    border-radius: var(--border-radius-large);
     box-shadow: var(--card-media-shadow);
   }
 
@@ -211,7 +211,7 @@ const hasActions = Astro.slots.has('actions');
   .body {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--base-8);
   }
 
   /* Les blocs intérieurs sont rentrés de 16 de plus que la carte, l'image non :
@@ -219,8 +219,8 @@ const hasActions = Astro.slots.has('actions');
   .text {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
-    padding-inline: var(--space-lg);
+    gap: var(--base-4);
+    padding-inline: var(--base-16);
   }
 
   /* Les trois lignes lisent le groupe de tokens `card`, qui ne fixe que ce qui
@@ -235,13 +235,13 @@ const hasActions = Astro.slots.has('actions');
      d'une carte peut bouger sans emporter les titres de page avec elle. */
   .title {
     margin: 0;
-    font-size: var(--card-title-size);
-    color: var(--card-title-color);
+    font-size: var(--text-title-large-size);
+    color: var(--color-text-base-default);
   }
 
   /* Le titre peut descendre d'un cran dans l'échelle : `heading` est la taille
      d'un h4 — 1.25rem — là où `title` est celle d'un h2. La bascule ne
-     redéclare pas `font-size` sur .title ; elle repose --card-title-size sur la
+     redéclare pas `font-size` sur .title ; elle repose --text-title-large-size sur la
      carte, et c'est tout. Trois choses en découlent, et c'est pour elles que
      c'est écrit ainsi :
 
@@ -256,21 +256,21 @@ const hasActions = Astro.slots.has('actions');
      l'interlettrage est en em (-0,015), donc les deux suivent la taille. Un
      titre en `heading` est exactement un h4 du système, ce qu'il doit être. */
   .card-title-heading {
-    --card-title-size: var(--font-size-heading);
+    --text-title-large-size: var(--text-title-small-size);
   }
 
   .subtitle {
     margin: 0;
-    font-size: var(--card-subtitle-size);
-    line-height: var(--font-line-height-body);
-    color: var(--card-subtitle-color);
+    font-size: var(--text-body-large-size);
+    line-height: var(--base-text-line-height-normal);
+    color: var(--color-text-base-default);
   }
 
   .meta {
     margin: 0;
-    font-size: var(--card-meta-size);
-    line-height: var(--font-line-height-body);
-    color: var(--card-meta-color);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-normal);
+    color: var(--color-text-base-muted);
   }
 
   /* Une seule règle pour les deux rangées de tags : elles portent la même
@@ -279,8 +279,8 @@ const hasActions = Astro.slots.has('actions');
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm);
-    padding-inline: var(--space-lg);
+    gap: var(--base-8);
+    padding-inline: var(--base-16);
   }
 
   /* Les actions sont calées à droite, et l'écart entre deux d'entre elles est
@@ -294,8 +294,8 @@ const hasActions = Astro.slots.has('actions');
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
-    gap: var(--space-xs);
-    padding-inline: var(--button-padding-x-sm);
+    gap: var(--base-4);
+    padding-inline: var(--control-small-padding-inline-normal);
   }
 
   /* Verticale, l'image est l'élément qui donne et qui reprend la hauteur : elle

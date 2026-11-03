@@ -328,15 +328,15 @@ const success =
     align-items: center;
     justify-content: center;
     position: relative;
-    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    gap: var(--base-8); /* 8 — l'itemSpacing du nœud */
     /* 24 en x, lié dans le nœud ; 24 + 4 = 28 en y, la mesure exacte du nœud. */
-    padding: calc(var(--space-xl) + var(--space-xs)) var(--space-xl);
+    padding: calc(var(--base-24) + var(--base-4)) var(--base-24);
     /* L'icône descend par héritage jusqu'au <svg> : 32, la mesure du nœud. */
-    --icon-size: var(--space-2xl);
-    border-radius: var(--radius-lg); /* 28 */
+    --icon-size: var(--base-32);
+    border-radius: var(--border-radius-large); /* 28 */
     text-align: center;
-    border: var(--border-width-default) dashed var(--color-border-default);
-    background: var(--add-image-bg, var(--color-bg-surface));
+    border: var(--border-width-default) dashed var(--color-border-base-subtle);
+    background: var(--add-image-bg, var(--color-surface-raised));
   }
 
   /* Le curseur et le survol ne valent que pour la boîte qui contient le champ
@@ -346,18 +346,18 @@ const success =
   }
 
   .add-image:has(.add-image-input):hover {
-    background: var(--add-image-bg-hover, var(--color-action-secondary-bg-hover));
+    background: var(--add-image-bg-hover, var(--color-background-secondary-subtle-hover));
   }
 
   .add-image:has(.add-image-input):hover .add-image-label {
-    color: var(--color-text-accent-hover);
+    color: var(--color-text-primary-hover);
   }
 
   /* — focused — L'anneau du système, porté par la zone : le champ étant hors du
      cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
   .add-image:has(.add-image-input:focus-visible) {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
@@ -366,75 +366,75 @@ const success =
      par-dessous, et n'a donc plus à virer au gris pour dire « éteint ». */
   .add-image:has(.add-image-input:disabled),
   .add-image:has(.add-image-input:disabled):hover {
-    background: var(--add-image-bg, var(--color-bg-surface));
+    background: var(--add-image-bg, var(--color-surface-raised));
     opacity: var(--opacity-disabled);
     cursor: not-allowed;
   }
 
   .add-image-label {
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
-    letter-spacing: var(--font-letter-spacing-normal);
-    color: var(--color-text-default);
+    font-family: var(--font-stack-body); /* Inter */
+    font-size: var(--text-body-medium-size); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--base-text-weight-medium); /* 500 */
+    line-height: var(--base-text-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--base-text-letter-spacing-normal);
+    color: var(--color-text-base-default);
   }
 
   /* L'indication a la même graisse et le même corps que le libellé dans le nœud :
      c'est l'encre seule qui la met au second plan. */
   .add-image-hint {
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-normal);
-    color: var(--color-text-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+    color: var(--color-text-base-muted);
   }
 
   .add-image-progress-label,
   .add-image-progress-value,
   .add-image-fail-message {
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-normal);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-normal);
   }
 
   .add-image-progress-label {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   .add-image-progress-value {
-    color: var(--color-text-default);
+    color: var(--color-text-base-default);
   }
 
   /* La piste ne fait pas 114 de large dans le code : comme la boîte, elle suit
      la largeur que l'appelant lui donne. Hauteur 8 = space/sm, exacte. */
   .add-image-progress-track {
     width: 100%;
-    height: var(--space-sm);
-    border-radius: var(--radius-pill);
-    background: var(--color-progress-track);
+    height: var(--base-8);
+    border-radius: var(--border-radius-full);
+    background: var(--color-background-neutral-subtle-pressed);
   }
 
   .add-image-progress-fill {
     height: 100%;
     width: var(--add-image-progress, 0%);
-    border-radius: var(--radius-pill);
-    background: var(--color-progress-fill);
+    border-radius: var(--border-radius-full);
+    background: var(--color-background-primary-subtle-pressed);
   }
 
   /* — fail — Surcharge nommée d'après l'objet, comme --add-image-bg : le fond
      plein remplace le fond surface. Le nœud ne dessine aucun trait sur cet
      état — le fond plein suffit à détacher la boîte de la page. */
   .add-image-fail {
-    background: var(--add-image-bg-fail, var(--color-feedback-danger-bg));
+    background: var(--add-image-bg-fail, var(--color-background-danger-subtle));
     border: none;
   }
 
   .add-image-fail-message {
-    color: var(--color-feedback-danger-solid);
+    color: var(--color-text-danger-default);
   }
 
   /* — success — plus de boîte pointillée : l'image tient toute la place, les
@@ -445,9 +445,9 @@ const success =
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-md);
-    height: calc(var(--space-layout-128) + var(--space-md)); /* 140, comme EditImageGallery */
-    border-radius: var(--radius-lg);
+    gap: var(--base-12);
+    height: calc(var(--section-space-xlarge) + var(--base-12)); /* 140, comme EditImageGallery */
+    border-radius: var(--border-radius-large);
     overflow: hidden;
   }
 
@@ -465,6 +465,6 @@ const success =
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 </style>

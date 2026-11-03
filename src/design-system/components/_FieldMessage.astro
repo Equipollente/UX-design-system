@@ -48,28 +48,28 @@ const classes = ['field-message', `field-message-${type}`, className].filter(Boo
   .field-message {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--base-4);
     margin: 0;
     /* La taille d'icône descend par héritage jusqu'au <svg>, comme dans le bouton. */
-    --icon-size: var(--button-icon-size-sm);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--font-line-height-snug);
+    --icon-size: var(--icon-small);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-regular);
+    line-height: var(--base-text-line-height-snug);
   }
 
   /* L'encre : le « text » de chaque famille de feedback, pas son « solid » — les
      deux ne tiennent pas le même seuil sur le fond de la page. L'aide reste en
      muted, comme tout ce qui est secondaire. */
   .field-message-error {
-    color: var(--color-feedback-danger-text);
+    color: var(--color-text-danger-on-subtle);
   }
 
   .field-message-success {
-    color: var(--color-feedback-success-text);
+    color: var(--color-text-success-on-subtle);
   }
 
   .field-message-hint {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 </style>

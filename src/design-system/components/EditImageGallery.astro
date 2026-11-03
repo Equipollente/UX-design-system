@@ -139,10 +139,10 @@ const classes = ['gallery', className].filter(Boolean).join(' ');
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      minmax(calc(var(--space-layout-128) + var(--space-layout-64)), 1fr)
+      minmax(calc(var(--section-space-xlarge) + var(--section-space-medium)), 1fr)
     );
-    gap: var(--space-sm);
-    padding: var(--space-sm);
+    gap: var(--base-8);
+    padding: var(--base-8);
     margin: 0;
     /* C'est une liste, mais ses puces ne disent rien que les vignettes ne disent
        déjà. Le rôle de liste, lui, reste — il est ce qui annonce « 3 éléments ». */
@@ -157,10 +157,10 @@ const classes = ['gallery', className].filter(Boolean).join(' ');
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-md); /* 12 — la liaison space/md du nœud */
-    min-height: calc(var(--space-layout-128) + var(--space-md));
-    padding: calc(var(--space-xl) + var(--space-xs)) var(--space-xl); /* 28 / 24 */
-    border-radius: var(--radius-lg); /* 28 */
+    gap: var(--base-12); /* 12 — la liaison space/md du nœud */
+    min-height: calc(var(--section-space-xlarge) + var(--base-12));
+    padding: calc(var(--base-24) + var(--base-4)) var(--base-24); /* 28 / 24 */
+    border-radius: var(--border-radius-large); /* 28 */
     overflow: hidden;
   }
 
@@ -183,6 +183,6 @@ const classes = ['gallery', className].filter(Boolean).join(' ');
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 </style>

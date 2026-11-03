@@ -66,7 +66,7 @@ const classes = ['case-study-card', className].filter(Boolean).join(' ');
 
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
+    gap: var(--base-24);
     width: 100%;
     /* Point de surcharge public, comme --btn-px sur Button : la carte ne décide
        pas de sa hauteur, mais elle accepte qu'on la lui impose. CaseStudyList
@@ -77,9 +77,9 @@ const classes = ['case-study-card', className].filter(Boolean).join(' ');
        du carrousel comprises — resterait hors d'atteinte une fois la carte
        collée en haut. Bornée, elle demande au carrousel de se resserrer. */
     height: var(--card-height, auto);
-    padding-block: var(--space-layout-64);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding-block: var(--section-space-medium);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
     box-shadow: var(--card-shadow);
   }
 
@@ -88,7 +88,7 @@ const classes = ['case-study-card', className].filter(Boolean).join(' ');
      chez elle. */
   @media (max-width: 767px) {
     .case-study-card {
-      padding-block: var(--space-layout-48);
+      padding-block: var(--section-space-small);
     }
   }
 </style>

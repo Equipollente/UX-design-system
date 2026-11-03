@@ -11,13 +11,13 @@
 
 body {
   margin: 0;
-  background: var(--color-bg-default);
-  color: var(--color-text-default);
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-body);
-  letter-spacing: var(--font-letter-spacing-normal);
+  background: var(--color-surface-default);
+  color: var(--color-text-base-default);
+  font-family: var(--font-stack-body);
+  font-size: var(--text-body-medium-size);
+  font-weight: var(--base-text-weight-regular);
+  line-height: var(--base-text-line-height-normal);
+  letter-spacing: var(--base-text-letter-spacing-normal);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -31,11 +31,11 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 var(--space-sm);
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight);
-  letter-spacing: var(--font-letter-spacing-tight);
+  margin: 0 0 var(--base-8);
+  font-family: var(--font-stack-heading);
+  font-weight: var(--base-text-weight-bold);
+  line-height: var(--base-text-line-height-tight);
+  letter-spacing: var(--base-text-letter-spacing-tight);
 }
 
 /* Le h1 est le seul à ne pas prendre le `tight` posé juste au-dessus : le style
@@ -46,31 +46,31 @@ h6 {
  * se contredit donc elle-même. À corriger côté Figma — c'est la note qui a
  * tort, pas le style. */
 h1 {
-  font-size: var(--font-size-display);
-  line-height: var(--font-line-height-snug);
-  letter-spacing: var(--font-letter-spacing-normal);
+  font-size: var(--text-display-size);
+  line-height: var(--base-text-line-height-snug);
+  letter-spacing: var(--base-text-letter-spacing-normal);
 }
-h2 { font-size: var(--font-size-title); }
-h3 { font-size: var(--font-size-subtitle); }
-h4 { font-size: var(--font-size-heading); }
-h5 { font-size: var(--font-size-subheading); }
+h2 { font-size: var(--text-title-large-size); }
+h3 { font-size: var(--text-title-medium-size); }
+h4 { font-size: var(--text-title-small-size); }
+h5 { font-size: var(--text-body-medium-size); }
 
 /* H6 est l'eyebrow : même taille que le petit corps de texte, mais capitales et
  * interlettrage large. « H6 and small body share this size — that is
  * intentional » (font.size.body-sm). */
 h6 {
-  font-size: var(--font-size-body-sm);
-  letter-spacing: var(--font-letter-spacing-wider);
-  line-height: var(--font-line-height-snug);
+  font-size: var(--text-body-small-size);
+  letter-spacing: var(--base-text-letter-spacing-wider);
+  line-height: var(--base-text-line-height-snug);
   text-transform: uppercase;
 }
 
 p {
-  margin: 0 0 var(--space-md);
+  margin: 0 0 var(--base-12);
 }
 
 a {
-  color: var(--color-text-accent);
+  color: var(--color-text-primary-default);
   text-underline-offset: 3px;
 }
 
@@ -84,22 +84,22 @@ figure {
 }
 
 figcaption {
-  margin-top: var(--space-xs);
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
+  margin-top: var(--base-4);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-base-muted);
 }
 
 hr {
   height: 1px;
-  margin: var(--space-lg) 0;
+  margin: var(--base-16) 0;
   border: 0;
-  background: var(--color-border-default);
+  background: var(--color-border-base-subtle);
 }
 
 code,
 pre {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-  font-size: var(--font-size-caption);
+  font-size: var(--text-caption-size);
 }
 
 /* Focus visible. L'épaisseur est `border/width/focus` : c'est la mesure que neuf
@@ -112,8 +112,8 @@ pre {
 }
 
 :focus-visible {
-  outline: var(--border-width-focus) solid var(--color-border-focus);
-  outline-offset: var(--button-focus-offset);
+  outline: var(--border-width-thick) solid var(--color-border-base-focus);
+  outline-offset: var(--border-outline-focus-offset);
 }
 
 /* Les champs. Le dessin d'un champ est une recette de balise, au même titre que
@@ -146,18 +146,18 @@ pre {
     textarea,
     .field-box
   ) {
-  font-family: var(--font-family-body); /* Inter */
-  font-size: var(--font-size-ui); /* 0.875rem — les 14 des nœuds */
-  font-weight: var(--font-weight-medium); /* 500 */
-  line-height: var(--font-line-height-snug); /* 1.2 — les 120 % des nœuds */
-  letter-spacing: var(--font-letter-spacing-normal);
-  color: var(--color-text-default);
-  background: var(--color-bg-surface);
+  font-family: var(--font-stack-body); /* Inter */
+  font-size: var(--text-body-medium-size); /* 0.875rem — les 14 des nœuds */
+  font-weight: var(--base-text-weight-medium); /* 500 */
+  line-height: var(--base-text-line-height-snug); /* 1.2 — les 120 % des nœuds */
+  letter-spacing: var(--base-text-letter-spacing-normal);
+  color: var(--color-text-base-default);
+  background: var(--color-background-input);
   /* Le trait remplace le contour gris que le navigateur pose de lui-même sur un
    * contrôle natif, et qui ne venait d'aucune variable. */
-  border: var(--border-width-default) solid var(--color-border-default);
-  border-radius: var(--radius-md); /* 14 */
-  padding: var(--button-padding-y-sm) var(--button-padding-x-sm); /* 12 / 16 */
+  border: var(--border-width-default) solid var(--color-border-base-subtle);
+  border-radius: var(--border-radius-medium); /* 14 */
+  padding: var(--control-small-padding-block) var(--control-small-padding-inline-normal); /* 12 / 16 */
 }
 
 /* Les champs d'une ligne ont la hauteur du bouton sm — `control/height`, 44,
@@ -175,7 +175,7 @@ pre {
     select,
     .field-box
   ) {
-  height: var(--control-height); /* 44 */
+  height: var(--control-small-size); /* 44 */
   padding-block: 0;
 }
 
@@ -183,7 +183,7 @@ pre {
  * Aucun nœud ne le dessine : sans cette ligne le gris serait celui du
  * navigateur, et il ne viendrait d'aucune variable. */
 :where(input, textarea)::placeholder {
-  color: var(--color-text-muted);
+  color: var(--color-text-base-muted);
 }
 
 /* La zone de texte ne s'élargit pas au-delà de sa colonne : un glissement
@@ -201,7 +201,7 @@ input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='searc
 select:hover,
 textarea:hover,
 .field-box:hover {
-  border-color: var(--color-border-hover);
+  border-color: var(--color-border-neutral-strong);
 }
 
 /* — validation — Le trait prend la couleur du verdict, et la garde au survol : un
@@ -220,15 +220,15 @@ input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='searc
 select[data-validation='error'],
 textarea[data-validation='error'],
 .field-box[data-validation='error'] {
-  border-color: var(--color-border-danger);
+  border-color: var(--color-border-danger-strong);
 }
 
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search'])[data-validation='success'],
 select[data-validation='success'],
 textarea[data-validation='success'],
 .field-box[data-validation='success'] {
-  border-color: var(--color-feedback-success-solid);
-  background: var(--color-feedback-success-bg);
+  border-color: var(--color-icon-success);
+  background: var(--color-background-success-subtle);
 }
 
 /* — désactivé — écrit après le survol : à spécificité égale c'est l'ordre qui
@@ -239,16 +239,16 @@ input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='searc
 select:disabled,
 textarea:disabled,
 fieldset:disabled .field-box {
-  border-color: var(--color-border-default);
-  background: var(--color-bg-surface);
-  color: var(--color-text-disabled);
+  border-color: var(--color-border-base-subtle);
+  background: var(--color-surface-raised);
+  color: var(--color-text-base-inactive);
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
 
 ::selection {
-  background: var(--color-bg-selection);
-  color: var(--color-text-default);
+  background: var(--color-surface-selected);
+  color: var(--color-text-base-default);
 }
 
 /* Le défilement fluide des ancres. C'est lui qui fait glisser la page quand on

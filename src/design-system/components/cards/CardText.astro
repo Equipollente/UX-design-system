@@ -44,15 +44,15 @@ const classes = [
 <style>
   .card-text-content {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--base-4);
     min-width: 0;
   }
 
   .cards-text-title {
     margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: var(--card-title-size);
-    color: var(--card-title-color);
+    font-family: var(--font-stack-heading);
+    font-size: var(--text-title-large-size);
+    color: var(--color-text-base-default);
   }
 
   .cards-text-subtitle,
@@ -61,16 +61,16 @@ const classes = [
   }
 
   .cards-text-subtitle {
-    font-size: var(--card-subtitle-size);
-    color: var(--card-subtitle-color);
+    font-size: var(--text-body-large-size);
+    color: var(--color-text-base-default);
   }
 
   .cards-text-meta {
-    font-size: var(--card-meta-size);
-    color: var(--card-meta-color);
+    font-size: var(--text-body-medium-size);
+    color: var(--color-text-base-muted);
   }
 
   .card-text-content:global(.card-text-heading) {
-    --card-title-size: var(--font-size-heading);
+    --text-title-large-size: var(--text-title-small-size);
   }
 </style>

@@ -10,7 +10,7 @@ import Button from '../design-system/components/Button.astro';
 import { iconNames } from '../design-system/lib/icons';
 import tokens from '../design-system/data/tokens.json';
 
-const sizeTokens = tokens.filter((t) => t.path.startsWith('button.icon-size.'));
+const sizeTokens = tokens.filter((t) => t.group === 'icon');
 const sizes = ['sm', 'md', 'lg'] as const;
 
 const iconProps = [
@@ -146,7 +146,7 @@ const figmaNames: Record<string, string> = {
 
       <p class="section-note">
         <strong>Au passage, une erreur trouvée par les icônes.</strong> Le libellé du bouton secondaire
-        était écrit en <code>--color-text-accent</code> là où Figma dit <code>color/text/default</code>.
+        était écrit en <code>--color-text-primary-default</code> là où Figma dit <code>color/text/default</code>.
         Il fait 14 px : le seuil WCAG applicable est 4,5:1, et l'indigo tombait à <strong>3,31:1</strong>
         {' '}sur le fond d'appui — l'état pressé n'est pas exempté, contrairement à l'état désactivé. La
         description du token le disait déjà : « safe at body size (7.00:1 <em>on the ground</em>) », or
@@ -200,12 +200,9 @@ const figmaNames: Record<string, string> = {
         }
       </ul>
 
-      <p class="flag">
-        <strong>Écart à arbitrer côté Figma.</strong> Aucun token ne décrit la taille d'une icône en
-        général : <em>Icon</em> emprunte <code>button.icon-size.*</code>, des variables qui décrivent le
-        bouton. Tant qu'une icône ne vit qu'à l'intérieur d'un bouton ou d'un onglet, l'emprunt est
-        exact ; il cessera de l'être à la première icône posée ailleurs. Une collection
-        {' '}<code>icon.size.*</code> manque dans la source.
+      <p class="section-note">
+        La taille d'une icône est une famille à part, <code>icon.*</code> : petite, moyenne et grande.
+        <em>Icon</em> les lit, et le bouton les passe à l'icône qu'il contient.
       </p>
     </section>
 
@@ -312,11 +309,11 @@ const figmaNames: Record<string, string> = {
   /* Même cadre neutre que sur /components : il donne aux icônes une surface de page
      sans laisser croire qu'elles font partie de la doc. */
   .demo {
-    padding: var(--space-xl);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-lg);
+    padding: var(--base-24);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+    margin-bottom: var(--base-16);
   }
 
   /* La planche. Des colonnes qui se posent d'elles-mêmes : ajouter une icône ne
@@ -324,7 +321,7 @@ const figmaNames: Record<string, string> = {
   .plate {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-    gap: var(--space-xl) var(--space-md);
+    gap: var(--base-24) var(--base-12);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -334,13 +331,13 @@ const figmaNames: Record<string, string> = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--base-12);
     text-align: center;
   }
 
   .plate code {
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
     /* Les noms sont longs et à tirets : on les laisse se couper plutôt qu'élargir
        la colonne. */
     overflow-wrap: anywhere;
@@ -349,7 +346,7 @@ const figmaNames: Record<string, string> = {
   .contexts {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--base-12);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -358,32 +355,32 @@ const figmaNames: Record<string, string> = {
   .ctx {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-ui);
+    gap: var(--base-12);
+    padding: var(--base-16);
+    border-radius: var(--border-radius-medium);
+    font-size: var(--text-body-medium-size);
   }
 
   .ctx-default {
-    color: var(--color-text-default);
-    border: 1px solid var(--color-border-default);
+    color: var(--color-text-base-default);
+    border: 1px solid var(--color-border-base-subtle);
   }
 
   .ctx-muted {
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border-default);
+    color: var(--color-text-base-muted);
+    border: 1px solid var(--color-border-base-subtle);
   }
 
   .ctx-accent {
-    color: var(--color-text-on-accent);
-    background: var(--color-bg-feature);
+    color: var(--color-text-primary-on-bold);
+    background: var(--color-surface-feature);
   }
 
   .sizes {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: var(--space-2xl);
+    gap: var(--base-32);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -393,19 +390,19 @@ const figmaNames: Record<string, string> = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 
   .sizes code {
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
   }
 
   .btn-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--button-target-spacing);
+    gap: var(--stack-gap-spacious);
   }
 
   .btn-row.last {
@@ -417,72 +414,72 @@ const figmaNames: Record<string, string> = {
   .quote {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: var(--space-md) var(--space-lg);
+    gap: var(--base-12) var(--base-16);
     margin: 0;
-    color: var(--color-text-accent);
+    color: var(--color-text-primary-default);
   }
 
   .quote blockquote {
     margin: 0;
-    font-size: var(--font-size-body-lg);
-    color: var(--color-text-default);
+    font-size: var(--text-body-large-size);
+    color: var(--color-text-base-default);
   }
 
   .quote figcaption {
     grid-column: 2;
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
   }
 
   .same {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   h3 {
-    font-size: var(--font-size-subheading);
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-md);
+    font-size: var(--text-body-medium-size);
+    margin-top: var(--base-32);
+    margin-bottom: var(--base-12);
   }
 
   .source {
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    font-family: var(--font-stack-body);
+    font-weight: var(--base-text-weight-regular);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
   }
 
   .table-scroll {
     overflow-x: auto;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--base-24);
   }
 
   table {
     border-collapse: collapse;
-    font-size: var(--font-size-body-sm);
+    font-size: var(--text-body-small-size);
     text-align: left;
   }
 
   th {
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-label);
-    letter-spacing: var(--font-letter-spacing-wider);
+    font-family: var(--font-stack-heading);
+    font-size: var(--text-caption-size);
+    letter-spacing: var(--base-text-letter-spacing-wider);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   th,
   td {
-    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
-    border-bottom: 1px solid var(--color-border-default);
+    padding: var(--base-8) var(--base-16) var(--base-8) 0;
+    border-bottom: 1px solid var(--color-border-base-subtle);
     vertical-align: top;
   }
 
   td {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   td:first-child {
-    color: var(--color-text-default);
+    color: var(--color-text-base-default);
     white-space: nowrap;
   }
 </style>

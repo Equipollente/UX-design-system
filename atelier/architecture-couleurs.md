@@ -1,3 +1,7 @@
+> ⚠️ **Périmé.** Cette proposition a été remplacée par l'architecture décrite dans
+> [decisions.md](decisions.md), « La couleur s'organise par propriété… ». Les noms ci-dessous
+> (`bg/`, `feedback/`, `ramp/neutral`, `ramp/accent`) n'existent plus.
+
 # Architecture des couleurs — cible
 
 Proposition, pas décision. Elle remplace l'espace plat `color/` (81 variables, primitives et rôles

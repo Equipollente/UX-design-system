@@ -9,7 +9,7 @@ const total = tokens.length;
 // Même partage que /foundations, et pour la même raison : un token qui décrit un
 // objet n'est pas du vocabulaire. La liste est ici aussi la seule chose écrite à
 // la main — les chiffres, eux, se comptent.
-const groupesObjet = ['button', 'card', 'nav'];
+const groupesObjet = ['control', 'controlStack', 'icon', 'overlay', 'nav'];
 const composants = tokens.filter((t) => groupesObjet.includes(t.group)).length;
 const vocabulaire = total - composants;
 
@@ -81,21 +81,21 @@ const entrees = [
   .entrees {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: var(--space-xl);
+    gap: var(--base-24);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .entrees li {
-    padding: var(--space-xl);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-md);
+    padding: var(--base-24);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-medium);
   }
 
   .entrees h2 {
-    margin-bottom: var(--space-sm);
-    font-size: var(--font-size-subtitle);
+    margin-bottom: var(--base-8);
+    font-size: var(--text-title-medium-size);
   }
 
   .entrees a {

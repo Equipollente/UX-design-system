@@ -60,14 +60,14 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
       icon="arrow-narrow-left"
       aria-label="Image précédente"
       data-carousel-prev
-      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0; pointer-events: auto"
+      style="--btn-bg: var(--color-surface-default); --btn-min-w: 0; pointer-events: auto"
     />
     <Button
       variant="secondary"
       icon="arrow-narrow-right"
       aria-label="Image suivante"
       data-carousel-next
-      style="--btn-bg: var(--color-bg-default); --btn-min-w: 0; pointer-events: auto"
+      style="--btn-bg: var(--color-surface-default); --btn-min-w: 0; pointer-events: auto"
     />
   </div>
 </div>
@@ -120,9 +120,9 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     flex: 1 1 auto;
     min-height: 0;
     height: var(--carousel-height);
-    gap: var(--space-2xl);
+    gap: var(--base-32);
     margin: 0;
-    padding: var(--space-lg) 0;
+    padding: var(--base-16) 0;
     list-style: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -152,7 +152,7 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     height: 100%;
     aspect-ratio: var(--item-ratio);
     overflow: hidden;
-    border-radius: var(--radius-lg);
+    border-radius: var(--border-radius-large);
     box-shadow: var(--carousel-item-shadow);
     scroll-snap-align: start;
   }
@@ -176,7 +176,7 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: var(--space-layout-48);
+    padding-inline: var(--section-space-small);
     /* La barre couvre toute la piste : sans ceci, elle avalerait le défilement au
        doigt et à la molette au milieu des images — une panne qu'on ne voit pas en
        cliquant les flèches. Chacune le reprend pour son compte, dans son attribut
@@ -200,11 +200,11 @@ const classes = ['carousel', className].filter(Boolean).join(' ');
     }
 
     .track {
-      gap: var(--space-lg);
+      gap: var(--base-16);
     }
 
     .nav {
-      padding-inline: var(--space-xl);
+      padding-inline: var(--base-24);
     }
   }
 </style>

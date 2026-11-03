@@ -237,7 +237,7 @@ const {
     top: anchor(bottom);
     left: anchor(left);
     width: anchor-size(width);
-    margin: var(--control-field-gap) 0 0;
+    margin: var(--stack-gap-condensed) 0 0;
     position-try-fallbacks: flip-block;
     /* Sept lignes, puis la liste défile. Une ligne mesure la case
        (`control/size`, 18 — plus haute que le libellé, 16,8) et son rembourrage
@@ -245,10 +245,10 @@ const {
        trait du cadre. Rien n'est mesuré à la main : la hauteur suit ses
        variables, comme le cadre de 585:1410 la suit dans Figma. */
     max-height: calc(
-      var(--select-visible-options) * (var(--control-size) + 2 * var(--space-sm)) +
-        2 * var(--space-xs) + 2 * var(--border-width-default) +
-        var(--select-search-block, calc(0 * var(--space-xs))) +
-        var(--select-footer-block, calc(0 * var(--space-xs)))
+      var(--select-visible-options) * (var(--base-20) + 2 * var(--base-8)) +
+        2 * var(--base-4) + 2 * var(--border-width-default) +
+        var(--select-search-block, calc(0 * var(--base-4))) +
+        var(--select-footer-block, calc(0 * var(--base-4)))
     );
     /* Ce n'est pas le cadre qui défile, ce sont ses options : la recherche et le
        pied restent à leur place sans avoir à flotter au-dessus d'elles. Le cadre
@@ -258,11 +258,11 @@ const {
        `shadow/md` du système la détache de ce qu'elle recouvre. Le rembourrage
        se partage avec les lignes : 4 au cadre + 12 à la ligne = les 16 de la
        boîte, et le libellé d'une option tombe à l'aplomb du texte de la boîte. */
-    padding: var(--space-xs);
-    background: var(--color-bg-default);
-    color: var(--color-text-default);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    padding: var(--base-4);
+    background: var(--color-surface-default);
+    color: var(--color-text-base-default);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
     box-shadow: var(--shadow-md);
   }
 
@@ -271,7 +271,7 @@ const {
   .select-list:popover-open {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--base-4);
   }
 
   /* Avec la recherche, la liste grandit de la hauteur d'un champ (`control/height`,
@@ -279,11 +279,11 @@ const {
      lignes restent sept. Le pied de même, d'une ligne de création (`button/height/sm`)
      et de son écart. */
   .select-list:has(.select-search) {
-    --select-search-block: calc(var(--control-height) + 2 * var(--space-xs));
+    --select-search-block: calc(var(--control-small-size) + 2 * var(--base-4));
   }
 
   .select-list:has(.select-create) {
-    --select-footer-block: calc(var(--button-height-sm) + var(--space-xs));
+    --select-footer-block: calc(var(--control-small-size) + var(--base-4));
   }
 
   .select-options {
@@ -305,7 +305,7 @@ const {
 
   .select-search-input {
     width: 100%;
-    padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+    padding-right: calc(var(--control-small-padding-inline-normal) + var(--icon-small) + var(--base-8));
   }
 
   /* La croix que le navigateur pose dans un champ de recherche tomberait sous
@@ -316,11 +316,11 @@ const {
 
   .select-search-icon {
     position: absolute;
-    right: var(--button-padding-x-sm);
+    right: var(--control-small-padding-inline-normal);
     top: 50%;
     translate: 0 -50%;
-    --icon-size: var(--button-icon-size-sm);
-    color: var(--color-text-muted);
+    --icon-size: var(--icon-small);
+    color: var(--color-text-base-muted);
     pointer-events: none;
   }
 
@@ -335,14 +335,14 @@ const {
 
   .select-group-label {
     margin: 0;
-    padding: var(--space-sm) var(--space-md) var(--space-xs);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-wider);
+    padding: var(--base-8) var(--base-12) var(--base-4);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-wider);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   .select-group.select-filtered {
@@ -359,11 +359,11 @@ const {
      message est annoncé. Vide, il ne prend aucune place. */
   .select-empty {
     margin: 0;
-    padding: var(--space-sm) var(--space-md);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-muted);
+    padding: var(--base-8) var(--base-12);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-snug);
+    color: var(--color-text-base-muted);
   }
 
   .select-empty:empty {
@@ -377,19 +377,19 @@ const {
      `neutral/100`. Les deux listes, à un et à plusieurs choix, ont le même
      rythme. */
   .select-list :global(.checkbox) {
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
+    padding: var(--base-8) var(--base-12);
+    border-radius: var(--border-radius-medium);
   }
 
   .select-list :global(.checkbox:not(.checkbox-disabled):hover),
   .select-list :global(.checkbox:has(input:focus-visible)) {
-    background: var(--color-action-ghost-bg-hover);
+    background: var(--color-background-neutral-subtlest-hover);
   }
 
   /* Une option cochée se lit aussi par son mot, pas seulement par sa case
      (WCAG 1.4.1). Le libellé est déjà en medium : c'est le cran au-dessus. */
   .select-list :global(.checkbox:has(input:checked) .field-label) {
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--base-text-weight-semibold);
   }
 
   /* Une ligne de choix unique — `_SelectItem` `type=single`, 863:39983. Le
@@ -401,14 +401,14 @@ const {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-default);
+    gap: var(--base-8);
+    padding: var(--base-8) var(--base-12);
+    border-radius: var(--border-radius-medium);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    color: var(--color-text-base-default);
     cursor: pointer;
   }
 
@@ -425,29 +425,29 @@ const {
   /* La coche n'est là que sur la ligne choisie. Elle prend la place qu'elle
      tient dans le nœud : 20, comme le chevron. */
   .select-row-check {
-    --icon-size: var(--button-icon-size-sm);
+    --icon-size: var(--icon-small);
     flex: none;
     visibility: hidden;
   }
 
   /* — hover — */
   .select-row:not(:has(input:disabled)):hover {
-    background: var(--color-action-ghost-bg-hover);
+    background: var(--color-background-neutral-subtlest-hover);
   }
 
   /* — focused — Le fond du survol et l'anneau du système. */
   .select-row:has(input:focus-visible) {
-    background: var(--color-action-ghost-bg-hover);
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
+    background: var(--color-background-neutral-subtlest-hover);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: calc(-1 * var(--border-width-thick));
   }
 
   /* — selected — Le fond d'accent, l'encre qui s'y lit, la coche. Au survol et
      au focus, le nœud reprend le fond du survol et l'encre par défaut : la ligne
      choisie ne s'éteint pas pour autant, sa coche reste. */
   .select-row:has(input:checked) {
-    background: var(--color-action-primary-bg);
-    color: var(--color-text-on-accent);
+    background: var(--color-background-primary-bold);
+    color: var(--color-text-primary-on-bold);
   }
 
   .select-row:has(input:checked) .select-row-check {
@@ -456,8 +456,8 @@ const {
 
   .select-row:has(input:checked):not(:has(input:disabled)):hover,
   .select-row:has(input:checked):has(input:focus-visible) {
-    background: var(--color-action-ghost-bg-hover);
-    color: var(--color-text-default);
+    background: var(--color-background-neutral-subtlest-hover);
+    color: var(--color-text-base-default);
   }
 
   /* — disabled — */
@@ -472,9 +472,9 @@ const {
     display: flex;
     flex: none;
     flex-direction: column;
-    gap: var(--space-xs);
-    padding-top: var(--space-xs);
-    border-top: var(--border-width-default) solid var(--color-border-default);
+    gap: var(--base-4);
+    padding-top: var(--base-4);
+    border-top: var(--border-width-default) solid var(--color-border-base-subtle);
   }
 
   .select-picked-zone {
@@ -493,18 +493,18 @@ const {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-sm);
+    gap: var(--base-8);
     width: 100%;
-    min-height: var(--button-height-sm);
-    padding: var(--space-sm) var(--space-md);
+    min-height: var(--control-small-size);
+    padding: var(--base-8) var(--base-12);
     border: 0;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-medium);
     background: transparent;
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    color: var(--color-text-base-default);
     text-align: left;
   }
 
@@ -518,25 +518,25 @@ const {
   }
 
   .select-create-open:hover {
-    background: var(--color-action-ghost-bg-hover);
+    background: var(--color-background-neutral-subtlest-hover);
   }
 
   .select-create-open:focus-visible {
-    background: var(--color-action-ghost-bg-hover);
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
+    background: var(--color-background-neutral-subtlest-hover);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: calc(-1 * var(--border-width-thick));
   }
 
   .select-create-icon {
-    --icon-size: var(--button-icon-size-sm);
+    --icon-size: var(--icon-small);
     flex: none;
   }
 
   /* Taper le nom : la ligne prend l'anneau de focus du nœud, et le champ n'a ni
      fond ni trait — c'est la ligne qui les porte. */
   .select-create-edit {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: calc(-1 * var(--border-width-focus));
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: calc(-1 * var(--border-width-thick));
   }
 
   .select-create-input {
@@ -560,7 +560,7 @@ const {
   }
 
   .select-create-confirm:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 </style>

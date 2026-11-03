@@ -1,0 +1,1585 @@
+{
+  "base": {
+    "2": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Valeur brute de l'échelle : 2 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11167",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "4": {
+      "$type": "number",
+      "$value": 4,
+      "$description": "Valeur brute de l'échelle : 4 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11168",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "6": {
+      "$type": "number",
+      "$value": 6,
+      "$description": "Valeur brute de l'échelle : 6 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11169",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "8": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Valeur brute de l'échelle : 8 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11170",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Valeur brute de l'échelle : 12 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11171",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Valeur brute de l'échelle : 16 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11172",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Valeur brute de l'échelle : 20 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11173",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Valeur brute de l'échelle : 24 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11174",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "28": {
+      "$type": "number",
+      "$value": 28,
+      "$description": "Valeur brute de l'échelle : 28 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11175",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Valeur brute de l'échelle : 32 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11176",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "36": {
+      "$type": "number",
+      "$value": 36,
+      "$description": "Valeur brute de l'échelle : 36 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11177",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Valeur brute de l'échelle : 40 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11178",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "44": {
+      "$type": "number",
+      "$value": 44,
+      "$description": "Valeur brute de l'échelle : 44 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11179",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Valeur brute de l'échelle : 48 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11180",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "56": {
+      "$type": "number",
+      "$value": 56,
+      "$description": "Valeur brute de l'échelle : 56 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11192",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "64": {
+      "$type": "number",
+      "$value": 64,
+      "$description": "Valeur brute de l'échelle : 64 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11181",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "80": {
+      "$type": "number",
+      "$value": 80,
+      "$description": "Valeur brute de l'échelle : 80 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11182",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "96": {
+      "$type": "number",
+      "$value": 96,
+      "$description": "Valeur brute de l'échelle : 96 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11183",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "112": {
+      "$type": "number",
+      "$value": 112,
+      "$description": "Valeur brute de l'échelle : 112 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11184",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "128": {
+      "$type": "number",
+      "$value": 128,
+      "$description": "Valeur brute de l'échelle : 128 px. Ne se lit pas directement dans un composant : choisis le token fonctionnel (stack, control, icon, overlay…) qui pointe ici.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11185",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP"
+        ]
+      }
+    },
+    "negative-2": {
+      "$type": "number",
+      "$value": -2,
+      "$description": "Valeur négative de l'échelle (-2 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11224",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-4": {
+      "$type": "number",
+      "$value": -4,
+      "$description": "Valeur négative de l'échelle (-4 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11225",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-6": {
+      "$type": "number",
+      "$value": -6,
+      "$description": "Valeur négative de l'échelle (-6 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11226",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-8": {
+      "$type": "number",
+      "$value": -8,
+      "$description": "Valeur négative de l'échelle (-8 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11227",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-12": {
+      "$type": "number",
+      "$value": -12,
+      "$description": "Valeur négative de l'échelle (-12 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11228",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-16": {
+      "$type": "number",
+      "$value": -16,
+      "$description": "Valeur négative de l'échelle (-16 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11229",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-20": {
+      "$type": "number",
+      "$value": -20,
+      "$description": "Valeur négative de l'échelle (-20 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11230",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-24": {
+      "$type": "number",
+      "$value": -24,
+      "$description": "Valeur négative de l'échelle (-24 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11231",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-28": {
+      "$type": "number",
+      "$value": -28,
+      "$description": "Valeur négative de l'échelle (-28 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11232",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-32": {
+      "$type": "number",
+      "$value": -32,
+      "$description": "Valeur négative de l'échelle (-32 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11233",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-36": {
+      "$type": "number",
+      "$value": -36,
+      "$description": "Valeur négative de l'échelle (-36 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11234",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-40": {
+      "$type": "number",
+      "$value": -40,
+      "$description": "Valeur négative de l'échelle (-40 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11235",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-44": {
+      "$type": "number",
+      "$value": -44,
+      "$description": "Valeur négative de l'échelle (-44 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11236",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "negative-48": {
+      "$type": "number",
+      "$value": -48,
+      "$description": "Valeur négative de l'échelle (-48 px), pour une marge négative. Brute : ne se lit pas directement dans un composant, passe par un token fonctionnel.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11237",
+        "com.figma.hiddenFromPublishing": true,
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    }
+  },
+  "stack": {
+    "padding": {
+      "condensed": {
+        "$type": "number",
+        "$value": "{base.8}",
+        "$description": "Marge intérieure (8 px) d'un conteneur de pile, en densité dense. À poser en padding. Alias de base/8.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11186",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "normal": {
+        "$type": "number",
+        "$value": "{base.16}",
+        "$description": "Marge intérieure (16 px) d'un conteneur de pile, en densité normale. À poser en padding. Alias de base/16.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11188",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "spacious": {
+        "$type": "number",
+        "$value": "{base.24}",
+        "$description": "Marge intérieure (24 px) d'un conteneur de pile, en densité aérée. À poser en padding. Alias de base/24.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11190",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      }
+    },
+    "gap": {
+      "condensed": {
+        "$type": "number",
+        "$value": "{base.8}",
+        "$description": "Espace (8 px) entre les éléments d'une pile, en densité dense. À poser en gap d'un auto-layout ou d'un flex. Alias de base/8.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11187",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "normal": {
+        "$type": "number",
+        "$value": "{base.16}",
+        "$description": "Espace (16 px) entre les éléments d'une pile, en densité normale. À poser en gap d'un auto-layout ou d'un flex. Alias de base/16.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11189",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "spacious": {
+        "$type": "number",
+        "$value": "{base.24}",
+        "$description": "Espace (24 px) entre les éléments d'une pile, en densité aérée. À poser en gap d'un auto-layout ou d'un flex. Alias de base/24.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11191",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      }
+    }
+  },
+  "border": {
+    "width": {
+      "thin": {
+        "$type": "number",
+        "$value": 1,
+        "$description": "Trait fin (1 px) : bordure standard des champs, cartes et séparateurs.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11193",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ]
+        }
+      },
+      "thick": {
+        "$type": "number",
+        "$value": "{base.2}",
+        "$description": "Trait épais (2 px) : bordure d'un élément actif ou sélectionné. Alias de base/2.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11194",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ]
+        }
+      },
+      "thicker": {
+        "$type": "number",
+        "$value": "{base.4}",
+        "$description": "Trait très épais (4 px) : accent fort, par exemple l'indicateur d'un onglet actif. Alias de base/4.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11195",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ]
+        }
+      },
+      "default": {
+        "$type": "number",
+        "$value": "{border.width.thin}",
+        "$description": "Épaisseur de bordure par défaut. À lire quand aucun accent n'est voulu. Alias de border/width/thin.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11196",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ]
+        }
+      }
+    },
+    "radius": {
+      "small": {
+        "$type": "number",
+        "$value": "{base.6}",
+        "$description": "Petit arrondi (6 px) : petits éléments comme un tag, un badge ou une case à cocher. Alias de base/6.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11197",
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      },
+      "medium": {
+        "$type": "number",
+        "$value": 14,
+        "$description": "Arrondi moyen (14 px) : champs, menus, cartes.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11198",
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      },
+      "large": {
+        "$type": "number",
+        "$value": "{base.28}",
+        "$description": "Grand arrondi (28 px) : modales et grandes cartes. Alias de base/28.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11199",
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      },
+      "full": {
+        "$type": "number",
+        "$value": 999,
+        "$description": "Arrondi maximal : forme en pilule ou en cercle (boutons, avatars).",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11200",
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      },
+      "default": {
+        "$type": "number",
+        "$value": "{border.radius.medium}",
+        "$description": "Arrondi par défaut des composants. À lire quand aucun arrondi particulier n'est voulu. Alias de border/radius/medium.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11201",
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      }
+    },
+    "outline": {
+      "focus-offset": {
+        "$type": "number",
+        "$value": 3,
+        "$description": "Écart (3 px) entre un élément et son anneau de focus clavier. À poser en outline-offset.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11202",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "focus-width": {
+        "$type": "number",
+        "$value": 3,
+        "$description": "Épaisseur (3 px) de l'anneau de focus clavier. À poser en outline-width.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11203",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ]
+        }
+      }
+    },
+    "boxShadow": {
+      "thin": {
+        "$type": "string",
+        "$value": "inset 0 0 0 1px",
+        "$description": "Ombre interne (box-shadow inset) qui dessine une bordure de 1 px sans changer la taille de la boîte. À utiliser quand une vraie bordure décalerait la mise en page.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11238",
+          "com.figma.scopes": [
+            "TEXT_CONTENT"
+          ],
+          "com.figma.type": "string"
+        }
+      },
+      "thick": {
+        "$type": "string",
+        "$value": "inset 0 0 0 2px",
+        "$description": "Ombre interne (box-shadow inset) qui dessine une bordure de 2 px sans changer la taille de la boîte. À utiliser quand une vraie bordure décalerait la mise en page.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11239",
+          "com.figma.scopes": [
+            "TEXT_CONTENT"
+          ],
+          "com.figma.type": "string"
+        }
+      },
+      "thicker": {
+        "$type": "string",
+        "$value": "inset 0 0 0 4px",
+        "$description": "Ombre interne (box-shadow inset) qui dessine une bordure de 4 px sans changer la taille de la boîte. À utiliser quand une vraie bordure décalerait la mise en page.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11240",
+          "com.figma.scopes": [
+            "TEXT_CONTENT"
+          ],
+          "com.figma.type": "string"
+        }
+      }
+    }
+  },
+  "breakpoint": {
+    "xsmall": {
+      "$type": "number",
+      "$value": 320,
+      "$description": "Seuil de largeur d'écran (320 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11204",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "small": {
+      "$type": "number",
+      "$value": 544,
+      "$description": "Seuil de largeur d'écran (544 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11205",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "medium": {
+      "$type": "number",
+      "$value": 768,
+      "$description": "Seuil de largeur d'écran (768 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11206",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "large": {
+      "$type": "number",
+      "$value": 1012,
+      "$description": "Seuil de largeur d'écran (1012 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11207",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xlarge": {
+      "$type": "number",
+      "$value": 1280,
+      "$description": "Seuil de largeur d'écran (1280 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11208",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xxlarge": {
+      "$type": "number",
+      "$value": 1400,
+      "$description": "Seuil de largeur d'écran (1400 px) à partir duquel la mise en page change (min-width). Lu par le code pour les media queries : ne sert pas à dessiner dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11209",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "control": {
+    "xsmall": {
+      "size": {
+        "$type": "number",
+        "$value": "{base.36}",
+        "$description": "Hauteur (36 px) d'un contrôle de taille très petite (xsmall), bouton ou champ. À poser en min-height : c'est elle qui fixe la cible tactile. Alias de base/36.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11210",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "paddingBlock": {
+        "$type": "number",
+        "$value": 2,
+        "$description": "Marge verticale (2 px) d'un contrôle de taille très petite (xsmall). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11250",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "gap": {
+        "$type": "number",
+        "$value": "{base.4}",
+        "$description": "Espace (4 px) entre l'icône et le libellé d'un contrôle de taille très petite (xsmall). À poser en gap. Alias de base/4.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11267",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingInline": {
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.4}",
+          "$description": "Marge horizontale (4 px) d'un contrôle de taille très petite (xsmall), en densité dense. À poser en padding gauche et droite. Alias de base/4.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11255",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "normal": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Marge horizontale (8 px) d'un contrôle de taille très petite (xsmall), en densité normale. À poser en padding gauche et droite. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11256",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.12}",
+          "$description": "Marge horizontale (12 px) d'un contrôle de taille très petite (xsmall), en densité aérée. À poser en padding gauche et droite. Alias de base/12.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11257",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "small": {
+      "size": {
+        "$type": "number",
+        "$value": "{base.44}",
+        "$description": "Hauteur (44 px) d'un contrôle de taille petite (small), bouton ou champ. À poser en min-height : c'est elle qui fixe la cible tactile. Alias de base/44.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11211",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "gap": {
+        "$type": "number",
+        "$value": "{base.8}",
+        "$description": "Espace (8 px) entre l'icône et le libellé d'un contrôle de taille petite (small). À poser en gap. Alias de base/8.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11217",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingBlock": {
+        "$type": "number",
+        "$value": 4,
+        "$description": "Marge verticale (4 px) d'un contrôle de taille petite (small). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11251",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingInline": {
+        "normal": {
+          "$type": "number",
+          "$value": "{base.16}",
+          "$description": "Marge horizontale (16 px) d'un contrôle de taille petite (small), en densité normale. À poser en padding gauche et droite. Alias de base/16.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:903:11214",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.12}",
+          "$description": "Marge horizontale (12 px) d'un contrôle de taille petite (small), en densité dense. À poser en padding gauche et droite. Alias de base/12.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11258",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.20}",
+          "$description": "Marge horizontale (20 px) d'un contrôle de taille petite (small), en densité aérée. À poser en padding gauche et droite. Alias de base/20.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11259",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "medium": {
+      "size": {
+        "$type": "number",
+        "$value": "{base.48}",
+        "$description": "Hauteur (48 px) d'un contrôle de taille moyenne (medium), bouton ou champ. À poser en min-height : c'est elle qui fixe la cible tactile. Alias de base/48.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11212",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "gap": {
+        "$type": "number",
+        "$value": "{base.12}",
+        "$description": "Espace (12 px) entre l'icône et le libellé d'un contrôle de taille moyenne (medium). À poser en gap. Alias de base/12.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11218",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingBlock": {
+        "$type": "number",
+        "$value": 6,
+        "$description": "Marge verticale (6 px) d'un contrôle de taille moyenne (medium). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11252",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingInline": {
+        "normal": {
+          "$type": "number",
+          "$value": "{base.24}",
+          "$description": "Marge horizontale (24 px) d'un contrôle de taille moyenne (medium), en densité normale. À poser en padding gauche et droite. Alias de base/24.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:903:11215",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.20}",
+          "$description": "Marge horizontale (20 px) d'un contrôle de taille moyenne (medium), en densité dense. À poser en padding gauche et droite. Alias de base/20.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11260",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.28}",
+          "$description": "Marge horizontale (28 px) d'un contrôle de taille moyenne (medium), en densité aérée. À poser en padding gauche et droite. Alias de base/28.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11261",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "large": {
+      "size": {
+        "$type": "number",
+        "$value": "{base.56}",
+        "$description": "Hauteur (56 px) d'un contrôle de taille grande (large), bouton ou champ. À poser en min-height : c'est elle qui fixe la cible tactile. Alias de base/56.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11213",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "gap": {
+        "$type": "number",
+        "$value": "{base.12}",
+        "$description": "Espace (12 px) entre l'icône et le libellé d'un contrôle de taille grande (large). À poser en gap. Alias de base/12.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11219",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingBlock": {
+        "$type": "number",
+        "$value": 10,
+        "$description": "Marge verticale (10 px) d'un contrôle de taille grande (large). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11253",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingInline": {
+        "normal": {
+          "$type": "number",
+          "$value": "{base.32}",
+          "$description": "Marge horizontale (32 px) d'un contrôle de taille grande (large), en densité normale. À poser en padding gauche et droite. Alias de base/32.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:903:11216",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.28}",
+          "$description": "Marge horizontale (28 px) d'un contrôle de taille grande (large), en densité dense. À poser en padding gauche et droite. Alias de base/28.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11262",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.36}",
+          "$description": "Marge horizontale (36 px) d'un contrôle de taille grande (large), en densité aérée. À poser en padding gauche et droite. Alias de base/36.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11263",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "xlarge": {
+      "size": {
+        "$type": "number",
+        "$value": "{base.64}",
+        "$description": "Hauteur (64 px) d'un contrôle de taille très grande (xlarge), bouton ou champ. À poser en min-height : c'est elle qui fixe la cible tactile. Alias de base/64.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11247",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "paddingBlock": {
+        "$type": "number",
+        "$value": 14,
+        "$description": "Marge verticale (14 px) d'un contrôle de taille très grande (xlarge). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11254",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "gap": {
+        "$type": "number",
+        "$value": "{base.8}",
+        "$description": "Espace (8 px) entre l'icône et le libellé d'un contrôle de taille très grande (xlarge). À poser en gap. Alias de base/8.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11268",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "paddingInline": {
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Marge horizontale (8 px) d'un contrôle de taille très grande (xlarge), en densité dense. À poser en padding gauche et droite. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11264",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "normal": {
+          "$type": "number",
+          "$value": "{base.12}",
+          "$description": "Marge horizontale (12 px) d'un contrôle de taille très grande (xlarge), en densité normale. À poser en padding gauche et droite. Alias de base/12.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11265",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.16}",
+          "$description": "Marge horizontale (16 px) d'un contrôle de taille très grande (xlarge), en densité aérée. À poser en padding gauche et droite. Alias de base/16.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11266",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "minTarget": {
+      "fine": {
+        "$type": "number",
+        "$value": "{base.16}",
+        "$description": "Zone cliquable minimale (16 px) avec un pointeur précis, comme une souris. Alias de base/16.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11248",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "coarse": {
+        "$type": "number",
+        "$value": "{base.44}",
+        "$description": "Zone cliquable minimale (44 px) avec un pointeur tactile. Alias de base/44.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11249",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "$root": {
+        "$type": "number",
+        "$value": "{base.44}",
+        "$description": "Zone cliquable minimale (44 px), cible tactile WCAG 2.5.5. À poser en min-height et min-width des éléments interactifs. Alias de base/44.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:903:11220",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      }
+    }
+  },
+  "icon": {
+    "small": {
+      "$type": "number",
+      "$value": "{base.20}",
+      "$description": "Taille d'une icône small (20 px). À poser en largeur et hauteur de l'icône ; le bouton la transmet à l'icône qu'il contient. Alias de base/20.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11221",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "medium": {
+      "$type": "number",
+      "$value": "{base.24}",
+      "$description": "Taille d'une icône medium (24 px). À poser en largeur et hauteur de l'icône ; le bouton la transmet à l'icône qu'il contient. Alias de base/24.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11222",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "large": {
+      "$type": "number",
+      "$value": "{base.28}",
+      "$description": "Taille d'une icône large (28 px). À poser en largeur et hauteur de l'icône ; le bouton la transmet à l'icône qu'il contient. Alias de base/28.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:903:11223",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xsmall": {
+      "$type": "number",
+      "$value": 10,
+      "$description": "Taille d'une icône très petite (10 px) : la coche « moins » de l'état indéterminé d'une case à cocher. À poser en largeur et hauteur de l'icône.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:25329",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "viewport": {
+    "narrow": {
+      "$type": "string",
+      "$value": "(max-width: 767.98px)",
+      "$description": "Condition de media query (texte) : (max-width: 767.98px). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11241",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "narrowLandscape": {
+      "$type": "string",
+      "$value": "((max-width: 1011.98px) and (max-height: 543.98px) and (orientation: landscape))",
+      "$description": "Condition de media query (texte) : ((max-width: 1011.98px) and (max-height: 543.98px) and (orientation: landscape)). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11242",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "regular": {
+      "$type": "string",
+      "$value": "(min-width: 768px)",
+      "$description": "Condition de media query (texte) : (min-width: 768px). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11243",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "wide": {
+      "$type": "string",
+      "$value": "(min-width: 1400px)",
+      "$description": "Condition de media query (texte) : (min-width: 1400px). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11244",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "portrait": {
+      "$type": "string",
+      "$value": "(orientation: portrait)",
+      "$description": "Condition de media query (texte) : (orientation: portrait). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11245",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "landscape": {
+      "$type": "string",
+      "$value": "(orientation: landscape)",
+      "$description": "Condition de media query (texte) : (orientation: landscape). Lue par le code uniquement, jamais appliquée dans Figma.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11246",
+        "com.figma.scopes": [
+          "TEXT_CONTENT"
+        ],
+        "com.figma.type": "string"
+      }
+    }
+  },
+  "controlStack": {
+    "small": {
+      "gap": {
+        "auto": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille petite (small) (un groupe de boutons, par exemple), densité par défaut. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11269",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille petite (small) (un groupe de boutons, par exemple), densité dense. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11270",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.16}",
+          "$description": "Espace (16 px) entre deux contrôles voisins de taille petite (small) (un groupe de boutons, par exemple), densité aérée. Alias de base/16.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11271",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "medium": {
+      "gap": {
+        "auto": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille moyenne (medium) (un groupe de boutons, par exemple), densité par défaut. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11272",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille moyenne (medium) (un groupe de boutons, par exemple), densité dense. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11273",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.12}",
+          "$description": "Espace (12 px) entre deux contrôles voisins de taille moyenne (medium) (un groupe de boutons, par exemple), densité aérée. Alias de base/12.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11274",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    },
+    "large": {
+      "gap": {
+        "auto": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille grande (large) (un groupe de boutons, par exemple), densité par défaut. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11275",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "condensed": {
+          "$type": "number",
+          "$value": "{base.8}",
+          "$description": "Espace (8 px) entre deux contrôles voisins de taille grande (large) (un groupe de boutons, par exemple), densité dense. Alias de base/8.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11276",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        },
+        "spacious": {
+          "$type": "number",
+          "$value": "{base.12}",
+          "$description": "Espace (12 px) entre deux contrôles voisins de taille grande (large) (un groupe de boutons, par exemple), densité aérée. Alias de base/12.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:904:11277",
+            "com.figma.scopes": [
+              "GAP"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "overlay": {
+    "borderRadius": {
+      "$type": "number",
+      "$value": "{border.radius.medium}",
+      "$description": "Arrondi (14 px) des surcouches. Alias de border/radius/medium.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11291",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ]
+      }
+    },
+    "offset": {
+      "$type": "number",
+      "$value": "{base.4}",
+      "$description": "Distance (4 px) entre l'élément déclencheur et sa surcouche. Alias de base/4.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:904:11292",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "width": {
+      "xsmall": {
+        "$type": "number",
+        "$value": 192,
+        "$description": "Largeur (192 px) d'une surcouche (menu, popover, modale) de taille xsmall.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11278",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "small": {
+        "$type": "number",
+        "$value": 320,
+        "$description": "Largeur (320 px) d'une surcouche (menu, popover, modale) de taille small.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11279",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "medium": {
+        "$type": "number",
+        "$value": 480,
+        "$description": "Largeur (480 px) d'une surcouche (menu, popover, modale) de taille medium.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11280",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "large": {
+        "$type": "number",
+        "$value": 640,
+        "$description": "Largeur (640 px) d'une surcouche (menu, popover, modale) de taille large.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11281",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "xlarge": {
+        "$type": "number",
+        "$value": 960,
+        "$description": "Largeur (960 px) d'une surcouche (menu, popover, modale) de taille xlarge.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11282",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      }
+    },
+    "height": {
+      "small": {
+        "$type": "number",
+        "$value": 256,
+        "$description": "Hauteur maximale (256 px) d'une surcouche de taille small.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11283",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "medium": {
+        "$type": "number",
+        "$value": 320,
+        "$description": "Hauteur maximale (320 px) d'une surcouche de taille medium.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11284",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "large": {
+        "$type": "number",
+        "$value": 432,
+        "$description": "Hauteur maximale (432 px) d'une surcouche de taille large.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11285",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      },
+      "xlarge": {
+        "$type": "number",
+        "$value": 600,
+        "$description": "Hauteur maximale (600 px) d'une surcouche de taille xlarge.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11286",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ]
+        }
+      }
+    },
+    "padding": {
+      "normal": {
+        "$type": "number",
+        "$value": "{base.16}",
+        "$description": "Marge intérieure horizontale (16 px) d'une surcouche, densité normale. Alias de base/16.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11287",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "condensed": {
+        "$type": "number",
+        "$value": "{base.8}",
+        "$description": "Marge intérieure horizontale (8 px) d'une surcouche, densité dense. Alias de base/8.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11288",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      }
+    },
+    "paddingBlock": {
+      "normal": {
+        "$type": "number",
+        "$value": "{base.12}",
+        "$description": "Marge intérieure verticale (12 px) d'une surcouche, densité normale. Alias de base/12.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11289",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "condensed": {
+        "$type": "number",
+        "$value": "{base.4}",
+        "$description": "Marge intérieure verticale (4 px) d'une surcouche, densité dense. Alias de base/4.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:904:11290",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      }
+    }
+  },
+  "section": {
+    "space": {
+      "small": {
+        "$type": "number",
+        "$value": "{base.48}",
+        "$description": "Espace entre deux blocs d'une même section (48 px). À poser en padding vertical d'une section ou en gap entre sections. Alias de base/48, identique sur tous les appareils.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25406",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "medium": {
+        "$type": "number",
+        "$value": "{base.64}",
+        "$description": "Espace entre deux sections proches (64 px). À poser en padding vertical d'une section ou en gap entre sections. Alias de base/64, identique sur tous les appareils.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25407",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "large": {
+        "$type": "number",
+        "$value": "{base.96}",
+        "$description": "Espace entre deux grandes sections (96 px). À poser en padding vertical d'une section ou en gap entre sections. Alias de base/96, identique sur tous les appareils.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25408",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      },
+      "xlarge": {
+        "$type": "number",
+        "$value": "{base.128}",
+        "$description": "Espace autour d'un grand bloc d'ouverture ou de fermeture de page (128 px). À poser en padding vertical d'une section ou en gap entre sections. Alias de base/128, identique sur tous les appareils.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25409",
+          "com.figma.scopes": [
+            "GAP"
+          ]
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Valeur"
+  }
+}

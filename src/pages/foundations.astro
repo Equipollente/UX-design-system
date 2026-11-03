@@ -9,24 +9,33 @@ const byGroup = (group: string) => tokens.filter((t) => t.group === group);
 // Les couleurs, dans l'ordre du fichier Figma : rôles sémantiques d'abord,
 // rampes ensuite.
 const colorFamilies = [
-  { key: 'color.bg.', label: 'Fonds' },
-  { key: 'color.border.', label: 'Bordures' },
-  { key: 'color.feedback.', label: 'Feedback' },
+  { key: 'color.surface.', label: 'Surfaces' },
+  { key: 'color.background.', label: 'Fonds' },
   { key: 'color.text.', label: 'Texte' },
-  { key: 'ramp.neutral.', label: 'Rampe neutre' },
-  { key: 'ramp.accent.', label: 'Rampe accent — indigo' },
-  { key: 'ramp.highlight.', label: 'Rampe highlight — lime' },
+  { key: 'color.icon.', label: 'Icônes' },
+  { key: 'color.border.', label: 'Bordures' },
+  { key: 'ramp.grey.', label: 'Rampe grey' },
+  { key: 'ramp.indigo.', label: 'Rampe indigo' },
+  { key: 'ramp.lime.', label: 'Rampe lime' },
+  { key: 'ramp.clay.', label: 'Rampe clay' },
+  { key: 'ramp.teal.', label: 'Rampe teal' },
+  { key: 'ramp.sun.', label: 'Rampe sun' },
+  { key: 'ramp.rose.', label: 'Rampe rose' },
+  { key: 'ramp.red.', label: 'Rampe red' },
+  { key: 'ramp.green.', label: 'Rampe green' },
+  { key: 'ramp.blue-france.', label: 'Rampe blue-france — Prof Hub' },
+  { key: 'ramp.green-emeraude.', label: 'Rampe green-émeraude — Prof Hub' },
 ];
 
-const fontSizes = byPrefix('font.size.');
-const lineHeights = byPrefix('font.line-height.');
-const letterSpacings = byPrefix('font.letter-spacing.');
-const weights = byPrefix('font.weight.');
-const families = byPrefix('font.family.');
-const spaces = byGroup('space');
-const radii = byGroup('radius');
-const controls = byGroup('control');
-const borders = byGroup('border');
+const fontSizes = byPrefix('base.text.size.');
+const lineHeights = byPrefix('base.text.lineHeight.');
+const letterSpacings = byPrefix('base.text.letterSpacing.');
+const weights = byPrefix('base.text.weight.');
+const families = byPrefix('fontStack.');
+const spaces = byGroup('base').filter((t) => !t.path.includes('negative'));
+const radii = byPrefix('border.radius.');
+const controls = byGroup('control').filter((t) => /\.size$|minTarget/.test(t.path));
+const borders = [...byPrefix('border.width.'), ...byPrefix('border.outline.')];
 const opacities = byGroup('opacity');
 
 // Les ombres. Figma n'a pas de type de variable « ombre » : chaque partie y est
@@ -40,14 +49,14 @@ const shadows = shadowSubs.filter((sub) => sub !== 'contact');
 const contact = shadowParts('contact');
 const durations = byPrefix('motion.duration.');
 const easings = byPrefix('motion.easing.');
-const layout = byGroup('layout');
+const layout = [...byPrefix('viewport.width'), ...byPrefix('viewport.scale'), ...byPrefix('nav.')];
 
 // Les tokens qui décrivent un objet plutôt que le vocabulaire du système. Ils
 // ne sont pas montrés ici mais dans /components, avec le composant qu'ils
 // dimensionnent. Comptés et non listés en dur : le jour où un quatrième groupe
 // d'objet apparaît, cette page n'annoncera pas un chiffre faux — c'est ce qui
 // vient de servir quand le groupe `card` est arrivé.
-const groupesObjet = ['button', 'card', 'nav'];
+const groupesObjet = ['control', 'controlStack', 'icon', 'overlay', 'nav'];
 const objets = tokens.filter((t) => groupesObjet.includes(t.group));
 const vocabulaire = tokens.length - objets.length;
 
@@ -63,7 +72,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     <h1>Fondations</h1>
     <p class="lead">
       Le vocabulaire du système — <strong>{vocabulaire} tokens</strong> sur {tokens.length}, générés
-      depuis <code>tokens/Desktop.tokens.json</code> par <code>npm run tokens</code>. Les {objets.length} autres
+      depuis les exports de <code>tokens/</code> par <code>npm run tokens</code>. Les {objets.length} autres
       décrivent un objet plutôt que le système : ils sont documentés
       dans <a href={withBase('/components')}>Composants</a>. Rien sur cette page n'est écrit en dur :
       chaque valeur affichée est lue dans la variable CSS correspondante.
@@ -111,7 +120,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
           {
             families.map((t) => (
               <li>
-                <span style={`font-family: var(${t.name}); font-size: var(--font-size-heading)`}>
+                <span style={`font-family: var(${t.name}); font-size: var(--text-title-small-size)`}>
                   {t.resolved}
                 </span>
                 <code class="name">{t.name}</code>
@@ -129,7 +138,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
             weights.map((t) => (
               <li>
                 <span
-                  style={`font-family: var(--font-family-heading); font-weight: var(${t.name}); font-size: var(--font-size-heading)`}
+                  style={`font-family: var(--font-stack-heading); font-weight: var(${t.name}); font-size: var(--text-title-small-size)`}
                 >
                   {specimen}
                 </span>
@@ -148,7 +157,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
           {
             fontSizes.map((t) => (
               <li>
-                <span style={`font-size: var(${t.name}); line-height: var(--font-line-height-snug)`}>
+                <span style={`font-size: var(${t.name}); line-height: var(--base-text-line-height-snug)`}>
                   {specimen}
                 </span>
                 <code class="name">
@@ -187,7 +196,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
             letterSpacings.map((t) => (
               <li>
                 <span
-                  style={`letter-spacing: var(${t.name}); font-size: var(--font-size-heading); text-transform: uppercase`}
+                  style={`letter-spacing: var(${t.name}); font-size: var(--text-title-small-size); text-transform: uppercase`}
                 >
                   Interlettrage
                 </span>
@@ -251,7 +260,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
           <p class="section-note">
             Elles sont peu nombreuses <strong>et c'est voulu</strong> : tout ce qui se compose depuis
             un espacement reste composé. La largeur d'une piste vaut
-            {' '}<code>space/xl + space/lg</code> — 40 exactement — et n'a donc pas de variable.
+            {' '}<code>base/24 + base/16</code> — 40 exactement — et n'a donc pas de variable.
           </p>
           <ul class="plain">
             {controls.map((t) => (
@@ -378,7 +387,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
 
           <p class="flag">
             <strong>Les couleurs d'ombre ne suivent pas l'encre.</strong> Elles valent
-            {' '}<code>ramp.neutral.900</code> à trois opacités, mais un alias Figma emporte l'opacité
+            {' '}<code>ramp.grey.900</code> à trois opacités, mais un alias Figma emporte l'opacité
             avec la couleur : on ne peut pas pointer l'encre et n'en changer que la transparence.
             Les trois sont donc des couleurs littérales. Si l'encre du système change, elles sont à
             reprendre à la main — c'est le seul point du groupe qui puisse dériver.
@@ -511,20 +520,20 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .chip {
     height: 4rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--color-border-base-subtle);
   }
 
   /* — espacements — */
   .ruler .bar {
-    height: var(--space-md);
-    background: var(--color-bg-feature);
-    border-radius: var(--radius-sm);
+    height: var(--base-12);
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-small);
   }
 
   /* — mouvement —
@@ -534,35 +543,35 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
      le calc — la piste doit connaître sa propre longueur pour que la pastille
      s'arrête au bord. */
   .track {
-    --piste: calc(var(--space-layout-128) * 3);
+    --piste: calc(var(--section-space-xlarge) * 3);
 
     position: relative;
     width: var(--piste);
     max-width: 100%;
-    height: calc(var(--space-2xl) + var(--space-xs) * 2);
-    padding: var(--space-xs);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-pill);
+    height: calc(var(--base-32) + var(--base-4) * 2);
+    padding: var(--base-4);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-full);
     cursor: pointer;
   }
 
   .puck {
     display: block;
-    width: var(--space-2xl);
-    height: var(--space-2xl);
-    background: var(--color-bg-feature);
-    border-radius: var(--radius-pill);
+    width: var(--base-32);
+    height: var(--base-32);
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-full);
     transition: transform var(--demo-duration) var(--demo-easing);
   }
 
   .track:hover .puck {
-    transform: translateX(calc(var(--piste) - var(--space-2xl) - var(--space-xs) * 2));
+    transform: translateX(calc(var(--piste) - var(--base-32) - var(--base-4) * 2));
   }
 
   /* Sous 768px la piste ne tiendrait pas : elle raccourcit, la pastille suit. */
   @media (max-width: 767px) {
     .track {
-      --piste: calc(var(--space-layout-128) * 2);
+      --piste: calc(var(--section-space-xlarge) * 2);
     }
   }
 
@@ -576,29 +585,29 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: var(--space-2xl);
+    gap: var(--base-32);
   }
 
   /* `lg-invert` porte 46px au-dessus de sa boîte — 30 de décalage, 30 de flou,
-     moins les 14 d'étalement. `space.layout.48` est le premier cran qui les
+     moins les 14 d'étalement. `section.space.small` (48) est le premier cran qui les
      couvre ; en dessous l'ombre mordrait sur la section précédente. */
   .shadows > li {
-    padding-block-start: var(--space-layout-48);
+    padding-block-start: var(--section-space-small);
   }
 
   .shadow-box {
     height: 7rem;
-    margin-block-end: var(--space-md);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-md);
+    margin-block-end: var(--base-12);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-medium);
   }
 
   .parts {
     list-style: none;
-    margin: var(--space-sm) 0 0;
+    margin: var(--base-8) 0 0;
     padding: 0;
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--base-4);
   }
 
   /* — rayons — */
@@ -610,7 +619,7 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xl);
+    gap: var(--base-24);
   }
 
   .swatches > li {
@@ -622,17 +631,17 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
   .stroke-box {
     width: 7rem;
     height: 4rem;
-    background: var(--color-bg-default);
+    background: var(--color-surface-default);
     border-style: solid;
-    border-color: var(--color-border-default);
-    border-radius: var(--radius-md);
+    border-color: var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
   }
 
   .opacity-box {
     width: 7rem;
     height: 4rem;
-    background: var(--color-bg-feature);
-    border-radius: var(--radius-md);
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-medium);
   }
 
   .radii {
@@ -641,13 +650,13 @@ const specimen = 'Concevoir, tester, décider — puis recommencer.';
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xl);
+    gap: var(--base-24);
   }
 
   .radius-box {
     width: 7rem;
     height: 7rem;
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-base-strong);
   }
 </style>

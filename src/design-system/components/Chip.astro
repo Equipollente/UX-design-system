@@ -97,14 +97,14 @@ const classes = ['chip', className].filter(Boolean).join(' ');
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: var(--space-sm) var(--space-lg); /* 8 / 16 — les liaisons du nœud */
-    border: var(--border-width-default) solid var(--color-border-control);
-    border-radius: var(--radius-pill);
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-ui); /* 0.875rem — les 14 du nœud */
-    font-weight: var(--font-weight-regular); /* 400 */
-    line-height: var(--font-line-height-snug); /* 1.2 — les 120 % du nœud */
-    letter-spacing: var(--font-letter-spacing-normal);
+    padding: var(--base-8) var(--base-16); /* 8 / 16 — les liaisons du nœud */
+    border: var(--border-width-default) solid var(--color-border-primary-default);
+    border-radius: var(--border-radius-full);
+    font-family: var(--font-stack-body); /* Inter */
+    font-size: var(--text-body-medium-size); /* 0.875rem — les 14 du nœud */
+    font-weight: var(--base-text-weight-regular); /* 400 */
+    line-height: var(--base-text-line-height-snug); /* 1.2 — les 120 % du nœud */
+    letter-spacing: var(--base-text-letter-spacing-normal);
     /* WCAG 2.5.5 — le chip entier est la cible, pas seulement son mot. */
     cursor: pointer;
     /* Un chip ne se coupe pas : il perdrait sa forme de pastille. */
@@ -114,33 +114,33 @@ const classes = ['chip', className].filter(Boolean).join(' ');
   /* — default — Le fond est le blanc de la page ; c'est le trait qui l'en
      détache. Voir le pavé en tête pour ce qu'il vaut en contraste. */
   .chip {
-    color: var(--color-text-default);
-    background: var(--chip-bg, var(--color-bg-default));
+    color: var(--color-text-base-default);
+    background: var(--chip-bg, var(--color-surface-default));
   }
 
   /* — hover — */
   .chip:hover {
-    background: var(--chip-bg-hover, var(--color-action-ghost-bg-hover));
+    background: var(--chip-bg-hover, var(--color-background-neutral-subtlest-hover));
   }
 
   /* — focused — L'anneau du système, porté par le chip : la case étant hors du
      cadre, son propre anneau ne se verrait pas. 2, la mesure du nœud. WCAG 2.4.7. */
   .chip:has(.chip-input:focus-visible) {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* — selected — Le mot passe en medium : c'est la graisse qui porte l'état, pas
      seulement la couleur. Un chip retenu se reconnaît donc aussi en niveaux de
      gris (WCAG 1.4.1 — la couleur n'est pas le seul indice). */
   .chip:has(.chip-input:checked) {
-    color: var(--color-text-on-accent);
-    background: var(--chip-bg-selected, var(--color-action-primary-bg));
-    font-weight: var(--font-weight-medium); /* 500 */
+    color: var(--color-text-primary-on-bold);
+    background: var(--chip-bg-selected, var(--color-background-primary-bold));
+    font-weight: var(--base-text-weight-medium); /* 500 */
   }
 
   .chip:has(.chip-input:checked):hover {
-    background: var(--chip-bg-selected-hover, var(--color-action-primary-bg-hover));
+    background: var(--chip-bg-selected-hover, var(--color-background-primary-bold-hover));
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
@@ -149,14 +149,14 @@ const classes = ['chip', className].filter(Boolean).join(' ');
      l'opacité qui porte l'état, l'encre ne fait que la suivre. */
   .chip:has(.chip-input:disabled),
   .chip:has(.chip-input:disabled):hover {
-    color: var(--color-text-disabled);
-    background: var(--chip-bg, var(--color-bg-default));
+    color: var(--color-text-base-inactive);
+    background: var(--chip-bg, var(--color-surface-default));
     opacity: var(--opacity-disabled);
     cursor: not-allowed;
   }
 
   .chip:has(.chip-input:checked:disabled),
   .chip:has(.chip-input:checked:disabled):hover {
-    background: var(--chip-bg-selected, var(--color-action-primary-bg));
+    background: var(--chip-bg-selected, var(--color-background-primary-bold));
   }
 </style>

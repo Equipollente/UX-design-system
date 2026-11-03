@@ -1,0 +1,60 @@
+{
+  "duration": {
+    "quick": {
+      "$type": "number",
+      "$value": 140,
+      "$description": "Durée en millisecondes. Une réaction immédiate : survol, appui, changement de couleur. À poser en transition-duration. Remise à zéro sous prefers-reduced-motion.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56637"
+      }
+    },
+    "default": {
+      "$type": "number",
+      "$value": 200,
+      "$description": "Durée en millisecondes. Un changement d'état courant : ouverture d'un menu, déplacement d'un élément. À poser en transition-duration. Remise à zéro sous prefers-reduced-motion.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56638"
+      }
+    },
+    "slow": {
+      "$type": "number",
+      "$value": 320,
+      "$description": "Durée en millisecondes. Une transition plus ample : apparition d'une modale ou d'un panneau. À poser en transition-duration. Remise à zéro sous prefers-reduced-motion.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56639"
+      }
+    }
+  },
+  "easing": {
+    "standard": {
+      "$type": "string",
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$description": "Courbe de base d'un mouvement qui reste à l'écran (cubic-bezier(0.4, 0, 0.2, 1)). À poser en transition-timing-function.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56640",
+        "com.figma.type": "string"
+      }
+    },
+    "enter": {
+      "$type": "string",
+      "$value": "cubic-bezier(0, 0, 0.2, 1)",
+      "$description": "Courbe d'un élément qui entre à l'écran, démarrage vif puis ralentissement (cubic-bezier(0, 0, 0.2, 1)). À poser en transition-timing-function.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56641",
+        "com.figma.type": "string"
+      }
+    },
+    "exit": {
+      "$type": "string",
+      "$value": "cubic-bezier(0.4, 0, 1, 1)",
+      "$description": "Courbe d'un élément qui quitte l'écran, accélération progressive (cubic-bezier(0.4, 0, 1, 1)). À poser en transition-timing-function.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:56642",
+        "com.figma.type": "string"
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Valeur"
+  }
+}

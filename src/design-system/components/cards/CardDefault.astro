@@ -95,7 +95,7 @@ const cardVariant = hasActions ? 'actions' : 'link';
   .card-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .card-default[data-card-variant='link'] {
@@ -103,7 +103,7 @@ const cardVariant = hasActions ? 'actions' : 'link';
   }
 
   .card-default[data-card-variant='link']:hover .card-layout {
-    border: var(--border-width-default) solid var(--color-border-default);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
     box-shadow:
       0 var(--shadow-lg-y) var(--shadow-lg-blur) var(--shadow-lg-spread) var(--shadow-lg-color),
       0 var(--shadow-contact-y) var(--shadow-contact-blur) var(--shadow-contact-spread) var(--shadow-contact-color);
@@ -122,8 +122,8 @@ const cardVariant = hasActions ? 'actions' : 'link';
   }
 
   .card-default[data-card-variant='link']:focus-within {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--space-xs);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--base-4);
   }
 
   .cards-card-link:focus-visible {
@@ -132,8 +132,8 @@ const cardVariant = hasActions ? 'actions' : 'link';
 
   .card-info {
     display: grid;
-    gap: var(--space-xl);
-    padding: var(--space-lg) 0;
+    gap: var(--base-24);
+    padding: var(--base-16) 0;
   }
 
   .card-img {
@@ -144,8 +144,8 @@ const cardVariant = hasActions ? 'actions' : 'link';
      aspect-ratio: var(--ratio-square);
     min-width: 0;
     overflow: hidden;
-    border-radius: var(--radius-sm);
-    border: var(--border-width-default) solid var(--color-border-strong);
+    border-radius: var(--border-radius-small);
+    border: var(--border-width-default) solid var(--color-border-base-strong);
   }
 
   @container (min-width: 224px) {

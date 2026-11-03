@@ -35,8 +35,11 @@ import {
   modalSuccessDemo,
 } from './_demo';
 
-const buttonTokens = tokens.filter((t) => t.group === 'button');
-const cardTokens = tokens.filter((t) => t.group === 'card');
+// Les tokens qui dimensionnent un bouton : ses hauteurs, marges et écarts (control)
+// et la taille de ses icônes (icon).
+const buttonTokens = tokens.filter((t) => t.group === 'control' || t.group === 'icon');
+// La carte n'a plus de tokens propres : elle lit les rôles de texte du système.
+const cardTokens: typeof tokens = [];
 const buttonSizes = ['sm', 'md', 'lg'] as const;
 const buttonHues = ['clay', 'teal', 'sun', 'rose', 'accent', 'highlight', 'neutral'] as const;
 
@@ -413,7 +416,7 @@ const modalProps = [
         l'extraction du système, et valait 1,28:1 sur ce même fond quand WCAG 1.4.11 en demande 3.
         C'est ce qui explique qu'il ait tenu si longtemps sans que personne le voie.
         <br />
-        L'écart entre deux boutons est <code>--button-target-spacing</code> (WCAG 2.5.8). Tabulez pour
+        L'écart entre deux boutons est <code>--stack-gap-spacious</code> (WCAG 2.5.8). Tabulez pour
         voir l'anneau de focus, et survolez pour voir le fond changer en
         {' '}<code>--motion-duration-quick</code>.
       </p>
@@ -511,9 +514,9 @@ const modalProps = [
 
       <h3>Tokens</h3>
       <p class="section-note">
-        Les {buttonTokens.length} tokens <code>button.*</code> : hauteur, padding, gap, taille d'icône,
-        largeur minimale, rayon, anneau de focus. Ils décrivent cet objet et pas le système — c'est pour
-        ça qu'ils sont ici plutôt que dans <a href={withBase('/foundations')}>Fondations</a>.
+        Les {buttonTokens.length} tokens <code>control.*</code> et <code>icon.*</code> : hauteur, marge
+        horizontale, écart, taille d'icône. Le bouton n'a pas de largeur minimale : il épouse son
+        contenu. Ces tokens dimensionnent les contrôles en général, pas seulement le bouton.
       </p>
       <ul class="plain token-list">
         {
@@ -1001,7 +1004,7 @@ const modalProps = [
 
       <h3>Tokens</h3>
       <p class="section-note">
-        CardDefault lit les tokens <code>card.*</code> pour ses trois lignes de texte. Les ratios
+        CardDefault lit directement les rôles de texte du système pour ses trois lignes. Les ratios
         d'image et les seuils de largeur restent respectivement des tokens <code>ratio.*</code> et
         des bornes structurelles de container query ; ils ne sont pas recopiés dans cette page.
       </p>
@@ -1163,7 +1166,7 @@ const modalProps = [
 
       <p class="section-note">
         <strong>La bascule ne réécrit pas la taille du titre, elle repose
-        {' '}<code>--card-title-size</code> sur la carte.</strong> L'endroit qui décide reste donc
+        {' '}<code>--text-title-large-size</code> sur la carte.</strong> L'endroit qui décide reste donc
         unique, et l'alias <code>card.title.size</code> sert enfin à ce pour quoi il avait été gardé :
         être le point où la typographie d'une carte bouge sans emporter les titres de page.
       </p>
@@ -1285,23 +1288,12 @@ const modalProps = [
 
       <h3>Tokens</h3>
       <p class="section-note">
-        Les {cardTokens.length} tokens <code>card.*</code> : la taille et l'encre des trois lignes de
-        texte de la carte. Ils décrivent cet objet et pas le système — c'est pour ça qu'ils sont ici
-        plutôt que dans <a href={withBase('/foundations')}>Fondations</a>.
-        <br />
-        <strong>Ce sont six alias, et c'est voulu.</strong> Aucun ne porte de valeur à lui : chacun
-        renvoie à une primitive que le système avait déjà — <code>card.title.size</code> lit
-        {' '}<code>font.size.title</code>, qui est aussi la taille d'un <code>h2</code>. Le token n'ajoute
-        donc pas une valeur, il ajoute un <em>endroit</em> : celui où la typographie d'une carte peut
-        bouger sans emporter les titres de page avec elle. C'est ce que fait déjà le groupe
-        {' '}<code>button</code> avec <code>button.radius</code>, qui n'est qu'un alias de
-        {' '}<code>radius.pill</code>.
-        <br />
-        <strong>Ils ne fixent que la taille et l'encre.</strong> La police, la graisse, l'interligne et
-        l'interlettrage du titre restent ceux d'un <code>h2</code>, posés par <code>global.css</code>
-        {' '}pour tous les rangs : les nommer ici aurait détaché les titres de carte de l'échelle
-        typographique du système, ce qui est exactement ce qu'un design system ne doit pas laisser
-        arriver par distraction.
+        La carte n'a plus de tokens propres : le titre lit <code>--text-title-large-size</code>, la phrase
+        d'appui <code>--text-body-large-size</code> et la méta <code>--text-body-medium-size</code>.
+        L'encre vient de <code>--color-text-base-default</code> et <code>--color-text-base-muted</code>.
+        Ils décrivent cet objet et pas le système, mais ils ne sont plus des alias dédiés : le jour où
+        la typographie d'une carte doit bouger sans emporter les titres de page, c'est ici qu'il faudra
+        recréer un endroit.
       </p>
       <ul class="plain token-list">
         {
@@ -1560,7 +1552,7 @@ const modalProps = [
         <li>
           <p class="desc">
             <strong>Sous 768px</strong>, les marges de 48px tomberaient à la moitié d'un écran de 390 :
-            elles passent à <code>--space-xl</code>, le titre à <code>--font-size-subtitle</code> et la
+            elles passent à <code>--base-24</code>, le titre à <code>--text-title-medium-size</code> et la
             piste à <code>272px</code>, ce qui laisse aux vignettes les 240px qu'elles avaient déjà.
             {' '}<strong>Et les tags s'effacent</strong>, comme les icônes et l'action du Nav au même point
             de rupture : c'est ce que la maquette mobile dessine, et ce n'est pas qu'une économie de
@@ -1611,7 +1603,7 @@ const modalProps = [
       <p class="flag">
         <strong>Deux écarts d'espacement.</strong> Figma pose <code>33px</code> entre les vignettes et
         {' '}<code>10px</code> entre les tags. Aucun token ne porte ces deux valeurs : la première devient
-        {' '}<code>--space-2xl</code> (32), la seconde <code>--space-md</code> (12) — on n'a jamais intérêt à
+        {' '}<code>--base-32</code> (32), la seconde <code>--base-12</code> (12) — on n'a jamais intérêt à
         resserrer l'écart entre deux cibles voisines (WCAG 2.5.8).
       </p>
 
@@ -2145,7 +2137,7 @@ const modalProps = [
 
       <p class="flag">
         <strong>L'écart entre le texte et les boutons n'a pas de token.</strong> Figma le dessine à
-        {' '}<code>10px</code> ; ni <code>--space-sm</code> (8) ni <code>--space-md</code> (12) ne
+        {' '}<code>10px</code> ; ni <code>--base-8</code> (8) ni <code>--base-12</code> (12) ne
         tombe juste. La valeur reste en dur, dans <code>--modal-gap</code>, comme
         {' '}<code>--card-shadow</code> et <code>--fold-peek</code> avant elle.
       </p>
@@ -2172,17 +2164,17 @@ const modalProps = [
      la largeur qu'il aurait dans une page, sans laisser croire qu'il fait
      partie de la doc. */
   .demo {
-    padding: var(--space-xl);
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-lg);
+    padding: var(--base-24);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+    margin-bottom: var(--base-16);
   }
 
   /* Le Nav se centre et déborde en largeur sur petit écran : il défile dans son
      cadre plutôt que d'élargir la page. */
   .demo-nav {
-    padding: var(--space-md) 0;
+    padding: var(--base-12) 0;
     overflow-x: auto;
   }
 
@@ -2190,20 +2182,20 @@ const modalProps = [
      très basse — ne suffirait pas à l'en détacher. Elle se montre donc sur la
      surface lavande, comme le carrousel et ses flèches blanches. */
   .demo-card {
-    background: var(--color-bg-surface);
+    background: var(--color-surface-raised);
   }
 
   .demo-card-default-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: var(--space-xl);
-    background: var(--color-bg-surface);
+    gap: var(--base-24);
+    background: var(--color-surface-raised);
   }
 
   .demo-card-default {
     display: grid;
-    gap: var(--space-xl);
-    background: var(--color-bg-surface);
+    gap: var(--base-24);
+    background: var(--color-surface-raised);
   }
 
   /* La modale est blanche sur un cadre blanc, comme la carte : même remède,
@@ -2216,7 +2208,7 @@ const modalProps = [
   .demo-modal {
     position: relative;
     min-height: 420px;
-    background: var(--color-bg-surface);
+    background: var(--color-surface-raised);
   }
 
   .demo-modal :global(.modal) {
@@ -2242,7 +2234,7 @@ const modalProps = [
      Reste un peu d'air en haut, sans quoi son ombre — projetée vers le haut —
      ne se verrait pas. */
   .demo-case-study {
-    padding: var(--space-2xl) 0 0;
+    padding: var(--base-32) 0 0;
     /* Le cadre perd ses coins bas arrondis pour épouser ceux de la carte, qui
        sont carrés. Pas d'overflow: hidden ici — il rognerait l'ombre. */
     border-bottom-left-radius: 0;
@@ -2252,19 +2244,19 @@ const modalProps = [
   /* L'en-tête et le carrousel portent eux aussi leurs marges latérales. */
   .demo-header,
   .demo-carousel {
-    padding: var(--space-xl) 0;
+    padding: var(--base-24) 0;
   }
 
   /* La carte et le carrousel s'attendent à la surface lavande ; le carrousel
      seul est montré sur elle pour que ses flèches, blanches, se détachent. */
   .demo-carousel {
-    background: var(--color-bg-surface);
+    background: var(--color-surface-raised);
   }
 
   /* L'intro se centre sur sa propre mesure et porte déjà son padding : le cadre
      n'en remet pas. */
   .demo-intro {
-    padding: var(--space-xl) 0;
+    padding: var(--base-24) 0;
   }
 
   /* La pile en réduction. La boîte défile, donc elle devient elle-même le
@@ -2291,33 +2283,33 @@ const modalProps = [
     justify-content: center;
     height: calc(420px - 42px);
     margin: 0;
-    padding: var(--space-xl);
-    background: var(--color-bg-section);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-body-sm);
+    padding: var(--base-24);
+    background: var(--color-surface-sunken);
+    color: var(--color-text-base-muted);
+    font-size: var(--text-body-small-size);
     text-align: center;
   }
 
   .demo-note {
-    margin-top: calc(-1 * var(--space-sm));
-    margin-bottom: var(--space-xl);
-    font-size: var(--font-size-body-sm);
-    color: var(--color-text-muted);
+    margin-top: calc(-1 * var(--base-8));
+    margin-bottom: var(--base-24);
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-muted);
   }
 
   /* Les trois règles que la page doit porter, montrées telles qu'on les écrit. */
   pre {
-    margin: 0 0 var(--space-lg);
-    padding: var(--space-lg);
-    background: var(--color-bg-section);
-    border-radius: var(--radius-sm);
+    margin: 0 0 var(--base-16);
+    padding: var(--base-16);
+    background: var(--color-surface-sunken);
+    border-radius: var(--border-radius-small);
     overflow-x: auto;
   }
 
   .tag-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm) var(--space-md);
+    gap: var(--base-8) var(--base-12);
   }
 
   /* Les boutons eux-mêmes vivent dans Button.astro — il n'y a qu'une seule
@@ -2327,8 +2319,8 @@ const modalProps = [
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--button-target-spacing);
-    margin-bottom: var(--space-xl);
+    gap: var(--stack-gap-spacious);
+    margin-bottom: var(--base-24);
   }
 
   .btn-row.last {
@@ -2336,56 +2328,56 @@ const modalProps = [
   }
 
   h3 {
-    font-size: var(--font-size-subheading);
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-md);
+    font-size: var(--text-body-medium-size);
+    margin-top: var(--base-32);
+    margin-bottom: var(--base-12);
   }
 
   h4 {
-    font-size: var(--font-size-subheading);
-    margin-bottom: var(--space-md);
+    font-size: var(--text-body-medium-size);
+    margin-bottom: var(--base-12);
   }
 
   .ref,
   .source {
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-label);
-    color: var(--color-text-muted);
+    font-family: var(--font-stack-body);
+    font-weight: var(--base-text-weight-regular);
+    font-size: var(--text-caption-size);
+    color: var(--color-text-base-muted);
   }
 
   .table-scroll {
     overflow-x: auto;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--base-24);
   }
 
   table {
     border-collapse: collapse;
-    font-size: var(--font-size-body-sm);
+    font-size: var(--text-body-small-size);
     text-align: left;
   }
 
   th {
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-label);
-    letter-spacing: var(--font-letter-spacing-wider);
+    font-family: var(--font-stack-heading);
+    font-size: var(--text-caption-size);
+    letter-spacing: var(--base-text-letter-spacing-wider);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   th,
   td {
-    padding: var(--space-sm) var(--space-lg) var(--space-sm) 0;
-    border-bottom: 1px solid var(--color-border-default);
+    padding: var(--base-8) var(--base-16) var(--base-8) 0;
+    border-bottom: 1px solid var(--color-border-base-subtle);
     vertical-align: top;
   }
 
   td {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   td:first-child {
-    color: var(--color-text-default);
+    color: var(--color-text-base-default);
     white-space: nowrap;
   }
 </style>

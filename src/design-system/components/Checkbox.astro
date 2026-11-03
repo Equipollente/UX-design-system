@@ -105,8 +105,8 @@ const messageId = `${id}-message`;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    column-gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
-    row-gap: var(--space-xs); /* 4 — l'écart du LabelGroup */
+    column-gap: var(--base-8); /* 8 — l'itemSpacing du nœud */
+    row-gap: var(--base-4); /* 4 — l'écart du LabelGroup */
   }
 
   .checkbox :global(.field-message) {
@@ -125,10 +125,10 @@ const messageId = `${id}-message`;
   .checkbox-input {
     appearance: none;
     margin: 0;
-    width: var(--checkbox-size, var(--control-size));
-    height: var(--checkbox-size, var(--control-size));
-    border-radius: var(--radius-sm); /* 6 — la liaison radius/sm du nœud */
-    border: var(--border-width-default) solid var(--color-border-default);
+    width: var(--checkbox-size, var(--base-20));
+    height: var(--checkbox-size, var(--base-20));
+    border-radius: var(--border-radius-small); /* 6 — la liaison radius/sm du nœud */
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
     /* WCAG 2.5.5 — le libellé est lié par `for`, il agrandit la cible. */
     cursor: pointer;
     transition:
@@ -138,20 +138,20 @@ const messageId = `${id}-message`;
 
   /* — default — */
   .checkbox-input {
-    background: var(--checkbox-bg, var(--color-bg-surface));
+    background: var(--checkbox-bg, var(--color-surface-raised));
   }
 
   /* — focused — L'anneau du système remplace celui du navigateur. 2, la mesure
      du nœud, et WCAG 2.4.7 est tenu. */
   .checkbox-input:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   /* — checked, indeterminate — Le trait suit le fond : la case est d'un seul tenant. */
   .checkbox-input:is(:checked, :indeterminate) {
-    background: var(--checkbox-accent, var(--color-bg-control));
-    border-color: var(--checkbox-accent, var(--color-bg-control));
+    background: var(--checkbox-accent, var(--color-background-primary-bold));
+    border-color: var(--checkbox-accent, var(--color-background-primary-bold));
   }
 
   /* La coche et le tiret sont posés au centre de la case, à 10 dans le nœud : la
@@ -162,9 +162,9 @@ const messageId = `${id}-message`;
      système n'a pas. */
   .checkbox-mark {
     position: absolute;
-    inset: var(--space-xs);
-    --icon-size: calc(var(--checkbox-size, var(--control-size)) - 2 * var(--space-xs));
-    --icon-color: var(--color-text-on-accent);
+    inset: var(--base-4);
+    --icon-size: calc(var(--checkbox-size, var(--base-20)) - 2 * var(--base-4));
+    --icon-color: var(--color-text-primary-on-bold);
     pointer-events: none;
   }
 
@@ -183,13 +183,13 @@ const messageId = `${id}-message`;
      trait `category/neutral` vide, plein `category/neutral/solid` cochée. La
      coche reste blanche sur ce plein. */
   .checkbox-input:disabled {
-    background: var(--color-category-neutral-bg);
-    border-color: var(--color-category-neutral-border);
+    background: var(--color-background-neutral-subtle);
+    border-color: var(--color-border-neutral-default);
   }
 
   .checkbox-input:disabled:is(:checked, :indeterminate) {
-    background: var(--color-category-neutral-solid);
-    border-color: var(--color-category-neutral-solid);
+    background: var(--color-background-neutral-bold);
+    border-color: var(--color-background-neutral-bold);
   }
 
   .checkbox-disabled .checkbox-input,

@@ -58,8 +58,8 @@ const classes = ['icon', size && `icon-${size}`, className].filter(Boolean).join
      à 24 il est à l'échelle 1, en dessous il est réduit, jamais étiré. */
   .icon {
     flex: none;
-    width: var(--icon-size, var(--button-icon-size-md));
-    height: var(--icon-size, var(--button-icon-size-md));
+    width: var(--icon-size, var(--icon-medium));
+    height: var(--icon-size, var(--icon-medium));
     /* Par défaut l'icône suit le texte. --icon-color existe pour les cas où Figma
        lie l'icône à une variable propre plutôt qu'à la couleur du libellé : c'est
        ce que fait Button, dont les deux variantes nomment leur teinte d'icône. */
@@ -70,14 +70,14 @@ const classes = ['icon', size && `icon-${size}`, className].filter(Boolean).join
      tiennent déjà leur taille d'icône de leur propre taille. Une propriété personnalisée
      hérite, elle atteint le <svg> sans que l'appelant ait à viser l'icône. */
   .icon-sm {
-    --icon-size: var(--button-icon-size-sm);
+    --icon-size: var(--icon-small);
   }
 
   .icon-md {
-    --icon-size: var(--button-icon-size-md);
+    --icon-size: var(--icon-medium);
   }
 
   .icon-lg {
-    --icon-size: var(--button-icon-size-lg);
+    --icon-size: var(--icon-large);
   }
 </style>

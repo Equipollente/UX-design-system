@@ -557,3 +557,33 @@ minimale et le rembourrage, avec un diamètre égal à la hauteur de la taille. 
 `iconEnd`, ni largeur minimale, et doit porter son nom : `icon` et `aria-label` sont obligatoires, et le composant
 refuse de se compiler sans. Le secondaire reste son défaut, parce que c'est le rond d'origine. Cassant pour qui
 écrivait `<Button variant="icon">` : la bascule est `<IconButton icon="…" aria-label="…" />`.
+
+## La couleur s'organise par propriété, la forme et la typographie suivent Primer (03/11)
+
+**Couleur : deux étages, des rôles par propriété.** `primitives` porte les rampes, nommées d'après leur teinte —
+`grey`, `indigo`, `lime`, `clay`, `teal`, `sun`, `rose`, `red`, `green`, plus `blue-france` et `green-emeraude` pour
+Prof Hub. `semantic` porte les rôles, rangés par **propriété d'abord** — `color/surface`, `background`, `text`, `icon`,
+`border` — puis par famille (primary, secondary, highlight, neutral, rose, clay, teal, sun, danger, success, warning,
+info, plus `base` pour le défaut). L'emphase se dit `bold`, `subtle`, `subtlest` ; l'état `/hover`, `/pressed`. Une
+famille s'appelle d'après sa fonction, une rampe d'après sa teinte. Un composant ne lit qu'un rôle.
+
+**Le thème est un mode, pas une catégorie.** Prof Hub est un mode de `semantic` : mêmes noms, autres valeurs (rampes
+DSFR). Dans le CSS, Default est le `:root` et Prof Hub un bloc `[data-theme="prof-hub"]` qui ne redéfinit que ce qui
+change. Les modes d'appareil n'existent que dans `layout`.
+
+**Taille, forme et typographie suivent Primer.** `size` : une échelle `base/` nommée d'après sa valeur, des rôles qui
+y pointent (`stack`, `control`, `icon`, `overlay`, `section`), les traits, les rayons, l'anneau de focus et les
+seuils de largeur. La densité est dans le nom (`condensed`, `normal`, `spacious`), pas dans un mode. `typography` : une
+échelle de base (8 tailles : 12, 14, 16, 18, 20, 24, 32, 40) et neuf rôles de texte (`display`, `title/large|medium|small`,
+`subtitle`, `body/large|medium|small`, `caption`). Les tailles passent de 10, 11, 13, 15, 17 à une échelle où le
+texte courant fait 16 px et rien ne descend sous 12 : un champ à moins de 16 px fait zoomer iOS.
+
+**Un bouton épouse son contenu.** La largeur minimale (`button/min-width`) est supprimée ; la hauteur reste un token
+(`control/<taille>/size`), parce qu'elle fixe la cible tactile. Le padding vertical n'existe plus sur le bouton.
+
+**Les variantes de catégorie du Button sont des teintes claires.** `action/<teinte>/bg` valait exactement
+`background/<famille>/subtle`, le libellé `text/<famille>/on-subtle`, et l'icône `icon/<famille>`.
+
+**Écarts connus, à arbitrer dans Figma :** la bordure de champ (`border/base/subtle`) et l'indicateur « éteint » du
+Toggle (`background/inactive`, très pâle) ne tiennent pas le 3:1 des éléments d'interface ; les ombres, l'opacité et les
+rapports d'image sont dans `effects` sans rôle sémantique ; `card` n'a plus de tokens propres.

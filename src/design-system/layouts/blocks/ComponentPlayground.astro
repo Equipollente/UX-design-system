@@ -210,13 +210,13 @@ const htmlPanelId = `${id}-html-panel`;
 <style>
   [data-slot='Playground'] {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .playground-header {
     display: grid;
-    gap: var(--space-xs);
-    padding: var(--space-2xl) 0 var(--space-xs) 0;
+    gap: var(--base-4);
+    padding: var(--base-32) 0 var(--base-4) 0;
   }
 
   h2,
@@ -225,29 +225,29 @@ const htmlPanelId = `${id}-html-panel`;
   }
 
   h2 {
-    font-size: var(--font-size-title);
+    font-size: var(--text-title-large-size);
   }
 
   h3 {
     margin: 0;
-    font-size: var(--font-size-heading);
+    font-size: var(--text-title-small-size);
   }
 
   p {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   .playground-frame {
     display: grid;
     grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 2.3fr);
     grid-template-rows: minmax(0, 1fr);
-    gap: var(--space-xl);
+    gap: var(--base-24);
     width: 100%;
     max-height: 800px;
     min-width: 0;
-    padding: var(--space-xl);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-surface);
+    padding: var(--base-24);
+    border-radius: var(--border-radius-medium);
+    background: var(--color-surface-raised);
     overflow: hidden;
   }
 
@@ -266,41 +266,41 @@ const htmlPanelId = `${id}-html-panel`;
   }
 
   .playground-controls {
-    padding-right: var(--space-xs);
+    padding-right: var(--base-4);
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
 
   }
 
   .playground-controls :global(form) {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .playground-controls :global(fieldset) {
     display: grid;
-    gap: var(--space-md);
+    gap: var(--base-12);
     min-inline-size: 0;
     margin: 0;
-    padding: var(--space-md);
-    border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-default);
+    padding: var(--base-12);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+    background: var(--color-surface-default);
   }
 
   .playground-controls :global(legend) {
-    padding-inline: var(--space-xs) var(--space-xl);
-    padding-block: var(--space-xl) var(--space-md);
-    color: var(--color-text-default);
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-heading);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-tight);
+    padding-inline: var(--base-4) var(--base-24);
+    padding-block: var(--base-24) var(--base-12);
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-heading);
+    font-size: var(--text-title-small-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-tight);
   }
 
   .playground-controls :global([data-playground-options]) {
     display: grid;
-    gap: var(--space-md);
+    gap: var(--base-12);
     min-inline-size: 0;
   }
 
@@ -312,8 +312,8 @@ const htmlPanelId = `${id}-html-panel`;
   .demo-frame {
     width: 100%;
     min-height: 12rem;
-    padding: var(--space-xl);
-    background: var(--color-bg-default);
+    padding: var(--base-24);
+    background: var(--color-surface-default);
   }
 
   pre {

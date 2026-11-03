@@ -10,23 +10,23 @@
 main {
   max-width: 72rem;
   margin: 0 auto;
-  padding: 0 var(--space-xl);
+  padding: 0 var(--base-24);
 }
 
 .page-head {
-  padding-top: var(--space-layout-64);
-  padding-bottom: var(--space-layout-48);
+  padding-top: var(--section-space-medium);
+  padding-bottom: var(--section-space-small);
 }
 
 .page-head h6 {
-  color: var(--color-text-accent);
-  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary-default);
+  margin-bottom: var(--base-8);
 }
 
 .lead {
   max-width: 60ch;
-  font-size: var(--font-size-body-lg);
-  color: var(--color-text-muted);
+  font-size: var(--text-body-large-size);
+  color: var(--color-text-base-muted);
 }
 
 /* Les sections de la doc, et elles seules : `main >` n'est pas une précaution de
@@ -35,72 +35,72 @@ main {
  * la bordure et les marges de la page qui les montre. Un composant démontré doit
  * se voir tel qu'il est ailleurs. */
 main > section {
-  padding: var(--space-layout-48) 0;
-  border-top: 1px solid var(--color-border-default);
+  padding: var(--section-space-small) 0;
+  border-top: 1px solid var(--color-border-base-subtle);
 }
 
 main > section > h2 {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--base-16);
 }
 
 .section-note {
   max-width: 66ch;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-xl);
+  color: var(--color-text-base-muted);
+  margin-bottom: var(--base-24);
 }
 
 /* Ce qui reste à trancher côté design. Le système préfère l'écrire que le taire. */
 .flag {
   max-width: 66ch;
-  margin-bottom: var(--space-xl);
-  padding: var(--space-lg);
-  background: var(--color-bg-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-default);
-  font-size: var(--font-size-body-sm);
+  margin-bottom: var(--base-24);
+  padding: var(--base-16);
+  background: var(--color-surface-raised);
+  border-radius: var(--border-radius-medium);
+  border: 1px solid var(--color-border-base-subtle);
+  font-size: var(--text-body-small-size);
 }
 
 .family {
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--base-32);
 }
 
 .family h3 {
-  font-size: var(--font-size-heading);
-  margin-bottom: var(--space-md);
+  font-size: var(--text-title-small-size);
+  margin-bottom: var(--base-12);
 }
 
 code {
-  background: var(--color-bg-surface);
-  border-radius: var(--radius-sm);
-  padding: 0 var(--space-xs);
+  background: var(--color-surface-raised);
+  border-radius: var(--border-radius-small);
+  padding: 0 var(--base-4);
 }
 
 .name {
   display: block;
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
-  margin-top: var(--space-xs);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-base-muted);
+  margin-top: var(--base-4);
   background: none;
   padding: 0;
 }
 
 .value {
   display: block;
-  font-size: var(--font-size-label);
-  color: var(--color-text-default);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-base-default);
   font-variant-numeric: tabular-nums;
 }
 
 .alias {
-  color: var(--color-text-accent);
+  color: var(--color-text-primary-default);
   font-style: normal;
 }
 
 .desc {
-  margin: var(--space-xs) 0 0;
-  font-size: var(--font-size-label);
-  line-height: var(--font-line-height-body);
-  color: var(--color-text-muted);
+  margin: var(--base-4) 0 0;
+  font-size: var(--text-caption-size);
+  line-height: var(--base-text-line-height-normal);
+  color: var(--color-text-base-muted);
   max-width: 42ch;
 }
 
@@ -112,12 +112,12 @@ code {
 }
 
 .plain > li + li {
-  margin-top: var(--space-xl);
-  padding-top: var(--space-xl);
-  border-top: 1px solid var(--color-border-default);
+  margin-top: var(--base-24);
+  padding-top: var(--base-24);
+  border-top: 1px solid var(--color-border-base-subtle);
 }
 
 .token-list > li + li {
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
+  margin-top: var(--base-12);
+  padding-top: var(--base-12);
 }

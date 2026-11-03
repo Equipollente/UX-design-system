@@ -51,7 +51,7 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
           size="lg"
           href={action.href}
           iconEnd="arrow-narrow-right"
-          style="--btn-px: var(--button-padding-x-md); --btn-icon: var(--button-icon-size-md)"
+          style="--btn-px: var(--control-medium-padding-inline-normal); --btn-icon: var(--icon-medium)"
         >
           {action.label}
         </Button>
@@ -80,8 +80,8 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
 
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    padding-inline: var(--space-layout-48);
+    gap: var(--base-12);
+    padding-inline: var(--section-space-small);
   }
 
   /* Même dessin que le h6 du système — 13px, capitales, interlettrage large —
@@ -91,13 +91,13 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
      h6 : c'est une ligne de contexte au-dessus du titre. */
   .eyebrow {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-body-sm);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-wider);
+    font-family: var(--font-stack-body);
+    font-weight: var(--base-text-weight-semibold);
+    font-size: var(--text-body-small-size);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-wider);
     text-transform: uppercase;
-    color: var(--color-text-accent);
+    color: var(--color-text-primary-default);
   }
 
   /* Le titre et le bouton partagent une ligne et s'alignent sur leur bas. Trop
@@ -106,28 +106,28 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 
   .title-impact {
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--base-8);
     min-width: min(var(--header-title-min), 100%);
   }
 
   .title {
     margin: 0;
-    font-size: var(--font-size-title);
-    color: var(--color-text-default);
+    font-size: var(--text-title-large-size);
+    color: var(--color-text-base-default);
   }
 
   .impact {
     margin: 0;
-    font-size: var(--font-size-body);
-    line-height: var(--font-line-height-body);
-    color: var(--color-text-muted);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-normal);
+    color: var(--color-text-base-muted);
   }
 
   /* Figma pose 8px entre les rangées et 10px entre les tags. Aucun token ne
@@ -136,7 +136,7 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm) var(--space-md);
+    gap: var(--base-8) var(--base-12);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -145,11 +145,11 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
   /* Sous 768px, la marge de 48px mange la moitié d'un écran de 390. */
   @media (max-width: 767px) {
     .case-study-header {
-      padding-inline: var(--space-xl);
+      padding-inline: var(--base-24);
     }
 
     .title {
-      font-size: var(--font-size-subtitle);
+      font-size: var(--text-title-medium-size);
     }
 
     /* Les tags s'effacent, comme les icônes et l'action du Nav s'effacent au

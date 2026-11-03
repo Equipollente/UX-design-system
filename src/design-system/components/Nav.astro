@@ -89,7 +89,7 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
           size="lg"
           href={action.href}
           icon={action.icon}
-          style="--btn-px: var(--button-padding-x-md); --btn-min-w: 0"
+          style="--btn-px: var(--control-medium-padding-inline-normal); --btn-min-w: 0"
         >
           {action.label}
         </Button>
@@ -103,11 +103,11 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-lg);
+    gap: var(--base-16);
     /* Ce padding vertical fait partie de ce que mesure le token nav.height, que
        les pages lisent pour caler leur premier écran sous la barre. Le changer
        ici sans reprendre la variable dans Figma décalerait ces pages. */
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--base-12) var(--base-16);
     /* Sans min-width: 0, le min-width: auto par défaut des éléments flex
        empêche la pilule de se contraindre, donc de défiler (cf. mobile). */
     min-width: 0;
@@ -147,7 +147,7 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
   nav {
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--base-16);
     min-width: 0;
   }
 
@@ -159,7 +159,7 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
     flex: none;
     width: var(--nav-home-size);
     height: var(--nav-home-size);
-    border-radius: var(--radius-pill);
+    border-radius: var(--border-radius-full);
     overflow: hidden;
   }
 
@@ -174,12 +174,12 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
     position: relative; /* repère de la pastille */
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--base-12);
     margin: 0;
-    padding: var(--space-sm);
+    padding: var(--base-8);
     list-style: none;
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-pill);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-full);
     overflow: hidden;
   }
 
@@ -195,8 +195,8 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
     width: var(--slider-w, 0);
     height: var(--slider-h, 0);
     transform: translate(var(--slider-x, 0), var(--slider-y, 0));
-    background: var(--color-bg-default);
-    border-radius: var(--radius-lg);
+    background: var(--color-surface-default);
+    border-radius: var(--border-radius-large);
     opacity: 0;
     pointer-events: none;
     /* Un déplacement prend duration.default, un fondu duration.quick. Sous
@@ -231,15 +231,15 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
     flex: none; /* Figma déclare les onglets shrink-0 : ils ne se compriment pas. */
     align-items: center;
     justify-content: center;
-    height: var(--button-height-md);
-    padding: var(--space-md);
-    gap: var(--button-gap-sm);
-    border-radius: var(--radius-lg);
-    color: var(--color-text-on-highlight);
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-body);
-    line-height: var(--font-line-height-snug);
+    height: var(--control-medium-size);
+    padding: var(--base-12);
+    gap: var(--control-small-gap);
+    border-radius: var(--border-radius-large);
+    color: var(--color-text-highlight-on-bold);
+    font-family: var(--font-stack-body);
+    font-weight: var(--base-text-weight-medium);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-snug);
     text-decoration: none;
     white-space: nowrap;
     /* Un changement de couleur prend duration.quick. Sert au repli sans
@@ -250,11 +250,11 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
   /* L'état courant est stylé sur l'attribut ARIA, pas sur une classe : l'état
      visuel et l'état annoncé ne peuvent donc pas diverger. */
   .tab[aria-current='page'] {
-    background: var(--color-bg-default);
+    background: var(--color-surface-default);
   }
 
   .tab:hover:not([aria-current='page']) {
-    background: var(--color-action-secondary-bg-hover);
+    background: var(--color-background-secondary-subtle-hover);
   }
 
   /* Ces deux aplats sont le plancher : sans JavaScript, la barre se comporte
@@ -266,7 +266,7 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
   }
 
   .tab-icon {
-    --icon-size: var(--button-icon-size-md);
+    --icon-size: var(--icon-medium);
   }
 
   .nav-action {
@@ -278,10 +278,10 @@ const classes = ['nav-bar', sticky && 'sticky'].filter(Boolean).join(' ');
      retour, et les libellés. Les icônes et l'action s'effacent. */
   @media (max-width: 767px) {
     .nav-bar {
-      gap: var(--space-sm);
+      gap: var(--base-8);
       /* Même remarque qu'au repos : nav.height porte 72 dans le mode Mobile,
          que le build sort sous ce même point de rupture. */
-      padding: var(--space-xs);
+      padding: var(--base-4);
     }
 
     .tab-icon,

@@ -181,24 +181,24 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
     min-height: calc(100svh - var(--fold-peek));
     max-width: 72rem;
     margin: 0 auto;
-    padding: var(--space-layout-64) var(--space-layout-48);
+    padding: var(--section-space-medium) var(--section-space-small);
   }
 
   .after p {
     max-width: 46rem;
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   /* Fixe, donc toujours atteignable : la pile passe dessous. Elle est peinte
      après .home dans l'ordre du DOM, ce qui suffit à la garder devant. */
   .back {
     position: fixed;
-    bottom: var(--space-lg);
-    left: var(--space-lg);
-    padding: var(--space-xs) var(--space-md);
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-pill);
-    font-size: var(--font-size-body-sm);
+    bottom: var(--base-16);
+    left: var(--base-16);
+    padding: var(--base-4) var(--base-12);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-body-small-size);
     text-decoration: none;
   }
 
@@ -219,7 +219,7 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      être recalculé si celui-ci change. */
   @media (max-height: 690px) {
     .intro-slot {
-      --intro-gap: var(--space-xl);
+      --intro-gap: var(--base-24);
     }
   }
 
@@ -238,7 +238,7 @@ import { demoLinks, demoAction, introDemo, caseStudies, projectsAnchor } from '.
      Il ne reste donc ici que la chrome de cette page de doc. */
   @media (max-width: 767px) {
     .after {
-      padding: var(--space-layout-48) var(--space-xl);
+      padding: var(--section-space-small) var(--base-24);
     }
   }
 </style>

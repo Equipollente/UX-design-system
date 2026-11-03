@@ -1,0 +1,42 @@
+{
+  "viewport": {
+    "width": {
+      "$type": "number",
+      "$value": 390,
+      "$description": "Largeur de référence de l'appareil du mode (px) : 1200 en Desktop, 768 en Tablet, 390 en Mobile, 1060 en Paper. Lue par le code pour fabriquer les media queries ; dans Figma, elle sert à régler la largeur des cadres d'un appareil.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:25411",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "scale": {
+      "$type": "number",
+      "$value": 1.25,
+      "$description": "Multiplicateur de la taille de texte racine selon l'appareil : 1 partout, 1,25 en Mobile. Lu par le code pour calculer la taille racine (rem).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:25412",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "nav": {
+    "height": {
+      "$type": "number",
+      "$value": 72,
+      "$description": "Hauteur de la barre de navigation (px) : 88 en Desktop, Tablet et Paper, 72 en Mobile. À poser en hauteur de la Nav ; les pages la lisent (--nav-height) pour caler leurs contenus collés sous la barre.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:25413",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Mobile"
+  }
+}

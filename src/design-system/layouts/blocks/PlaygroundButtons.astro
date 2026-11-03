@@ -110,14 +110,14 @@ const actionRows = actions.length > 0 ? actions : [{ label: 'Nouvelle action', v
 <style>
   .playground-button-list {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--base-16);
   }
 
   .playground-button-row {
     display: grid;
-    gap: var(--space-md);
-    padding-block-start: var(--space-md);
-    border-block-start: var(--border-width-default) solid var(--color-border-default);
+    gap: var(--base-12);
+    padding-block-start: var(--base-12);
+    border-block-start: var(--border-width-default) solid var(--color-border-base-subtle);
   }
 
   .playground-button-row:first-child {
@@ -129,7 +129,7 @@ const actionRows = actions.length > 0 ? actions : [{ label: 'Nouvelle action', v
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
     align-items: end;
-    gap: var(--space-md);
+    gap: var(--base-12);
   }
 
   @media (max-width: 767px) {

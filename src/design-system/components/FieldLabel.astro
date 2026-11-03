@@ -72,12 +72,12 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
      Figma, ce sont ces lignes qui changeront, et elles seules. */
   .field-label {
     display: inline-block;
-    color: var(--color-text-default); /* #2F2D2E */
-    font-family: var(--font-family-body); /* Inter */
-    font-size: var(--font-size-body); /* 0.9375rem */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: var(--font-line-height-tight); /* 1.12 */
-    letter-spacing: var(--font-letter-spacing-normal); /* 0em */
+    color: var(--color-text-base-default); /* #2F2D2E */
+    font-family: var(--font-stack-body); /* Inter */
+    font-size: var(--text-body-medium-size); /* 0.9375rem */
+    font-weight: var(--base-text-weight-medium); /* 500 */
+    line-height: var(--base-text-line-height-tight); /* 1.12 */
+    letter-spacing: var(--base-text-letter-spacing-normal); /* 0em */
     /* Une <legend> arrive avec un rembourrage du navigateur, qui ne vient
        d'aucune variable : il s'efface, et les deux balises se posent pareil. */
     padding: 0;
@@ -85,7 +85,7 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
 
   /* Désactivé : l'encre, et rien d'autre. */
   .field-label-disabled {
-    color: var(--color-text-disabled); /* #A9A5B0 — la variante disabled=true du nœud */
+    color: var(--color-text-base-inactive); /* #A9A5B0 — la variante disabled=true du nœud */
   }
 
   /* L'astérisque hérite de tout le reste — taille, graisse, interligne — et ne
@@ -94,6 +94,6 @@ const classes = ['field-label', disabled && 'field-label-disabled', className]
   .field-label-mark {
     /* L'écart au mot n'est pas encore écrit : aucune variable ne vaut cette
        fraction de cadratin. En attendant, l’astérisque est collé au libellé. */
-    color: var(--color-feedback-danger-solid); /* #DC2626 */
+    color: var(--color-text-danger-default); /* #DC2626 */
   }
 </style>

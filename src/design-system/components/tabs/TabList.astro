@@ -25,23 +25,23 @@ const classes = ['tabs-tablist', className].filter(Boolean).join(' ');
   .tabs-tablist {
     position: relative;
     display: inline-flex;
-    padding: var(--space-sm);
+    padding: var(--base-8);
     align-items: center;
-    gap: var(--button-gap-sm);
-    border-radius: var(--radius-pill);
-    background: var(--color-bg-neutral);
+    gap: var(--control-small-gap);
+    border-radius: var(--border-radius-full);
+    background: var(--color-background-neutral-subtle);
   }
 
   .tabs-tablist::before {
     content: '';
     position: absolute;
-    top: var(--space-sm);
-    bottom: var(--space-sm);
+    top: var(--base-8);
+    bottom: var(--base-8);
     left: var(--pill-x, 0);
     z-index: 0;
     width: var(--pill-w, 0);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-default);
+    border-radius: var(--border-radius-large);
+    background: var(--color-surface-default);
     opacity: var(--pill-on, 0);
     /* On anime `left` et `width` (pas `transform`) : les deux ancrent la pastille
        au bord gauche du conteneur, sans oscillation d'interpolation. */

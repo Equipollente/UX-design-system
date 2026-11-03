@@ -1,0 +1,811 @@
+{
+  "fontStack": {
+    "heading": {
+      "$type": "string",
+      "$value": "Poppins",
+      "$description": "Police des titres, du sous-titre et des boutons : Poppins. À poser en famille de police des textes de titre.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:25339",
+        "com.figma.scopes": [
+          "FONT_FAMILY"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "body": {
+      "$type": "string",
+      "$value": "Inter",
+      "$description": "Police du texte courant, des légendes et des champs : Inter. À poser en famille de police des textes de lecture.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:905:25340",
+        "com.figma.scopes": [
+          "FONT_FAMILY"
+        ],
+        "com.figma.type": "string"
+      }
+    }
+  },
+  "base": {
+    "text": {
+      "weight": {
+        "regular": {
+          "$type": "number",
+          "$value": 400,
+          "$description": "Graisse regular (400). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25341",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "medium": {
+          "$type": "number",
+          "$value": 500,
+          "$description": "Graisse medium (500). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25342",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "semibold": {
+          "$type": "number",
+          "$value": 600,
+          "$description": "Graisse semibold (600). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25343",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "bold": {
+          "$type": "number",
+          "$value": 700,
+          "$description": "Graisse bold (700). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25344",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        }
+      },
+      "size": {
+        "12": {
+          "$type": "number",
+          "$value": 12,
+          "$description": "Taille de police 12 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25345",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "14": {
+          "$type": "number",
+          "$value": 14,
+          "$description": "Taille de police 14 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25346",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "16": {
+          "$type": "number",
+          "$value": 16,
+          "$description": "Taille de police 16 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25347",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "18": {
+          "$type": "number",
+          "$value": 18,
+          "$description": "Taille de police 18 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25348",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "20": {
+          "$type": "number",
+          "$value": 20,
+          "$description": "Taille de police 20 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25349",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "24": {
+          "$type": "number",
+          "$value": 24,
+          "$description": "Taille de police 24 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25350",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "32": {
+          "$type": "number",
+          "$value": 32,
+          "$description": "Taille de police 32 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25351",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "40": {
+          "$type": "number",
+          "$value": 40,
+          "$description": "Taille de police 40 px. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25352",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        }
+      },
+      "lineHeight": {
+        "tight": {
+          "$type": "number",
+          "$value": 112,
+          "$description": "Interligne serré (112 %, en pourcentage car Figma le compte ainsi : 1,12 en CSS). Pour les titres. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25353",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "snug": {
+          "$type": "number",
+          "$value": 120,
+          "$description": "Interligne ajusté (120 %, soit 1,2 en CSS). Pour le texte sur une ou deux lignes : boutons, légendes, sous-titre. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25354",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "normal": {
+          "$type": "number",
+          "$value": 155,
+          "$description": "Interligne de lecture (155 %, soit 1,55 en CSS), au-dessus du 1,5 que demande WCAG 1.4.12. Pour le texte courant. Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25355",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        }
+      },
+      "letterSpacing": {
+        "tight": {
+          "$type": "number",
+          "$value": -1.5,
+          "$description": "Resserré (−1,5 %) pour les grands titres. En pourcentage (équivalent em ×100). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25356",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        },
+        "normal": {
+          "$type": "number",
+          "$value": 0,
+          "$description": "Normal (0 %). En pourcentage (équivalent em ×100). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25357",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        },
+        "wide": {
+          "$type": "number",
+          "$value": 2,
+          "$description": "Large (2 %) pour les tags. En pourcentage (équivalent em ×100). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25358",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        },
+        "wider": {
+          "$type": "number",
+          "$value": 8,
+          "$description": "Plus large (8 %) pour les surtitres et les en-têtes de tableau. En pourcentage (équivalent em ×100). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25359",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        },
+        "widest": {
+          "$type": "number",
+          "$value": 10,
+          "$description": "Très large (10 %) pour le plus petit texte en capitales. En pourcentage (équivalent em ×100). Valeur brute. Ne se lit pas directement dans un composant : choisis le rôle de texte (text/…) qui pointe ici.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25360",
+            "com.figma.hiddenFromPublishing": true,
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "text": {
+    "display": {
+      "family": {
+        "$type": "string",
+        "$value": "{fontStack.heading}",
+        "$description": "Police du rôle « display » (Poppins). Le plus grand texte : titre de page d'accueil ou de section d'ouverture.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25361",
+          "com.figma.scopes": [
+            "FONT_FAMILY"
+          ],
+          "com.figma.type": "string"
+        }
+      },
+      "size": {
+        "$type": "number",
+        "$value": "{base.text.size.40}",
+        "$description": "Taille du rôle « display » (40 px). Le plus grand texte : titre de page d'accueil ou de section d'ouverture.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25362",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": "{base.text.weight.bold}",
+        "$description": "Graisse du rôle « display ». Le plus grand texte : titre de page d'accueil ou de section d'ouverture.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25363",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": "{base.text.lineHeight.tight}",
+        "$description": "Interligne du rôle « display ». Le plus grand texte : titre de page d'accueil ou de section d'ouverture.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25364",
+          "com.figma.scopes": [
+            "LINE_HEIGHT"
+          ]
+        }
+      },
+      "letterSpacing": {
+        "$type": "number",
+        "$value": "{base.text.letterSpacing.normal}",
+        "$description": "Espacement des lettres du rôle « display ». Le plus grand texte : titre de page d'accueil ou de section d'ouverture.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25365",
+          "com.figma.scopes": [
+            "LETTER_SPACING"
+          ]
+        }
+      }
+    },
+    "title": {
+      "large": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.heading}",
+          "$description": "Police du rôle « title/large » (Poppins). Titre de page (niveau 1).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25366",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.32}",
+          "$description": "Taille du rôle « title/large » (32 px). Titre de page (niveau 1).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25367",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.bold}",
+          "$description": "Graisse du rôle « title/large ». Titre de page (niveau 1).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25368",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.tight}",
+          "$description": "Interligne du rôle « title/large ». Titre de page (niveau 1).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25369",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.tight}",
+          "$description": "Espacement des lettres du rôle « title/large ». Titre de page (niveau 1).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25370",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      },
+      "medium": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.heading}",
+          "$description": "Police du rôle « title/medium » (Poppins). Titre de section (niveau 2).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25371",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.24}",
+          "$description": "Taille du rôle « title/medium » (24 px). Titre de section (niveau 2).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25372",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.bold}",
+          "$description": "Graisse du rôle « title/medium ». Titre de section (niveau 2).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25373",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.tight}",
+          "$description": "Interligne du rôle « title/medium ». Titre de section (niveau 2).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25374",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.tight}",
+          "$description": "Espacement des lettres du rôle « title/medium ». Titre de section (niveau 2).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25375",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      },
+      "small": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.heading}",
+          "$description": "Police du rôle « title/small » (Poppins). Titre de bloc ou de carte (niveau 3).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25376",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.20}",
+          "$description": "Taille du rôle « title/small » (20 px). Titre de bloc ou de carte (niveau 3).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25377",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.bold}",
+          "$description": "Graisse du rôle « title/small ». Titre de bloc ou de carte (niveau 3).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25378",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.tight}",
+          "$description": "Interligne du rôle « title/small ». Titre de bloc ou de carte (niveau 3).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25379",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.normal}",
+          "$description": "Espacement des lettres du rôle « title/small ». Titre de bloc ou de carte (niveau 3).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25380",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      }
+    },
+    "subtitle": {
+      "family": {
+        "$type": "string",
+        "$value": "{fontStack.heading}",
+        "$description": "Police du rôle « subtitle » (Poppins). Sous-titre ou chapeau placé sous un titre : même taille que title/small, graisse plus légère.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25381",
+          "com.figma.scopes": [
+            "FONT_FAMILY"
+          ],
+          "com.figma.type": "string"
+        }
+      },
+      "size": {
+        "$type": "number",
+        "$value": "{base.text.size.20}",
+        "$description": "Taille du rôle « subtitle » (20 px). Sous-titre ou chapeau placé sous un titre : même taille que title/small, graisse plus légère.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25382",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": "{base.text.weight.regular}",
+        "$description": "Graisse du rôle « subtitle ». Sous-titre ou chapeau placé sous un titre : même taille que title/small, graisse plus légère.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25383",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": "{base.text.lineHeight.snug}",
+        "$description": "Interligne du rôle « subtitle ». Sous-titre ou chapeau placé sous un titre : même taille que title/small, graisse plus légère.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25384",
+          "com.figma.scopes": [
+            "LINE_HEIGHT"
+          ]
+        }
+      },
+      "letterSpacing": {
+        "$type": "number",
+        "$value": "{base.text.letterSpacing.normal}",
+        "$description": "Espacement des lettres du rôle « subtitle ». Sous-titre ou chapeau placé sous un titre : même taille que title/small, graisse plus légère.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25385",
+          "com.figma.scopes": [
+            "LETTER_SPACING"
+          ]
+        }
+      }
+    },
+    "body": {
+      "large": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.body}",
+          "$description": "Police du rôle « body/large » (Inter). Texte d'introduction ou chapeau d'un article.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25386",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.18}",
+          "$description": "Taille du rôle « body/large » (18 px). Texte d'introduction ou chapeau d'un article.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25387",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.regular}",
+          "$description": "Graisse du rôle « body/large ». Texte d'introduction ou chapeau d'un article.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25388",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.normal}",
+          "$description": "Interligne du rôle « body/large ». Texte d'introduction ou chapeau d'un article.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25389",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.normal}",
+          "$description": "Espacement des lettres du rôle « body/large ». Texte d'introduction ou chapeau d'un article.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25390",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      },
+      "medium": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.body}",
+          "$description": "Police du rôle « body/medium » (Inter). Texte courant par défaut, y compris le texte des champs de saisie (16 px évite le zoom automatique sur iOS).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25391",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.16}",
+          "$description": "Taille du rôle « body/medium » (16 px). Texte courant par défaut, y compris le texte des champs de saisie (16 px évite le zoom automatique sur iOS).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25392",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.regular}",
+          "$description": "Graisse du rôle « body/medium ». Texte courant par défaut, y compris le texte des champs de saisie (16 px évite le zoom automatique sur iOS).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25393",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.normal}",
+          "$description": "Interligne du rôle « body/medium ». Texte courant par défaut, y compris le texte des champs de saisie (16 px évite le zoom automatique sur iOS).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25394",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.normal}",
+          "$description": "Espacement des lettres du rôle « body/medium ». Texte courant par défaut, y compris le texte des champs de saisie (16 px évite le zoom automatique sur iOS).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25395",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      },
+      "small": {
+        "family": {
+          "$type": "string",
+          "$value": "{fontStack.body}",
+          "$description": "Police du rôle « body/small » (Inter). Texte secondaire : aides, notes, métadonnées.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25396",
+            "com.figma.scopes": [
+              "FONT_FAMILY"
+            ],
+            "com.figma.type": "string"
+          }
+        },
+        "size": {
+          "$type": "number",
+          "$value": "{base.text.size.14}",
+          "$description": "Taille du rôle « body/small » (14 px). Texte secondaire : aides, notes, métadonnées.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25397",
+            "com.figma.scopes": [
+              "FONT_SIZE"
+            ]
+          }
+        },
+        "weight": {
+          "$type": "number",
+          "$value": "{base.text.weight.regular}",
+          "$description": "Graisse du rôle « body/small ». Texte secondaire : aides, notes, métadonnées.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25398",
+            "com.figma.scopes": [
+              "FONT_STYLE"
+            ]
+          }
+        },
+        "lineHeight": {
+          "$type": "number",
+          "$value": "{base.text.lineHeight.normal}",
+          "$description": "Interligne du rôle « body/small ». Texte secondaire : aides, notes, métadonnées.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25399",
+            "com.figma.scopes": [
+              "LINE_HEIGHT"
+            ]
+          }
+        },
+        "letterSpacing": {
+          "$type": "number",
+          "$value": "{base.text.letterSpacing.normal}",
+          "$description": "Espacement des lettres du rôle « body/small ». Texte secondaire : aides, notes, métadonnées.",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:905:25400",
+            "com.figma.scopes": [
+              "LETTER_SPACING"
+            ]
+          }
+        }
+      }
+    },
+    "caption": {
+      "family": {
+        "$type": "string",
+        "$value": "{fontStack.body}",
+        "$description": "Police du rôle « caption » (Inter). Légende et étiquette courte : la plus petite taille autorisée du système.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25401",
+          "com.figma.scopes": [
+            "FONT_FAMILY"
+          ],
+          "com.figma.type": "string"
+        }
+      },
+      "size": {
+        "$type": "number",
+        "$value": "{base.text.size.12}",
+        "$description": "Taille du rôle « caption » (12 px). Légende et étiquette courte : la plus petite taille autorisée du système.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25402",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": "{base.text.weight.regular}",
+        "$description": "Graisse du rôle « caption ». Légende et étiquette courte : la plus petite taille autorisée du système.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25403",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": "{base.text.lineHeight.snug}",
+        "$description": "Interligne du rôle « caption ». Légende et étiquette courte : la plus petite taille autorisée du système.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25404",
+          "com.figma.scopes": [
+            "LINE_HEIGHT"
+          ]
+        }
+      },
+      "letterSpacing": {
+        "$type": "number",
+        "$value": "{base.text.letterSpacing.normal}",
+        "$description": "Espacement des lettres du rôle « caption ». Légende et étiquette courte : la plus petite taille autorisée du système.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:905:25405",
+          "com.figma.scopes": [
+            "LETTER_SPACING"
+          ]
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Valeur"
+  }
+}

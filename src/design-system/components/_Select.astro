@@ -740,7 +740,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
   .select-control,
   .select-chips,
   .select-status:not(:empty) {
-    margin-top: var(--control-field-gap);
+    margin-top: var(--stack-gap-condensed);
   }
 
   /* La boîte fermée. Tout son dessin est la recette de global.css ; elle ne
@@ -751,7 +751,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
     display: flex;
     align-items: center;
     width: 100%;
-    padding-right: calc(var(--button-padding-x-sm) + var(--button-icon-size-sm) + var(--space-sm));
+    padding-right: calc(var(--control-small-padding-inline-normal) + var(--icon-small) + var(--base-8));
     text-align: left;
     cursor: pointer;
     anchor-name: var(--select-anchor);
@@ -761,8 +761,8 @@ const classes = ['select', className].filter(Boolean).join(' ');
      montre sur un champ même au clic ; un bouton, il ne le montre qu'au clavier.
      Les boîtes voisines doivent réagir pareil. */
   .select-box:focus {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   .select-box:disabled {
@@ -777,15 +777,15 @@ const classes = ['select', className].filter(Boolean).join(' ');
 
   /* L'invite s'écrit comme celle des champs texte, dans l'encre atténuée. */
   .select-summary-empty {
-    color: var(--color-text-muted);
+    color: var(--color-text-base-muted);
   }
 
   .select-chevron {
     position: absolute;
-    right: var(--button-padding-x-sm);
+    right: var(--control-small-padding-inline-normal);
     top: 50%;
     translate: 0 -50%;
-    --icon-size: var(--button-icon-size-sm); /* 20 */
+    --icon-size: var(--icon-small); /* 20 */
     pointer-events: none;
   }
 
@@ -800,7 +800,7 @@ const classes = ['select', className].filter(Boolean).join(' ');
   .select-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm);
+    gap: var(--base-8);
     margin-bottom: 0;
     padding: 0;
     list-style: none;
@@ -816,34 +816,34 @@ const classes = ['select', className].filter(Boolean).join(' ');
   .select-chip {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-sm) var(--space-lg);
-    border: var(--border-width-default) solid var(--color-action-primary-bg);
-    border-radius: var(--radius-pill);
-    background: var(--color-action-primary-bg);
-    color: var(--color-text-on-accent);
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-ui);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-snug);
-    letter-spacing: var(--font-letter-spacing-normal);
+    gap: var(--base-4);
+    padding: var(--base-8) var(--base-16);
+    border: var(--border-width-default) solid var(--color-background-primary-bold);
+    border-radius: var(--border-radius-full);
+    background: var(--color-background-primary-bold);
+    color: var(--color-text-primary-on-bold);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-normal);
     white-space: nowrap;
     cursor: pointer;
     transition: background-color var(--motion-duration-quick) var(--motion-easing-standard);
   }
 
   .select-chip:hover {
-    background: var(--color-action-primary-bg-hover);
-    border-color: var(--color-action-primary-bg-hover);
+    background: var(--color-background-primary-bold-hover);
+    border-color: var(--color-background-primary-bold-hover);
   }
 
   .select-chip:focus-visible {
-    outline: var(--border-width-focus) solid var(--color-border-focus);
-    outline-offset: var(--button-focus-offset);
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: var(--border-outline-focus-offset);
   }
 
   .select-chip-icon {
-    --icon-size: var(--button-icon-size-sm);
+    --icon-size: var(--icon-small);
   }
 
   /* Le message de limite, dans le dessin du compteur de Textarea : rangé à
@@ -851,11 +851,11 @@ const classes = ['select', className].filter(Boolean).join(' ');
   .select-status {
     margin-bottom: 0;
     text-align: right;
-    font-family: var(--font-family-body);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--font-line-height-snug);
-    color: var(--color-text-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--base-text-weight-regular);
+    line-height: var(--base-text-line-height-snug);
+    color: var(--color-text-base-muted);
   }
 
   .select-status:empty {

@@ -6,7 +6,7 @@
 // (réglé le 02/11) : les variables button/padding-y/* existent encore, lues ailleurs.
 //
 // Chaque taille pose ses variables locales (--btn-h, --btn-px, --btn-gap,
-// --btn-icon, --btn-min-w) et chaque variante ses trois fonds (--btn-bg,
+// --btn-icon) et chaque variante ses trois fonds (--btn-bg,
 // --btn-bg-hover, --btn-bg-active). Un appelant peut en surcharger une
 // ponctuellement via `style` sans avoir à inventer une taille ni une variante
 // supplémentaire. C'est ce que font le Nav pour son bouton d'action et le
@@ -120,7 +120,6 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
     align-items: center;
     justify-content: center;
     min-height: var(--btn-h);
-    min-width: var(--btn-min-w);
     padding: 0 var(--btn-px);
     gap: var(--btn-gap);
     /* La taille d'icône descend par héritage jusqu'au <svg> : le bouton n'a pas à
@@ -133,11 +132,11 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
        transparente est repeinte par le système. C'est là, et là seulement, que
        le bouton retrouve un bord — et il vaut mieux que ce bord existe. */
     border: 1px solid transparent;
-    border-radius: var(--button-radius);
-    font-family: var(--font-family-heading);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-ui);
-    line-height: var(--font-line-height-snug);
+    border-radius: var(--border-radius-full);
+    font-family: var(--font-stack-heading);
+    font-weight: var(--base-text-weight-bold);
+    font-size: var(--text-body-medium-size);
+    line-height: var(--base-text-line-height-snug);
     text-decoration: none;
     cursor: pointer;
     /* Seul le fond change entre le repos, le survol et l'appui — il n'y a plus
@@ -148,36 +147,33 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
 
   /* — tailles — */
   .btn-sm {
-    --btn-h: var(--button-height-sm);
-    --btn-px: var(--button-padding-x-sm);
-    --btn-gap: var(--button-gap-sm);
-    --btn-icon: var(--button-icon-size-sm);
-    --btn-min-w: var(--button-min-width-sm);
+    --btn-h: var(--control-small-size);
+    --btn-px: var(--control-small-padding-inline-normal);
+    --btn-gap: var(--control-small-gap);
+    --btn-icon: var(--icon-small);
   }
 
   .btn-md {
-    --btn-h: var(--button-height-md);
-    --btn-px: var(--button-padding-x-md);
-    --btn-gap: var(--button-gap-md);
-    --btn-icon: var(--button-icon-size-md);
-    --btn-min-w: var(--button-min-width-md);
+    --btn-h: var(--control-medium-size);
+    --btn-px: var(--control-medium-padding-inline-normal);
+    --btn-gap: var(--control-medium-gap);
+    --btn-icon: var(--icon-medium);
   }
 
   .btn-lg {
-    --btn-h: var(--button-height-lg);
-    --btn-px: var(--button-padding-x-lg);
-    --btn-gap: var(--button-gap-md);
-    --btn-icon: var(--button-icon-size-lg);
-    --btn-min-w: var(--button-min-width-lg);
+    --btn-h: var(--control-large-size);
+    --btn-px: var(--control-large-padding-inline-normal);
+    --btn-gap: var(--control-medium-gap);
+    --btn-icon: var(--icon-large);
   }
 
   /* — variantes — */
   .btn-primary {
-    --btn-bg: var(--color-action-primary-bg);
-    --btn-bg-hover: var(--color-action-primary-bg-hover);
-    --btn-bg-active: var(--color-action-primary-bg-pressed);
-    --icon-color: var(--color-text-on-accent);
-    color: var(--color-text-on-accent);
+    --btn-bg: var(--color-background-primary-bold);
+    --btn-bg-hover: var(--color-background-primary-bold-hover);
+    --btn-bg-active: var(--color-background-primary-bold-pressed);
+    --icon-color: var(--color-text-primary-on-bold);
+    color: var(--color-text-primary-on-bold);
   }
 
   /* L'encre, pas l'accent — comme Figma. Le libellé fait 14 px : le seuil WCAG est
@@ -186,10 +182,10 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
      sur la brume lavande du secondaire, on n'est plus sur le blanc.
      L'icône suit le libellé — Figma la lie à color/neutral/900, la même encre. */
   .btn-secondary {
-    --btn-bg: var(--color-action-secondary-bg);
-    --btn-bg-hover: var(--color-action-secondary-bg-hover);
-    --btn-bg-active: var(--color-action-secondary-bg-pressed);
-    color: var(--color-text-default);
+    --btn-bg: var(--color-background-secondary-subtle);
+    --btn-bg-hover: var(--color-background-secondary-subtle-hover);
+    --btn-bg-active: var(--color-background-secondary-subtle-pressed);
+    color: var(--color-text-base-default);
   }
 
   /* L'action destructive, et elle seule. Contrairement au primaire, l'icône n'a
@@ -197,19 +193,19 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
      que vaut color/text/on-accent. currentColor suffit donc, et l'icône suit le
      libellé sans qu'on ait à la viser. */
   .btn-alert {
-    --btn-bg: var(--color-action-destructive-bg);
-    --btn-bg-hover: var(--color-action-destructive-bg-hover);
-    --btn-bg-active: var(--color-action-destructive-bg-pressed);
-    color: var(--color-text-on-danger);
+    --btn-bg: var(--color-background-danger-bold);
+    --btn-bg-hover: var(--color-background-danger-bold-hover);
+    --btn-bg-active: var(--color-background-danger-bold-pressed);
+    color: var(--color-text-danger-on-bold);
   }
 
   /* Rien au repos : le lavis n'apparaît qu'au survol et à l'appui, comme dans Figma.
      Le désactivé baisse l'opacité du bouton entier, il n'a donc pas de fond à lui. */
   .btn-ghost {
     --btn-bg: transparent;
-    --btn-bg-hover: var(--color-action-ghost-bg-hover);
-    --btn-bg-active: var(--color-action-ghost-bg-pressed);
-    color: var(--color-text-default);
+    --btn-bg-hover: var(--color-background-neutral-subtlest-hover);
+    --btn-bg-active: var(--color-background-neutral-subtlest-pressed);
+    color: var(--color-text-base-default);
   }
 
   /* Les sept teintes de catégorie. Le liseré est dessiné (1 px, color/category/<teinte>/border) :
@@ -222,66 +218,66 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
   }
 
   .btn-clay {
-    --btn-bg: var(--color-action-clay-bg);
-    --btn-bg-hover: var(--color-action-clay-bg-hover);
-    --btn-bg-active: var(--color-action-clay-bg-pressed);
-    --btn-border: var(--color-category-clay-border);
-    --btn-text: var(--color-category-clay-text);
-    --btn-solid: var(--color-action-clay-solid);
+    --btn-bg: var(--color-background-clay-subtle);
+    --btn-bg-hover: var(--color-background-clay-subtle-hover);
+    --btn-bg-active: var(--color-background-clay-subtle-pressed);
+    --btn-border: var(--color-border-clay-default);
+    --btn-text: var(--color-text-clay-on-subtle);
+    --btn-solid: var(--color-icon-clay);
   }
 
   .btn-teal {
-    --btn-bg: var(--color-action-teal-bg);
-    --btn-bg-hover: var(--color-action-teal-bg-hover);
-    --btn-bg-active: var(--color-action-teal-bg-pressed);
-    --btn-border: var(--color-category-teal-border);
-    --btn-text: var(--color-category-teal-text);
-    --btn-solid: var(--color-action-teal-solid);
+    --btn-bg: var(--color-background-teal-subtle);
+    --btn-bg-hover: var(--color-background-teal-subtle-hover);
+    --btn-bg-active: var(--color-background-teal-subtle-pressed);
+    --btn-border: var(--color-border-teal-default);
+    --btn-text: var(--color-text-teal-on-subtle);
+    --btn-solid: var(--color-icon-teal);
   }
 
   .btn-sun {
-    --btn-bg: var(--color-action-sun-bg);
-    --btn-bg-hover: var(--color-action-sun-bg-hover);
-    --btn-bg-active: var(--color-action-sun-bg-pressed);
-    --btn-border: var(--color-category-sun-border);
-    --btn-text: var(--color-category-sun-text);
-    --btn-solid: var(--color-action-sun-solid);
+    --btn-bg: var(--color-background-sun-subtle);
+    --btn-bg-hover: var(--color-background-sun-subtle-hover);
+    --btn-bg-active: var(--color-background-sun-subtle-pressed);
+    --btn-border: var(--color-border-sun-default);
+    --btn-text: var(--color-text-sun-on-subtle);
+    --btn-solid: var(--color-icon-sun);
   }
 
   .btn-rose {
-    --btn-bg: var(--color-action-rose-bg);
-    --btn-bg-hover: var(--color-action-rose-bg-hover);
-    --btn-bg-active: var(--color-action-rose-bg-pressed);
-    --btn-border: var(--color-category-rose-border);
-    --btn-text: var(--color-category-rose-text);
-    --btn-solid: var(--color-action-rose-solid);
+    --btn-bg: var(--color-background-rose-subtle);
+    --btn-bg-hover: var(--color-background-rose-subtle-hover);
+    --btn-bg-active: var(--color-background-rose-subtle-pressed);
+    --btn-border: var(--color-border-rose-default);
+    --btn-text: var(--color-text-rose-on-subtle);
+    --btn-solid: var(--color-icon-rose);
   }
 
   .btn-accent {
-    --btn-bg: var(--color-action-accent-bg);
-    --btn-bg-hover: var(--color-action-accent-bg-hover);
-    --btn-bg-active: var(--color-action-accent-bg-pressed);
-    --btn-border: var(--color-category-accent-border);
-    --btn-text: var(--color-category-accent-text);
-    --btn-solid: var(--color-action-accent-solid);
+    --btn-bg: var(--color-background-primary-subtle);
+    --btn-bg-hover: var(--color-background-primary-subtle-hover);
+    --btn-bg-active: var(--color-background-primary-subtle-pressed);
+    --btn-border: var(--color-border-primary-default);
+    --btn-text: var(--color-text-primary-on-subtle);
+    --btn-solid: var(--color-icon-primary);
   }
 
   .btn-highlight {
-    --btn-bg: var(--color-action-highlight-bg);
-    --btn-bg-hover: var(--color-action-highlight-bg-hover);
-    --btn-bg-active: var(--color-action-highlight-bg-pressed);
-    --btn-border: var(--color-category-highlight-border);
-    --btn-text: var(--color-category-highlight-text);
-    --btn-solid: var(--color-action-highlight-solid);
+    --btn-bg: var(--color-background-highlight-subtle);
+    --btn-bg-hover: var(--color-background-highlight-subtle-hover);
+    --btn-bg-active: var(--color-background-highlight-subtle-pressed);
+    --btn-border: var(--color-border-highlight-default);
+    --btn-text: var(--color-text-highlight-on-subtle);
+    --btn-solid: var(--color-icon-highlight);
   }
 
   .btn-neutral {
-    --btn-bg: var(--color-action-neutral-bg);
-    --btn-bg-hover: var(--color-action-neutral-bg-hover);
-    --btn-bg-active: var(--color-action-neutral-bg-pressed);
-    --btn-border: var(--color-category-neutral-border);
-    --btn-text: var(--color-category-neutral-text);
-    --btn-solid: var(--color-action-neutral-solid);
+    --btn-bg: var(--color-background-neutral-subtle);
+    --btn-bg-hover: var(--color-background-neutral-subtle-hover);
+    --btn-bg-active: var(--color-background-neutral-subtle-pressed);
+    --btn-border: var(--color-border-neutral-default);
+    --btn-text: var(--color-text-neutral-on-subtle);
+    --btn-solid: var(--color-icon-neutral);
   }
 
   .btn:hover:not(:disabled) {
