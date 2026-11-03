@@ -153,17 +153,21 @@ const classes = ['checkbox', disabled && 'checkbox-disabled', className]
   }
 
   /* — disabled — écrit en dernier : à spécificité égale c'est l'ordre qui
-     tranche, et une case désactivée ne doit pas prendre le survol. La case garde
-     son dessin et s'atténue, exactement comme le nœud : rien ne bascule vers un
-     gris, c'est l'opacité seule qui dit « éteint ». L'atténuation est posée sur
-     la pile, pas sur la case : la coche doit pâlir avec elle, sans quoi elle
-     resterait franche sur un fond éteint. */
+     tranche. La case bascule vers le gris du système, comme le nœud : fond et
+     trait `category/neutral` vide, plein `category/neutral/solid` cochée. La
+     coche reste blanche sur ce plein. */
+  .checkbox-input:disabled {
+    background: var(--color-category-neutral-bg);
+    border-color: var(--color-category-neutral-border);
+  }
+
+  .checkbox-input:disabled:checked {
+    background: var(--color-category-neutral-solid);
+    border-color: var(--color-category-neutral-solid);
+  }
+
   .checkbox-disabled .checkbox-input,
   .checkbox-disabled :global(.field-label) {
     cursor: not-allowed;
-  }
-
-  .checkbox-disabled .checkbox-control {
-    opacity: var(--opacity-disabled);
   }
 </style>
