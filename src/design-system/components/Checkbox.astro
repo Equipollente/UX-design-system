@@ -34,6 +34,7 @@
 //   l'emporte — c'est sa raison d'être.
 
 import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -47,6 +48,8 @@ interface Props {
   value?: string;
   /** Cochée à l'ouverture. */
   checked?: boolean;
+  /** L'aide : ce que cocher entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`. */
+  hint?: string;
   /** Pose l'astérisque et l'attribut. A du sens ici : une case peut être seule. */
   required?: boolean;
   disabled?: boolean;
@@ -59,6 +62,7 @@ const {
   name,
   value,
   checked = false,
+  hint,
   required = false,
   disabled = false,
   class: className,
@@ -68,6 +72,7 @@ const {
 const classes = ['checkbox', disabled && 'checkbox-disabled', className]
   .filter(Boolean)
   .join(' ');
+const messageId = `${id}-message`;
 ---
 
 <div class={classes} {...rest}>
@@ -81,19 +86,30 @@ const classes = ['checkbox', disabled && 'checkbox-disabled', className]
       checked={checked}
       required={required}
       disabled={disabled}
+      aria-describedby={hint ? messageId : undefined}
     />
     {/* La coche double l'état que la case porte déjà : elle est décorative, donc
         sans `label` — sans quoi elle serait annoncée en plus de « coché ». */}
     <Icon name="check" class="checkbox-check" />
   </span>
   <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
+  {hint && <FieldMessage type="hint" id={messageId}>{hint}</FieldMessage>}
 </div>
 
 <style>
+  /* Deux colonnes : la case, puis le texte. Le libellé est sur la première ligne,
+     l'aide sur la seconde, sous lui — la case reste centrée sur le libellé, sans
+     qu'aucune mesure n'ait à la décaler. */
   .checkbox {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    column-gap: var(--space-sm); /* 8 — l'itemSpacing du nœud */
+    row-gap: var(--space-xs); /* 4 — l'écart du LabelGroup */
+  }
+
+  .checkbox :global(.field-message) {
+    grid-column: 2;
   }
 
   /* La case et sa coche se superposent : même pile que le chevron de Select. */
