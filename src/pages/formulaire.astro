@@ -92,6 +92,7 @@ const radioProps = [
   ['name', 'string', '—', 'Le name du groupe. Deux radios ne s’excluent que s’ils le partagent.'],
   ['value', 'string', 'id', 'Ce que le formulaire enverra si ce choix est retenu.'],
   ['checked', 'boolean', 'false', 'Le choix retenu à l’ouverture. Un seul du groupe doit le porter.'],
+  ['hint', 'string', '—', 'L’aide : ce que ce choix entraîne, dite sous le libellé et désignée par aria-describedby.'],
   ['disabled', 'boolean', 'false', 'Grisé des deux côtés — contrôle et libellé.'],
   ['class', 'string', '—', 'Classe supplémentaire pour la mise en page de l’appelant.'],
 ];
@@ -766,7 +767,8 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         <strong>Ce qu'il est.</strong> Un choix parmi plusieurs, dont un seul peut être retenu.
-        Nœud Figma <code>340:879</code>, huit variantes — <code>Selected</code> × <code>State</code>.
+        Nœud Figma <code>876:64956</code>, six variantes — <code>state</code> × <code>checked</code>, plus
+        {' '}<code>hint?</code> — sur la pièce interne <code>_RadioInput</code> (<code>875:53423</code>), qui dessine le cercle seul.
         <br />
         <strong>Ce qu'il n'est pas.</strong> Ni une case à cocher — une case se coche et se décoche
         toute seule, un radio ne se relâche qu'en en choisissant un autre — ni un objet qui vit
@@ -778,9 +780,9 @@ const exemplesMultiple: Exemple[] = [
       <p class="section-note">
         <strong>Le contrôle est natif, le dessin est du système.</strong>
         {' '}<code>appearance: none</code> efface celui du navigateur, et tout ce qui le remplace est
-        une variable. Le point du centre n'est pas un second élément : c'est une ombre intérieure de
-        {' '}<code>space/xs</code> posée sur un fond blanc — <strong>16 − 4 − 4 = 8</strong>,
-        exactement le point du nœud, sans qu'une mesure soit écrite à la main. Le contrôle reste un
+        une variable. Le choix retenu n'a pas de point : c'est un anneau, le trait passe de
+        {' '}<code>border/width/default</code> (1) à <code>border/width/focus</code> (2), en
+        {' '}<code>border/control</code>, et le cercle ne grandit pas puisque le trait est dans la boîte. Le contrôle reste un
         {' '}<code>&lt;input type="radio"&gt;</code> : la navigation aux flèches dans le groupe et
         l'annonce aux lecteurs d'écran viennent avec.
       </p>
@@ -829,11 +831,16 @@ const exemplesMultiple: Exemple[] = [
           <p class="demo-name">disabled + selected</p>
           <Radio id="etat-d" label="Atelier en présentiel" name="etat-4" checked disabled />
         </div>
+        <div class="demo-case">
+          <p class="demo-name">hint</p>
+          <Radio id="etat-e" label="Atelier à distance" name="etat-5" hint="Un lien vous est envoyé la veille." />
+        </div>
       </div>
 
       <p class="section-note">
-        <strong>Hover</strong> fonce l'accent d'un cran — <code>accent/600</code> au lieu de
-        {' '}<code>accent/500</code> — et ne s'attrape qu'à la souris. <strong>Focused</strong> pose l'anneau
+        <strong>Pas de survol</strong> : la ligne d'un radio ne change pas sous la souris, comme
+        pour la case seule. <strong>Désactivé</strong> passe au gris du système — <code>category/neutral</code> —, plus
+        à l'opacité. <strong>Focused</strong> pose l'anneau
         du système — <code>button/focus-ring-width</code> sur <code>color/border/focus</code>, en
         {' '}<code>outline</code> pour ne rien déplacer autour de lui. WCAG 2.4.7.
       </p>
@@ -868,19 +875,8 @@ const exemplesMultiple: Exemple[] = [
       <p class="section-note">
         <strong>Plus une seule mesure approchée.</strong> Le cercle fait
         {' '}<code>control/size</code>, son trait <code>border/width/default</code>, son anneau de
-        focus <code>border/width/focus</code>. Et le point ne se mesure toujours pas : le trait prend
-        1 de chaque côté, la boîte intérieure retombe à 16, et l'anneau de <code>space/xs</code> n'y
-        laisse que <strong>16 − 4 − 4 = 8</strong>. Le désactivé, lui, ne bascule plus vers un gris —
-        le cercle garde son dessin et s'atténue de <code>opacity/disabled</code>, ce que le nœud
-        dessinait depuis le début.
-      </p>
-
-      <p class="flag">
-        <strong>Le libellé n'a pas la typographie du nœud.</strong> Figma le dessine à 14 px,
-        interligne 120 %, et le grise en <code>neutral/400</code> ; <code>FieldLabel</code> le rend à
-        15 px, interligne 112 %, grisé en <em>muted</em>. Le libellé partagé l'emporte : c'est sa
-        raison d'être qu'un seul fichier décide de tous les libellés du formulaire. L'écart est à
-        trancher dans Figma, pas ici.
+        focus <code>border/width/focus</code>. Le choix retenu, lui, n'a plus de point à mesurer : il n'y a que
+        le trait, qui double.
       </p>
     </section>
 

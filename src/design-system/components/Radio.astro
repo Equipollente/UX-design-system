@@ -6,32 +6,24 @@
 // ne va jamais seul — il n'a de sens que dans un groupe qui partage un `name` et
 // pose sa question en <legend>. Pour un oui/non isolé, c'est Checkbox.
 //
-// Nœud Figma : 340:879 — 8 variantes, Selected × State.
+// Nœud Figma : 876:64956 — 6 variantes, state × checked, plus `hint?` ; le cercle seul
+// est la pièce interne `_RadioInput` (875:53423).
 //
 // Le contrôle est natif mais son dessin vient du système : `appearance: none`
 // efface celui du navigateur, et tout ce qui le remplace est une variable. Le
-// point du centre n'est pas un second élément — c'est une ombre intérieure de
-// `space/xs` posée sur un fond blanc : 16 − 4 − 4 = 8, exactement le point du
-// nœud, sans qu'une mesure soit écrite à la main.
+// choix retenu n'a pas de point : c'est un anneau, le trait de 1
+// (`border/width/default`) passe à 2 (`border/width/focus`) en `border/control`.
+// Le trait étant dans la boîte, le cercle garde ses 18 dans les deux états.
 //
 // Toutes les mesures viennent du nœud, et aucune n'est approchée :
 // — cercle 18 → `control/size` ;
-// — point 8 → `space/sm`, obtenu sans être écrit. Le trait mange 1 de chaque
-//   côté, la boîte intérieure fait donc 16, et l'anneau de `space/xs` n'y laisse
-//   que 16 − 4 − 4 = 8 ;
 // — écart au libellé 8 → `space/sm`, lié dans le nœud ;
-// — trait 1 → `border/width/default`, anneau de focus 2 → `border/width/focus`.
+// — écart libellé–aide 4 → `space/xs` ;
+// — trait 1 → `border/width/default`, 2 retenu et anneau de focus →
+//   `border/width/focus`.
 //
-// Le trait est posé dans tous les états, et c'est sa couleur qui change : le nœud
-// ne le dessine que sur le cercle non retenu, mais un trait accent sur un fond
-// accent se voit pareil, et la géométrie ne bouge alors jamais — sans quoi le
-// point changerait de taille en passant d'un état à l'autre.
-//
-// Ce que Figma déclare et qui n'est pas ici :
-// — la typographie du libellé (14 px, interligne 120 %) et son encre désactivée
-//   (neutral/400), qui ne sont pas celles de FieldLabel (15 px, 112 %, muted).
-//   Le libellé partagé l'emporte : c'est sa raison d'être qu'un seul fichier
-//   décide de tous les libellés du formulaire.
+// Désactivé : le cercle passe au gris du système (`category/neutral`), il ne
+// s'atténue plus. Il n'y a pas de survol : un radio ne change pas sous la souris.
 
 import FieldLabel from './FieldLabel.astro';
 import FieldMessage from './_FieldMessage.astro';
