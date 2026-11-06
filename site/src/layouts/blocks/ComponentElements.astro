@@ -24,21 +24,18 @@ const { reglages, slots, utilise, natifs, source } = Astro.props;
 ---
 
 <section class="elements">
-  <h2>Les éléments Astro</h2>
-  <p class="note">Page générée d'après le code du composant (<code>{source}</code>). Pour la corriger, corriger le code.</p>
-
-  <h3>Les réglages</h3>
-  <p>Ce qu'on peut donner au composant quand on le pose. Une étoile marque un réglage obligatoire.</p>
+  <h2>Props</h2>
+  <p class="note">Tableau généré d'après le code du composant (<code>{source}</code>). Une étoile marque un réglage obligatoire.</p>
   <table>
     <thead>
-      <tr><th scope="col">Réglage</th><th scope="col">Valeurs</th><th scope="col">Au départ</th><th scope="col">À quoi il sert</th></tr>
+      <tr><th scope="col">Name</th><th scope="col">Default</th><th scope="col">Type</th><th scope="col">Description</th></tr>
     </thead>
     <tbody>
       {reglages.map((r) => (
         <tr>
           <th scope="row"><code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}</th>
-          <td>{r.valeurs ? r.valeurs.map((v) => <code>{v}</code>) : <code>{r.type}</code>}</td>
           <td>{r.default !== undefined ? <code>{r.default}</code> : '—'}</td>
+          <td>{r.valeurs ? r.valeurs.map((v) => <code>{v}</code>) : <code>{r.type}</code>}</td>
           <td>{r.description}</td>
         </tr>
       ))}
@@ -53,8 +50,8 @@ const { reglages, slots, utilise, natifs, source } = Astro.props;
 
   {slots.length > 0 && (
     <>
-      <h3>Les emplacements (slots)</h3>
-      <p>Les endroits où on peut glisser son propre contenu, entre les balises du composant.</p>
+      <h3>Slots</h3>
+      <p>Les endroits où glisser son propre contenu, entre les balises du composant.</p>
       <ul>
         {slots.map((s) => <li><code>{s === 'default' ? 'contenu par défaut' : `slot="${s}"`}</code></li>)}
       </ul>
@@ -63,8 +60,8 @@ const { reglages, slots, utilise, natifs, source } = Astro.props;
 
   {utilise.length > 0 && (
     <>
-      <h3>Les pièces qu'il emprunte</h3>
-      <p>D'autres composants du système, qu'il pose lui-même à l'intérieur.</p>
+      <h3>Composants utilisés</h3>
+      <p>D'autres composants du système, que celui-ci pose lui-même à l'intérieur.</p>
       <ul>
         {utilise.map((u) => <li><code>{u}</code></li>)}
       </ul>

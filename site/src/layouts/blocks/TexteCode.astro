@@ -1,0 +1,12 @@
+---
+// Une phrase où ce qui est entre accents graves (`maxlength`) s'écrit en code. Les textes de la
+// doc viennent de fichiers Markdown ou YAML ; le YAML ne met pas en forme, ce composant le fait.
+interface Props {
+  texte: string;
+}
+
+const { texte } = Astro.props;
+const morceaux = texte.split('`').map((morceau, i) => ({ morceau, code: i % 2 === 1 }));
+---
+
+{morceaux.map(({ morceau, code }) => (code ? <code>{morceau}</code> : morceau))}

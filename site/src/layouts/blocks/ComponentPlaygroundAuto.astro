@@ -86,18 +86,17 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
 ---
 
 <section class="playground" data-playground>
-  <h2>Le composant</h2>
-  <p>Changer un réglage dans le tableau : le composant et le code se mettent à jour.</p>
+  <h2>Playground</h2>
+  <p class="note">Changer un réglage : le composant et le code se mettent à jour.</p>
 
   <!-- Le composant. Sans JavaScript, on voit au moins sa version de départ. -->
   <div class="canvas" data-canvas aria-live="polite">
     <Composant {...reglagesDe({}, false)} />
   </div>
 
-  <h3>Les réglages</h3>
   <table class="controles">
     <thead>
-      <tr><th scope="col">Réglage</th><th scope="col">Valeur</th></tr>
+      <tr><th scope="col">Name</th><th scope="col">Control</th></tr>
     </thead>
     <tbody>
       {reglables.map((r) => {
@@ -107,7 +106,6 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
           <tr>
             <th scope="row">
               <code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}
-              {r.description && <small>{r.description}</small>}
             </th>
             <td>
               {sorte === 'choix' && (
@@ -152,7 +150,7 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
   )}
 
   <div class="entete-code">
-    <h3>Le code à copier</h3>
+    <h3>Code</h3>
     <button type="button" data-copier>Copier</button>
   </div>
   <pre><code data-code></code></pre>

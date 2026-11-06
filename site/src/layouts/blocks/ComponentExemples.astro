@@ -1,0 +1,156 @@
+---
+// Les exemples d'un composant, comme dans Primer : un titre, une phrase d'usage, le composant
+// posé avec ses réglages, puis le code à copier.
+//
+// Les exemples sont écrits à la main, dans le fichier de présentation du composant
+// (site/src/content/components/<nom>.md) : seulement leurs réglages. Le code à copier, lui, est
+// fabriqué ici d'après ces réglages, et un réglage qui n'existe pas — ou une valeur hors liste —
+// fait échouer la construction : un exemple faux ne peut pas être publié.
+import TexteCode from './TexteCode.astro';
+
+interface Reglage {
+  nom: string;
+  type: string;
+  valeurs?: string[];
+  default?: string;
+}
+
+interface Exemple {
+  titre: string;
+  texte?: string;
+  instances: Record<string, string | number | boolean>[];
+}
+
+interface Props {
+  /** Le nom du composant, tel qu'on l'importe : `InputPG`. */
+  nom: string;
+  reglages: Reglage[];
+  Composant: any; // un composant Astro : aucun type d'Astro ne le décrit
+  exemples: Exemple[];
+}
+
+const { nom, reglages, Composant, exemples } = Astro.props;
+
+// ── Un exemple ne peut pas mentir ────────────────────────────────────────────
+for (const exemple of exemples) {
+  for (const instance of exemple.instances) {
+    for (const [cle, valeur] of Object.entries(instance)) {
+      const reglage = reglages.find((r) => r.nom === cle);
+      if (!reglage) throw new Error(`Exemple « ${exemple.titre} » : ${nom} n'a pas de réglage « ${cle} ».`);
+      if (reglage.valeurs && !reglage.valeurs.includes(String(valeur))) {
+        throw new Error(`Exemple « ${exemple.titre} » : « ${valeur} » n'est pas une valeur de ${cle} (${reglage.valeurs.join(', ')}).`);
+      }
+    }
+  }
+}
+
+// ── Le code à copier ─────────────────────────────────────────────────────────
+// Seulement ce qui s'écarte du départ, dans l'ordre des réglages du composant.
+function ligne(reglage: Reglage, valeur: string | number | boolean) {
+  if (typeof valeur === 'boolean') {
+    const parDefaut = reglage.default === 'true';
+    if (valeur === parDefaut) return null;
+    return valeur ? reglage.nom : `${reglage.nom}={false}`;
+  }
+  if (typeof valeur === 'number') return `${reglage.nom}={${valeur}}`;
+  if (reglage.valeurs && reglage.default === valeur) return null;
+  return valeur.includes('"') ? `${reglage.nom}={${JSON.stringify(valeur)}}` : `${reglage.nom}="${valeur}"`;
+}
+
+const codeDe = (instances: Exemple['instances']) =>
+  instances
+    .map((instance) => {
+      const lignes = reglages
+        .filter((r) => r.nom in instance)
+        .map((r) => ligne(r, instance[r.nom]))
+        .filter((l): l is string => l !== null);
+      return `<${nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
+    })
+    .join('\n\n');
+---
+
+<section class="exemples">
+  <h2>Exemples</h2>
+
+  {exemples.map((exemple) => (
+    <section class="exemple">
+      <h3>{exemple.titre}</h3>
+      {exemple.texte && <p><TexteCode texte={exemple.texte} /></p>}
+
+      <div class="demo">
+        {exemple.instances.map((instance) => <Composant {...instance} />)}
+      </div>
+
+      <div class="code">
+        <button type="button" data-copie>Copier</button>
+        <pre><code>{codeDe(exemple.instances)}</code></pre>
+      </div>
+    </section>
+  ))}
+</section>
+
+<style>
+  h2 {
+    font-size: var(--text-title-large-size);
+  }
+  .exemple {
+    margin-block-start: var(--base-32);
+  }
+  h3 {
+    margin-block: 0 var(--base-4);
+    font-size: var(--text-title-small-size);
+  }
+  p {
+    margin-block: 0 var(--base-12);
+    color: var(--color-text-base-muted);
+    max-inline-size: 60ch;
+  }
+
+  /* La démo : le composant sur un fond neutre, les instances côte à côte. */
+  .demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--base-24);
+    padding: var(--base-32);
+    background: var(--color-surface-raised);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+  }
+
+  .code {
+    position: relative;
+  }
+  pre {
+    margin: 0;
+    padding: var(--base-16);
+    overflow-x: auto;
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-block-start: 0;
+    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
+    font-size: var(--text-body-small-size);
+  }
+  button {
+    position: absolute;
+    inset-block-start: var(--base-8);
+    inset-inline-end: var(--base-8);
+    padding: var(--base-4) var(--base-12);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: 999px;
+    background: var(--color-surface-default);
+    color: inherit;
+    font: inherit;
+    font-size: var(--text-caption-size);
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  // Un seul écouteur pour tous les boutons « Copier » de la page.
+  document.addEventListener('click', async (event) => {
+    const bouton = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copie]');
+    if (!bouton) return;
+    await navigator.clipboard.writeText(bouton.parentElement?.querySelector('pre')?.textContent ?? '');
+    bouton.textContent = 'Copié';
+    setTimeout(() => (bouton.textContent = 'Copier'), 1500);
+  });
+</script>
