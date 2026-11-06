@@ -123,6 +123,17 @@ const proprietes = (sf, interf) =>
 
 const frontmatter = (src) => src.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
 
+/** Les pièces que le composant emprunte : les composants .astro qu'il importe (pas les types). */
+function pieces(sf) {
+  const noms = [];
+  for (const s of sf.statements) {
+    if (!ts.isImportDeclaration(s) || s.importClause?.isTypeOnly) continue;
+    if (!s.moduleSpecifier.text.endsWith('.astro') || !s.importClause?.name) continue;
+    noms.push(s.importClause.name.text);
+  }
+  return noms;
+}
+
 /** Les slots du modèle : { nom, } — `default` pour `<slot />`. */
 function slots(src) {
   const modele = src.replace(/^---[\s\S]*?\n---/, '').replace(/<!--[\s\S]*?-->/g, '');
@@ -159,6 +170,7 @@ function lire(fichier) {
     natifs: natifs(source, decl),
     props: proprietes(source, decl),
     slots: slots(src),
+    utilise: pieces(parse(frontmatter(src), 'frontmatter.ts')),
   };
 }
 

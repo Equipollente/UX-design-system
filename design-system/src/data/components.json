@@ -98,6 +98,9 @@
     ],
     "slots": [
       "default"
+    ],
+    "utilise": [
+      "Icon"
     ]
   },
   "Card": {
@@ -175,7 +178,8 @@
       "tags-top",
       "tags",
       "actions"
-    ]
+    ],
+    "utilise": []
   },
   "CardDefaultLegacy": {
     "source": "design-system/src/components/CardDefaultLegacy.astro",
@@ -250,6 +254,11 @@
       "tags-top",
       "tags-bottom",
       "actions"
+    ],
+    "utilise": [
+      "NewCardDefault",
+      "CardImage",
+      "CardText"
     ]
   },
   "Carousel": {
@@ -279,7 +288,10 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button"
+    ]
   },
   "CaseStudyCard": {
     "source": "design-system/src/components/CaseStudyCard.astro",
@@ -344,7 +356,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "CaseStudyHeader",
+      "Carousel"
+    ]
   },
   "CaseStudyHeader": {
     "source": "design-system/src/components/CaseStudyHeader.astro",
@@ -397,7 +413,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button",
+      "Tag"
+    ]
   },
   "CaseStudyList": {
     "source": "design-system/src/components/CaseStudyList.astro",
@@ -444,7 +464,10 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "CaseStudyCard"
+    ]
   },
   "Checkbox": {
     "source": "design-system/src/components/Checkbox.astro",
@@ -515,7 +538,12 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage",
+      "Icon"
+    ]
   },
   "Chip": {
     "source": "design-system/src/components/Chip.astro",
@@ -568,7 +596,8 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": []
   },
   "ComponentTemplate": {
     "source": "design-system/src/components/ComponentTemplate.astro",
@@ -593,7 +622,8 @@
     ],
     "slots": [
       "default"
-    ]
+    ],
+    "utilise": []
   },
   "EditImageGallery": {
     "source": "design-system/src/components/EditImageGallery.astro",
@@ -640,7 +670,10 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button"
+    ]
   },
   "FieldLabel": {
     "source": "design-system/src/components/FieldLabel.astro",
@@ -687,7 +720,8 @@
     ],
     "slots": [
       "default"
-    ]
+    ],
+    "utilise": []
   },
   "Icon": {
     "source": "design-system/src/components/Icon.astro",
@@ -727,7 +761,8 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": []
   },
   "IconButton": {
     "source": "design-system/src/components/IconButton.astro",
@@ -813,7 +848,10 @@
         "description": "La surcharge ponctuelle de Button : --btn-bg, --btn-icon…"
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button"
+    ]
   },
   "Input": {
     "source": "design-system/src/components/Input.astro",
@@ -915,7 +953,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage"
+    ]
   },
   "InputPG": {
     "source": "design-system/src/components/InputPG.astro",
@@ -1036,6 +1078,10 @@
     ],
     "slots": [
       "icon-start"
+    ],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage"
     ]
   },
   "Intro": {
@@ -1089,7 +1135,10 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button"
+    ]
   },
   "Modal": {
     "source": "design-system/src/components/Modal.astro",
@@ -1165,7 +1214,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Icon",
+      "Button"
+    ]
   },
   "Nav": {
     "source": "design-system/src/components/Nav.astro",
@@ -1212,7 +1265,11 @@
         "description": "La barre se colle en haut de la fenêtre et s'efface quand on descend. Absente,\nelle reste posée à plat : c'est ce que doit rester une barre qu'on documente\nplutôt qu'on habite."
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Button",
+      "Icon"
+    ]
   },
   "Radio": {
     "source": "design-system/src/components/Radio.astro",
@@ -1271,7 +1328,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage"
+    ]
   },
   "Sidebar": {
     "source": "design-system/src/components/Sidebar.astro",
@@ -1330,7 +1391,10 @@
         "description": "Surcharge locale de mise en page fournie par l'appelant."
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Icon"
+    ]
   },
   "Tag": {
     "source": "design-system/src/components/Tag.astro",
@@ -1367,7 +1431,8 @@
     ],
     "slots": [
       "default"
-    ]
+    ],
+    "utilise": []
   },
   "Textarea": {
     "source": "design-system/src/components/Textarea.astro",
@@ -1462,7 +1527,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage"
+    ]
   },
   "Toggle": {
     "source": "design-system/src/components/Toggle.astro",
@@ -1515,7 +1584,11 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldMessage"
+    ]
   },
   "_FieldMessage": {
     "source": "design-system/src/components/_FieldMessage.astro",
@@ -1546,6 +1619,9 @@
     ],
     "slots": [
       "default"
+    ],
+    "utilise": [
+      "Icon"
     ]
   },
   "_Select": {
@@ -1747,7 +1823,13 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "SelectPanel",
+      "Icon",
+      "FieldMessage"
+    ]
   },
   "_SelectPanel": {
     "source": "design-system/src/components/_SelectPanel.astro",
@@ -1860,6 +1942,10 @@
         "description": ""
       }
     ],
-    "slots": []
+    "slots": [],
+    "utilise": [
+      "Checkbox",
+      "Icon"
+    ]
   }
 }

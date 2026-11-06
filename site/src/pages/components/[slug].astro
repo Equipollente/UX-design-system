@@ -1,13 +1,17 @@
 ---
-// La page d'un composant, fabriquée d'après son code : une page par composant qui dit, avec des
-// `@example`, comment l'essayer (voir _component-pages.ts). Aucun fichier à écrire pour un
-// nouveau composant. Ce qui reste à la main, c'est le texte d'usage — à venir, dans la
-// collection de contenu.
+// La page d'un composant, fabriquée d'après son code. Elle suit toujours le même ordre :
 //
-// La page est celle de la maquette Figma : titre, Overview des variantes, Playground.
+//   1. La présentation : à quoi il sert, quand l'utiliser. C'est le seul texte écrit à la main :
+//      src/content/components/<nom>.md.
+//   2. Les éléments Astro : ses réglages, ses emplacements, ses pièces. Lus dans son code.
+//   3. Le composant, avec ses réglages et le code à copier.
+//
+// Un composant a sa page dès que ses réglages obligatoires portent un `@example` (voir
+// _component-pages.ts). Aucun fichier de page à écrire.
+import { getEntry, render } from 'astro:content';
 import ComponentPageLayout from '../../layouts/ComponentPageLayout.astro';
 import ComponentIntroduction from '../../layouts/blocks/ComponentIntroduction.astro';
-import ComponentVariantes from '../../layouts/blocks/ComponentVariantes.astro';
+import ComponentElements from '../../layouts/blocks/ComponentElements.astro';
 import ComponentPlaygroundAuto from '../../layouts/blocks/ComponentPlaygroundAuto.astro';
 import components from 'ux-design-system/data/components.json';
 import { withBase } from 'ux-design-system/lib/url';
@@ -23,7 +27,11 @@ const { page } = Astro.props;
 const modules = import.meta.glob<{ default: any }>('../../../../design-system/src/components/*.astro', { eager: true });
 const Composant = Object.entries(modules).find(([chemin]) => chemin.endsWith(`/${page.nom}.astro`))![1].default;
 
-const fiche = (components as unknown as Record<string, { props: any[]; experimental?: boolean }>)[page.nom];
+const fiche = (components as unknown as Record<string, any>)[page.nom];
+
+// Le texte de présentation, s'il est écrit.
+const texte = await getEntry('components', page.slug);
+const Presentation = texte ? (await render(texte)).Content : null;
 ---
 
 <ComponentPageLayout
@@ -36,11 +44,38 @@ const fiche = (components as unknown as Record<string, { props: any[]; experimen
   sidebarLabel="Navigation des composants"
 >
   <div slot="header">
-    <ComponentIntroduction title={page.title} description={page.description} />
+    <ComponentIntroduction title={texte?.data.title ?? page.title} description={texte?.data.description ?? page.description} />
   </div>
 
   <div slot="content">
-    <ComponentVariantes reglages={fiche.props} Composant={Composant} />
+    <!-- 1. La présentation -->
+    <section class="presentation">
+      {Presentation ? <Presentation /> : <p class="manque">Le texte de présentation de ce composant reste à écrire : <code>site/src/content/components/{page.slug}.md</code>.</p>}
+    </section>
+
+    <!-- 2. Les éléments Astro -->
+    <ComponentElements
+      reglages={fiche.props}
+      slots={fiche.slots}
+      utilise={fiche.utilise}
+      natifs={fiche.natifs}
+      source={fiche.source}
+    />
+
+    <!-- 3. Le composant, ses réglages et le code à copier -->
     <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} />
   </div>
 </ComponentPageLayout>
+
+<style>
+  .presentation {
+    margin-block-end: var(--base-48);
+  }
+  .presentation :global(h2) {
+    margin-block: var(--base-32) var(--base-8);
+    font-size: var(--text-title-large-size);
+  }
+  .manque {
+    color: var(--color-text-base-muted);
+  }
+</style>

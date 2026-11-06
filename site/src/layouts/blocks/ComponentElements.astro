@@ -1,0 +1,109 @@
+---
+// « Les éléments Astro » d'un composant : ce qu'il reçoit (ses réglages), ce qu'il emprunte
+// (ses pièces) et ce qu'on peut y glisser (ses emplacements). Tout est lu dans son code par
+// design-system/scripts/build-props.mjs : rien n'est écrit à la main ici.
+
+interface Reglage {
+  nom: string;
+  type: string;
+  valeurs?: string[];
+  requis: boolean;
+  description: string;
+  default?: string;
+}
+
+interface Props {
+  reglages: Reglage[];
+  slots: string[];
+  utilise: string[];
+  natifs: { balise: string | null; ecartes: string[] };
+  source: string;
+}
+
+const { reglages, slots, utilise, natifs, source } = Astro.props;
+---
+
+<section class="elements">
+  <h2>Les éléments Astro</h2>
+  <p class="note">Page générée d'après le code du composant (<code>{source}</code>). Pour la corriger, corriger le code.</p>
+
+  <h3>Les réglages</h3>
+  <p>Ce qu'on peut donner au composant quand on le pose. Une étoile marque un réglage obligatoire.</p>
+  <table>
+    <thead>
+      <tr><th scope="col">Réglage</th><th scope="col">Valeurs</th><th scope="col">Au départ</th><th scope="col">À quoi il sert</th></tr>
+    </thead>
+    <tbody>
+      {reglages.map((r) => (
+        <tr>
+          <th scope="row"><code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}</th>
+          <td>{r.valeurs ? r.valeurs.map((v) => <code>{v}</code>) : <code>{r.type}</code>}</td>
+          <td>{r.default !== undefined ? <code>{r.default}</code> : '—'}</td>
+          <td>{r.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {natifs.balise && (
+    <p class="note">
+      Le composant accepte aussi les attributs natifs de <code>&lt;{natifs.balise}&gt;</code>
+      {natifs.ecartes.length > 0 && <>, sauf <code>{natifs.ecartes.join(', ')}</code></>}.
+    </p>
+  )}
+
+  {slots.length > 0 && (
+    <>
+      <h3>Les emplacements (slots)</h3>
+      <p>Les endroits où on peut glisser son propre contenu, entre les balises du composant.</p>
+      <ul>
+        {slots.map((s) => <li><code>{s === 'default' ? 'contenu par défaut' : `slot="${s}"`}</code></li>)}
+      </ul>
+    </>
+  )}
+
+  {utilise.length > 0 && (
+    <>
+      <h3>Les pièces qu'il emprunte</h3>
+      <p>D'autres composants du système, qu'il pose lui-même à l'intérieur.</p>
+      <ul>
+        {utilise.map((u) => <li><code>{u}</code></li>)}
+      </ul>
+    </>
+  )}
+</section>
+
+<style>
+  h2 {
+    font-size: var(--text-title-large-size);
+  }
+  h3 {
+    margin-block: var(--base-24) var(--base-8);
+    font-size: var(--text-title-small-size);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-body-small-size);
+  }
+  th,
+  td {
+    padding: var(--base-12) var(--base-12);
+    border-block-end: var(--border-width-default) solid var(--color-border-base-subtle);
+    text-align: start;
+    vertical-align: top;
+  }
+  thead th {
+    color: var(--color-text-base-muted);
+    font-weight: var(--base-text-weight-medium);
+  }
+  td code + code {
+    margin-inline-start: var(--base-4);
+  }
+  .requis {
+    color: var(--color-text-danger-default);
+  }
+  .note {
+    color: var(--color-text-base-muted);
+    font-size: var(--text-body-small-size);
+  }
+</style>
