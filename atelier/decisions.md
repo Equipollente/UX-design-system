@@ -587,3 +587,15 @@ texte courant fait 16 px et rien ne descend sous 12 : un champ à moins de 16 px
 **Écarts connus, à arbitrer dans Figma :** la bordure de champ (`border/base/subtle`) et l'indicateur « éteint » du
 Toggle (`background/inactive`, très pâle) ne tiennent pas le 3:1 des éléments d'interface ; les ombres, l'opacité et les
 rapports d'image sont dans `effects` sans rôle sémantique ; `card` n'a plus de tokens propres.
+
+## Le nom d'un token est la syntaxe code de sa variable Figma
+
+`build-tokens.mjs` ne déduit plus le nom CSS du nom de la variable : il lit `com.figma.codeSyntax.WEB`
+(`var(--color-text-primary-default)`) dans l'export, tel quel. Le but est de coder depuis Figma sans
+interpréter — ce que Figma affiche en mode Dev est ce que le code écrit. Une variable sans syntaxe, ou
+deux variables avec la même, font refuser la construction ; une syntaxe qui s'écarte de la règle de
+nommage est signalée sans bloquer, parce que c'est presque toujours un renommage dont le champ n'a pas
+suivi. La palette DSFR, qui n'a pas de syntaxe, garde la règle.
+
+La collection Motion est préfixée par le script (`--motion-duration-quick`) : sa syntaxe dans Figma doit
+le dire aussi. `node scripts/liste-syntaxes.mjs` dresse la liste et relève les écarts.

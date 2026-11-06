@@ -9,7 +9,10 @@
           "com.figma.variableId": "VariableID:905:56644",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-y)"
+          }
         }
       },
       "blur": {
@@ -20,7 +23,10 @@
           "com.figma.variableId": "VariableID:905:56645",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-blur)"
+          }
         }
       },
       "spread": {
@@ -31,7 +37,10 @@
           "com.figma.variableId": "VariableID:905:56646",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-spread)"
+          }
         }
       },
       "color": {
@@ -51,7 +60,10 @@
           "com.figma.variableId": "VariableID:905:56647",
           "com.figma.scopes": [
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-contact-color)"
+          }
         }
       }
     },
@@ -64,7 +76,10 @@
           "com.figma.variableId": "VariableID:905:56648",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-y)"
+          }
         }
       },
       "blur": {
@@ -75,7 +90,10 @@
           "com.figma.variableId": "VariableID:905:56649",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-blur)"
+          }
         }
       },
       "spread": {
@@ -86,7 +104,10 @@
           "com.figma.variableId": "VariableID:905:56650",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-spread)"
+          }
         }
       },
       "color": {
@@ -106,7 +127,10 @@
           "com.figma.variableId": "VariableID:905:56651",
           "com.figma.scopes": [
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-md-color)"
+          }
         }
       }
     },
@@ -119,7 +143,10 @@
           "com.figma.variableId": "VariableID:905:56652",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-y)"
+          }
         }
       },
       "blur": {
@@ -130,7 +157,10 @@
           "com.figma.variableId": "VariableID:905:56653",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-blur)"
+          }
         }
       },
       "spread": {
@@ -141,7 +171,10 @@
           "com.figma.variableId": "VariableID:905:56654",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-spread)"
+          }
         }
       },
       "color": {
@@ -161,7 +194,10 @@
           "com.figma.variableId": "VariableID:905:56655",
           "com.figma.scopes": [
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-color)"
+          }
         }
       }
     },
@@ -174,7 +210,10 @@
           "com.figma.variableId": "VariableID:905:56656",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-y)"
+          }
         }
       },
       "blur": {
@@ -185,7 +224,10 @@
           "com.figma.variableId": "VariableID:905:56657",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-blur)"
+          }
         }
       },
       "spread": {
@@ -196,7 +238,10 @@
           "com.figma.variableId": "VariableID:905:56658",
           "com.figma.scopes": [
             "EFFECT_FLOAT"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-spread)"
+          }
         }
       },
       "color": {
@@ -216,7 +261,10 @@
           "com.figma.variableId": "VariableID:905:56659",
           "com.figma.scopes": [
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--shadow-lg-invert-color)"
+          }
         }
       }
     }
@@ -230,7 +278,10 @@
         "com.figma.variableId": "VariableID:905:56660",
         "com.figma.scopes": [
           "OPACITY"
-        ]
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--opacity-disabled)"
+        }
       }
     }
   },
@@ -240,7 +291,10 @@
       "$value": 1,
       "$description": "Rapport largeur/hauteur d'une image. Carré (1:1). À poser en aspect-ratio.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:905:56661"
+        "com.figma.variableId": "VariableID:905:56661",
+        "com.figma.codeSyntax": {
+          "WEB": "var(--ratio-square)"
+        }
       }
     },
     "portrait": {
@@ -248,7 +302,10 @@
       "$value": 0.6669999957084656,
       "$description": "Rapport largeur/hauteur d'une image. Portrait (2:3). À poser en aspect-ratio.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:905:56662"
+        "com.figma.variableId": "VariableID:905:56662",
+        "com.figma.codeSyntax": {
+          "WEB": "var(--ratio-portrait)"
+        }
       }
     },
     "landscape": {
@@ -256,7 +313,10 @@
       "$value": 1.777999997138977,
       "$description": "Rapport largeur/hauteur d'une image. Paysage (16:9). À poser en aspect-ratio.",
       "$extensions": {
-        "com.figma.variableId": "VariableID:905:56663"
+        "com.figma.variableId": "VariableID:905:56663",
+        "com.figma.codeSyntax": {
+          "WEB": "var(--ratio-landscape)"
+        }
       }
     }
   },

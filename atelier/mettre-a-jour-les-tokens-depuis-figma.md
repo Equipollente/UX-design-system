@@ -89,6 +89,14 @@ en lisant les vraies variables — s'ils y sont, ils sont arrivés.
 famille dont le script ignore le nom, et sans cette ligne elle sortirait du CSS sans un mot. L'erreur
 nomme le groupe ; il n'y a rien à chercher, seulement une ligne à faire ajouter au script.
 
+**« n variable(s) sans syntaxe code »** — et il refuse de construire. Le nom d'un token est celui que
+Figma lui donne dans « Code syntax » (Web), pas un nom que le script déduit. Une variable créée sans ce
+champ n'a pas de nom : le remplir dans Figma, ré-exporter. `node scripts/liste-syntaxes.mjs` dresse la
+liste d'un export et relève les écarts.
+
+**« ⚠️ n syntaxe(s) code s'écartent du nom… »** — rien n'est cassé, le code suit Figma. Mais c'est presque
+toujours une variable renommée dont le champ « Code syntax » n'a pas suivi : à vérifier dans Figma.
+
 **« ⚠️ n valeurs ont bougé dans les familles que Figma ne sait pas lier »** — rien n'est cassé, le
 code est à jour. Mais un interligne ou un interlettrage a changé, et les **styles de texte du fichier
 Figma ne suivent pas tout seuls**. Voir [verifier-la-typographie.md](verifier-la-typographie.md).

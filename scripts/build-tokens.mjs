@@ -103,7 +103,15 @@ const cssName = (path) =>
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .toLowerCase();
 
-const read = (dir, mode) =>
+// Le nom d'un token, c'est celui que Figma lui donne : la syntaxe code de la variable
+// (`var(--color-text-primary-default)`), lue dans l'export, telle quelle. Le script ne
+// l'interprète pas. `cssName` ne sert plus qu'à deux choses : la palette DSFR, qui n'a pas
+// de syntaxe, et le signalement d'un écart (voir « Lecture »).
+const SYNTAXE = /^var\((--[a-z0-9-]+)\)$/;
+const nomsFigma = new Map(); // chemin → nom écrit dans Figma
+const nom = (path) => nomsFigma.get(path) ?? cssName(path);
+
+const read =(dir, mode) =>
   JSON.parse(readFileSync(join(ROOT, 'tokens', dir, `${mode}.tokens.json`), 'utf8'));
 
 /**
@@ -131,6 +139,7 @@ function token(path, node, prefix) {
     type: node.$type,
     value,
     description: node.$description ?? '',
+    syntaxe: node.$extensions?.['com.figma.codeSyntax']?.WEB,
   };
 }
 
@@ -157,7 +166,9 @@ function flatten(node, path = [], out = [], prefix) {
 }
 
 const isAlias = (v) => typeof v === 'string' && v.startsWith('{') && v.endsWith('}');
-const aliasTarget = (v) => v.slice(1, -1);
+// `{color.background.primary.subtlest.$root}` : l'alias vers une variable qui est aussi un
+// groupe. Dans la liste, cette variable a pour chemin celui du groupe, sans `$root`.
+const aliasTarget = (v) => v.slice(1, -1).replace(/\.\$root$/, '');
 
 const round = (n) => parseFloat(n.toFixed(4));
 
@@ -171,7 +182,7 @@ const round = (n) => parseFloat(n.toFixed(4));
 function toCss(token) {
   const { path, type, value } = token;
 
-  if (isAlias(value)) return `var(${cssName(aliasTarget(value))})`;
+  if (isAlias(value)) return `var(${nom(aliasTarget(value))})`;
 
   if (type === 'color') {
     const { alpha = 1, components } = value;
@@ -221,13 +232,41 @@ const base = SOURCES.flatMap(({ dir, mode, prefix }) =>
   flatten(read(dir, mode), prefix ? [prefix] : [], [], prefix),
 );
 
+// Chaque variable doit porter sa syntaxe code. Sans elle, le nom du token serait une
+// décision du script, et c'est précisément ce que ce fichier ne doit plus faire : on refuse
+// de construire plutôt que d'inventer un nom que personne n'a choisi.
+const sansSyntaxe = base.filter((t) => !t.syntaxe);
+if (sansSyntaxe.length) {
+  throw new Error(
+    `${sansSyntaxe.length} variable(s) sans syntaxe code dans l'export : ` +
+      `${sansSyntaxe.slice(0, 5).map((t) => t.path).join(', ')}${sansSyntaxe.length > 5 ? '…' : ''}.\n` +
+      `Dans Figma, ouvre la variable : « Code syntax » → Web → var(--son-nom). ` +
+      `\`node scripts/liste-syntaxes.mjs\` donne la liste complète.`,
+  );
+}
+
+const illisibles = base.filter((t) => !SYNTAXE.test(t.syntaxe));
+if (illisibles.length) {
+  throw new Error(
+    `${illisibles.length} syntaxe(s) code qui ne sont pas de la forme var(--nom) : ` +
+      `${illisibles.slice(0, 3).map((t) => `${t.path} : ${t.syntaxe}`).join(', ')}${illisibles.length > 3 ? '…' : ''}.`,
+  );
+}
+
+for (const t of base) nomsFigma.set(t.path, t.syntaxe.match(SYNTAXE)[1]);
+
+// Un écart entre la syntaxe et ce que la règle de nommage donnerait ne bloque rien : le
+// nom de Figma fait foi. Mais il se dit, parce qu'il est le plus souvent un renommage
+// de variable dont le champ n'a pas suivi.
+const ecarts = base.filter((t) => nomsFigma.get(t.path) !== cssName(t.path));
+
 const resolved = base.map((t) => ({
-  name: cssName(t.path),
+  name: nom(t.path),
   path: t.path,
   group: groupOf(t.path),
   type: t.type,
   css: toCss(t),
-  alias: isAlias(t.value) ? cssName(aliasTarget(t.value)) : null,
+  alias: isAlias(t.value) ? nom(aliasTarget(t.value)) : null,
   description: t.description,
 }));
 
@@ -260,8 +299,8 @@ for (const t of resolved) {
  * ombre réglable dans Figma sans toucher au code.
  */
 function composeShadows(tokens) {
-  const layer = (prefix) => {
-    const part = (suffix) => tokens.find((t) => t.name === `${prefix}-${suffix}`);
+  const layer = (chemin) => {
+    const part = (suffix) => tokens.find((t) => t.path === `${chemin}.${suffix}`);
     const [y, blur, spread, color] = ['y', 'blur', 'spread', 'color'].map(part);
     if (!y || !blur || !color) return null; // couche incomplète : on n'invente pas
     return ['0', y, blur, spread, color]
@@ -270,11 +309,11 @@ function composeShadows(tokens) {
       .join(' ');
   };
 
-  const contact = layer(cssName('shadow.contact'));
+  const contact = layer('shadow.contact');
 
   return [...new Set(tokens.map((t) => t.path.split('.')[1]))]
     .filter((sub) => sub !== 'contact')
-    .map((sub) => ({ name: cssName(`shadow.${sub}`), own: layer(cssName(`shadow.${sub}`)) }))
+    .map((sub) => ({ name: nom(`shadow.${sub}`), own: layer(`shadow.${sub}`) }))
     .filter((s) => s.own)
     .map((s) => ({ name: s.name, css: [s.own, contact].filter(Boolean).join(', ') }));
 }
@@ -352,7 +391,7 @@ lines.push('}');
 const themeOverrides = new Map(); // nom CSS → { thème: valeur }
 for (const { name, selector } of THEMES) {
   const overrides = flatten(read('semantic', name))
-    .map((t) => ({ ...t, name: cssName(t.path) }))
+    .map((t) => ({ ...t, name: nom(t.path) }))
     .filter((t) => {
       const baseToken = resolved.find((r) => r.name === t.name);
       return baseToken && baseToken.css !== toCss(t);
@@ -374,7 +413,7 @@ for (const { name, selector } of THEMES) {
 // elle sort d'ici sans qu'on ait à revenir dans ce script.
 for (const { name, query } of MODES) {
   const overrides = flatten(read('layout', name))
-    .map((t) => ({ ...t, name: cssName(t.path) }))
+    .map((t) => ({ ...t, name: nom(t.path) }))
     .filter((t) => {
       const baseToken = resolved.find((r) => r.name === t.name);
       return baseToken && baseToken.css !== toCss(t);
@@ -547,4 +586,12 @@ if (dsfrCount) {
   console.log(
     `${dsfrCount} couleurs DSFR → src/design-system/styles/tokens-dsfr.css, src/design-system/data/tokens-dsfr.json (hors du compte)`
   );
+}
+if (ecarts.length) {
+  console.log('');
+  console.log(`  ⚠️  ${ecarts.length} syntaxe(s) code s'écartent du nom que la règle de nommage donnerait.`);
+  console.log('      Le nom de Figma fait foi et le code le suit. Si ce n\'est pas voulu, la variable a');
+  console.log('      sans doute été renommée sans que son champ « Code syntax » suive :');
+  for (const t of ecarts.slice(0, 10)) console.log(`      ${t.path} : ${nomsFigma.get(t.path)}  (règle : ${cssName(t.path)})`);
+  if (ecarts.length > 10) console.log(`      … et ${ecarts.length - 10} autres`);
 }

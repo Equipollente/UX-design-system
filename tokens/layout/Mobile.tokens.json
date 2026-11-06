@@ -8,7 +8,10 @@
         "com.figma.variableId": "VariableID:905:25411",
         "com.figma.scopes": [
           "WIDTH_HEIGHT"
-        ]
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--viewport-width)"
+        }
       }
     },
     "scale": {
@@ -19,7 +22,10 @@
         "com.figma.variableId": "VariableID:905:25412",
         "com.figma.scopes": [
           "WIDTH_HEIGHT"
-        ]
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--viewport-scale)"
+        }
       }
     }
   },
@@ -32,7 +38,10 @@
         "com.figma.variableId": "VariableID:905:25413",
         "com.figma.scopes": [
           "WIDTH_HEIGHT"
-        ]
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--nav-height)"
+        }
       }
     }
   },

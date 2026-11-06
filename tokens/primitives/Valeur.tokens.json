@@ -15,7 +15,10 @@
         },
         "$description": "Blanc pur.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13130"
+          "com.figma.variableId": "VariableID:839:13130",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-0)"
+          }
         }
       },
       "50": {
@@ -32,7 +35,10 @@
         },
         "$description": "Tinted fill, wireframe fill.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10677"
+          "com.figma.variableId": "VariableID:897:10677",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-50)"
+          }
         }
       },
       "100": {
@@ -49,7 +55,10 @@
         },
         "$description": "Tinted fill, wireframe fill.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13063"
+          "com.figma.variableId": "VariableID:839:13063",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-100)"
+          }
         }
       },
       "200": {
@@ -66,7 +75,10 @@
         },
         "$description": "The backdrop around a slide.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13064"
+          "com.figma.variableId": "VariableID:839:13064",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-200)"
+          }
         }
       },
       "300": {
@@ -83,7 +95,10 @@
         },
         "$description": "Image frame, wireframe border.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13065"
+          "com.figma.variableId": "VariableID:839:13065",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-300)"
+          }
         }
       },
       "400": {
@@ -100,7 +115,10 @@
         },
         "$description": "Wireframe line. Not a text colour.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13066"
+          "com.figma.variableId": "VariableID:839:13066",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-400)"
+          }
         }
       },
       "500": {
@@ -117,7 +135,10 @@
         },
         "$description": "2.41:1 on white — decorative only. Never use for text, at any size.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13067"
+          "com.figma.variableId": "VariableID:839:13067",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-500)"
+          }
         }
       },
       "600": {
@@ -134,7 +155,10 @@
         },
         "$description": "The quiet text step. See color.text.muted.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13068"
+          "com.figma.variableId": "VariableID:839:13068",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-600)"
+          }
         }
       },
       "700": {
@@ -151,7 +175,10 @@
         },
         "$description": "Dense body copy. 9.10:1 on the ground.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13069"
+          "com.figma.variableId": "VariableID:839:13069",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-700)"
+          }
         }
       },
       "800": {
@@ -168,7 +195,10 @@
         },
         "$description": "Text on a neutral-100 fill. 10.16:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13070"
+          "com.figma.variableId": "VariableID:839:13070",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-800)"
+          }
         }
       },
       "900": {
@@ -185,7 +215,10 @@
         },
         "$description": "The primary ink. See color.text.default.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13071"
+          "com.figma.variableId": "VariableID:839:13071",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-grey-900)"
+          }
         }
       }
     },
@@ -204,7 +237,10 @@
         },
         "$description": "Teinte pâle de l’accent. Valeur de bg/surface.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13131"
+          "com.figma.variableId": "VariableID:839:13131",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-25)"
+          }
         }
       },
       "50": {
@@ -221,7 +257,10 @@
         },
         "$description": "Teinte de l’accent. Valeur de bg/section.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13132"
+          "com.figma.variableId": "VariableID:839:13132",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-50)"
+          }
         }
       },
       "100": {
@@ -238,7 +277,10 @@
         },
         "$description": "Tinted fill behind accent text; secondary ink on indigo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13072"
+          "com.figma.variableId": "VariableID:839:13072",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-100)"
+          }
         }
       },
       "200": {
@@ -255,7 +297,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13073"
+          "com.figma.variableId": "VariableID:839:13073",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-200)"
+          }
         }
       },
       "300": {
@@ -272,7 +317,10 @@
         },
         "$description": "Chart tints, muted accents.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13074"
+          "com.figma.variableId": "VariableID:839:13074",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-300)"
+          }
         }
       },
       "400": {
@@ -289,7 +337,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13075"
+          "com.figma.variableId": "VariableID:839:13075",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-400)"
+          }
         }
       },
       "500": {
@@ -306,7 +357,10 @@
         },
         "$description": "The brand indigo. Everything accent runs through this.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13076"
+          "com.figma.variableId": "VariableID:839:13076",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-500)"
+          }
         }
       },
       "600": {
@@ -323,7 +377,10 @@
         },
         "$description": "Hover state for indigo fills.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13077"
+          "com.figma.variableId": "VariableID:839:13077",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-600)"
+          }
         }
       },
       "700": {
@@ -340,7 +397,10 @@
         },
         "$description": "Pressed state for indigo fills.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13078"
+          "com.figma.variableId": "VariableID:839:13078",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-700)"
+          }
         }
       },
       "800": {
@@ -357,7 +417,10 @@
         },
         "$description": "Text on an accent-100 fill. 9.74:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13079"
+          "com.figma.variableId": "VariableID:839:13079",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-800)"
+          }
         }
       },
       "900": {
@@ -374,7 +437,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13080"
+          "com.figma.variableId": "VariableID:839:13080",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-indigo-900)"
+          }
         }
       }
     },
@@ -393,7 +459,10 @@
         },
         "$description": "The palest lime fill.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10678"
+          "com.figma.variableId": "VariableID:897:10678",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-50)"
+          }
         }
       },
       "100": {
@@ -410,7 +479,10 @@
         },
         "$description": "The palest lime fill.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13081"
+          "com.figma.variableId": "VariableID:839:13081",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-100)"
+          }
         }
       },
       "200": {
@@ -427,7 +499,10 @@
         },
         "$description": "The brand lime. This ramp's base sits at 200, not 500, because the lime is a surface and not an ink.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13082"
+          "com.figma.variableId": "VariableID:839:13082",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-200)"
+          }
         }
       },
       "300": {
@@ -444,7 +519,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13083"
+          "com.figma.variableId": "VariableID:839:13083",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-300)"
+          }
         }
       },
       "400": {
@@ -461,7 +539,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13084"
+          "com.figma.variableId": "VariableID:839:13084",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-400)"
+          }
         }
       },
       "500": {
@@ -478,7 +559,10 @@
         },
         "$description": "Derived step. Not the brand value — see 200.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13085"
+          "com.figma.variableId": "VariableID:839:13085",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-500)"
+          }
         }
       },
       "600": {
@@ -495,7 +579,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13086"
+          "com.figma.variableId": "VariableID:839:13086",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-600)"
+          }
         }
       },
       "700": {
@@ -512,7 +599,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13087"
+          "com.figma.variableId": "VariableID:839:13087",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-700)"
+          }
         }
       },
       "800": {
@@ -529,7 +619,10 @@
         },
         "$description": "Text on a highlight-100 fill. 8.07:1. Reach here when lime has to carry text.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13088"
+          "com.figma.variableId": "VariableID:839:13088",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-800)"
+          }
         }
       },
       "900": {
@@ -546,7 +639,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13089"
+          "com.figma.variableId": "VariableID:839:13089",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-lime-900)"
+          }
         }
       }
     },
@@ -565,7 +661,10 @@
         },
         "$description": "Tinted fill behind clay text; background of a clay tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10679"
+          "com.figma.variableId": "VariableID:897:10679",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-50)"
+          }
         }
       },
       "100": {
@@ -582,7 +681,10 @@
         },
         "$description": "Tinted fill behind clay text; background of a clay tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13090"
+          "com.figma.variableId": "VariableID:839:13090",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-100)"
+          }
         }
       },
       "200": {
@@ -599,7 +701,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13091"
+          "com.figma.variableId": "VariableID:839:13091",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-200)"
+          }
         }
       },
       "300": {
@@ -616,7 +721,10 @@
         },
         "$description": "Border of a clay memo card.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13092"
+          "com.figma.variableId": "VariableID:839:13092",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-300)"
+          }
         }
       },
       "400": {
@@ -633,7 +741,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13093"
+          "com.figma.variableId": "VariableID:839:13093",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-400)"
+          }
         }
       },
       "500": {
@@ -650,7 +761,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13094"
+          "com.figma.variableId": "VariableID:839:13094",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-500)"
+          }
         }
       },
       "600": {
@@ -667,7 +781,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13095"
+          "com.figma.variableId": "VariableID:839:13095",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-600)"
+          }
         }
       },
       "700": {
@@ -684,7 +801,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13096"
+          "com.figma.variableId": "VariableID:839:13096",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-700)"
+          }
         }
       },
       "800": {
@@ -701,7 +821,10 @@
         },
         "$description": "Text on a clay-100 fill. 8.23:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13097"
+          "com.figma.variableId": "VariableID:839:13097",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-800)"
+          }
         }
       },
       "900": {
@@ -718,7 +841,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13098"
+          "com.figma.variableId": "VariableID:839:13098",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-clay-900)"
+          }
         }
       }
     },
@@ -737,7 +863,10 @@
         },
         "$description": "Tinted fill behind teal text; background of a teal tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10680"
+          "com.figma.variableId": "VariableID:897:10680",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-50)"
+          }
         }
       },
       "100": {
@@ -754,7 +883,10 @@
         },
         "$description": "Tinted fill behind teal text; background of a teal tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13099"
+          "com.figma.variableId": "VariableID:839:13099",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-100)"
+          }
         }
       },
       "200": {
@@ -771,7 +903,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13100"
+          "com.figma.variableId": "VariableID:839:13100",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-200)"
+          }
         }
       },
       "300": {
@@ -788,7 +923,10 @@
         },
         "$description": "Border of a teal memo card.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13101"
+          "com.figma.variableId": "VariableID:839:13101",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-300)"
+          }
         }
       },
       "400": {
@@ -805,7 +943,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13102"
+          "com.figma.variableId": "VariableID:839:13102",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-400)"
+          }
         }
       },
       "500": {
@@ -822,7 +963,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13103"
+          "com.figma.variableId": "VariableID:839:13103",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-500)"
+          }
         }
       },
       "600": {
@@ -839,7 +983,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13104"
+          "com.figma.variableId": "VariableID:839:13104",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-600)"
+          }
         }
       },
       "700": {
@@ -856,7 +1003,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13105"
+          "com.figma.variableId": "VariableID:839:13105",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-700)"
+          }
         }
       },
       "800": {
@@ -873,7 +1023,10 @@
         },
         "$description": "Text on a teal-100 fill. 8.00:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13106"
+          "com.figma.variableId": "VariableID:839:13106",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-800)"
+          }
         }
       },
       "900": {
@@ -890,7 +1043,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13107"
+          "com.figma.variableId": "VariableID:839:13107",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-teal-900)"
+          }
         }
       }
     },
@@ -909,7 +1065,10 @@
         },
         "$description": "Tinted fill behind sun text; background of a sun tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10681"
+          "com.figma.variableId": "VariableID:897:10681",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-50)"
+          }
         }
       },
       "100": {
@@ -926,7 +1085,10 @@
         },
         "$description": "Tinted fill behind sun text; background of a sun tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13108"
+          "com.figma.variableId": "VariableID:839:13108",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-100)"
+          }
         }
       },
       "200": {
@@ -943,7 +1105,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13109"
+          "com.figma.variableId": "VariableID:839:13109",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-200)"
+          }
         }
       },
       "300": {
@@ -960,7 +1125,10 @@
         },
         "$description": "Border of a sun memo card.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13110"
+          "com.figma.variableId": "VariableID:839:13110",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-300)"
+          }
         }
       },
       "400": {
@@ -977,7 +1145,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13111"
+          "com.figma.variableId": "VariableID:839:13111",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-400)"
+          }
         }
       },
       "500": {
@@ -994,7 +1165,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13112"
+          "com.figma.variableId": "VariableID:839:13112",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-500)"
+          }
         }
       },
       "600": {
@@ -1011,7 +1185,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13113"
+          "com.figma.variableId": "VariableID:839:13113",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-600)"
+          }
         }
       },
       "700": {
@@ -1028,7 +1205,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13114"
+          "com.figma.variableId": "VariableID:839:13114",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-700)"
+          }
         }
       },
       "800": {
@@ -1045,7 +1225,10 @@
         },
         "$description": "Text on a sun-100 fill. 7.74:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13115"
+          "com.figma.variableId": "VariableID:839:13115",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-800)"
+          }
         }
       },
       "900": {
@@ -1062,7 +1245,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13116"
+          "com.figma.variableId": "VariableID:839:13116",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-sun-900)"
+          }
         }
       }
     },
@@ -1081,7 +1267,10 @@
         },
         "$description": "Tinted fill behind rose text; background of a rose tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10682"
+          "com.figma.variableId": "VariableID:897:10682",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-50)"
+          }
         }
       },
       "100": {
@@ -1098,7 +1287,10 @@
         },
         "$description": "Tinted fill behind rose text; background of a rose tag or memo.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13117"
+          "com.figma.variableId": "VariableID:839:13117",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-100)"
+          }
         }
       },
       "200": {
@@ -1115,7 +1307,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13118"
+          "com.figma.variableId": "VariableID:839:13118",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-200)"
+          }
         }
       },
       "300": {
@@ -1132,7 +1327,10 @@
         },
         "$description": "Border of a rose memo card.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13119"
+          "com.figma.variableId": "VariableID:839:13119",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-300)"
+          }
         }
       },
       "400": {
@@ -1149,7 +1347,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13120"
+          "com.figma.variableId": "VariableID:839:13120",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-400)"
+          }
         }
       },
       "500": {
@@ -1166,7 +1367,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13121"
+          "com.figma.variableId": "VariableID:839:13121",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-500)"
+          }
         }
       },
       "600": {
@@ -1183,7 +1387,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13122"
+          "com.figma.variableId": "VariableID:839:13122",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-600)"
+          }
         }
       },
       "700": {
@@ -1200,7 +1407,10 @@
         },
         "$description": "Derived step.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13123"
+          "com.figma.variableId": "VariableID:839:13123",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-700)"
+          }
         }
       },
       "800": {
@@ -1217,7 +1427,10 @@
         },
         "$description": "Text on a rose-100 fill. 9.47:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13124"
+          "com.figma.variableId": "VariableID:839:13124",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-800)"
+          }
         }
       },
       "900": {
@@ -1234,7 +1447,10 @@
         },
         "$description": "Derived step, deepest.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13125"
+          "com.figma.variableId": "VariableID:839:13125",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-rose-900)"
+          }
         }
       }
     },
@@ -1252,7 +1468,10 @@
           "hex": "#FFF5F4"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10683"
+          "com.figma.variableId": "VariableID:897:10683",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-50)"
+          }
         }
       },
       "100": {
@@ -1268,7 +1487,10 @@
           "hex": "#FFECE9"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16989"
+          "com.figma.variableId": "VariableID:842:16989",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-100)"
+          }
         }
       },
       "200": {
@@ -1284,7 +1506,10 @@
           "hex": "#FED4CE"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16990"
+          "com.figma.variableId": "VariableID:842:16990",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-200)"
+          }
         }
       },
       "300": {
@@ -1300,7 +1525,10 @@
           "hex": "#FFB5AC"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16991"
+          "com.figma.variableId": "VariableID:842:16991",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-300)"
+          }
         }
       },
       "400": {
@@ -1316,7 +1544,10 @@
           "hex": "#FF8B7E"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16992"
+          "com.figma.variableId": "VariableID:842:16992",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-400)"
+          }
         }
       },
       "500": {
@@ -1333,7 +1564,10 @@
         },
         "$description": "Wrong / negative examples, and the resting fill of the alert button. Now safe at body size on white (4.82:1), and carries white text at the same 4.82:1. On color/bg/section it falls to 3.86:1 — fill, icon, border or large text only there.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13126"
+          "com.figma.variableId": "VariableID:839:13126",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-500)"
+          }
         }
       },
       "600": {
@@ -1350,7 +1584,10 @@
         },
         "$description": "Alert button, hover. White text on it reads 6.47:1. Not a surface for body text in the other direction.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13127"
+          "com.figma.variableId": "VariableID:839:13127",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-600)"
+          }
         }
       },
       "700": {
@@ -1367,7 +1604,10 @@
         },
         "$description": "Alert button, pressed. White text on it reads 8.31:1. Not a surface for body text in the other direction.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13128"
+          "com.figma.variableId": "VariableID:839:13128",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-700)"
+          }
         }
       },
       "800": {
@@ -1383,7 +1623,10 @@
           "hex": "#801F1B"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16993"
+          "com.figma.variableId": "VariableID:842:16993",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-800)"
+          }
         }
       },
       "900": {
@@ -1399,7 +1642,10 @@
           "hex": "#561310"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16994"
+          "com.figma.variableId": "VariableID:842:16994",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-red-900)"
+          }
         }
       }
     },
@@ -1423,7 +1669,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-50)"
+          }
         }
       },
       "100": {
@@ -1445,7 +1694,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-100)"
+          }
         }
       },
       "200": {
@@ -1467,7 +1719,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-200)"
+          }
         }
       },
       "300": {
@@ -1489,7 +1744,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-300)"
+          }
         }
       },
       "400": {
@@ -1511,7 +1769,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-400)"
+          }
         }
       },
       "500": {
@@ -1533,7 +1794,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-500)"
+          }
         }
       },
       "600": {
@@ -1555,7 +1819,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-600)"
+          }
         }
       },
       "700": {
@@ -1577,7 +1844,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-700)"
+          }
         }
       },
       "800": {
@@ -1599,7 +1869,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-800)"
+          }
         }
       },
       "900": {
@@ -1621,7 +1894,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-900)"
+          }
         }
       },
       "950": {
@@ -1643,7 +1919,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-emeraude-950)"
+          }
         }
       }
     },
@@ -1667,7 +1946,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-50)"
+          }
         }
       },
       "100": {
@@ -1689,7 +1971,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-100)"
+          }
         }
       },
       "200": {
@@ -1711,7 +1996,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-200)"
+          }
         }
       },
       "300": {
@@ -1733,7 +2021,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-300)"
+          }
         }
       },
       "400": {
@@ -1755,7 +2046,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-400)"
+          }
         }
       },
       "500": {
@@ -1777,7 +2071,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-500)"
+          }
         }
       },
       "600": {
@@ -1799,7 +2096,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-600)"
+          }
         }
       },
       "700": {
@@ -1821,7 +2121,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-700)"
+          }
         }
       },
       "800": {
@@ -1843,7 +2146,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-800)"
+          }
         }
       },
       "900": {
@@ -1865,7 +2171,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-900)"
+          }
         }
       },
       "950": {
@@ -1887,7 +2196,10 @@
             "ALL_FILLS",
             "STROKE",
             "EFFECT_COLOR"
-          ]
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-blue-france-950)"
+          }
         }
       }
     },
@@ -1905,7 +2217,10 @@
           "hex": "#F1FBF4"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:897:10684"
+          "com.figma.variableId": "VariableID:897:10684",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-50)"
+          }
         }
       },
       "100": {
@@ -1921,7 +2236,10 @@
           "hex": "#E4F6E9"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16995"
+          "com.figma.variableId": "VariableID:842:16995",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-100)"
+          }
         }
       },
       "200": {
@@ -1937,7 +2255,10 @@
           "hex": "#C3EBCE"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16996"
+          "com.figma.variableId": "VariableID:842:16996",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-200)"
+          }
         }
       },
       "300": {
@@ -1953,7 +2274,10 @@
           "hex": "#9CDDAF"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16997"
+          "com.figma.variableId": "VariableID:842:16997",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-300)"
+          }
         }
       },
       "400": {
@@ -1969,7 +2293,10 @@
           "hex": "#72C78E"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16998"
+          "com.figma.variableId": "VariableID:842:16998",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-400)"
+          }
         }
       },
       "500": {
@@ -1986,7 +2313,10 @@
         },
         "$description": "Correct / positive examples. NOT a body-size text colour (3.02:1 on white). Safe as a fill, an icon, a border, or large text. Default text on it reads 4.52:1.",
         "$extensions": {
-          "com.figma.variableId": "VariableID:839:13129"
+          "com.figma.variableId": "VariableID:839:13129",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-500)"
+          }
         }
       },
       "600": {
@@ -2002,7 +2332,10 @@
           "hex": "#398C59"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:16999"
+          "com.figma.variableId": "VariableID:842:16999",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-600)"
+          }
         }
       },
       "700": {
@@ -2018,7 +2351,10 @@
           "hex": "#2C6F45"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:17000"
+          "com.figma.variableId": "VariableID:842:17000",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-700)"
+          }
         }
       },
       "800": {
@@ -2034,7 +2370,10 @@
           "hex": "#205433"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:17001"
+          "com.figma.variableId": "VariableID:842:17001",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-800)"
+          }
         }
       },
       "900": {
@@ -2050,7 +2389,10 @@
           "hex": "#143721"
         },
         "$extensions": {
-          "com.figma.variableId": "VariableID:842:17002"
+          "com.figma.variableId": "VariableID:842:17002",
+          "com.figma.codeSyntax": {
+            "WEB": "var(--ramp-green-900)"
+          }
         }
       }
     }
