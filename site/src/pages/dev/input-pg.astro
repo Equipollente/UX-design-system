@@ -4,6 +4,10 @@
 import BaseLayout from 'ux-design-system/layouts/BaseLayout.astro';
 import InputPG from 'ux-design-system/components/InputPG.astro';
 import Icon from 'ux-design-system/components/Icon.astro';
+import components from 'ux-design-system/data/components.json';
+
+// Les réglages viennent du composant lui-même : design-system/scripts/build-props.mjs les lit.
+const fiche = components.InputPG;
 
 const statuses = ['rest', 'error', 'success', 'disabled'] as const;
 const sizes = ['small', 'medium', 'large'] as const;
@@ -18,6 +22,29 @@ const messages = {
 <BaseLayout title="InputPG">
   <main>
     <h1>InputPG</h1>
+    <p class="intro">{fiche.description}{fiche.experimental && <span class="badge">Expérimental</span>}</p>
+
+    <h2>Réglages</h2>
+    <p class="note">Tableau généré : ne pas le modifier ici. Source : <code>{fiche.source}</code>, et les types qu'il importe.</p>
+    <table>
+      <thead>
+        <tr><th>Réglage</th><th>Type</th><th>Défaut</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        {fiche.props.map((p) => (
+          <tr>
+            <td><code>{p.nom}</code>{p.requis && <span class="requis" title="Obligatoire"> *</span>}</td>
+            <td>{p.valeurs ? p.valeurs.map((v) => <code>{v}</code>) : <code>{p.type}</code>}</td>
+            <td>{'default' in p ? <code>{p.default}</code> : '—'}</td>
+            <td>{p.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="note">
+      Attributs natifs de <code>&lt;{fiche.natifs.balise}&gt;</code> acceptés, sauf <code>{fiche.natifs.ecartes.join(', ')}</code>.
+      Slots : {fiche.slots.map((s) => <code>{s}</code>)}.
+    </p>
 
     <h2>Statuts, en taille moyenne</h2>
     <div class="grid">
@@ -56,6 +83,13 @@ const messages = {
     max-width: 72rem;
     margin: 0 auto;
   }
+  .intro { font-size: 1.125rem; }
+  .badge { margin-left: 0.75rem; padding: 0.125rem 0.5rem; border-radius: 999px; background: var(--color-background-highlight-subtle); font-size: 0.75rem; }
+  .note { color: var(--color-text-base-muted); }
+  .requis { color: var(--color-text-danger-default); }
+  table { width: 100%; border-collapse: collapse; margin-block: 1rem; font-size: 0.9375rem; }
+  th, td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border-base-subtle); text-align: left; vertical-align: top; }
+  td code + code { margin-left: 0.25rem; }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

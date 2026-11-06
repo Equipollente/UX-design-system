@@ -21,6 +21,7 @@
     "./lib/*": "./src/lib/*.ts",
     "./styles/*": "./src/styles/*",
     "./data/tokens.json": "./src/data/tokens.json",
+    "./data/components.json": "./src/data/components.json",
     "./package.json": "./package.json"
   },
   "// files": "Ce qui part dans le paquet : le code source, tel quel. Les icônes en font partie : inlinées, elles sont du code et non des assets.",
@@ -33,6 +34,7 @@
   "scripts": {
     "tokens": "node scripts/build-tokens.mjs",
     "icons": "node scripts/build-icons.mjs",
+    "props": "node scripts/build-props.mjs",
     "check": "astro check"
   },
   "devDependencies": {

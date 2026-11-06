@@ -14,11 +14,12 @@
   ],
   "scripts": {
     "dev": "npm run dev -w site",
-    "build": "npm run tokens && npm run icons && npm run build -w site",
+    "build": "npm run tokens && npm run icons && npm run props && npm run build -w site",
     "preview": "npm run preview -w site",
     "check": "npm run check -w design-system && npm run check -w site",
     "tokens": "npm run tokens -w design-system",
     "icons": "npm run icons -w design-system",
-    "astro": "npm run astro -w site --"
+    "astro": "npm run astro -w site --",
+    "props": "npm run props -w design-system"
   }
 }

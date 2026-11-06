@@ -1,0 +1,1833 @@
+{
+  "Button": {
+    "source": "design-system/src/components/Button.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "variant",
+        "type": "'primary' | 'secondary' | 'alert' | 'ghost' | 'clay' | 'teal' | 'sun' | 'rose' | 'accent' | 'highlight' | 'neutral'",
+        "valeurs": [
+          "primary",
+          "secondary",
+          "alert",
+          "ghost",
+          "clay",
+          "teal",
+          "sun",
+          "rose",
+          "accent",
+          "highlight",
+          "neutral"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "valeurs": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "href",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "icon",
+        "type": "IconName",
+        "requis": false,
+        "description": "Nom d'une icône du système. Posée avant le label. Une icône seule est un IconButton."
+      },
+      {
+        "nom": "iconEnd",
+        "type": "IconName",
+        "requis": false,
+        "description": "Idem, mais posée après le label."
+      },
+      {
+        "nom": "type",
+        "type": "'button' | 'submit'",
+        "valeurs": [
+          "button",
+          "submit"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le couple que le formulaire recevra quand ce bouton-la l'envoie. C'est ce\nqui permet a plusieurs submit de se distinguer sans une ligne de script —\nEditImageGallery s'en sert pour dire quelle image retirer."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "'aria-label'",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom du bouton quand aucun libellé ne le porte. Un IconButton le pose toujours."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "La surcharge ponctuelle décrite plus haut : --btn-bg, --btn-px, --btn-icon…\nDéclarée parce qu'elle fait partie du contrat — le Nav, le Carousel et\nl'en-tête d'étude de cas s'en servent tous les trois."
+      }
+    ],
+    "slots": [
+      "default"
+    ]
+  },
+  "Card": {
+    "source": "design-system/src/components/Card.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "orientation",
+        "type": "'vertical' | 'horizontal'",
+        "valeurs": [
+          "vertical",
+          "horizontal"
+        ],
+        "requis": false,
+        "description": "Les deux variantes de Figma. Verticale, l'image est en tête ; horizontale,\nelle occupe la moitié gauche."
+      },
+      {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "subtitle",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne sous le titre."
+      },
+      {
+        "nom": "meta",
+        "type": "string",
+        "requis": false,
+        "description": "L'information de second plan, sous le sous-titre — une date, un lieu, un\nauteur. Absente ⇒ la ligne n'est pas rendue."
+      },
+      {
+        "nom": "image",
+        "type": "{ src: string; alt: string; width: number; height: number }",
+        "requis": false,
+        "description": "L'image de tête. `width` et `height` donnent le rapport de l'image, pas la\ntaille de la boîte : c'est la carte qui pose la hauteur, l'image la\nremplit en cover. Absente ⇒ la carte n'en réserve pas la place."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5",
+        "requis": false,
+        "description": "Le rang du titre : il se range sous ce que la page porte déjà. Le rang ne\nchange pas le dessin — la taille vient du composant, pas de la balise."
+      },
+      {
+        "nom": "titleSize",
+        "type": "'title' | 'heading'",
+        "valeurs": [
+          "title",
+          "heading"
+        ],
+        "requis": false,
+        "description": "La taille du titre, prise dans l'échelle : `title` est celle d'un h2 —\n2rem, ce que Figma dessine — et `heading` celle d'un h4, 1.25rem. Elle ne\nrègle que la taille ; la police, la graisse, l'interligne et\nl'interlettrage suivent d'eux-mêmes. Rien à voir avec `headingLevel`, qui\nrègle le rang : les deux restent indépendants, et c'est le contrat."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "Le point de surcharge : --card-media-height, et rien d'autre. Déclarée\nparce qu'elle fait partie du contrat."
+      }
+    ],
+    "slots": [
+      "tags-top",
+      "tags",
+      "actions"
+    ]
+  },
+  "CardDefaultLegacy": {
+    "source": "design-system/src/components/CardDefaultLegacy.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "subtitle",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "meta",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "href",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "image",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "imageAlt",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "fallbackImage",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5 | 6",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "tags-top",
+      "tags-bottom",
+      "actions"
+    ]
+  },
+  "Carousel": {
+    "source": "design-system/src/components/Carousel.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "items",
+        "type": "{ src: string; alt: string; width: number; height: number }[]",
+        "requis": true,
+        "description": "Les vignettes. `width` et `height` donnent le rapport de la boîte, pas la\ntaille de l'image : c'est le cadrage voulu, l'image le remplit en cover."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "Nom accessible de la piste."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "CaseStudyCard": {
+    "source": "design-system/src/components/CaseStudyCard.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "eyebrow",
+        "type": "string",
+        "requis": true,
+        "description": "L'année et le client : « 2025 - Rubika »."
+      },
+      {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "impact",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "tags",
+        "type": "string[]",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "action",
+        "type": "{ label: string; href?: string }",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "images",
+        "type": "{ src: string; alt: string; width: number; height: number }[]",
+        "requis": false,
+        "description": "Les vignettes du carrousel. Tableau vide ⇒ pas de carrousel."
+      },
+      {
+        "nom": "imagesLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Nom accessible de la piste d'images."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "CaseStudyHeader": {
+    "source": "design-system/src/components/CaseStudyHeader.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "eyebrow",
+        "type": "string",
+        "requis": true,
+        "description": "L'année et le client : « 2025 - Rubika ». Mis en capitales par le CSS."
+      },
+      {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "impact",
+        "type": "string",
+        "requis": false,
+        "description": "La phrase d'impact, sous le titre."
+      },
+      {
+        "nom": "tags",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les méthodes. Tableau vide ou absent ⇒ la rangée n'est pas rendue."
+      },
+      {
+        "nom": "action",
+        "type": "{ label: string; href?: string }",
+        "requis": false,
+        "description": "Le lien vers l'étude. Sans href ⇒ <button> inerte, à câbler par l'appelant."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5",
+        "requis": false,
+        "description": "Le niveau du titre : il se range sous ce que la page porte déjà. Le rang ne\nchange pas le dessin — la taille du titre vient du composant, pas du tag."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "CaseStudyList": {
+    "source": "design-system/src/components/CaseStudyList.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "items",
+        "type": "{ eyebrow: string; title: string; impact?: string; tags?: string[]; action?: { label: string; href?: string }; images?: { src: string; alt: string; width: number; height: number }[]; imagesLabel?: string; }[]",
+        "requis": true,
+        "description": "Les études de cas. Ajouter une carte, c'est ajouter un objet."
+      },
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": false,
+        "description": "La cible d'ancre : c'est par elle qu'arrivent « Projects » et le bouton de l'intro."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "Nom accessible de la section."
+      },
+      {
+        "nom": "covers",
+        "type": "string",
+        "requis": false,
+        "description": "L'id du bloc que la première carte recouvre — le premier écran d'une page\nd'accueil. Il devient inert quand elle est en place, et le redevient\natteignable au retour. Sans lui, rien n'est recouvert au-dessus de la pile."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5",
+        "requis": false,
+        "description": "Le rang des titres de carte, sous ce que la page porte déjà."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Checkbox": {
+    "source": "design-system/src/components/Checkbox.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au contrôle. Unique dans la page."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Ce que la case affirme quand elle est cochée. Une phrase, pas une question."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé par le formulaire. À défaut, l'`id`."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le formulaire enverra si la case est cochée. À défaut, `on`."
+      },
+      {
+        "nom": "checked",
+        "type": "boolean",
+        "requis": false,
+        "description": "Cochée à l'ouverture."
+      },
+      {
+        "nom": "indeterminate",
+        "type": "boolean",
+        "requis": false,
+        "description": "Ni cochée ni décochée : « certaines des cases d'un groupe le sont ». Elle l'emporte sur `checked`, et le premier clic la remplace par cochée ou décochée."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que cocher entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose l'astérisque et l'attribut. A du sens ici : une case peut être seule."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Chip": {
+    "source": "design-system/src/components/Chip.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie la case au chip. Unique dans la page."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le mot porté par la pastille. Court : un chip ne se coupe pas en deux lignes."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé par le formulaire. Le même pour tout un groupe de filtres."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le formulaire enverra si le chip est retenu. À défaut, l'`id`."
+      },
+      {
+        "nom": "selected",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retenu à l'ouverture."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "ComponentTemplate": {
+    "source": "design-system/src/components/ComponentTemplate.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": "Classe fournie par le contexte qui utilise la carte."
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "Surcharge ponctuelle documentée par le composant appelant."
+      }
+    ],
+    "slots": [
+      "default"
+    ]
+  },
+  "EditImageGallery": {
+    "source": "design-system/src/components/EditImageGallery.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "images",
+        "type": "Image[]",
+        "requis": true,
+        "description": "Les images déjà déposées. Vide : la galerie ne rend rien."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Ce qui nomme la galerie pour les lecteurs d'écran. Une liste sans nom se traverse mal."
+      },
+      {
+        "nom": "removeName",
+        "type": "string",
+        "requis": false,
+        "description": "Le `name` du bouton supprimer. Sa `value` est l'`id` de l'image."
+      },
+      {
+        "nom": "viewLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le mot du bouton qui ouvre l'image. Celui de Figma."
+      },
+      {
+        "nom": "removeLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le mot du bouton qui la retire. Celui de Figma."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "FieldLabel": {
+    "source": "design-system/src/components/FieldLabel.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "for",
+        "type": "string",
+        "requis": false,
+        "description": "L'`id` du champ que ce libellé nomme. C'est ce qui les lie. Sans objet en légende."
+      },
+      {
+        "nom": "as",
+        "type": "'label' | 'legend'",
+        "valeurs": [
+          "label",
+          "legend"
+        ],
+        "requis": false,
+        "description": "`legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose l'astérisque. Le champ doit porter `required` de son côté."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "L'encre passe en `text/disabled`. Le champ doit porter `disabled` de son côté."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ]
+  },
+  "Icon": {
+    "source": "design-system/src/components/Icon.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "name",
+        "type": "IconName",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "valeurs": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "requis": false,
+        "description": "Les trois tailles des tokens button.icon-size.*. Sinon : --icon-size hérité du contexte."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "Nom accessible. Absent — le cas ordinaire — l'icône est décorative et masquée aux\nlecteurs d'écran : elle double un mot déjà écrit à côté d'elle. À ne remplir que\nlorsqu'elle est seule à porter le sens, et alors le texte doit dire l'action, pas\nle dessin : « Image suivante », pas « flèche droite »."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "IconButton": {
+    "source": "design-system/src/components/IconButton.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "icon",
+        "type": "IconName",
+        "requis": true,
+        "description": "Nom d'une icône du système. Obligatoire : c'est tout ce que le bouton montre."
+      },
+      {
+        "nom": "'aria-label'",
+        "type": "string",
+        "requis": true,
+        "description": "Le nom du bouton, seul à être lu. Obligatoire."
+      },
+      {
+        "nom": "variant",
+        "type": "'primary' | 'secondary' | 'alert' | 'ghost'",
+        "valeurs": [
+          "primary",
+          "secondary",
+          "alert",
+          "ghost"
+        ],
+        "requis": false,
+        "description": "Les mêmes que Button. Le secondaire est le défaut : c'est le rond d'origine."
+      },
+      {
+        "nom": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "valeurs": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "href",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "type",
+        "type": "'button' | 'submit'",
+        "valeurs": [
+          "button",
+          "submit"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "La surcharge ponctuelle de Button : --btn-bg, --btn-icon…"
+      }
+    ],
+    "slots": []
+  },
+  "Input": {
+    "source": "design-system/src/components/Input.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au champ, et sert de `name` si aucun n'est donné."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé."
+      },
+      {
+        "nom": "type",
+        "type": "'text' | 'email' | 'tel' | 'url' | 'search'",
+        "valeurs": [
+          "text",
+          "email",
+          "tel",
+          "url",
+          "search"
+        ],
+        "requis": false,
+        "description": "Ce que le champ accepte. Les types d'une seule ligne, et eux seuls."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Un exemple, pas une consigne : il disparaît à la première frappe."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "maxlength",
+        "type": "number",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "autocomplete",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe."
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Pose `aria-invalid` et passe le trait en rouge. Il remplace l'aide."
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Il remplace l'aide, et cède à l'erreur."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "InputPG": {
+    "source": "design-system/src/components/InputPG.astro",
+    "description": "Un champ texte d'une ligne, avec son libellé, son aide et son message.",
+    "experimental": true,
+    "natifs": {
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "size",
+        "disabled"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé."
+      },
+      {
+        "nom": "type",
+        "type": "'text' | 'email' | 'tel' | 'url' | 'search' | 'password'",
+        "valeurs": [
+          "text",
+          "email",
+          "tel",
+          "url",
+          "search",
+          "password"
+        ],
+        "requis": false,
+        "description": "Ce que le champ accepte. Il choisit le clavier sur mobile et la validation du navigateur.",
+        "default": "text"
+      },
+      {
+        "nom": "status",
+        "type": "'rest' | 'error' | 'success' | 'disabled'",
+        "valeurs": [
+          "rest",
+          "error",
+          "success",
+          "disabled"
+        ],
+        "requis": false,
+        "description": "Où en est le champ : `rest` (au repos), `error`, `success` ou `disabled`. Il change le fond,\nle trait et l'encre ; `disabled` pose aussi l'attribut natif.",
+        "default": "rest"
+      },
+      {
+        "nom": "size",
+        "type": "'small' | 'medium' | 'large'",
+        "valeurs": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "requis": false,
+        "description": "La hauteur de la boîte : petite, moyenne ou grande.",
+        "default": "medium"
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend. Reste affichée, même en erreur."
+      },
+      {
+        "nom": "message",
+        "type": "string",
+        "requis": false,
+        "description": "Le texte qui accompagne `status=\"error\"` ou `status=\"success\"`."
+      },
+      {
+        "nom": "counter",
+        "type": "boolean",
+        "requis": false,
+        "description": "Affiche « 12/500 » sous la boîte. Demande `maxlength`.",
+        "default": "false"
+      }
+    ],
+    "slots": [
+      "icon-start"
+    ]
+  },
+  "Intro": {
+    "source": "design-system/src/components/Intro.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "avatar",
+        "type": "{ src: string; alt: string }",
+        "requis": true,
+        "description": "Le visage. `src` passe par le withBase() du site : c'est son asset, pas le nôtre."
+      },
+      {
+        "nom": "greeting",
+        "type": "string",
+        "requis": true,
+        "description": "La salutation, au-dessus du titre."
+      },
+      {
+        "nom": "headline",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "description",
+        "type": "string",
+        "requis": false,
+        "description": "La phrase sous le titre."
+      },
+      {
+        "nom": "action",
+        "type": "{ label: string; href?: string }",
+        "requis": false,
+        "description": "La suite. Sans href ⇒ <button> inerte, à câbler par l'appelant."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "1 | 2",
+        "requis": false,
+        "description": "1 sur une page qui n'a pas d'autre titre — le cas d'une page d'accueil. Le\nrang ne change pas le dessin : la taille du titre vient du composant."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Modal": {
+    "source": "design-system/src/components/Modal.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'id du <dialog> — c'est par lui que le site consommateur appelle showModal()."
+      },
+      {
+        "nom": "icon",
+        "type": "IconName",
+        "requis": true,
+        "description": "L'icône du cercle en tête."
+      },
+      {
+        "nom": "variant",
+        "type": "'validation' | 'alert' | 'succes'",
+        "valeurs": [
+          "validation",
+          "alert",
+          "succes"
+        ],
+        "requis": false,
+        "description": "`validation` (deux boutons, principal en `primary`) ou `alert` (deux boutons,\nprincipal en `alert`, icône rouge) ou `succes` (un seul bouton — `secondary`\nest ignoré, même fourni)."
+      },
+      {
+        "nom": "headingLevel",
+        "type": "2 | 3 | 4 | 5 | 6",
+        "requis": false,
+        "description": "Le rang du titre : il se range sous ce que la page porte déjà. Ne change pas le dessin."
+      },
+      {
+        "nom": "heading",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "body",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "primary",
+        "type": "{ label: string; href?: string }",
+        "requis": true,
+        "description": "Sans `href`, un bouton inerte — la même convention que Button et Card."
+      },
+      {
+        "nom": "secondary",
+        "type": "{ label: string; href?: string }",
+        "requis": false,
+        "description": "Lu seulement hors de `succes` : cette variante n'a jamais de second bouton."
+      },
+      {
+        "nom": "open",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose l'attribut HTML `open` — pour la doc uniquement : sans `.showModal()`,\nla boîte s'affiche en flux normal, pas dans l'état `:modal` du navigateur\n(donc sans `::backdrop`). Le site consommateur ouvre par script, jamais\npar cette prop."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Nav": {
+    "source": "design-system/src/components/Nav.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "links",
+        "type": "{ href: string; label: string; icon?: IconName }[]",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "current",
+        "type": "string",
+        "requis": false,
+        "description": "Chemin courant. Aucun item n'est actif s'il ne correspond à aucun href."
+      },
+      {
+        "nom": "home",
+        "type": "{ href: string; src: string; alt: string }",
+        "requis": false,
+        "description": "Le bouton avatar. Absent ⇒ non rendu, c'est l'état d'accueil."
+      },
+      {
+        "nom": "action",
+        "type": "{ label: string; icon?: IconName; href?: string }",
+        "requis": false,
+        "description": "Le sixième bouton. Sans href ⇒ <button> inerte, à câbler par l'appelant."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "aria-label du <nav>."
+      },
+      {
+        "nom": "sticky",
+        "type": "boolean",
+        "requis": false,
+        "description": "La barre se colle en haut de la fenêtre et s'efface quand on descend. Absente,\nelle reste posée à plat : c'est ce que doit rester une barre qu'on documente\nplutôt qu'on habite."
+      }
+    ],
+    "slots": []
+  },
+  "Radio": {
+    "source": "design-system/src/components/Radio.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le mot qui nomme ce choix-ci — pas la question, qui va en <legend>."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": true,
+        "description": "Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`."
+      },
+      {
+        "nom": "checked",
+        "type": "boolean",
+        "requis": false,
+        "description": "Le choix retenu à l'ouverture. Un seul du groupe doit le porter."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que ce choix entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Sidebar": {
+    "source": "design-system/src/components/Sidebar.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": "Le nom affiche dans l'en-tete de la sidebar."
+      },
+      {
+        "nom": "groups",
+        "type": "SidebarGroup[]",
+        "requis": true,
+        "description": "Les groupes et leurs liens, fournis par la vue appelante."
+      },
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Identifiant unique de cette instance, utilise par les relations ARIA."
+      },
+      {
+        "nom": "current",
+        "type": "string",
+        "requis": false,
+        "description": "Le chemin courant, utilise pour identifier l'item actif."
+      },
+      {
+        "nom": "groupHeadingLevel",
+        "type": "2 | 3 | 4 | 5 | 6",
+        "requis": false,
+        "description": "Le niveau des titres de groupes dans la page appelante."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom accessible du landmark de navigation."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": "Classe de mise en page fournie par l'appelant."
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "Surcharge locale de mise en page fournie par l'appelant."
+      }
+    ],
+    "slots": []
+  },
+  "Tag": {
+    "source": "design-system/src/components/Tag.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "variant",
+        "type": "'accent' | 'lime' | 'neutral' | 'outline'",
+        "valeurs": [
+          "accent",
+          "lime",
+          "neutral",
+          "outline"
+        ],
+        "requis": false,
+        "description": "Les quatre variantes de Figma. Les trois premières sont remplies, la\ndernière n'a qu'un liseré — et c'est elle par défaut."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "style",
+        "type": "string",
+        "requis": false,
+        "description": "Le point de surcharge : --tag-color sur la variante outline, et rien\nd'autre. Déclarée parce qu'elle fait partie du contrat."
+      }
+    ],
+    "slots": [
+      "default"
+    ]
+  },
+  "Textarea": {
+    "source": "design-system/src/components/Textarea.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au champ, et sert de `name` si aucun n'est donné."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Le contenu déjà saisi."
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite dans la boîte vide. Une consigne, pas un exemple à recopier."
+      },
+      {
+        "nom": "rows",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes."
+      },
+      {
+        "nom": "maxlength",
+        "type": "number",
+        "requis": false,
+        "description": "La limite de caractères. C'est elle qui allume le compteur."
+      },
+      {
+        "nom": "showCount",
+        "type": "boolean",
+        "requis": false,
+        "description": "Montre le compteur. Sans `maxlength`, il n'y a rien à compter."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe."
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Pose `aria-invalid` et passe le trait en rouge. Il remplace l'aide."
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Il remplace l'aide, et cède à l'erreur."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "Toggle": {
+    "source": "design-system/src/components/Toggle.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au contrôle. Unique dans la page."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Ce que l'interrupteur allume. Un état, pas une action : « Notifications », pas « Notifier »."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé si l'interrupteur est dans un formulaire. À défaut, l'`id`."
+      },
+      {
+        "nom": "checked",
+        "type": "boolean",
+        "requis": false,
+        "description": "Allumé à l'ouverture."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que l'interrupteur change, dite sous le libellé. Le champ la désigne par `aria-describedby`."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "_FieldMessage": {
+    "source": "design-system/src/components/_FieldMessage.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "type",
+        "type": "FieldMessageType",
+        "requis": true,
+        "description": "Ce que dit le message. Il décide de l'encre et de l'icône."
+      },
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'`id` que le champ désigne par `aria-describedby`."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ]
+  },
+  "_Select": {
+    "source": "design-system/src/components/_Select.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Préfixe des `id` des contrôles, et `name` si aucun n'est donné. Unique dans la page."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé — la légende du groupe."
+      },
+      {
+        "nom": "options",
+        "type": "(Option | OptionGroup)[]",
+        "requis": true,
+        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label,\noptions }` — range ses choix sous un nom, comme un <optgroup> : il ne\ns'imbrique pas, et `disabled` éteint tout le groupe."
+      },
+      {
+        "nom": "multiple",
+        "type": "boolean",
+        "requis": false,
+        "description": "Plusieurs choix : des cases plutôt que des radios."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "La valeur choisie à l'ouverture, pour un choix unique."
+      },
+      {
+        "nom": "values",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les valeurs cochées à l'ouverture, pour `multiple`."
+      },
+      {
+        "nom": "max",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de choix à ne pas dépasser, pour `multiple`. Absent : aucune limite."
+      },
+      {
+        "nom": "display",
+        "type": "'count' | 'chips'",
+        "valeurs": [
+          "count",
+          "chips"
+        ],
+        "requis": false,
+        "description": "Ce que montre le champ de ses choix, pour `multiple` : un compteur, ou en plus des pastilles."
+      },
+      {
+        "nom": "visibleOptions",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de lignes que la liste montre avant de défiler."
+      },
+      {
+        "nom": "searchable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose un champ de recherche en haut de la liste, qui filtre les options."
+      },
+      {
+        "nom": "showSelected",
+        "type": "boolean",
+        "requis": false,
+        "description": "Épingle en bas de la liste ce qui est choisi."
+      },
+      {
+        "nom": "creatable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose en bas de la liste la ligne qui crée une option."
+      },
+      {
+        "nom": "searchLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du champ de recherche. Il n'est pas affiché."
+      },
+      {
+        "nom": "searchPlaceholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite du champ de recherche."
+      },
+      {
+        "nom": "noResultsLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la liste quand aucune option ne correspond."
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la boîte quand rien n'est choisi."
+      },
+      {
+        "nom": "countOneLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la boîte pour un seul choix, pour `multiple`. `{n}` vaut le nombre."
+      },
+      {
+        "nom": "countLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la boîte pour plusieurs choix. `{n}` vaut le nombre."
+      },
+      {
+        "nom": "maxLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de limite. `{n}` et `{max}` y sont remplacés."
+      },
+      {
+        "nom": "removeLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le verbe d'une pastille, lu avant son mot : « Retirer France »."
+      },
+      {
+        "nom": "createLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création au repos."
+      },
+      {
+        "nom": "createQueryLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte."
+      },
+      {
+        "nom": "createPlaceholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite du champ où l'on tape le nom de l'option créée."
+      },
+      {
+        "nom": "requiredMessage",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le navigateur dit si `required` et rien n'est choisi, pour `multiple`."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé par le formulaire, le même pour tous les contrôles."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe."
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Passe le trait de la boîte en rouge. Il remplace l'aide."
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Il remplace l'aide, et cède à l'erreur."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Au moins un choix. Pose l'astérisque."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": []
+  },
+  "_SelectPanel": {
+    "source": "design-system/src/components/_SelectPanel.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "listId",
+        "type": "string",
+        "requis": true,
+        "description": "L'id de la liste : c'est ce que la boîte désigne par `popovertarget`."
+      },
+      {
+        "nom": "blocks",
+        "type": "Block[]",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "items",
+        "type": "Item[]",
+        "requis": true,
+        "description": "Les choix mis à plat, dans l'ordre."
+      },
+      {
+        "nom": "chosen",
+        "type": "string[]",
+        "requis": true,
+        "description": "Les valeurs cochées à l'ouverture."
+      },
+      {
+        "nom": "count",
+        "type": "number",
+        "requis": true,
+        "description": "Le nombre de choix faits : c'est lui qui montre ou cache la zone épinglée."
+      },
+      {
+        "nom": "full",
+        "type": "boolean",
+        "requis": true,
+        "description": "La limite est atteinte : les cases décochées s'éteignent."
+      },
+      {
+        "nom": "multiple",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "fieldName",
+        "type": "string",
+        "requis": true,
+        "description": "Le `name` envoyé par le formulaire, le même pour tous les contrôles."
+      },
+      {
+        "nom": "searchable",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "searchLabel",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "searchPlaceholder",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "showSelected",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "creatable",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "createLabel",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
+        "nom": "createPlaceholder",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      }
+    ],
+    "slots": []
+  }
+}

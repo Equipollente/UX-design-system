@@ -24,18 +24,39 @@ export type InputType = 'text' | 'email' | 'tel' | 'url' | 'search' | 'password'
 // sens (`size` y est un nombre de caractères) : on les écarte pour poser les nôtres.
 type NativeAttributes = Omit<HTMLAttributes<'input'>, 'type' | 'size' | 'disabled'>;
 
+/**
+ * Un champ texte d'une ligne, avec son libellé, son aide et son message.
+ *
+ * @experimental
+ */
 export interface InputProps extends NativeAttributes {
   /** Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent. */
   id: string;
   /** Le texte du libellé. */
   label: string;
+  /**
+   * Ce que le champ accepte. Il choisit le clavier sur mobile et la validation du navigateur.
+   * @default 'text'
+   */
   type?: InputType;
+  /**
+   * Où en est le champ : `rest` (au repos), `error`, `success` ou `disabled`. Il change le fond,
+   * le trait et l'encre ; `disabled` pose aussi l'attribut natif.
+   * @default 'rest'
+   */
   status?: InputStatus;
+  /**
+   * La hauteur de la boîte : petite, moyenne ou grande.
+   * @default 'medium'
+   */
   size?: InputSize;
   /** L'aide : ce que le champ attend. Reste affichée, même en erreur. */
   hint?: string;
   /** Le texte qui accompagne `status="error"` ou `status="success"`. */
   message?: string;
-  /** Affiche « 12/500 ». Demande `maxlength`. */
+  /**
+   * Affiche « 12/500 » sous la boîte. Demande `maxlength`.
+   * @default false
+   */
   counter?: boolean;
 }
