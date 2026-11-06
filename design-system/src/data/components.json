@@ -982,8 +982,8 @@
       {
         "nom": "label",
         "type": "string",
-        "requis": true,
-        "description": "Le texte du libellé.",
+        "requis": false,
+        "description": "Le texte du libellé. Sans lui, pas de libellé visible : le champ doit alors porter un\n`aria-label`, sinon un lecteur d'écran ne sait pas le nommer.",
         "groupe": "Libellé",
         "exemple": "Libellé"
       },

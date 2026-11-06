@@ -37,6 +37,12 @@ const {
 } = Astro.props;
 
 // ── D. Les calculs ───────────────────────────────────────────────────────────
+// Le libellé est facultatif, comme l'interrupteur `label?` de Figma — mais un champ doit toujours
+// avoir un nom. Sans libellé visible, il lui faut un `aria-label` (ou un `aria-labelledby`).
+if (!label && !rest['aria-label'] && !rest['aria-labelledby']) {
+  throw new Error(`InputPG « ${id} » n'a ni libellé ni aria-label : un lecteur d'écran ne saurait pas le nommer.`);
+}
+
 // `disabled` est un vrai attribut HTML : il rend le champ non cliquable et c'est lui
 // que les lecteurs d'écran annoncent. Figma le range dans `status` ; le code le déduit.
 const disabled = status === 'disabled';
@@ -65,8 +71,8 @@ const hasIcon = Astro.slots.has('icon-start');
   ╚═════════════════════════════════════════════════════════════════════════╝
 -->
 <div class:list={['field', `field-${size}`, className]} data-status={status}>
-  <!-- 1. Le libellé : la pièce FieldLabel -->
-  <FieldLabel for={id} required={isRequired} disabled={disabled}>{label}</FieldLabel>
+  <!-- 1. Le libellé : la pièce FieldLabel, seulement s'il y en a un -->
+  {label && <FieldLabel for={id} required={isRequired} disabled={disabled}>{label}</FieldLabel>}
 
   <!-- 2. La boîte (`input-row`) : une icône facultative (le SLOT), puis la balise de saisie -->
   <div class="input-row">

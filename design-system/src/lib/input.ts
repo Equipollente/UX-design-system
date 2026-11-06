@@ -36,11 +36,12 @@ export interface InputProps extends NativeAttributes {
    */
   id: string;
   /**
-   * Le texte du libellé.
+   * Le texte du libellé. Sans lui, pas de libellé visible : le champ doit alors porter un
+   * `aria-label`, sinon un lecteur d'écran ne sait pas le nommer.
    * @group Libellé
    * @example Libellé
    */
-  label: string;
+  label?: string;
   /**
    * Ce que la personne a déjà tapé.
    * @example Valeur
