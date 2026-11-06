@@ -288,12 +288,19 @@ const classes = ['btn', `btn-${variant}`, isHue && 'btn-cat', `btn-${size}`, cla
     background: var(--btn-bg-active);
   }
 
-  /* Désactivé : Figma ne change pas le fond, il baisse l'opacité de tout le
-     bouton à 45 % (états Disabled, 854:41683 et 854:41667). Le contraste tombe
-     alors sous le seuil — c'est admis, WCAG 1.4.3 exempte les contrôles
-     inactifs. Le Carousel s'en sert pour ses flèches en bout de piste. */
+  /* Désactivé : le bouton prend les rôles « inactive », quelle que soit sa variante —
+     fond, libellé, trait et icône. Il ne dépend plus d'une opacité : un bouton éteint
+     est gris, pas un bouton de sa couleur délavé. Le ghost n'a pas de fond à éteindre.
+     Le Carousel s'en sert pour ses flèches en bout de piste. */
   .btn:disabled {
-    opacity: 0.45;
+    background: var(--color-background-inactive);
+    border-color: var(--color-border-base-inactive);
+    color: var(--color-text-base-inactive);
+    --icon-color: var(--color-icon-base-inactive);
     cursor: not-allowed;
+  }
+
+  .btn-ghost:disabled {
+    background: transparent;
   }
 </style>
