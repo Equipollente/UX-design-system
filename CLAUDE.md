@@ -36,17 +36,18 @@ doit connaître un site consommateur**. Ce qui est propre à une page (liste de 
 textes, chemins d'images) se passe en props ; un composant qui connaîtrait les pages d'un site ne
 serait plus un composant.
 
-- `src/design-system/` — le système : `components/`, `layouts/`, `lib/`, `styles/` + `data/`
-  (générés depuis `tokens/` par `npm run tokens`) et `icons/` + `lib/icons.ts` (générés depuis
-  `icons/` par `npm run icons`).
-- `src/pages/` — la doc du système, qui est aussi le site publié : `/`, `/foundations`, `/icons`,
+- `design-system/` — le paquet publié (`ux-design-system`) : `src/components/`, `layouts/`, `lib/`, `styles/` +
+  `data/` (générés depuis `tokens/` par `npm run tokens`) et `icons/` + `lib/icons.ts` (générés depuis
+  `design-system/icons/` par `npm run icons`).
+- `site/` — le projet Astro de la doc du système, premier consommateur du paquet. Ses pages sont dans
+  `site/src/pages/` : la doc du système, qui est aussi le site publié : `/`, `/foundations`, `/icons`,
   `/components`. Elle est le premier consommateur du système, et à ce titre la première à trahir
   une régression.
 
 ## Les tokens ne s'écrivent pas dans le code
 
-La source de vérité est Figma. Les 554 tokens sont exportés collection par collection, un dossier chacune, dans
-`tokens/` (`primitives`, `semantic`, `size`, `typography`, `layout`, `motion`, `effects`), puis `npm run tokens`
+La source de vérité est Figma. Les tokens sont exportés collection par collection, un dossier chacune, dans
+`design-system/tokens/` (`primitives`, `semantic`, `size`, `typography`, `layout`, `motion`, `effects`), puis `npm run tokens`
 en fait `styles/tokens.css` et `data/tokens.json`.
 
 Deux étages pour la couleur : `primitives` porte les rampes `--ramp-*` (nommées d'après leur teinte : grey, indigo,
@@ -58,30 +59,30 @@ Si une valeur paraît fausse, la correction va **dans Figma**, puis dans l'expor
 un composant. Les deux fichiers générés sont versionnés parce que `npm run dev` ne lance pas
 `npm run tokens` : un clone frais serait cassé sans eux.
 
-La palette de l'État (DSFR, 228 couleurs) est une collection à part : `tokens/DSFR.tokens.json` →
+La palette de l'État (DSFR, 228 couleurs) est une collection à part : `design-system/tokens/DSFR.tokens.json` →
 `styles/tokens-dsfr.css`, **non chargé par défaut** — un projet qui l'adopte l'importe. Hors du compte
 des tokens du système.
 
 ## Les icônes ne s'écrivent pas non plus dans le code
 
 Même contrat que les tokens, même raison. Les 72 icônes sont les composants de la page Figma
-`Icons` (`45:395`), exportés dans `icons/` **au niveau du composant et non du vecteur** — sans quoi
+`Icons` (`45:395`), exportés dans `design-system/icons/` **au niveau du composant et non du vecteur** — sans quoi
 la `viewBox` n'est pas celle de la frame 24 × 24, et le script refuse le fichier. `npm run icons` en
-fait `src/design-system/icons/*.svg` (nettoyés) et `src/design-system/lib/icons.ts` (le registre
+fait `design-system/src/icons/*.svg` (nettoyés) et `design-system/src/lib/icons.ts` (le registre
 typé). Les deux sont versionnés, pour la même raison que `tokens.css`.
 
 Une icône est alors un nom, pas un chemin : `<Button icon="mail-edit">`. Le nom se vérifie à la
 compilation. Aucun `<img>`, aucune URL, donc aucun `withBase()` — et les fichiers ne portent que
 `currentColor` : c'est le contexte qui décide de la couleur. Ne jamais retoucher un SVG de
-`src/design-system/icons/` : il est régénéré. Ajouter une icône, c'est déposer l'export dans
-`icons/` et relancer.
+`design-system/src/icons/` : il est régénéré. Ajouter une icône, c'est déposer l'export dans
+`design-system/icons/` et relancer.
 
 ## Les URLs absolues passent par withBase()
 
 Le site est publié sur GitHub Pages sous `/UX-design-system/`, pas à la racine d'un domaine. Astro
 applique ce préfixe au routage mais **ne réécrit pas** les URLs écrites à la main. Tout chemin absolu
 — asset de `public/` comme lien vers une page — passe donc par `withBase()`
-(`src/design-system/lib/url.ts`). Un `/images/avatar.png` laissé tel quel marche en local et donne
+(`design-system/src/lib/url.ts`). Un `/images/avatar.png` laissé tel quel marche en local et donne
 un 404 en ligne : c'est une erreur qui ne se voit pas en développement. Les icônes, elles, n'en
 relèvent plus : inlinées, elles n'ont pas d'URL.
 

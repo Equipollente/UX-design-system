@@ -1,0 +1,106 @@
+---
+// Layout des pages de documentation du système. Il enveloppe BaseLayout et
+// n'ajoute qu'une barre de circulation.
+//
+// La barre est volontairement modeste : ce n'est pas le composant Nav. Documenter
+// le Nav et s'en servir pour se déplacer dans sa propre doc seraient deux usages
+// contradictoires — on ne saurait plus si l'on regarde le composant ou le site.
+
+import { withBase } from 'ux-design-system/lib/url';
+import BaseLayout from 'ux-design-system/layouts/BaseLayout.astro';
+import '../styles/docs.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const pages = [
+  { href: withBase('/foundations'), label: 'Fondations' },
+  { href: withBase('/icons'), label: 'Icônes' },
+  { href: withBase('/components'), label: 'Composants' },
+  { href: withBase('/formulaire'), label: 'Formulaire' },
+  { href: withBase('/bac-a-sable'), label: 'Bac à sable' },
+  { href: withBase('/components-usage'), label: 'Utiliser les composants' },
+  { href: withBase('/templates/home'), label: 'Gabarit' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="docs-bar">
+    <a class="docs-home" href={withBase('/')}>Design system</a>
+    <nav aria-label="Pages du design system">
+      <ul>
+        {
+          pages.map(({ href, label }) => (
+            <li>
+              <a href={href} aria-current={href === path ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <slot />
+</BaseLayout>
+
+<style>
+  .docs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--base-12);
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--base-16) var(--base-24) 0;
+  }
+
+  .docs-home {
+    font-family: var(--font-stack-heading);
+    font-weight: var(--base-text-weight-bold);
+    font-size: var(--text-body-medium-size);
+    color: var(--color-text-base-default);
+    text-decoration: none;
+  }
+
+  /*
+    La barre retombe à la ligne plutôt que de défiler. Un tableau de props qui déborde
+    s'annonce de lui-même — une colonne coupée se voit — et `.table-scroll` lui suffit ;
+    une barre de circulation, non : ses dernières destinations sortiraient du volet sans
+    que rien ne le dise. Sans `wrap`, les liens ne rentrent plus dès 320 px et poussaient
+    le document entier à défiler horizontalement. C'est déjà ce que `.docs-bar` fait de
+    son côté.
+  */
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--base-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    font-size: var(--text-body-small-size);
+    color: var(--color-text-base-muted);
+    text-decoration: none;
+  }
+
+  /* Comme dans Nav : l'état courant tient à l'attribut ARIA, pas à une classe. */
+  nav a[aria-current='page'] {
+    color: var(--color-text-primary-default);
+    font-weight: var(--base-text-weight-medium);
+  }
+
+  nav a:hover {
+    color: var(--color-text-primary-default);
+  }
+</style>

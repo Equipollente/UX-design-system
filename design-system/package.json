@@ -1,0 +1,43 @@
+{
+  "name": "ux-design-system",
+  "type": "module",
+  "version": "0.2.0",
+  "description": "Le design system de Judith Heckmann : les tokens exportés de Figma et les composants qui en sont faits.",
+  "homepage": "https://equipollente.github.io/UX-design-system/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Equipollente/UX-design-system.git",
+    "directory": "design-system"
+  },
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "// exports": "Ce que les sites consommateurs ont le droit d'importer. Rien d'autre n'est atteignable : la surface publique du système est décidée ici, pas subie.",
+  "exports": {
+    "./components/*": "./src/components/*",
+    "./layouts/*": "./src/layouts/*",
+    "./lib/*.ts": "./src/lib/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./styles/*": "./src/styles/*",
+    "./data/tokens.json": "./src/data/tokens.json",
+    "./package.json": "./package.json"
+  },
+  "// files": "Ce qui part dans le paquet : le code source, tel quel. Les icônes en font partie : inlinées, elles sont du code et non des assets.",
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "astro": "^7.0.0"
+  },
+  "scripts": {
+    "tokens": "node scripts/build-tokens.mjs",
+    "icons": "node scripts/build-icons.mjs",
+    "check": "astro check"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "astro": "^7.2.1",
+    "typescript": "^6.0.3"
+  }
+}

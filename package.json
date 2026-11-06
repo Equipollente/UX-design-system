@@ -1,49 +1,24 @@
 {
-  "name": "ux-design-system",
+  "name": "ux-design-system-workspace",
+  "private": true,
   "type": "module",
   "version": "0.2.0",
-  "description": "Le design system de Judith Heckmann : 268 tokens exportés de Figma et les composants qui en sont faits.",
-  "homepage": "https://equipollente.github.io/UX-design-system/",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Equipollente/UX-design-system.git"
-  },
-  "license": "UNLICENSED",
+  "description": "Le dépôt du design system : le paquet (design-system/) et son site de documentation (site/).",
   "engines": {
     "node": ">=22.12.0"
   },
-  "// exports": "Ce que les sites consommateurs ont le droit d'importer. Rien d'autre n'est atteignable : la surface publique du système est décidée ici, pas subie.",
-  "exports": {
-    "./components/*": "./src/design-system/components/*",
-    "./layouts/*": "./src/design-system/layouts/*",
-    "./lib/*": "./src/design-system/lib/*",
-    "./styles/*": "./src/design-system/styles/*",
-    "./data/tokens.json": "./src/design-system/data/tokens.json",
-    "./package.json": "./package.json"
-  },
-  "// files": "Ce qui part dans le paquet. Les icônes en font partie : inlinées, elles sont du code et non des assets, et un site consommateur les reçoit avec le système. public/ reste exclu — les images, elles, sont le choix du site qui les monte, et le Nav reçoit ses chemins en props.",
-  "files": [
-    "src/design-system"
+  "// workspaces": "Deux projets, un seul npm install. Aucune dépendance ici : chacun déclare les siennes.",
+  "workspaces": [
+    "design-system",
+    "site"
   ],
-  "peerDependencies": {
-    "astro": "^7.0.0"
-  },
   "scripts": {
-    "dev": "astro dev",
-    "build": "npm run tokens && npm run icons && astro build",
-    "preview": "astro preview",
-    "check": "astro check",
-    "astro": "astro",
-    "tokens": "node scripts/build-tokens.mjs",
-    "icons": "node scripts/build-icons.mjs"
-  },
-  "// devDependencies": "Astro est en devDependencies, pas en dependencies : un site qui installe le système ne doit pas se retrouver avec un second Astro dans son node_modules. La version attendue est déclarée en peerDependencies.",
-  "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "astro": "^7.2.1",
-    "typescript": "^6.0.3"
-  },
-  "dependencies": {
-    "@data-slot/popover": "^0.2.166"
+    "dev": "npm run dev -w site",
+    "build": "npm run tokens && npm run icons && npm run build -w site",
+    "preview": "npm run preview -w site",
+    "check": "npm run check -w design-system && npm run check -w site",
+    "tokens": "npm run tokens -w design-system",
+    "icons": "npm run icons -w design-system",
+    "astro": "npm run astro -w site --"
   }
 }

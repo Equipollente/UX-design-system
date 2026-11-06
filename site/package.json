@@ -1,0 +1,26 @@
+{
+  "name": "ux-design-system-site",
+  "private": true,
+  "type": "module",
+  "version": "0.2.0",
+  "description": "Le site de documentation du design system : le premier consommateur du paquet.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@data-slot/popover": "^0.2.166",
+    "astro": "^7.2.1",
+    "ux-design-system": "*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}

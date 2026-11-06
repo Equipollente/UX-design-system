@@ -1,0 +1,662 @@
+---
+import { withBase } from 'ux-design-system/lib/url';
+import DocsLayout from '../layouts/DocsLayout.astro';
+import tokens from 'ux-design-system/data/tokens.json';
+
+const byPrefix = (prefix: string) => tokens.filter((t) => t.path.startsWith(prefix));
+const byGroup = (group: string) => tokens.filter((t) => t.group === group);
+
+// Les couleurs, dans l'ordre du fichier Figma : rôles sémantiques d'abord,
+// rampes ensuite.
+const colorFamilies = [
+  { key: 'color.surface.', label: 'Surfaces' },
+  { key: 'color.background.', label: 'Fonds' },
+  { key: 'color.text.', label: 'Texte' },
+  { key: 'color.icon.', label: 'Icônes' },
+  { key: 'color.border.', label: 'Bordures' },
+  { key: 'ramp.grey.', label: 'Rampe grey' },
+  { key: 'ramp.indigo.', label: 'Rampe indigo' },
+  { key: 'ramp.lime.', label: 'Rampe lime' },
+  { key: 'ramp.clay.', label: 'Rampe clay' },
+  { key: 'ramp.teal.', label: 'Rampe teal' },
+  { key: 'ramp.sun.', label: 'Rampe sun' },
+  { key: 'ramp.rose.', label: 'Rampe rose' },
+  { key: 'ramp.red.', label: 'Rampe red' },
+  { key: 'ramp.green.', label: 'Rampe green' },
+  { key: 'ramp.blue-france.', label: 'Rampe blue-france — Prof Hub' },
+  { key: 'ramp.green-emeraude.', label: 'Rampe green-émeraude — Prof Hub' },
+];
+
+const fontSizes = byPrefix('base.text.size.');
+const lineHeights = byPrefix('base.text.lineHeight.');
+const letterSpacings = byPrefix('base.text.letterSpacing.');
+const weights = byPrefix('base.text.weight.');
+const families = byPrefix('fontStack.');
+const spaces = byGroup('base').filter((t) => !t.path.includes('negative'));
+const radii = byPrefix('border.radius.');
+const controls = byGroup('control').filter((t) => /\.size$|minTarget/.test(t.path));
+const borders = [...byPrefix('border.width.'), ...byPrefix('border.outline.')];
+const opacities = byGroup('opacity');
+
+// Les ombres. Figma n'a pas de type de variable « ombre » : chaque partie y est
+// nommée seule et liée à l'effet, et `npm run tokens` les remet bout à bout.
+// Les sous-groupes ne sont pas listés en dur — `contact` est la seule à porter
+// un nom que cette page connaisse, parce qu'elle n'est pas une ombre mais la
+// seconde couche de toutes les autres.
+const shadowParts = (sub: string) => byPrefix(`shadow.${sub}.`);
+const shadowSubs = [...new Set(byGroup('shadow').map((t) => t.path.split('.')[1]))];
+const shadows = shadowSubs.filter((sub) => sub !== 'contact');
+const contact = shadowParts('contact');
+const durations = byPrefix('motion.duration.');
+const easings = byPrefix('motion.easing.');
+const layout = [...byPrefix('viewport.width'), ...byPrefix('viewport.scale'), ...byPrefix('nav.')];
+
+// Les tokens qui décrivent un objet plutôt que le vocabulaire du système. Ils
+// ne sont pas montrés ici mais dans /components, avec le composant qu'ils
+// dimensionnent. Comptés et non listés en dur : le jour où un quatrième groupe
+// d'objet apparaît, cette page n'annoncera pas un chiffre faux — c'est ce qui
+// vient de servir quand le groupe `card` est arrivé.
+const groupesObjet = ['control', 'controlStack', 'icon', 'overlay', 'nav'];
+const objets = tokens.filter((t) => groupesObjet.includes(t.group));
+const vocabulaire = tokens.length - objets.length;
+
+const specimen = 'Concevoir, tester, décider — puis recommencer.';
+---
+
+<DocsLayout
+  title="Fondations — UX design system"
+  description="Le vocabulaire du système : couleur, typographie, espacement, rayon, contrôle, trait, opacité, mouvement."
+>
+  <header class="page-head">
+    <h6>Design system</h6>
+    <h1>Fondations</h1>
+    <p class="lead">
+      Le vocabulaire du système — <strong>{vocabulaire} tokens</strong> sur {tokens.length}, générés
+      depuis les exports de <code>tokens/</code> par <code>npm run tokens</code>. Les {objets.length} autres
+      décrivent un objet plutôt que le système : ils sont documentés
+      dans <a href={withBase('/components')}>Composants</a>. Rien sur cette page n'est écrit en dur :
+      chaque valeur affichée est lue dans la variable CSS correspondante.
+    </p>
+  </header>
+
+  <main>
+    <!-- ── Couleurs ─────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Couleurs</h2>
+      <p class="section-note">
+        Les descriptions viennent de Figma. Elles portent les ratios de contraste mesurés — c'est la
+        doctrine d'usage du système, pas de la décoration.
+      </p>
+
+      {
+        colorFamilies.map(({ key, label }) => (
+          <div class="family">
+            <h3>{label}</h3>
+            <ul class="swatches">
+              {byPrefix(key).map((t) => (
+                <li class="swatch">
+                  <div class="chip" style={`background: var(${t.name})`} />
+                  <code class="name">{t.name}</code>
+                  <span class="value">
+                    {t.resolved}
+                    {t.alias && <em class="alias"> ← {t.alias}</em>}
+                  </span>
+                  {t.description && <p class="desc">{t.description}</p>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- ── Typographie ──────────────────────────────────────────────────── -->
+    <section>
+      <h2>Typographie</h2>
+
+      <div class="family">
+        <h3>Familles</h3>
+        <ul class="plain">
+          {
+            families.map((t) => (
+              <li>
+                <span style={`font-family: var(${t.name}); font-size: var(--text-title-small-size)`}>
+                  {t.resolved}
+                </span>
+                <code class="name">{t.name}</code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Graisses</h3>
+        <ul class="plain">
+          {
+            weights.map((t) => (
+              <li>
+                <span
+                  style={`font-family: var(--font-stack-heading); font-weight: var(${t.name}); font-size: var(--text-title-small-size)`}
+                >
+                  {specimen}
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Échelle de tailles</h3>
+        <ul class="plain">
+          {
+            fontSizes.map((t) => (
+              <li>
+                <span style={`font-size: var(${t.name}); line-height: var(--base-text-line-height-snug)`}>
+                  {specimen}
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Interlignes</h3>
+        <ul class="plain">
+          {
+            lineHeights.map((t) => (
+              <li>
+                <p style={`line-height: var(${t.name}); margin: 0; max-width: 46ch`}>
+                  {specimen} Un système de design ne vaut que par ce qu'il rend évident au moment de
+                  décider. {specimen}
+                </p>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Interlettrages</h3>
+        <ul class="plain">
+          {
+            letterSpacings.map((t) => (
+              <li>
+                <span
+                  style={`letter-spacing: var(${t.name}); font-size: var(--text-title-small-size); text-transform: uppercase`}
+                >
+                  Interlettrage
+                </span>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Espacements ──────────────────────────────────────────────────── -->
+    <section>
+      <h2>Espacements</h2>
+      <ul class="plain">
+        {
+          spaces.map((t) => (
+            <li class="ruler">
+              <div class="bar" style={`width: var(${t.name})`} />
+              <code class="name">
+                {t.name} — {t.resolved}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Rayons ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Rayons</h2>
+      <ul class="radii">
+        {
+          radii.map((t) => (
+            <li>
+              <div class="radius-box" style={`border-radius: var(${t.name})`} />
+              <code class="name">
+                {t.name} — {t.resolved}
+              </code>
+              {t.description && <p class="desc">{t.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Contrôles ────────────────────────────────────────────────────── -->
+    {
+      controls.length > 0 && (
+        <section>
+          <h2>Contrôles</h2>
+          <p class="section-note">
+            La géométrie d'un contrôle de formulaire — ce qu'un espacement ne sait pas dire. Une case
+            à cocher n'a pas la taille d'un écart, et une piste d'interrupteur n'a pas celle d'un
+            rembourrage : ces trois mesures ont leur propre famille parce qu'elles décrivent un objet
+            qu'on vise, pas un intervalle entre deux choses.
+          </p>
+          <p class="section-note">
+            Elles sont peu nombreuses <strong>et c'est voulu</strong> : tout ce qui se compose depuis
+            un espacement reste composé. La largeur d'une piste vaut
+            {' '}<code>base/24 + base/16</code> — 40 exactement — et n'a donc pas de variable.
+          </p>
+          <ul class="plain">
+            {controls.map((t) => (
+              <li class="ruler">
+                <div class="bar" style={`width: var(${t.name})`} />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Traits ───────────────────────────────────────────────────────── -->
+    {
+      borders.length > 0 && (
+        <section>
+          <h2>Traits</h2>
+          <p class="section-note">
+            Deux crans, et rien de plus : le trait au repos, et la marque de focus. Le fichier Figma
+            en dessinait un troisième — 1,5, sur les deux zones de dépôt — quand 1 est dessiné 217
+            fois ailleurs. Un même geste fait deux fois n'est pas une échelle, et les deux nœuds ont
+            été redessinés.
+          </p>
+          <ul class="swatches">
+            {borders.map((t) => (
+              <li>
+                <div
+                  class="stroke-box"
+                  style={`border-width: var(${t.name})`}
+                />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Opacités ─────────────────────────────────────────────────────── -->
+    {
+      opacities.length > 0 && (
+        <section>
+          <h2>Opacités</h2>
+          <p class="section-note">
+            Une seule valeur, pour un seul rôle : ce qu'un objet désactivé perd. Le fichier en
+            dessinait trois — 0,4 sur les contrôles compacts, 0,5 sur les surfaces, 0,6 sur les
+            champs de texte — pour la même intention. Elles ont été ramenées à une.
+          </p>
+          <p class="section-note">
+            <strong>Elle se stocke en pourcentage dans Figma</strong>, comme un interligne : c'est ce
+            que la liaison de variable attend côté dessin. <code>npm run tokens</code> divise par 100.
+          </p>
+          <ul class="swatches">
+            {opacities.map((t) => (
+              <li>
+                <div class="opacity-box" style={`opacity: var(${t.name})`} />
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Ombres ───────────────────────────────────────────────────────── -->
+    {
+      shadows.length > 0 && (
+        <section>
+          <h2>Ombres</h2>
+          <p class="section-note">
+            Figma n'a pas de type de variable « ombre » : une variable y est couleur, nombre, texte
+            ou booléen. Chaque partie est donc nommée seule et <strong>liée à l'effet</strong> dans
+            le fichier — le dessin et le code lisent la même valeur, et rien ne peut diverger.
+            {' '}<code>npm run tokens</code> les remet bout à bout. Un composant utilise la ligne
+            composée, jamais les parties.
+          </p>
+
+          <ul class="shadows">
+            {shadows.map((sub) => (
+              <li>
+                <div class="shadow-box" style={`box-shadow: var(--shadow-${sub})`} />
+                <code class="name">--shadow-{sub}</code>
+                <ul class="parts">
+                  {shadowParts(sub).map((t) => (
+                    <li>
+                      <code class="name">{t.name}</code>
+                      <span class="value">{t.resolved}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+
+          {contact.length > 0 && (
+            <div class="family">
+              <h3>La couche de contact</h3>
+              <p class="section-note">
+                Toutes les ombres du système posent la même seconde couche, très près de la surface.
+                Ce n'est pas une ombre : elle est nommée une fois et entre dans chacune des
+                précédentes.
+              </p>
+              <ul class="parts">
+                {contact.map((t) => (
+                  <li>
+                    <code class="name">{t.name}</code>
+                    <span class="value">{t.resolved}</span>
+                    {t.description && <p class="desc">{t.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p class="flag">
+            <strong>Les couleurs d'ombre ne suivent pas l'encre.</strong> Elles valent
+            {' '}<code>ramp.grey.900</code> à trois opacités, mais un alias Figma emporte l'opacité
+            avec la couleur : on ne peut pas pointer l'encre et n'en changer que la transparence.
+            Les trois sont donc des couleurs littérales. Si l'encre du système change, elles sont à
+            reprendre à la main — c'est le seul point du groupe qui puisse dériver.
+          </p>
+
+          <p class="flag">
+            <strong>Aucune ombre n'a de décalage horizontal.</strong> Le <code>0</code> de tête
+            n'est pas un token : c'est une règle du système, écrite dans
+            {' '}<code>build-tokens.mjs</code> avec la couche de contact. Le jour où une ombre en
+            demande un, il devient une variable comme les autres.
+          </p>
+        </section>
+      )
+    }
+
+    <!-- ── Mouvement ────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Mouvement</h2>
+      <p class="section-note">
+        Trois durées et trois courbes. La règle tient en une ligne :
+        {' '}<strong>un changement de couleur prend <code>quick</code></strong>, <strong
+          >un déplacement prend <code>default</code></strong
+        >, <strong>une entrée ou une sortie prend <code>slow</code></strong>. Survolez une piste pour
+        rejouer le mouvement — la pastille voyage avec le token de sa ligne, pas avec une valeur
+        écrite ici.
+      </p>
+
+      <div class="family">
+        <h3>Durées</h3>
+        <p class="section-note">À courbe constante — <code>easing.standard</code>.</p>
+        <ul class="plain">
+          {
+            durations.map((t) => (
+              <li>
+                <div
+                  class="track"
+                  style={`--demo-duration: var(${t.name}); --demo-easing: var(--motion-easing-standard)`}
+                >
+                  <span class="puck" />
+                </div>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="family">
+        <h3>Courbes</h3>
+        <p class="section-note">
+          À durée constante — <code>duration.slow</code>, assez longue pour qu'on lise la différence.
+        </p>
+        <ul class="plain">
+          {
+            easings.map((t) => (
+              <li>
+                <div
+                  class="track"
+                  style={`--demo-duration: var(--motion-duration-slow); --demo-easing: var(${t.name})`}
+                >
+                  <span class="puck" />
+                </div>
+                <code class="name">
+                  {t.name} — {t.resolved}
+                </code>
+                {t.description && <p class="desc">{t.description}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="flag">
+        <strong>Mouvement réduit.</strong> Sous <code>prefers-reduced-motion: reduce</code>, ce sont
+        les trois durées qui tombent à <code>0ms</code>, dans <code>tokens.css</code>. Aucun
+        composant n'a à connaître la préférence, et les pistes ci-dessus s'arrêtent aussi. Le système
+        ne supprime pas les états — un onglet courant reste signalé, un bouton survolé reste
+        survolé : il supprime le trajet.
+      </p>
+    </section>
+
+
+    <!-- ── Layout ───────────────────────────────────────────────────────── -->
+    <section>
+      <h2>Layout</h2>
+      <p class="section-note">
+        Métadonnées des 4 modes Figma. Ce sont les seuls tokens qui varient d'un mode à l'autre —
+        redimensionnez la fenêtre pour les voir changer. Ils sont informatifs : rien ne les consomme
+        pour l'instant.
+      </p>
+      <ul class="plain token-list">
+        {
+          layout.map((t) => (
+            <li>
+              <code class="name">{t.name}</code>
+              <span class="value live" data-var={t.name} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Les tokens layout.* changent selon la media query : on lit la valeur
+    // calculée plutôt que la valeur desktop figée dans le JSON.
+    const paint = () => {
+      const styles = getComputedStyle(document.documentElement);
+      document.querySelectorAll<HTMLElement>('.live').forEach((el) => {
+        el.textContent = styles.getPropertyValue(el.dataset.var!).trim();
+      });
+    };
+    paint();
+    window.addEventListener('resize', paint);
+  </script>
+</DocsLayout>
+
+<style>
+  /* Uniquement ce qui sert aux démonstrations de cette page. Le chrome commun
+     aux pages de doc — sections, listes de tokens, encarts — vit dans
+     site/src/styles/docs.css, importé par DocsLayout. */
+
+  /* — couleurs — */
+  .swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: var(--base-16);
+  }
+
+  .chip {
+    height: 4rem;
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--color-border-base-subtle);
+  }
+
+  /* — espacements — */
+  .ruler .bar {
+    height: var(--base-12);
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-small);
+  }
+
+  /* — mouvement —
+     La pastille se déplace en transform, comme le fera tout mouvement du
+     système : la démonstration dit donc la vérité sur la façon dont c'est
+     animé, pas seulement sur la durée. Les dimensions sortent des tokens, d'où
+     le calc — la piste doit connaître sa propre longueur pour que la pastille
+     s'arrête au bord. */
+  .track {
+    --piste: calc(var(--section-space-xlarge) * 3);
+
+    position: relative;
+    width: var(--piste);
+    max-width: 100%;
+    height: calc(var(--base-32) + var(--base-4) * 2);
+    padding: var(--base-4);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+  }
+
+  .puck {
+    display: block;
+    width: var(--base-32);
+    height: var(--base-32);
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-full);
+    transition: transform var(--demo-duration) var(--demo-easing);
+  }
+
+  .track:hover .puck {
+    transform: translateX(calc(var(--piste) - var(--base-32) - var(--base-4) * 2));
+  }
+
+  /* Sous 768px la piste ne tiendrait pas : elle raccourcit, la pastille suit. */
+  @media (max-width: 767px) {
+    .track {
+      --piste: calc(var(--section-space-xlarge) * 2);
+    }
+  }
+
+  /* — ombres —
+     Les boîtes sont posées sur le fond de page et non sur une surface : c'est
+     là qu'une ombre se lit. La marge haute est celle qu'exige `lg-invert`, qui
+     porte vers le haut — sans elle, l'ombre sortirait de sa case. */
+  .shadows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--base-32);
+  }
+
+  /* `lg-invert` porte 46px au-dessus de sa boîte — 30 de décalage, 30 de flou,
+     moins les 14 d'étalement. `section.space.small` (48) est le premier cran qui les
+     couvre ; en dessous l'ombre mordrait sur la section précédente. */
+  .shadows > li {
+    padding-block-start: var(--section-space-small);
+  }
+
+  .shadow-box {
+    height: 7rem;
+    margin-block-end: var(--base-12);
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-medium);
+  }
+
+  .parts {
+    list-style: none;
+    margin: var(--base-8) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--base-4);
+  }
+
+  /* — rayons — */
+  /* Traits et opacités se montrent de la même façon : une pastille, son nom, sa
+     description. Même gabarit que les rayons, sans le carré plein. */
+  .swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--base-24);
+  }
+
+  .swatches > li {
+    max-width: 18rem;
+  }
+
+  /* Le trait se regarde sur un fond blanc, comme dans la page : c'est là qu'il
+     doit se détacher, et c'est là qu'il est le plus difficile. */
+  .stroke-box {
+    width: 7rem;
+    height: 4rem;
+    background: var(--color-surface-default);
+    border-style: solid;
+    border-color: var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+  }
+
+  .opacity-box {
+    width: 7rem;
+    height: 4rem;
+    background: var(--color-surface-feature);
+    border-radius: var(--border-radius-medium);
+  }
+
+  .radii {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--base-24);
+  }
+
+  .radius-box {
+    width: 7rem;
+    height: 7rem;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-base-strong);
+  }
+</style>
