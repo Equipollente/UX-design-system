@@ -1,0 +1,242 @@
+---
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  PARTIE 1 — LE SCRIPT                                                     ║
+// ║  Tout ce qui est entre les deux lignes `---`.                             ║
+// ║  Il s'exécute quand la page est fabriquée, jamais dans le navigateur.     ║
+// ║  Il prépare ce que le modèle (PARTIE 2) va afficher.                      ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+
+// ── A. Les pièces empruntées ─────────────────────────────────────────────────
+// Comme les instances imbriquées dans Figma.
+import FieldLabel from './FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
+import type { InputProps } from '../lib/input';
+
+// ── B. Les réglages ──────────────────────────────────────────────────────────
+// Ils sont décrits dans lib/input.ts. Astro lit `Props` pour vérifier ce qu'on
+// passe au composant.
+type Props = InputProps;
+
+// ── C. On lit les réglages reçus, avec leur valeur par défaut ────────────────
+// Ce qui n'est pas nommé ici (value, placeholder, required, autocomplete…) reste
+// dans `rest` et part tel quel sur la balise <input>.
+const {
+  id,
+  label,
+  type = 'text',
+  status = 'rest',
+  size = 'medium',
+  hint,
+  message,
+  counter = false,
+  maxlength,
+  required = false,
+  value,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// ── D. Les calculs ───────────────────────────────────────────────────────────
+// `disabled` est un vrai attribut HTML : il rend le champ non cliquable et c'est lui
+// que les lecteurs d'écran annoncent. Figma le range dans `status` ; le code le déduit.
+const disabled = status === 'disabled';
+
+// L'attribut natif `required` accepte plusieurs formes ; le libellé n'en veut qu'une.
+const isRequired = Boolean(required);
+
+// Un message n'a de sens que pour une erreur ou un succès.
+const showMessage = Boolean(message) && (status === 'error' || status === 'success');
+
+// Les identifiants que le champ désigne, pour que le lecteur d'écran les lise.
+const messageId = `${id}-message`;
+const hintId = `${id}-hint`;
+const describedBy = [showMessage && messageId, hint && hintId].filter(Boolean).join(' ') || undefined;
+
+// Le compteur part du nombre de caractères déjà présents.
+const count = String(value ?? '').length;
+const hasIcon = Astro.slots.has('icon-start');
+---
+
+<!--
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║  PARTIE 2 — LE MODÈLE                                                   ║
+  ║  Du HTML. Les accolades { } y insèrent ce que le script a préparé.      ║
+  ║  C'est l'assemblage de ton `_FormGroup`, de haut en bas.                ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+-->
+<div class:list={['field', `field-${size}`, className]} data-status={status}>
+  <!-- 1. Le libellé : la pièce FieldLabel -->
+  <FieldLabel for={id} required={isRequired} disabled={disabled}>{label}</FieldLabel>
+
+  <!-- 2. La boîte (`input-row`) : une icône facultative (le SLOT), puis la balise de saisie -->
+  <div class="input-row">
+    {hasIcon && <span class="icon"><slot name="icon-start" /></span>}
+    <input
+      {...rest}
+      id={id}
+      type={type}
+      value={value}
+      maxlength={maxlength}
+      required={required}
+      disabled={disabled}
+      aria-invalid={status === 'error' ? 'true' : undefined}
+      aria-describedby={describedBy}
+    />
+  </div>
+
+  <!-- 3. Sous la boîte. `{x && …}` : la pièce n'existe que si x est vrai ou rempli. -->
+  {showMessage && <FieldMessage type={status === 'error' ? 'error' : 'success'} id={messageId}>{message}</FieldMessage>}
+  {counter && maxlength && <p class="counter" data-counter data-max={maxlength}>{count}/{maxlength}</p>}
+  {hint && <FieldMessage type="hint" id={hintId}>{hint}</FieldMessage>}
+</div>
+
+<!--
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║  PARTIE 3 — LE STYLE                                                    ║
+  ║  Du CSS. Il ne s'applique qu'au HTML de CE fichier (Astro le rattache   ║
+  ║  à lui) : il ne déborde pas, et ne touche pas aux pièces empruntées.    ║
+  ║  Tout est lu dans les variables du système, rien n'est écrit en dur.    ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+-->
+<style>
+  /* La colonne : libellé, boîte, puis ce qu'on dit dessous. */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-gap-condensed);
+  }
+
+  /* ── La boîte. C'est `_Fields` dans Figma : un cadre, qui porte le fond, le trait
+        et les marges, et qui contient l'icône et le texte. Le <input> n'a, lui, ni
+        fond ni trait : il se fond dans la boîte. ───────────────────────────────── */
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--stack-control-small-gap);
+    padding-inline: var(--stack-control-small-padding-inline-normal);
+    padding-block: var(--stack-control-medium-padding-block);
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-small);
+    /* L'icône du slot lit cette taille, par héritage. */
+    --icon-size: var(--icon-medium);
+  }
+
+  /* La taille ne change que le rembourrage vertical : le texte reste de la même taille. */
+  .field-small .input-row {
+    padding-block: var(--stack-control-small-padding-block);
+  }
+  .field-large .input-row {
+    padding-block: var(--stack-control-large-padding-block);
+  }
+
+  /* Le focus : seul le trait change de couleur, comme dans Figma (`focus=true`). Le
+     <input> ne dessine pas son anneau lui-même, c'est la boîte qui le porte. */
+  .input-row:focus-within {
+    border-color: var(--color-border-base-focus);
+  }
+
+  .icon {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--color-icon-base-default);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0; /* sans cela, un champ long refuse de rétrécir dans sa boîte */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--text-body-medium-line-height);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+  }
+
+  input::placeholder {
+    color: var(--color-text-base-muted);
+  }
+
+  /* ── Les quatre statuts. Le fond et le trait changent sur la boîte, l'encre sur le
+        texte et sur l'icône. Au focus, le trait passe de « default » à « strong ». ── */
+  [data-status='error'] .input-row {
+    background: var(--color-background-danger-subtlest);
+    border-color: var(--color-border-danger-default);
+  }
+  [data-status='error'] .input-row:focus-within {
+    border-color: var(--color-border-danger-strong);
+  }
+  [data-status='error'] input {
+    color: var(--color-text-danger-on-subtle);
+  }
+  [data-status='error'] .icon {
+    color: var(--color-icon-danger-on-subtle);
+  }
+
+  [data-status='success'] .input-row {
+    background: var(--color-background-success-subtlest);
+    border-color: var(--color-border-success-default);
+  }
+  [data-status='success'] .input-row:focus-within {
+    border-color: var(--color-border-success-strong);
+  }
+  [data-status='success'] input {
+    color: var(--color-text-success-on-subtle);
+  }
+  [data-status='success'] .icon {
+    color: var(--color-icon-success-on-subtle);
+  }
+
+  [data-status='disabled'] .input-row {
+    background: var(--color-background-base-input-disabled);
+    border-color: var(--color-border-base-input-disabled);
+  }
+  [data-status='disabled'] input {
+    color: var(--color-text-base-disabled);
+    cursor: not-allowed;
+  }
+  [data-status='disabled'] .icon {
+    color: var(--color-icon-base-disabled);
+  }
+
+  /* Le compteur : le petit texte de `_FieldCounter`, en gris, et en rouge si on dépasse. */
+  .counter {
+    margin: 0;
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--base-text-weight-regular);
+    line-height: var(--text-caption-line-height);
+    color: var(--color-text-base-muted);
+  }
+  [data-status='disabled'] .counter {
+    color: var(--color-text-base-disabled);
+  }
+  [data-status='error'] .counter {
+    color: var(--color-text-danger-default);
+  }
+</style>
+
+<!--
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║  PARTIE 4 — LE SCRIPT DU NAVIGATEUR                                     ║
+  ║  Le script de la PARTIE 1 ne tourne qu'une fois, à la fabrication de    ║
+  ║  la page. Ce qui doit bouger pendant qu'on tape — le « 12/500 » qui     ║
+  ║  monte — demande un `<script>` ici. Astro n'en envoie qu'un exemplaire, ║
+  ║  même si la page pose dix champs.                                       ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+-->
+<script>
+  document.querySelectorAll<HTMLElement>('[data-counter]').forEach((counter) => {
+    const input = counter.closest('.field')?.querySelector('input');
+    if (!input) return;
+    const max = counter.dataset.max;
+    input.addEventListener('input', () => {
+      counter.textContent = `${input.value.length}/${max}`;
+    });
+  });
+</script>
