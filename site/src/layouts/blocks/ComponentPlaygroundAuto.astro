@@ -23,6 +23,7 @@ interface Reglage {
   description: string;
   default?: string;
   exemple?: string;
+  groupe?: string;
 }
 
 interface Props {
@@ -77,6 +78,12 @@ const reglagesDe = (c: Combinaison, avecRepere: boolean) =>
     }),
   );
 
+// Les réglages se rangent par section, comme dans le Storybook de Primer : la section du composant
+// d'abord, puis celles de ses pièces (libellé, aide, message), lues dans `@group`.
+const parGroupe = new Map<string, Reglage[]>();
+for (const r of reglables) parGroupe.set(r.groupe ?? nom, [...(parGroupe.get(r.groupe ?? nom) ?? []), r]);
+const groupes = [...parGroupe.entries()].sort(([a], [b]) => (a === nom ? -1 : b === nom ? 1 : 0));
+
 const config = {
   nom,
   axes: axes.map((r) => r.nom),
@@ -94,52 +101,60 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
     <Composant {...reglagesDe({}, false)} />
   </div>
 
-  <table class="controles">
-    <thead>
-      <tr><th scope="col">Name</th><th scope="col">Control</th></tr>
-    </thead>
-    <tbody>
-      {reglables.map((r) => {
-        const sorte = sorteDe(r)!;
-        const defaut = defautDe(r);
-        return (
-          <tr>
-            <th scope="row">
-              <code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}
-            </th>
-            <td>
-              {sorte === 'choix' && (
-                <fieldset class="options">
-                  <legend>{r.nom}</legend>
-                  {r.valeurs!.map((v) => (
-                    <label>
-                      <input type="radio" name={`reglage-${r.nom}`} data-reglage={r.nom} value={v} checked={v === defaut} /> {v}
-                    </label>
-                  ))}
-                </fieldset>
-              )}
-              {sorte === 'oui-non' && (
-                <fieldset class="options bascule">
-                  <legend>{r.nom}</legend>
-                  {[
-                    ['false', 'Non'],
-                    ['true', 'Oui'],
-                  ].map(([v, texte]) => (
-                    <label>
-                      <input type="radio" name={`reglage-${r.nom}`} data-reglage={r.nom} value={v} checked={String(defaut) === v} />
-                      <span>{texte}</span>
-                    </label>
-                  ))}
-                </fieldset>
-              )}
-              {sorte === 'texte' && <input type="text" data-reglage={r.nom} value={String(defaut)} aria-label={r.nom} />}
-              {sorte === 'nombre' && <input type="number" data-reglage={r.nom} value={String(defaut)} aria-label={r.nom} />}
-            </td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
+  <!-- Les réglages, rangés par section : un nom à gauche, son contrôle à droite. -->
+  <div class="reglages">
+    <div class="entete-reglages">
+      <span>Name</span>
+      <span>Control</span>
+      <button type="button" data-reinitialiser aria-label="Réinitialiser les réglages" title="Réinitialiser">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 6h7a3 3 0 1 1 0 6H6M3 6l2.5-2.5M3 6l2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+    {groupes.map(([groupe, liste]) => (
+      <details class="groupe" open>
+        <summary>{groupe}</summary>
+        {liste.map((r) => {
+          const sorte = sorteDe(r)!;
+          const defaut = defautDe(r);
+          return (
+            <div class="ligne">
+              <div class="nom">
+                <code title={r.description}>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}
+              </div>
+              <div class="controle">
+                {sorte === 'choix' && (
+                  <fieldset class="options">
+                    <legend>{r.nom}</legend>
+                    {r.valeurs!.map((v) => (
+                      <label>
+                        <input type="radio" name={`reglage-${r.nom}`} data-reglage={r.nom} value={v} checked={v === defaut} /> {v}
+                      </label>
+                    ))}
+                  </fieldset>
+                )}
+                {sorte === 'oui-non' && (
+                  <fieldset class="options bascule">
+                    <legend>{r.nom}</legend>
+                    {[
+                      ['false', 'False'],
+                      ['true', 'True'],
+                    ].map(([v, texte]) => (
+                      <label>
+                        <input type="radio" name={`reglage-${r.nom}`} data-reglage={r.nom} value={v} checked={String(defaut) === v} />
+                        <span>{texte}</span>
+                      </label>
+                    ))}
+                  </fieldset>
+                )}
+                {sorte === 'texte' && <input type="text" data-reglage={r.nom} value={String(defaut)} placeholder="Modifier le texte…" aria-label={r.nom} />}
+                {sorte === 'nombre' && <input type="number" data-reglage={r.nom} value={String(defaut)} aria-label={r.nom} />}
+              </div>
+            </div>
+          );
+        })}
+      </details>
+    ))}
+  </div>
   {nonReglables.length > 0 && (
     <p class="note">Réglages qu'on ne peut pas essayer ici : {nonReglables.map((r) => <code>{r.nom}</code>)}.</p>
   )}
@@ -184,40 +199,81 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
     border-radius: var(--border-radius-small);
   }
 
-  .controles {
-    width: 100%;
-    border-collapse: collapse;
+  /* Le panneau des réglages, comme celui du Storybook de Primer : une ligne d'en-tête, des
+     sections repliables, puis un nom à gauche et son contrôle à droite. */
+  .reglages {
+    margin-block-start: var(--base-16);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
     font-size: var(--text-body-small-size);
   }
-  .controles th,
-  .controles td {
+  .entete-reglages {
+    display: grid;
+    grid-template-columns: 40% minmax(0, 1fr) auto;
+    align-items: center;
+    padding: var(--base-8) var(--base-16);
+    color: var(--color-text-base-muted);
+    font-weight: var(--base-text-weight-medium);
+  }
+  .entete-reglages button {
+    padding: var(--base-4);
+    border: 0;
+    border-radius: var(--border-radius-small);
+    background: transparent;
+    color: inherit;
+    line-height: 0;
+    cursor: pointer;
+  }
+  .groupe > summary {
+    display: flex;
+    align-items: center;
+    gap: var(--base-8);
+    padding: var(--base-8) var(--base-16);
+    background: var(--color-surface-raised);
+    border-block: var(--border-width-default) solid var(--color-border-base-subtle);
+    color: var(--color-text-base-muted);
+    font-size: var(--text-caption-size);
+    font-weight: var(--base-text-weight-bold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+  }
+  .groupe > summary::-webkit-details-marker {
+    display: none;
+  }
+  .groupe > summary::before {
+    content: '';
+    inline-size: 6px;
+    block-size: 6px;
+    border-inline-end: 1.5px solid currentColor;
+    border-block-end: 1.5px solid currentColor;
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.1s;
+  }
+  .groupe:not([open]) > summary::before {
+    transform: rotate(-45deg);
+  }
+  .ligne {
+    display: grid;
+    grid-template-columns: 40% minmax(0, 1fr);
+    gap: var(--base-16);
     padding: var(--base-12) var(--base-16);
     border-block-end: var(--border-width-default) solid var(--color-border-base-subtle);
-    text-align: start;
-    vertical-align: top;
   }
-  .controles thead th {
-    color: var(--color-text-base-muted);
+  .nom {
     font-weight: var(--base-text-weight-medium);
-  }
-  .controles tbody th {
-    inline-size: 40%;
-    font-weight: var(--base-text-weight-medium);
-  }
-  small {
-    display: block;
-    margin-block-start: var(--base-4);
-    color: var(--color-text-base-muted);
-    font-weight: var(--base-text-weight-regular);
   }
   .requis {
     color: var(--color-text-danger-default);
   }
 
+  /* Un choix : les valeurs en colonne, comme chez Primer. */
   .options {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--base-12) var(--base-16);
+    flex-direction: column;
+    gap: var(--base-8);
     margin: 0;
     padding: 0;
     border: 0;
@@ -236,8 +292,9 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
     cursor: pointer;
   }
 
-  /* Oui / non : deux pastilles, la choisie est pleine. */
+  /* Vrai / faux : deux pastilles côte à côte, la choisie est pleine. */
   .bascule {
+    flex-direction: row;
     gap: 0;
     inline-size: fit-content;
     border: var(--border-width-default) solid var(--color-border-base-input);
@@ -251,18 +308,20 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
   .bascule span {
     display: block;
     padding: var(--base-4) var(--base-16);
+    color: var(--color-text-base-muted);
   }
   .bascule input:checked + span {
     background: var(--color-background-primary-subtle);
-    font-weight: var(--base-text-weight-medium);
+    color: var(--color-text-base-default);
+    font-weight: var(--base-text-weight-bold);
   }
   .bascule input:focus-visible + span {
     outline: var(--border-width-thick) solid var(--color-border-base-focus);
     outline-offset: -2px;
   }
 
-  .controles input[type='text'],
-  .controles input[type='number'] {
+  .controle input[type='text'],
+  .controle input[type='number'] {
     inline-size: 100%;
     padding: var(--base-8) var(--base-12);
     border: var(--border-width-default) solid var(--color-border-base-input);
@@ -374,6 +433,16 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
       if (r.sorte === 'oui-non') etat[r.nom] = champ.value === 'true';
       else if (r.sorte === 'nombre') etat[r.nom] = champ.value === '' ? '' : Number(champ.value);
       else etat[r.nom] = champ.value;
+      afficher();
+    });
+
+    racine.querySelector<HTMLButtonElement>('[data-reinitialiser]')!.addEventListener('click', () => {
+      for (const r of config.reglages) etat[r.nom] = r.defaut;
+      racine.querySelectorAll<HTMLInputElement>('input[data-reglage]').forEach((champ) => {
+        const defaut = etat[champ.dataset.reglage!];
+        if (champ.type === 'radio') champ.checked = String(defaut) === champ.value;
+        else champ.value = String(defaut);
+      });
       afficher();
     });
 

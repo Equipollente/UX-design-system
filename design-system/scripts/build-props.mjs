@@ -5,7 +5,7 @@
 //   1. le script du composant (entre les deux `---` de son .astro) : `interface Props`,
 //      ou `type Props = Nom` avec Nom importé d'un fichier .ts voisin (lib/input.ts) ;
 //   2. les commentaires JSDoc de chaque prop : la phrase, `@default`, `@example` (la valeur
-//      d'essai du playground), `@since`,
+//      d'essai du playground), `@group` (la section du playground où le réglage se range), `@since`,
 //      `@deprecated`, `@experimental` ; celui du composant donne son statut ;
 //   3. le modèle, pour les slots (`<slot />`, `<slot name="x" />`).
 //
@@ -43,6 +43,7 @@ const etiquettes = (noeud) => {
     const nom = tag.tagName.text;
     const texte = (ts.getTextOfJSDocComment(tag.comment) ?? '').trim();
     if (nom === 'default') out.default = texte.replace(/^['"`]|['"`]$/g, '');
+    else if (nom === 'group') out.groupe = texte;
     else if (nom === 'example') out.exemple = texte.replace(/^['"`]|['"`]$/g, '');
     else if (nom === 'since') out.since = texte;
     else if (nom === 'deprecated') out.deprecated = texte || true;

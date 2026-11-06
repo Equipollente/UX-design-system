@@ -37,6 +37,7 @@ export interface InputProps extends NativeAttributes {
   id: string;
   /**
    * Le texte du libellé.
+   * @group Libellé
    * @example Libellé
    */
   label: string;
@@ -78,11 +79,13 @@ export interface InputProps extends NativeAttributes {
   size?: InputSize;
   /**
    * L'aide : ce que le champ attend. Reste affichée, même en erreur.
+   * @group Aide
    * @example Ce que le champ attend.
    */
   hint?: string;
   /**
    * Le texte qui accompagne `status="error"` ou `status="success"`.
+   * @group Message
    * @example Le message du statut.
    */
   message?: string;
