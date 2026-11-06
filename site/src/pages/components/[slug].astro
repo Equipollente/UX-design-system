@@ -1,0 +1,46 @@
+---
+// La page d'un composant, fabriquée d'après son code : une page par composant qui dit, avec des
+// `@example`, comment l'essayer (voir _component-pages.ts). Aucun fichier à écrire pour un
+// nouveau composant. Ce qui reste à la main, c'est le texte d'usage — à venir, dans la
+// collection de contenu.
+//
+// La page est celle de la maquette Figma : titre, Overview des variantes, Playground.
+import ComponentPageLayout from '../../layouts/ComponentPageLayout.astro';
+import ComponentIntroduction from '../../layouts/blocks/ComponentIntroduction.astro';
+import ComponentVariantes from '../../layouts/blocks/ComponentVariantes.astro';
+import ComponentPlaygroundAuto from '../../layouts/blocks/ComponentPlaygroundAuto.astro';
+import components from 'ux-design-system/data/components.json';
+import { withBase } from 'ux-design-system/lib/url';
+import { componentPageGroups, generatedPages } from '../_component-pages';
+
+export function getStaticPaths() {
+  return generatedPages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props;
+
+// Les composants du paquet, chargés d'avance : Astro doit connaître chaque fichier à la construction.
+const modules = import.meta.glob<{ default: any }>('../../../../design-system/src/components/*.astro', { eager: true });
+const Composant = Object.entries(modules).find(([chemin]) => chemin.endsWith(`/${page.nom}.astro`))![1].default;
+
+const fiche = (components as unknown as Record<string, { props: any[]; experimental?: boolean }>)[page.nom];
+---
+
+<ComponentPageLayout
+  title={page.title}
+  description={page.description}
+  sidebarId="component-pages-sidebar"
+  sidebarTitle="UX design system"
+  sidebarGroups={componentPageGroups}
+  current={withBase(`/components/${page.slug}`)}
+  sidebarLabel="Navigation des composants"
+>
+  <div slot="header">
+    <ComponentIntroduction title={page.title} description={page.description} />
+  </div>
+
+  <div slot="content">
+    <ComponentVariantes reglages={fiche.props} Composant={Composant} />
+    <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} />
+  </div>
+</ComponentPageLayout>

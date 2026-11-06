@@ -1,0 +1,398 @@
+---
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  Le playground d'un composant, fabriqué tout seul d'après ses réglages.   ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+//
+// Il montre trois choses, comme le Storybook de Primer :
+//   · le composant, au-dessus (le « canvas ») ;
+//   · un tableau « Controls » : un réglage par ligne, avec le bon contrôle ;
+//   · un onglet « Code » : ce qu'il faut écrire pour obtenir ce qu'on voit.
+//
+// Le problème : un composant Astro n'est fabriqué qu'une fois, quand le site est construit.
+// Il ne sait pas se refabriquer quand on change un réglage dans le navigateur. La solution
+// tient en deux gestes :
+//
+//   1. À la construction, on fabrique D'AVANCE toutes les combinaisons des réglages à choix
+//      limité (status × size × type…), chacune dans un <template> caché. Le navigateur n'en
+//      montre qu'une à la fois : celle qui correspond aux contrôles.
+//   2. Les textes (libellé, aide, valeur…) ne peuvent pas être fabriqués d'avance : on y
+//      met un REPÈRE (⟦label⟧) et le navigateur le remplace par ce qui est tapé.
+//
+// Le nombre de combinaisons est plafonné : au-delà, les derniers réglages restent fixes.
+
+import Tabs from 'ux-design-system/components/tabs/Tabs.astro';
+import TabList from 'ux-design-system/components/tabs/TabList.astro';
+import TabButton from 'ux-design-system/components/tabs/TabButton.astro';
+import TabPanel from 'ux-design-system/components/tabs/TabPanel.astro';
+
+// Ce que build-props.mjs a lu dans le code du composant.
+interface Reglage {
+  nom: string;
+  type: string;
+  valeurs?: string[];
+  requis: boolean;
+  description: string;
+  default?: string;
+  exemple?: string;
+}
+
+interface Props {
+  /** Le nom du composant, tel qu'on l'importe : `InputPG`. */
+  nom: string;
+  /** Ses réglages, lus dans son code. */
+  reglages: Reglage[];
+  /** Le composant lui-même. */
+  Composant: any; // un composant Astro : aucun type d'Astro ne le décrit
+}
+
+const { nom, reglages, Composant } = Astro.props;
+
+const PLAFOND = 300;
+const repere = (n: string) => `⟦${n}⟧`;
+
+// ── Quel contrôle pour quel réglage ──────────────────────────────────────────
+type Sorte = 'choix' | 'oui-non' | 'nombre' | 'texte';
+const sorteDe = (r: Reglage): Sorte | null =>
+  r.valeurs ? 'choix' : r.type === 'boolean' ? 'oui-non' : r.type === 'number' ? 'nombre' : r.type === 'string' ? 'texte' : null;
+
+const reglables = reglages.filter((r) => sorteDe(r));
+const nonReglables = reglages.filter((r) => !sorteDe(r));
+
+// La valeur de départ de chaque réglage.
+const defautDe = (r: Reglage): string | boolean | number => {
+  const sorte = sorteDe(r);
+  if (sorte === 'choix') return r.default ?? r.valeurs![0];
+  if (sorte === 'oui-non') return r.default === 'true';
+  if (sorte === 'nombre') return Number(r.exemple ?? r.default ?? 0);
+  return r.exemple ?? r.default ?? '';
+};
+
+// ── Les combinaisons à fabriquer d'avance ────────────────────────────────────
+// Un « axe » est un réglage à choix limité : une liste de mots, ou oui / non.
+const valeursDe = (r: Reglage): (string | boolean)[] => (r.valeurs ?? [false, true]);
+let axes = reglables.filter((r) => ['choix', 'oui-non'].includes(sorteDe(r)!));
+const figes: string[] = [];
+const produit = (liste: Reglage[]) => liste.reduce((n, r) => n * valeursDe(r).length, 1);
+while (produit(axes) > PLAFOND) figes.push(axes.pop()!.nom);
+
+type Combinaison = Record<string, string | boolean>;
+const combinaisons = axes.reduce<Combinaison[]>(
+  (acc, r) => acc.flatMap((c) => valeursDe(r).map((v) => ({ ...c, [r.nom]: v }))),
+  [{}],
+);
+const cleDe = (c: Combinaison) => axes.map((r) => String(c[r.nom])).join('|');
+
+// Les réglages à passer au composant pour une combinaison : les axes prennent leur valeur,
+// les textes et les nombres prennent un repère, le reste garde son défaut.
+const reglagesDe = (c: Combinaison, avecRepere: boolean) =>
+  Object.fromEntries(
+    reglables.map((r) => {
+      const sorte = sorteDe(r);
+      if (c[r.nom] !== undefined) return [r.nom, c[r.nom]];
+      if (avecRepere && (sorte === 'texte' || sorte === 'nombre')) return [r.nom, repere(r.nom)];
+      return [r.nom, defautDe(r)];
+    }),
+  );
+
+const depart = Object.fromEntries(reglables.map((r) => [r.nom, defautDe(r)]));
+
+// Ce que le navigateur doit savoir pour faire marcher le playground.
+const config = {
+  nom,
+  axes: axes.map((r) => r.nom),
+  reglages: reglables.map((r) => ({ nom: r.nom, sorte: sorteDe(r), defaut: defautDe(r), requis: r.requis })),
+};
+const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
+
+const id = 'playground';
+---
+
+<section class="playground" data-playground>
+  <h2>Playground</h2>
+
+  <!-- Le canvas : le composant. Sans JavaScript, on voit au moins sa version de départ. -->
+  <div class="canvas" data-canvas aria-live="polite">
+    <Composant {...reglagesDe({}, false)} />
+  </div>
+
+  <div class="panneau">
+    <Tabs>
+      <TabList label="Réglages et code">
+        <TabButton id={`${id}-controles-tab`} controls={`${id}-controles`} selected>Controls</TabButton>
+        <TabButton id={`${id}-code-tab`} controls={`${id}-code`}>Code</TabButton>
+      </TabList>
+
+      <!-- Controls : un réglage par ligne, avec le contrôle qui lui convient. -->
+      <TabPanel id={`${id}-controles`} labelledby={`${id}-controles-tab`}>
+        <table class="controles">
+          <thead>
+            <tr><th scope="col">Name</th><th scope="col">Control</th></tr>
+          </thead>
+          <tbody>
+            {reglables.map((r) => {
+              const sorte = sorteDe(r)!;
+              const defaut = defautDe(r);
+              return (
+                <tr>
+                  <th scope="row">
+                    <code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}
+                    {r.description && <small>{r.description}</small>}
+                  </th>
+                  <td>
+                    {sorte === 'choix' && (
+                      <fieldset class="options">
+                        <legend>{r.nom}</legend>
+                        {r.valeurs!.map((v) => (
+                          <label>
+                            <input type="radio" name={`${id}-${r.nom}`} data-reglage={r.nom} value={v} checked={v === defaut} /> {v}
+                          </label>
+                        ))}
+                      </fieldset>
+                    )}
+                    {sorte === 'oui-non' && (
+                      <fieldset class="options bascule">
+                        <legend>{r.nom}</legend>
+                        {['false', 'true'].map((v) => (
+                          <label>
+                            <input type="radio" name={`${id}-${r.nom}`} data-reglage={r.nom} value={v} checked={String(defaut) === v} />
+                            <span>{v === 'true' ? 'True' : 'False'}</span>
+                          </label>
+                        ))}
+                      </fieldset>
+                    )}
+                    {sorte === 'texte' && <input type="text" data-reglage={r.nom} value={String(defaut)} aria-label={r.nom} />}
+                    {sorte === 'nombre' && <input type="number" data-reglage={r.nom} value={String(defaut)} aria-label={r.nom} />}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {nonReglables.length > 0 && (
+          <p class="note">Pas réglables ici : {nonReglables.map((r) => <code>{r.nom}</code>)}.</p>
+        )}
+        {figes.length > 0 && (
+          <p class="note">
+            Trop de combinaisons : {figes.map((n) => <code>{n}</code>)} reste{figes.length > 1 ? 'nt' : ''} à sa valeur de départ.
+          </p>
+        )}
+      </TabPanel>
+
+      <!-- Code : ce qu'il faut écrire pour obtenir ce qu'on voit. Rempli par le navigateur. -->
+      <TabPanel id={`${id}-code`} labelledby={`${id}-code-tab`} hidden>
+        <pre><code data-code></code></pre>
+      </TabPanel>
+    </Tabs>
+  </div>
+
+  <!-- Les combinaisons, fabriquées d'avance et cachées. Le navigateur en pioche une. -->
+  <div hidden>
+    {combinaisons.map((c) => (
+      <template data-combinaison={cleDe(c)}>
+        <Composant {...reglagesDe(c, true)} />
+      </template>
+    ))}
+  </div>
+
+  <script is:inline type="application/json" data-config set:html={configJson} />
+</section>
+
+<style>
+  .playground {
+    margin-block-start: var(--base-32);
+  }
+  h2 {
+    font-size: var(--text-title-large-size);
+  }
+
+  /* Le canvas : un fond neutre, pour voir le composant tel qu'il est. */
+  .canvas {
+    padding: var(--base-32);
+    background: var(--color-surface-raised);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-small);
+  }
+
+  .panneau {
+    margin-block-start: var(--base-16);
+  }
+
+  .controles {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-body-small-size);
+  }
+  .controles th,
+  .controles td {
+    padding: var(--base-12) var(--base-16);
+    border-block-end: var(--border-width-default) solid var(--color-border-base-subtle);
+    text-align: start;
+    vertical-align: top;
+  }
+  .controles thead th {
+    color: var(--color-text-base-muted);
+    font-weight: var(--base-text-weight-medium);
+  }
+  .controles tbody th {
+    inline-size: 40%;
+    font-weight: var(--base-text-weight-medium);
+  }
+  small {
+    display: block;
+    margin-block-start: var(--base-4);
+    color: var(--color-text-base-muted);
+    font-weight: var(--base-text-weight-regular);
+  }
+  .requis {
+    color: var(--color-text-danger-default);
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--base-12) var(--base-16);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .options legend {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .options label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--base-8);
+    cursor: pointer;
+  }
+
+  /* Vrai / faux : deux pastilles, la choisie est pleine. */
+  .bascule {
+    gap: 0;
+    inline-size: fit-content;
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bascule input {
+    position: absolute;
+    opacity: 0;
+  }
+  .bascule span {
+    display: block;
+    padding: var(--base-4) var(--base-16);
+  }
+  .bascule input:checked + span {
+    background: var(--color-background-primary-subtle);
+    font-weight: var(--base-text-weight-medium);
+  }
+  .bascule input:focus-visible + span {
+    outline: var(--border-width-thick) solid var(--color-border-base-focus);
+    outline-offset: -2px;
+  }
+
+  .controles input[type='text'],
+  .controles input[type='number'] {
+    inline-size: 100%;
+    padding: var(--base-8) var(--base-12);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-small);
+    font: inherit;
+  }
+
+  .note {
+    color: var(--color-text-base-muted);
+    font-size: var(--text-body-small-size);
+  }
+  pre {
+    margin: 0;
+    padding: var(--base-16);
+    overflow-x: auto;
+    background: var(--color-surface-raised);
+    border-radius: var(--border-radius-small);
+  }
+</style>
+
+<script>
+  // ── Ce que le navigateur fait : choisir la bonne combinaison, remplacer les repères,
+  //    et écrire le code correspondant. ───────────────────────────────────────────────
+
+  type Valeur = string | boolean | number;
+  interface Reglage {
+    nom: string;
+    sorte: 'choix' | 'oui-non' | 'nombre' | 'texte';
+    defaut: Valeur;
+    requis: boolean;
+  }
+  interface Config {
+    nom: string;
+    axes: string[];
+    reglages: Reglage[];
+  }
+
+  /** Remplace les repères ⟦nom⟧ par ce qui est tapé, dans les textes et dans les attributs. */
+  function remplacer(racine: DocumentFragment, etat: Record<string, Valeur>) {
+    const sub = (texte: string) => texte.replace(/⟦([^⟧]+)⟧/g, (_, nom) => String(etat[nom] ?? ''));
+    const marcheur = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT);
+    for (let n = marcheur.nextNode(); n; n = marcheur.nextNode()) n.nodeValue = sub(n.nodeValue ?? '');
+    racine.querySelectorAll('*').forEach((el) => {
+      for (const attr of Array.from(el.attributes)) if (attr.value.includes('⟦')) el.setAttribute(attr.name, sub(attr.value));
+    });
+  }
+
+  /** Le code à écrire pour obtenir ce qu'on voit : seulement ce qui s'écarte du départ. */
+  function code(config: Config, etat: Record<string, Valeur>) {
+    const lignes: string[] = [];
+    for (const r of config.reglages) {
+      const v = etat[r.nom];
+      if (r.sorte === 'texte') {
+        if (v !== '') lignes.push(`${r.nom}="${v}"`);
+      } else if (r.sorte === 'oui-non') {
+        if (v !== r.defaut) lignes.push(v ? r.nom : `${r.nom}={false}`);
+      } else if (r.sorte === 'nombre') {
+        if (v !== '' && !Number.isNaN(v)) lignes.push(`${r.nom}={${v}}`);
+      } else if (v !== r.defaut || r.requis) {
+        lignes.push(`${r.nom}="${v}"`);
+      }
+    }
+    const importation = `import ${config.nom} from 'ux-design-system/components/${config.nom}.astro';`;
+    return `${importation}\n\n<${config.nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-playground]').forEach((racine) => {
+    const config: Config = JSON.parse(racine.querySelector('[data-config]')!.textContent!);
+    const canvas = racine.querySelector<HTMLElement>('[data-canvas]')!;
+    const zoneCode = racine.querySelector<HTMLElement>('[data-code]')!;
+    const etat: Record<string, Valeur> = Object.fromEntries(config.reglages.map((r) => [r.nom, r.defaut]));
+
+    function afficher() {
+      const cle = config.axes.map((nom) => String(etat[nom])).join('|');
+      const modele = Array.from(racine.querySelectorAll<HTMLTemplateElement>('template[data-combinaison]')).find(
+        (t) => t.dataset.combinaison === cle,
+      );
+      if (modele) {
+        const copie = modele.content.cloneNode(true) as DocumentFragment;
+        remplacer(copie, etat);
+        canvas.replaceChildren(copie);
+      }
+      zoneCode.textContent = code(config, etat);
+    }
+
+    // Un contrôle bouge : on note sa valeur, puis on réaffiche.
+    racine.addEventListener('input', (event) => {
+      const champ = event.target;
+      if (!(champ instanceof HTMLInputElement) || !champ.dataset.reglage) return;
+      const r = config.reglages.find((x) => x.nom === champ.dataset.reglage);
+      if (!r) return;
+      if (r.sorte === 'oui-non') etat[r.nom] = champ.value === 'true';
+      else if (r.sorte === 'nombre') etat[r.nom] = champ.value === '' ? '' : Number(champ.value);
+      else etat[r.nom] = champ.value;
+      afficher();
+    });
+
+    afficher();
+  });
+</script>

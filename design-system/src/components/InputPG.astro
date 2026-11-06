@@ -231,12 +231,12 @@ const hasIcon = Astro.slots.has('icon-start');
   ╚═════════════════════════════════════════════════════════════════════════╝
 -->
 <script>
-  document.querySelectorAll<HTMLElement>('[data-counter]').forEach((counter) => {
-    const input = counter.closest('.field')?.querySelector('input');
-    if (!input) return;
-    const max = counter.dataset.max;
-    input.addEventListener('input', () => {
-      counter.textContent = `${input.value.length}/${max}`;
-    });
+  // Un seul écouteur pour toute la page, posé sur le document : il marche aussi pour un
+  // champ ajouté après coup (le playground de la doc en insère).
+  document.addEventListener('input', (event) => {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement)) return;
+    const counter = input.closest('.field')?.querySelector<HTMLElement>('[data-counter]');
+    if (counter) counter.textContent = `${input.value.length}/${counter.dataset.max}`;
   });
 </script>

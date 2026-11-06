@@ -934,13 +934,43 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent."
+        "description": "Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent.",
+        "exemple": "nom"
       },
       {
         "nom": "label",
         "type": "string",
         "requis": true,
-        "description": "Le texte du libellé."
+        "description": "Le texte du libellé.",
+        "exemple": "Libellé"
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que la personne a déjà tapé.",
+        "exemple": "Valeur"
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Un exemple, pas une consigne : il disparaît à la première frappe.",
+        "exemple": "Un exemple"
+      },
+      {
+        "nom": "maxlength",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de caractères au plus. Le compteur en a besoin.",
+        "exemple": "40"
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose l'astérisque sur le libellé et rend le champ obligatoire.",
+        "default": "false"
       },
       {
         "nom": "type",
@@ -986,13 +1016,15 @@
         "nom": "hint",
         "type": "string",
         "requis": false,
-        "description": "L'aide : ce que le champ attend. Reste affichée, même en erreur."
+        "description": "L'aide : ce que le champ attend. Reste affichée, même en erreur.",
+        "exemple": "Ce que le champ attend."
       },
       {
         "nom": "message",
         "type": "string",
         "requis": false,
-        "description": "Le texte qui accompagne `status=\"error\"` ou `status=\"success\"`."
+        "description": "Le texte qui accompagne `status=\"error\"` ou `status=\"success\"`.",
+        "exemple": "Le message du statut."
       },
       {
         "nom": "counter",

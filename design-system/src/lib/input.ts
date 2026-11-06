@@ -30,10 +30,36 @@ type NativeAttributes = Omit<HTMLAttributes<'input'>, 'type' | 'size' | 'disable
  * @experimental
  */
 export interface InputProps extends NativeAttributes {
-  /** Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent. */
+  /**
+   * Lie le libellé à la boîte. Obligatoire : c'est ce que les lecteurs d'écran annoncent.
+   * @example nom
+   */
   id: string;
-  /** Le texte du libellé. */
+  /**
+   * Le texte du libellé.
+   * @example Libellé
+   */
   label: string;
+  /**
+   * Ce que la personne a déjà tapé.
+   * @example Valeur
+   */
+  value?: string;
+  /**
+   * Un exemple, pas une consigne : il disparaît à la première frappe.
+   * @example Un exemple
+   */
+  placeholder?: string;
+  /**
+   * Le nombre de caractères au plus. Le compteur en a besoin.
+   * @example 40
+   */
+  maxlength?: number;
+  /**
+   * Pose l'astérisque sur le libellé et rend le champ obligatoire.
+   * @default false
+   */
+  required?: boolean;
   /**
    * Ce que le champ accepte. Il choisit le clavier sur mobile et la validation du navigateur.
    * @default 'text'
@@ -50,9 +76,15 @@ export interface InputProps extends NativeAttributes {
    * @default 'medium'
    */
   size?: InputSize;
-  /** L'aide : ce que le champ attend. Reste affichée, même en erreur. */
+  /**
+   * L'aide : ce que le champ attend. Reste affichée, même en erreur.
+   * @example Ce que le champ attend.
+   */
   hint?: string;
-  /** Le texte qui accompagne `status="error"` ou `status="success"`. */
+  /**
+   * Le texte qui accompagne `status="error"` ou `status="success"`.
+   * @example Le message du statut.
+   */
   message?: string;
   /**
    * Affiche « 12/500 » sous la boîte. Demande `maxlength`.
