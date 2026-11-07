@@ -70,11 +70,23 @@
 .ds-field-control[aria-invalid='true'] {
   background: var(--color-background-danger-subtlest);
   border-color: var(--color-border-danger-default);
+  /* Le texte prend l'encre « on-subtle » du verdict, valeur comme exemple : c'est ce que
+   * `_FieldValue` dessine (918:2412 est le libellé, 933:7833 le contenu). */
+  color: var(--color-text-danger-on-subtle);
 }
 
 .ds-field-control[data-validation='success'] {
   background: var(--color-background-success-subtlest);
   border-color: var(--color-border-success-default);
+  color: var(--color-text-success-on-subtle);
+}
+
+.ds-field-control[aria-invalid='true']::placeholder {
+  color: var(--color-text-danger-on-subtle);
+}
+
+.ds-field-control[data-validation='success']::placeholder {
+  color: var(--color-text-success-on-subtle);
 }
 
 /* — focus — Un anneau de 2 px dessiné vers l'intérieur : il couvre le trait au lieu de
@@ -100,4 +112,8 @@
   border-color: var(--color-border-base-input-disabled);
   color: var(--color-text-base-disabled);
   cursor: not-allowed;
+}
+
+.ds-field-control:disabled::placeholder {
+  color: var(--color-text-base-disabled);
 }
