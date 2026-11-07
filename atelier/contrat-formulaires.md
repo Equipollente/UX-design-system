@@ -250,9 +250,10 @@ reprend pas.
 3. **Le compteur se met à jour à la frappe** : un petit script dans `Textarea`.
 4. **Le survol** : pas dessiné pour `Checkbox`, `Radio` et `Toggle`. Seuls le curseur et le focus
    les distinguent.
+5. **L'anneau de focus fait 2 px partout** et lit `border/width/focus` (alias de `border/width/thick`) :
+   le trait des champs au focus, et l'anneau de la case, du rond et de l'interrupteur.
 
 ## Questions ouvertes pour Judith
 
-1. **L'épaisseur de l'anneau de focus** n'a pas de rôle : le dessin lit `border/width/default` (1)
-   pour le champ et `thick` (2) pour le rond. Un rôle `border/width/focus` dans `NEW Size` règlerait
-   les deux.
+Aucune. Reste à relire le dessin de la liste du `Select` (page ↳ Select Panel) pour en tirer le
+composant, au début de la phase 3.
