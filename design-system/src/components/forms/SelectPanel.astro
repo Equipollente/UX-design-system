@@ -1,0 +1,832 @@
+---
+// SelectPanel — la liste d'un Select : un en-tête, des choix, un pied. À un choix ou à plusieurs.
+//
+// Ce n'est pas un menu : une liste qui s'ouvre sous un champ porte un choix qui se soumet avec le
+// formulaire, pas une commande. Ses lignes sont donc de vrais radios (un choix) ou de vraies cases
+// (plusieurs), et le clavier — Tab, les flèches, Espace, Échap — est celui du navigateur. Le rôle
+// n'est pas le motif `combobox`, qui demanderait de réécrire ce clavier (décision du 07/11). Ce n'est
+// pas non plus le champ qui l'ouvre : la boîte, c'est Select, qui pose cette liste dans un `popover`.
+//
+// Dessin de Judith, page ↳ Select Panel — `_SelectPanel/Base` 955:17742 pour le cadre, `Header`
+// 955:17593 pour l'en-tête, `ActionList.Item/SingleSelect` 955:32289 et `MultiSelect` 955:30748 pour
+// une ligne, `ActionList.GroupHeading` 957:8982 pour un nom de groupe, `Footer` 955:17640 pour le
+// pied. Ce qui n'est pas repris : `ActionList.Item/ActionButton` et `Divider` (aucune vue n'en a
+// besoin), le bouton retour de l'en-tête, et son message d'état.
+//
+// Ce qu'on règle, comme dans Figma :
+// — le type : `single` ou `multiple` (`selection` de `_SelectPanel/List`) ;
+// — la taille : le rembourrage vertical d'une ligne, `small`, `medium` ou `large` ;
+// — l'en-tête : un titre, une description facultative, la recherche facultative ;
+// — le pied : les choix épinglés (`showSelected`, à plusieurs) et la ligne qui crée une option
+//   (`creatable`) ; à plusieurs, `max` éteint les cases restantes quand la limite est atteinte.
+//
+// Posée seule, la liste est une carte dans la page. Avec `popover`, elle est le cadre flottant d'un
+// Select : le navigateur la pose dans sa couche réservée, elle s'accroche à la boîte par l'ancrage CSS
+// (`anchor()`, `anchor-size()`), en prend la largeur, et passe au-dessus quand la place manque.
+//
+// Le script est l'élément personnalisé `<ds-select-panel>` : la recherche et le filtre, l'annonce du
+// nombre de résultats, les choix épinglés, la limite, la création. Il annonce ce qui se passe par des
+// événements — `select-change` (`detail.values`), `select-create` (`detail.value`) — que le Select ou la
+// page écoute. Sans lui, les radios et les cases marchent et partent avec le formulaire.
+//
+// Mesures : rembourrage d'une ligne `stack/control/{xsmall|small|medium}/paddingBlock` selon la taille
+// et `xsmall/paddingInline/normal`, rayon `border/radius/small`, écart `base/8`, cadre à `base/12` de rayon.
+
+import Icon from '../Icon.astro';
+import { buildBlocks, chosenValues, type Option, type OptionGroup } from '../../lib/select';
+
+/**
+ * La liste d'un Select : un en-tête, des choix, un pied. À un choix ou à plusieurs.
+ * @since 0.3.0
+ */
+interface Props {
+  /**
+   * Préfixe des `id` des choix. Unique dans la page.
+   * @example liste
+   */
+  id: string;
+  /**
+   * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses
+   * choix sous un nom, comme un <optgroup> : il ne s'imbrique pas.
+   * @example [{"label":"Peinture","options":["Gouache","Aquarelle","Huile"]},{"label":"Dessin","options":["Encre","Fusain"]},"Collage"]
+   */
+  options: (Option | OptionGroup)[];
+  /**
+   * Un seul choix, ou plusieurs.
+   * @default single
+   */
+  type?: 'single' | 'multiple';
+  /**
+   * Le rembourrage vertical d'une ligne.
+   * @default medium
+   */
+  size?: 'small' | 'medium' | 'large';
+  /**
+   * La valeur choisie à l'ouverture, pour un seul choix.
+   * @playground off
+   */
+  value?: string;
+  /**
+   * Les valeurs choisies à l'ouverture, pour plusieurs.
+   * @playground off
+   */
+  values?: string[];
+  /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
+  name?: string;
+  /**
+   * Le titre de l'en-tête.
+   * @group En-tête
+   * @default Choisir
+   */
+  heading?: string;
+  /**
+   * Une phrase sous le titre, qui dit ce qu'on choisit.
+   * @group En-tête
+   */
+  description?: string;
+  /**
+   * Le nom lu du bouton qui ferme la liste. Il n'existe qu'en `popover`.
+   * @group En-tête
+   * @default Fermer
+   */
+  closeLabel?: string;
+  /**
+   * Pose un champ de recherche dans l'en-tête, qui filtre les choix.
+   * @group Recherche
+   */
+  searchable?: boolean;
+  /**
+   * Le nom lu du champ de recherche. Il n'est pas affiché.
+   * @group Recherche
+   * @default Filtrer les choix
+   */
+  searchLabel?: string;
+  /**
+   * L'invite du champ de recherche.
+   * @group Recherche
+   * @default Rechercher
+   */
+  searchPlaceholder?: string;
+  /**
+   * Ce que dit la liste quand aucun choix ne correspond.
+   * @group Recherche
+   * @default Aucun résultat
+   */
+  noResultsLabel?: string;
+  /**
+   * Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre.
+   * @group Recherche
+   * @default {n} résultats
+   */
+  resultsLabel?: string;
+  /**
+   * Le nombre de résultats quand il n'y en a qu'un.
+   * @group Recherche
+   * @default {n} résultat
+   */
+  resultsOneLabel?: string;
+  /**
+   * Épingle en bas de la liste les choix faits, pour plusieurs choix. On les décoche de là.
+   * @group Pied
+   */
+  showSelected?: boolean;
+  /**
+   * Le nombre de choix à ne pas dépasser, pour plusieurs. Atteint, les cases restantes s'éteignent.
+   * @group Pied
+   */
+  max?: number;
+  /**
+   * Ce que dit la liste quand la limite est atteinte. `{n}` et `{max}` y sont remplacés.
+   * @group Pied
+   * @default Maximum atteint : {n} sur {max}
+   */
+  maxLabel?: string;
+  /**
+   * Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.
+   * @group Pied
+   */
+  creatable?: boolean;
+  /**
+   * La ligne de création au repos.
+   * @group Pied
+   * @default Créer une option
+   */
+  createLabel?: string;
+  /**
+   * La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.
+   * @group Pied
+   * @default Créer « {q} »
+   */
+  createQueryLabel?: string;
+  /**
+   * Ce que dit le navigateur quand un choix est obligatoire et que rien n'est choisi, pour plusieurs.
+   * @playground off
+   */
+  requiredMessage?: string;
+  /**
+   * Au moins un choix est nécessaire.
+   * @playground off
+   */
+  required?: boolean;
+  /** Éteint tous les choix. */
+  disabled?: boolean;
+  /**
+   * La liste est un cadre flottant, ouvert par `popovertarget` : c'est ce que Select pose. Seule, elle
+   * est une carte dans la page.
+   * @playground off
+   */
+  popover?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  options,
+  type = 'single',
+  size = 'medium',
+  value,
+  values,
+  name,
+  heading = 'Choisir',
+  description,
+  closeLabel = 'Fermer',
+  searchable = false,
+  searchLabel = 'Filtrer les choix',
+  searchPlaceholder = 'Rechercher',
+  noResultsLabel = 'Aucun résultat',
+  resultsLabel = '{n} résultats',
+  resultsOneLabel = '{n} résultat',
+  showSelected = false,
+  max,
+  maxLabel = 'Maximum atteint : {n} sur {max}',
+  creatable = false,
+  createLabel = 'Créer une option',
+  createQueryLabel = 'Créer « {q} »',
+  requiredMessage = 'Choisir au moins une option.',
+  required = false,
+  disabled = false,
+  popover = false,
+  class: className,
+} = Astro.props;
+
+const multiple = type === 'multiple';
+const { blocks } = buildBlocks(id, options);
+const chosen = chosenValues(multiple, value, values);
+const fieldName = name ?? id;
+const titleId = `${id}-title`;
+const withSearch = searchable || creatable;
+// Un choix unique ne se coche pas en plusieurs endroits : le premier l'emporte.
+const isChosen = (v: string) => chosen.includes(v);
+---
+
+<ds-select-panel
+  data-type={type}
+  data-max={multiple && max !== undefined ? max : undefined}
+  data-max-label={maxLabel}
+  data-required={required ? '' : undefined}
+  data-required-message={requiredMessage}
+  data-disabled={disabled ? '' : undefined}
+  data-no-results={noResultsLabel}
+  data-results={resultsLabel}
+  data-results-one={resultsOneLabel}
+  data-create-query={createQueryLabel}
+>
+  <div
+    class:list={['panel', className]}
+    id={popover ? id : undefined}
+    popover={popover ? '' : undefined}
+    data-panel
+    data-size={size}
+    aria-labelledby={titleId}
+  >
+    <header class="header">
+      <div class="heading-row">
+        <div class="titles">
+          <span class="title" id={titleId}>{heading}</span>
+          {description && <p class="description">{description}</p>}
+        </div>
+        {
+          popover && (
+            <button type="button" class="close" popovertarget={id} popovertargetaction="hide" aria-label={closeLabel}>
+              <Icon name="close" />
+            </button>
+          )
+        }
+      </div>
+      {
+        withSearch && (
+          <div class="search">
+            <input
+              type="search"
+              class="ds-field-control"
+              data-size="small"
+              data-search
+              autocomplete="off"
+              aria-label={searchLabel}
+              placeholder={searchPlaceholder}
+            />
+          </div>
+        )
+      }
+    </header>
+
+    <!-- Le nombre de résultats, ou la limite : lus à voix haute, jamais affichés. -->
+    <p class="status" role="status" data-status></p>
+
+    <fieldset class="options" data-options>
+      <legend class="legend">{heading}</legend>
+      {
+        blocks.map((block) => {
+          const Wrapper = block.label ? 'fieldset' : 'div';
+          return (
+            <Wrapper class="group" data-group>
+              {block.label && <legend class="group-label">{block.label}</legend>}
+              {block.items.map((item) => (
+                <label class="option" data-option data-text={item.label.toLowerCase()}>
+                  <input
+                    type={multiple ? 'checkbox' : 'radio'}
+                    name={fieldName}
+                    id={item.inputId}
+                    value={item.value}
+                    data-label={item.label}
+                    data-locked={item.locked ? '' : undefined}
+                    checked={isChosen(item.value)}
+                    required={required && !multiple}
+                    disabled={disabled || item.locked}
+                  />
+                  {multiple ? (
+                    <span class="box"><span class="tick"><Icon name="check" /></span></span>
+                  ) : (
+                    <span class="check"><Icon name="check" /></span>
+                  )}
+                  <span class="label">{item.label}</span>
+                </label>
+              ))}
+            </Wrapper>
+          );
+        })
+      }
+      <p class="empty" data-empty hidden>{noResultsLabel}</p>
+    </fieldset>
+
+    {
+      multiple && showSelected && (
+        <div class="pins" data-pins hidden></div>
+        <template data-pin-template>
+          <label class="option pin">
+            <input type="checkbox" checked data-pin />
+            <span class="box"><span class="tick"><Icon name="check" /></span></span>
+            <span class="label" data-pin-label></span>
+          </label>
+        </template>
+      )
+    }
+
+    {
+      creatable && (
+        <div class="footer">
+          <button type="button" class="create" data-create data-label-rest={createLabel} disabled>
+            <span class="label" data-create-label>{createLabel}</span>
+            <Icon name="plus" />
+          </button>
+        </div>
+      )
+    }
+  </div>
+</ds-select-panel>
+
+<style>
+  ds-select-panel {
+    display: contents;
+  }
+
+  /* La taille ne change que le rembourrage vertical d'une ligne, comme `size` de
+     `ActionList.Item` : 6, 12 ou 16 dans Figma. */
+  .panel {
+    --row-block: var(--stack-control-xsmall-padding-block);
+    --row-inline: var(--stack-control-xsmall-padding-inline-normal);
+    --select-row: calc(
+      var(--text-body-medium-size) * var(--text-body-medium-line-height) + 2 * var(--row-block)
+    );
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    /* Posée seule, la carte fait les 320 du dessin : quatre fois `base/80`. */
+    inline-size: min(100%, calc(4 * var(--base-80)));
+    padding: 0;
+    overflow: hidden;
+    background: var(--color-background-base-default);
+    color: var(--color-text-base-default);
+    border: var(--border-width-default) solid var(--color-border-base-strong);
+    border-radius: var(--base-12);
+    box-shadow: var(--shadow-md);
+  }
+
+  .panel[data-size='medium'] {
+    --row-block: var(--stack-control-small-padding-block);
+  }
+
+  .panel[data-size='large'] {
+    --row-block: var(--stack-control-medium-padding-block);
+  }
+
+  /* Flottante : le navigateur la pose dans sa couche réservée ; il ne reste qu'à l'accrocher — sous la
+     boîte, à l'écart de 8, de la largeur de la boîte, et au-dessus quand la place manque en bas. Les
+     marges et l'encart que le navigateur donne à un popover, centré au milieu de l'écran, s'effacent. */
+  .panel[popover] {
+    position-anchor: var(--select-anchor);
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin: var(--base-8) 0 0;
+    position-try-fallbacks: flip-block;
+  }
+
+  /* `display` seulement ouverte : posé sans condition, il l'emporterait sur le `display: none` que le
+     navigateur donne à un popover fermé. */
+  .panel[popover]:not(:popover-open) {
+    display: none;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    border-block-end: var(--border-width-default) solid var(--color-border-base-strong);
+  }
+
+  .heading-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--base-8);
+    padding: var(--stack-padding-condensed);
+    padding-inline-start: calc(2 * var(--stack-padding-condensed));
+  }
+
+  .titles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-control-xsmall-gap);
+    padding-block: var(--overlay-padding-block-condensed);
+  }
+
+  .title {
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-small-size);
+    font-weight: var(--base-text-weight-semibold);
+    line-height: var(--text-body-small-line-height);
+  }
+
+  .description {
+    margin: 0;
+    color: var(--color-text-base-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-small-size);
+    line-height: var(--text-body-small-line-height);
+  }
+
+  .close {
+    --icon-size: var(--icon-small);
+    display: grid;
+    place-items: center;
+    padding: 0;
+    color: var(--color-icon-base-default);
+    background: none;
+    border: 0;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+  }
+
+  .close:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: 0;
+  }
+
+  .search {
+    padding: 0 var(--stack-padding-condensed) var(--stack-padding-condensed);
+  }
+
+  /* Le masquage visuel : une technique, pas une mesure de design. */
+  .status,
+  .legend {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .options,
+  .group {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  /* Sept lignes, puis la liste défile : ce n'est pas le cadre qui défile, ce sont ses choix, et la
+     recherche comme le pied restent à leur place. */
+  .options {
+    max-block-size: calc(7 * var(--select-row) + 2 * var(--stack-padding-condensed));
+    overflow-y: auto;
+    padding: var(--stack-padding-condensed);
+  }
+
+  .group-label {
+    padding: var(--stack-control-small-padding-block) var(--stack-control-xsmall-padding-inline-normal);
+    color: var(--color-text-base-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--base-text-weight-semibold);
+    line-height: var(--text-caption-line-height);
+    letter-spacing: var(--base-text-letter-spacing-wide);
+    text-transform: uppercase;
+  }
+
+  .option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--base-8);
+    padding: var(--row-block) var(--row-inline);
+    border-radius: var(--border-radius-small);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--text-body-medium-weight);
+    line-height: var(--text-body-medium-line-height);
+    cursor: pointer;
+  }
+
+  .group[hidden],
+  .option[hidden],
+  .pins[hidden],
+  .empty[hidden] {
+    display: none;
+  }
+
+  /* Le radio ou la case reste dans le document, focalisable et lu, mais ne se dessine pas : c'est la
+     ligne entière qui le montre. */
+  .option input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: 0;
+    opacity: 0;
+  }
+
+  /* À un choix : une coche devant le libellé de la ligne choisie, et rien devant les autres. */
+  .check {
+    --icon-size: var(--icon-small);
+    display: none;
+    flex: none;
+    color: var(--color-icon-base-default);
+  }
+
+  .option:has(input:checked) .check {
+    display: grid;
+  }
+
+  /* À plusieurs : la case du système — 20, le trait de la boîte d'un champ, la coche de 10 — posée devant
+     le libellé. */
+  .box {
+    --icon-size: var(--icon-xsmall);
+    display: grid;
+    place-items: center;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--base-20);
+    block-size: var(--base-20);
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-small);
+  }
+
+  .tick {
+    display: none;
+    color: var(--color-icon-primary-on-bold);
+  }
+
+  .option:has(input:checked) .box {
+    background: var(--color-background-primary-bold);
+    border-color: var(--color-background-primary-bold);
+  }
+
+  .option:has(input:checked) .tick {
+    display: grid;
+  }
+
+  .option:hover {
+    background: var(--color-background-base-input-hover);
+  }
+
+  .option:has(input:focus-visible) {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: calc(var(--border-width-focus) * -1);
+  }
+
+  .option:has(input:disabled) {
+    color: var(--color-text-base-disabled);
+    cursor: not-allowed;
+  }
+
+  .option:has(input:disabled):hover {
+    background: none;
+  }
+
+  .option:has(input:disabled) .box {
+    background: var(--color-background-base-input-disabled);
+    border-color: var(--color-border-base-input-disabled);
+  }
+
+  .option:has(input:disabled:checked) .tick {
+    color: var(--color-icon-base-disabled);
+  }
+
+  .empty {
+    margin: 0;
+    padding: var(--row-block) var(--row-inline);
+    color: var(--color-text-base-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-small-size);
+    line-height: var(--text-body-small-line-height);
+  }
+
+  /* Les choix épinglés : un second bloc sous la liste, séparé comme dans Figma par un trait. */
+  .pins {
+    display: flex;
+    flex-direction: column;
+    padding: var(--stack-padding-condensed);
+    border-block-start: var(--border-width-default) solid var(--color-border-base-strong);
+  }
+
+  .footer {
+    padding: var(--stack-padding-condensed);
+    border-block-start: var(--border-width-default) solid var(--color-border-base-strong);
+  }
+
+  .create {
+    --icon-size: var(--icon-small);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--base-8);
+    inline-size: 100%;
+    padding: var(--row-block) var(--row-inline);
+    color: var(--color-text-base-default);
+    background: none;
+    border: 0;
+    border-radius: var(--border-radius-small);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .create:hover:not(:disabled) {
+    background: var(--color-background-base-input-hover);
+  }
+
+  .create:disabled {
+    color: var(--color-text-base-disabled);
+    cursor: not-allowed;
+  }
+
+  .create:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: calc(var(--border-width-focus) * -1);
+  }
+</style>
+
+<script>
+  // Un élément par liste : `connectedCallback` s'exécute à chaque instance, et l'élément ne cherche que
+  // dans ses enfants. Il filtre, épingle, limite, crée — et annonce ce qui change par des événements.
+  class DsSelectPanel extends HTMLElement {
+    private searchEl: HTMLInputElement | null = null;
+    private applyFilter: () => void = () => {};
+
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      const panel = this.querySelector<HTMLElement>('[data-panel]');
+      if (!panel) return;
+      this.dataset.ready = '';
+
+      const d = this.dataset;
+      const multiple = d.type === 'multiple';
+      const max = d.max ? Number(d.max) : undefined;
+      const required = d.required !== undefined;
+      const fieldDisabled = d.disabled !== undefined;
+
+      const inputs = [...panel.querySelectorAll<HTMLInputElement>('[data-option] input')];
+      const options = [...panel.querySelectorAll<HTMLElement>('[data-option]')];
+      const groups = [...panel.querySelectorAll<HTMLElement>('[data-group]')];
+      const search = panel.querySelector<HTMLInputElement>('[data-search]');
+      const status = panel.querySelector<HTMLElement>('[data-status]');
+      const empty = panel.querySelector<HTMLElement>('[data-empty]');
+      const create = panel.querySelector<HTMLButtonElement>('[data-create]');
+      const createLabel = panel.querySelector<HTMLElement>('[data-create-label]');
+      const pins = panel.querySelector<HTMLElement>('[data-pins]');
+      const pinTemplate = panel.querySelector<HTMLTemplateElement>('template[data-pin-template]');
+      this.searchEl = search;
+
+      let arrowNav = false;
+      let visible = options.length;
+      const fill = (template: string | undefined, values: Record<string, string | number>) =>
+        Object.entries(values).reduce((text, [k, v]) => text.replace(`{${k}}`, String(v)), template ?? '');
+      const checked = () => inputs.filter((i) => i.checked);
+      const usable = () => inputs.filter((i) => !i.disabled && !i.closest('[hidden]'));
+
+      // La limite : atteinte, les cases restantes s'éteignent. Celles que le groupe ou l'option
+      // éteignait déjà (`data-locked`) restent éteintes, et un champ désactivé ne se rallume pas.
+      const limit = () => {
+        if (!multiple || max === undefined || fieldDisabled) return false;
+        const full = checked().length >= max;
+        for (const i of inputs) if (!i.checked && !i.hasAttribute('data-locked')) i.disabled = full;
+        return full;
+      };
+
+      // Ce que le lecteur d'écran entend : le nombre de résultats d'une recherche, sinon la limite.
+      const announce = (full: boolean) => {
+        if (!status) return;
+        const query = (search?.value ?? '').trim();
+        status.textContent = query
+          ? visible === 0
+            ? (d.noResults ?? '')
+            : fill(visible === 1 ? d.resultsOne : d.results, { n: visible })
+          : full
+            ? fill(d.maxLabel, { n: checked().length, max: max ?? '' })
+            : '';
+      };
+
+      const filter = () => {
+        const query = (search?.value ?? '').trim().toLowerCase();
+        visible = 0;
+        for (const option of options) {
+          const show = !query || (option.dataset.text ?? '').includes(query);
+          option.hidden = !show;
+          if (show) visible++;
+        }
+        for (const group of groups) group.hidden = ![...group.querySelectorAll<HTMLElement>('[data-option]')].some((o) => !o.hidden);
+        if (empty) empty.hidden = visible > 0;
+        if (create && createLabel) {
+          const can = !!query && !options.some((o) => o.dataset.text === query);
+          create.disabled = !can;
+          createLabel.textContent = can ? fill(d.createQuery, { q: search?.value.trim() ?? '' }) : (create.dataset.labelRest ?? '');
+        }
+        announce(limit());
+      };
+      this.applyFilter = filter;
+
+      // Les choix épinglés : une ligne par case cochée, que l'on décoche de là.
+      const pin = () => {
+        if (!pins || !pinTemplate) return;
+        const done = checked();
+        pins.replaceChildren();
+        for (const input of done) {
+          const row = pinTemplate.content.cloneNode(true) as DocumentFragment;
+          row.querySelector<HTMLInputElement>('input')!.dataset.pinFor = input.id;
+          row.querySelector<HTMLElement>('[data-pin-label]')!.textContent = input.dataset.label ?? '';
+          pins.append(row);
+        }
+        pins.hidden = done.length === 0;
+      };
+      pins?.addEventListener('change', (event) => {
+        const target = event.target as HTMLInputElement;
+        const origin = inputs.find((i) => i.id === target.dataset.pinFor);
+        if (!origin) return;
+        origin.checked = false;
+        origin.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+
+      // Plusieurs cases obligatoires ne veulent pas dire « toutes » : c'est le premier choix qui porte
+      // le message du navigateur, tant qu'aucun n'est coché.
+      const validate = () => {
+        if (required && multiple) inputs[0]?.setCustomValidity(checked().length === 0 ? (d.requiredMessage ?? '') : '');
+      };
+
+      const changed = () => {
+        const full = limit();
+        pin();
+        validate();
+        announce(full);
+        this.dispatchEvent(
+          new CustomEvent('select-change', { bubbles: true, detail: { values: checked().map((i) => i.value), pointer: !arrowNav } }),
+        );
+      };
+
+      for (const input of inputs) {
+        input.addEventListener('change', changed);
+        // Un choix obligatoire qu'on ne peut pas focaliser, parce que la liste est fermée : le Select
+        // ouvre sa liste à la place, c'est l'endroit où il faut répondre.
+        input.addEventListener('invalid', (event) => {
+          if (!this.dispatchEvent(new CustomEvent('select-invalid', { bubbles: true, cancelable: true }))) event.preventDefault();
+        });
+      }
+
+      panel.addEventListener('keydown', (event) => {
+        const target = event.target;
+        const key = event.key;
+        if (key.startsWith('Arrow')) arrowNav = true;
+
+        // Les flèches parcourent les choix. À un choix, c'est le comportement natif des radios ; à
+        // plusieurs, les cases n'en ont pas : la liste le leur donne, depuis la recherche comprise.
+        if ((key === 'ArrowDown' || key === 'ArrowUp') && (multiple || target === search)) {
+          const list = [...(search ? [search] : []), ...usable()];
+          const at = list.indexOf(target as HTMLInputElement);
+          const next = list[(at + (key === 'ArrowDown' ? 1 : -1) + list.length) % list.length];
+          if (next && (multiple || target === search)) {
+            event.preventDefault();
+            next.focus();
+          }
+          return;
+        }
+
+        if (key !== 'Enter') return;
+        if (target === search) {
+          // Entrée dans la recherche ne soumet pas le formulaire : elle choisit le premier résultat.
+          event.preventDefault();
+          const first = usable()[0];
+          if (first && !first.checked) first.click();
+          else if (first) first.dispatchEvent(new Event('change', { bubbles: true }));
+        } else if (target instanceof HTMLInputElement && (target.type === 'radio' || target.type === 'checkbox')) {
+          event.preventDefault();
+          if (multiple) target.click();
+          else if (!target.checked) target.click();
+          else target.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      panel.addEventListener('keyup', () => {
+        arrowNav = false;
+      });
+
+      search?.addEventListener('input', filter);
+
+      create?.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('select-create', { bubbles: true, detail: { value: search?.value.trim() ?? '' } }));
+        this.reset();
+      });
+
+      pin();
+      validate();
+      limit();
+    }
+
+    /** Vide la recherche et rend tous les choix. */
+    reset() {
+      if (this.searchEl) this.searchEl.value = '';
+      this.applyFilter();
+    }
+
+    /** Le premier endroit où poser le curseur : la recherche, le choix fait, ou le premier choix. */
+    focusFirst() {
+      const inputs = [...this.querySelectorAll<HTMLInputElement>('[data-option] input')].filter((i) => !i.disabled && !i.closest('[hidden]'));
+      (this.searchEl ?? inputs.find((i) => i.checked) ?? inputs[0])?.focus();
+    }
+  }
+
+  if (!customElements.get('ds-select-panel')) customElements.define('ds-select-panel', DsSelectPanel);
+</script>

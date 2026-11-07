@@ -1517,7 +1517,7 @@
     ]
   },
   "_SelectPanel": {
-    "source": "design-system/src/components/forms/_SelectPanel.astro",
+    "source": "design-system/src/components/_SelectPanel.astro",
     "description": "",
     "natifs": {
       "balise": null,
@@ -1531,34 +1531,40 @@
         "description": "L'id de la liste : c'est ce que la boîte désigne par `popovertarget`."
       },
       {
-        "nom": "title",
-        "type": "string",
-        "requis": true,
-        "description": "Le titre du cadre."
-      },
-      {
-        "nom": "closeLabel",
-        "type": "string",
-        "requis": true,
-        "description": ""
-      },
-      {
         "nom": "blocks",
         "type": "Block[]",
         "requis": true,
         "description": ""
       },
       {
-        "nom": "chosen",
-        "type": "string | undefined",
+        "nom": "items",
+        "type": "Item[]",
         "requis": true,
-        "description": "La valeur choisie à l'ouverture."
+        "description": "Les choix mis à plat, dans l'ordre."
       },
       {
-        "nom": "fieldName",
-        "type": "string",
+        "nom": "chosen",
+        "type": "string[]",
         "requis": true,
-        "description": "Le `name` envoyé par le formulaire."
+        "description": "Les valeurs cochées à l'ouverture."
+      },
+      {
+        "nom": "count",
+        "type": "number",
+        "requis": true,
+        "description": "Le nombre de choix faits : c'est lui qui montre ou cache la zone épinglée."
+      },
+      {
+        "nom": "full",
+        "type": "boolean",
+        "requis": true,
+        "description": "La limite est atteinte : les cases décochées s'éteignent."
+      },
+      {
+        "nom": "multiple",
+        "type": "boolean",
+        "requis": true,
+        "description": ""
       },
       {
         "nom": "required",
@@ -1571,6 +1577,12 @@
         "type": "boolean",
         "requis": true,
         "description": ""
+      },
+      {
+        "nom": "fieldName",
+        "type": "string",
+        "requis": true,
+        "description": "Le `name` envoyé par le formulaire, le même pour tous les contrôles."
       },
       {
         "nom": "searchable",
@@ -1591,8 +1603,8 @@
         "description": ""
       },
       {
-        "nom": "noResultsLabel",
-        "type": "string",
+        "nom": "showSelected",
+        "type": "boolean",
         "requis": true,
         "description": ""
       },
@@ -1607,10 +1619,17 @@
         "type": "string",
         "requis": true,
         "description": ""
+      },
+      {
+        "nom": "createPlaceholder",
+        "type": "string",
+        "requis": true,
+        "description": ""
       }
     ],
     "slots": [],
     "utilise": [
+      "Checkbox",
       "Icon"
     ]
   },
@@ -1977,7 +1996,7 @@
   },
   "Select": {
     "source": "design-system/src/components/forms/Select.astro",
-    "description": "Un champ où l'on choisit une valeur dans une liste.",
+    "description": "Un champ où l'on choisit une valeur, ou plusieurs, dans une liste.",
     "since": "0.3.0",
     "natifs": {
       "balise": "button",
@@ -1995,7 +2014,7 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page.",
+        "description": "`id` de la boîte que le libellé nomme, et préfixe des choix. Unique dans la page.",
         "exemple": "pays"
       },
       {
@@ -2017,22 +2036,19 @@
         "nom": "options",
         "type": "(Option | OptionGroup)[]",
         "requis": true,
-        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\r\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas.",
+        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas.",
         "exemple": "[{\"value\":\"france\",\"label\":\"France\"},{\"value\":\"belgique\",\"label\":\"Belgique\"},{\"value\":\"suisse\",\"label\":\"Suisse\"}]"
       },
       {
-        "nom": "value",
-        "type": "string",
+        "nom": "type",
+        "type": "'single' | 'multiple'",
+        "valeurs": [
+          "single",
+          "multiple"
+        ],
         "requis": false,
-        "description": "La valeur choisie à l'ouverture.",
-        "playground": false
-      },
-      {
-        "nom": "placeholder",
-        "type": "string",
-        "requis": false,
-        "description": "Ce que dit la boîte quand rien n'est choisi.",
-        "default": "Choisir"
+        "description": "Un seul choix, ou plusieurs.",
+        "default": "single"
       },
       {
         "nom": "size",
@@ -2043,22 +2059,58 @@
           "large"
         ],
         "requis": false,
-        "description": "La hauteur de la boîte : le rembourrage vertical.",
+        "description": "La taille : la hauteur de la boîte, et le rembourrage de chaque ligne de la liste.",
         "default": "medium"
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "La valeur choisie à l'ouverture, pour un seul choix.",
+        "playground": false
+      },
+      {
+        "nom": "values",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les valeurs choisies à l'ouverture, pour plusieurs.",
+        "playground": false
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la boîte quand rien n'est choisi.",
+        "default": "Choisir"
+      },
+      {
+        "nom": "heading",
+        "type": "string",
+        "requis": false,
+        "description": "Le titre de l'en-tête de la liste. À défaut, le libellé du champ.",
+        "groupe": "En-tête"
+      },
+      {
+        "nom": "description",
+        "type": "string",
+        "requis": false,
+        "description": "Une phrase sous le titre de la liste.",
+        "groupe": "En-tête"
+      },
+      {
+        "nom": "closeLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du bouton qui ferme la liste.",
+        "groupe": "En-tête",
+        "default": "Fermer"
       },
       {
         "nom": "searchable",
         "type": "boolean",
         "requis": false,
-        "description": "Pose un champ de recherche en haut de la liste, qui filtre les choix.",
+        "description": "Pose un champ de recherche dans l'en-tête de la liste, qui filtre les choix.",
         "groupe": "Recherche"
-      },
-      {
-        "nom": "creatable",
-        "type": "boolean",
-        "requis": false,
-        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.",
-        "groupe": "Création"
       },
       {
         "nom": "searchLabel",
@@ -2101,11 +2153,40 @@
         "default": "{n} résultat"
       },
       {
+        "nom": "showSelected",
+        "type": "boolean",
+        "requis": false,
+        "description": "Épingle en bas de la liste les choix faits, pour plusieurs choix.",
+        "groupe": "Pied"
+      },
+      {
+        "nom": "max",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de choix à ne pas dépasser, pour plusieurs.",
+        "groupe": "Pied"
+      },
+      {
+        "nom": "maxLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la liste quand la limite est atteinte. `{n}` et `{max}` y sont remplacés.",
+        "groupe": "Pied",
+        "default": "Maximum atteint : {n} sur {max}"
+      },
+      {
+        "nom": "creatable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.",
+        "groupe": "Pied"
+      },
+      {
         "nom": "createLabel",
         "type": "string",
         "requis": false,
         "description": "La ligne de création au repos.",
-        "groupe": "Création",
+        "groupe": "Pied",
         "default": "Créer une option"
       },
       {
@@ -2113,16 +2194,8 @@
         "type": "string",
         "requis": false,
         "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.",
-        "groupe": "Création",
+        "groupe": "Pied",
         "default": "Créer « {q} »"
-      },
-      {
-        "nom": "closeLabel",
-        "type": "string",
-        "requis": false,
-        "description": "Le nom lu du bouton qui ferme la liste.",
-        "groupe": "Liste",
-        "default": "Fermer"
       },
       {
         "nom": "name",
@@ -2178,6 +2251,226 @@
     "utilise": [
       "Field",
       "SelectPanel",
+      "Icon"
+    ]
+  },
+  "SelectPanel": {
+    "source": "design-system/src/components/forms/SelectPanel.astro",
+    "description": "La liste d'un Select : un en-tête, des choix, un pied. À un choix ou à plusieurs.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Préfixe des `id` des choix. Unique dans la page.",
+        "exemple": "liste"
+      },
+      {
+        "nom": "options",
+        "type": "(Option | OptionGroup)[]",
+        "requis": true,
+        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas.",
+        "exemple": "[{\"label\":\"Peinture\",\"options\":[\"Gouache\",\"Aquarelle\",\"Huile\"]},{\"label\":\"Dessin\",\"options\":[\"Encre\",\"Fusain\"]},\"Collage\"]"
+      },
+      {
+        "nom": "type",
+        "type": "'single' | 'multiple'",
+        "valeurs": [
+          "single",
+          "multiple"
+        ],
+        "requis": false,
+        "description": "Un seul choix, ou plusieurs.",
+        "default": "single"
+      },
+      {
+        "nom": "size",
+        "type": "'small' | 'medium' | 'large'",
+        "valeurs": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "requis": false,
+        "description": "Le rembourrage vertical d'une ligne.",
+        "default": "medium"
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "La valeur choisie à l'ouverture, pour un seul choix.",
+        "playground": false
+      },
+      {
+        "nom": "values",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les valeurs choisies à l'ouverture, pour plusieurs.",
+        "playground": false
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé par le formulaire. À défaut, l'`id`."
+      },
+      {
+        "nom": "heading",
+        "type": "string",
+        "requis": false,
+        "description": "Le titre de l'en-tête.",
+        "groupe": "En-tête",
+        "default": "Choisir"
+      },
+      {
+        "nom": "description",
+        "type": "string",
+        "requis": false,
+        "description": "Une phrase sous le titre, qui dit ce qu'on choisit.",
+        "groupe": "En-tête"
+      },
+      {
+        "nom": "closeLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du bouton qui ferme la liste. Il n'existe qu'en `popover`.",
+        "groupe": "En-tête",
+        "default": "Fermer"
+      },
+      {
+        "nom": "searchable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose un champ de recherche dans l'en-tête, qui filtre les choix.",
+        "groupe": "Recherche"
+      },
+      {
+        "nom": "searchLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du champ de recherche. Il n'est pas affiché.",
+        "groupe": "Recherche",
+        "default": "Filtrer les choix"
+      },
+      {
+        "nom": "searchPlaceholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite du champ de recherche.",
+        "groupe": "Recherche",
+        "default": "Rechercher"
+      },
+      {
+        "nom": "noResultsLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la liste quand aucun choix ne correspond.",
+        "groupe": "Recherche",
+        "default": "Aucun résultat"
+      },
+      {
+        "nom": "resultsLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre.",
+        "groupe": "Recherche",
+        "default": "{n} résultats"
+      },
+      {
+        "nom": "resultsOneLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nombre de résultats quand il n'y en a qu'un.",
+        "groupe": "Recherche",
+        "default": "{n} résultat"
+      },
+      {
+        "nom": "showSelected",
+        "type": "boolean",
+        "requis": false,
+        "description": "Épingle en bas de la liste les choix faits, pour plusieurs choix. On les décoche de là.",
+        "groupe": "Pied"
+      },
+      {
+        "nom": "max",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de choix à ne pas dépasser, pour plusieurs. Atteint, les cases restantes s'éteignent.",
+        "groupe": "Pied"
+      },
+      {
+        "nom": "maxLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la liste quand la limite est atteinte. `{n}` et `{max}` y sont remplacés.",
+        "groupe": "Pied",
+        "default": "Maximum atteint : {n} sur {max}"
+      },
+      {
+        "nom": "creatable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.",
+        "groupe": "Pied"
+      },
+      {
+        "nom": "createLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création au repos.",
+        "groupe": "Pied",
+        "default": "Créer une option"
+      },
+      {
+        "nom": "createQueryLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.",
+        "groupe": "Pied",
+        "default": "Créer « {q} »"
+      },
+      {
+        "nom": "requiredMessage",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit le navigateur quand un choix est obligatoire et que rien n'est choisi, pour plusieurs.",
+        "playground": false
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Au moins un choix est nécessaire.",
+        "playground": false
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "Éteint tous les choix."
+      },
+      {
+        "nom": "popover",
+        "type": "boolean",
+        "requis": false,
+        "description": "La liste est un cadre flottant, ouvert par `popovertarget` : c'est ce que Select pose. Seule, elle\nest une carte dans la page.",
+        "playground": false
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
       "Icon"
     ]
   },
