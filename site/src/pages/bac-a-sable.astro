@@ -19,7 +19,7 @@ import Icon from 'ux-design-system/components/Icon.astro';
 import Card from 'ux-design-system/components/Card.astro';
 import Modal from 'ux-design-system/components/Modal.astro';
 import Input from 'ux-design-system/components/forms/Input.astro';
-import Select from 'ux-design-system/components/Select.astro';
+import Select from 'ux-design-system/components/forms/Select.astro';
 import MultiSelect from 'ux-design-system/components/MultiSelect.astro';
 import Textarea from 'ux-design-system/components/forms/Textarea.astro';
 import Radio from 'ux-design-system/components/forms/Radio.astro';
@@ -196,7 +196,7 @@ const cleChamp = (t: string, r: boolean, d: boolean) => `${t}|${r ? 'r' : '-'}|$
 // choisit. Sans JavaScript, c'est ce qui reste à l'écran, et c'est du code juste.
 const defautFormulaireEntete = `---
 import Input from 'ux-design-system/components/forms/Input.astro';
-import Select from 'ux-design-system/components/Select.astro';
+import Select from 'ux-design-system/components/forms/Select.astro';
 ---`;
 
 const defautFormulaire = `<Input id="ton-nom" label="Ton nom" required />

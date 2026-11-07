@@ -18,7 +18,8 @@
  *
  * Les états ne sont pas des classes. Ils lisent ce que le HTML dit déjà : `:disabled`,
  * `:focus-visible`, `[aria-invalid='true']` pour l'erreur. Le succès n'a pas d'équivalent
- * ARIA : il passe par `data-validation='success'`. La taille passe par `data-size`.
+ * ARIA : il passe par `data-validation='success'`. Un bouton — la boîte du Select — ne porte pas
+ * `aria-invalid` en ARIA : il dit l'erreur par `data-validation='error'`, au même dessin. La taille passe par `data-size`.
  *
  * Écart connu, tranché par Judith le 07/11 : le trait au repos (`color/border/base/input`)
  * mesure 1,28:1 sur le fond du champ, loin des 3:1 de WCAG 1.4.11. Le dessin est gardé tel
@@ -67,7 +68,8 @@
  * survol : un champ en erreur qui reprendrait son gris dès que la souris passe dessus
  * cacherait ce qu'on est en train de lire. Écrit après le survol : à spécificité égale,
  * c'est l'ordre qui tranche. */
-.ds-field-control[aria-invalid='true'] {
+.ds-field-control[aria-invalid='true'],
+.ds-field-control[data-validation='error'] {
   background: var(--color-background-danger-subtlest);
   border-color: var(--color-border-danger-default);
   /* Le texte prend l'encre « on-subtle » du verdict, valeur comme exemple : c'est ce que
@@ -81,7 +83,8 @@
   color: var(--color-text-success-on-subtle);
 }
 
-.ds-field-control[aria-invalid='true']::placeholder {
+.ds-field-control[aria-invalid='true']::placeholder,
+.ds-field-control[data-validation='error']::placeholder {
   color: var(--color-text-danger-on-subtle);
 }
 
@@ -97,7 +100,8 @@
   outline-offset: calc(var(--border-width-focus) * -1);
 }
 
-.ds-field-control[aria-invalid='true']:focus-visible {
+.ds-field-control[aria-invalid='true']:focus-visible,
+.ds-field-control[data-validation='error']:focus-visible {
   outline-color: var(--color-border-danger-strong);
 }
 

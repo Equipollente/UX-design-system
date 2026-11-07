@@ -1,0 +1,375 @@
+---
+// Select — un champ où l'on choisit une valeur dans une liste. Un seul choix.
+//
+// Ce n'est pas un menu natif : la liste est dessinée, parce que le menu du système est hors
+// d'atteinte du CSS et ne sait ni chercher, ni épingler, ni créer une option. Ce n'est pas non plus
+// le choix de plusieurs valeurs (c'est MultiSelect, qui attend son tour), ni quelques choix
+// affichés d'emblée (c'est RadioGroup).
+//
+// Nœuds Figma : `FormGroup` 936:9502 (`type=select`) pour la pile, `Select` 954:6709 pour la boîte
+// — `state` × `validation` × `size`. La liste est `_SelectPanel`, le dessin de Judith sur la page
+// ↳ Select Panel. Libellé, aide et message sont les pièces de `_Field`.
+//
+// La boîte est un <button> qui ouvre la liste par `popovertarget` : l'ouverture, la fermeture à Échap
+// et au clic à côté sont celles du navigateur, sans script. Les choix sont de vrais radios, qui se
+// soumettent avec le formulaire sous `name` : sans JavaScript, la liste s'ouvre et le choix part,
+// mais la boîte ne montre pas ce qu'on vient de choisir. C'est le seul rôle de `<ds-select>` pour
+// elle — avec la recherche, le filtre, l'annonce du nombre de résultats et la création.
+//
+// `aria-invalid` n'est pas posé : un bouton ne le porte pas en ARIA. C'est le message, avec son
+// icône, qui dit l'erreur en toutes lettres, et le trait rouge de la boîte n'en est que
+// l'accompagnement (`data-validation`).
+//
+// La création n'enregistre rien : le champ annonce `select-create` (`detail.value`), et la page
+// décide de la garder. `creatable` pose la recherche, où se tape le nom. Un site qui écoute
+// l'événement ajoute l'option à son tour.
+//
+// Un `<ds-select>` peut apparaître vingt fois dans une page, ou être cloné plus tard : l'élément
+// ne cherche que dans ses enfants, et `connectedCallback` s'exécute à chaque instance.
+
+import type { HTMLAttributes } from 'astro/types';
+import Field from './_Field.astro';
+import SelectPanel from './_SelectPanel.astro';
+import Icon from '../Icon.astro';
+import { resolveField } from '../../lib/field';
+
+type Option = string | { value: string; label: string };
+interface OptionGroup {
+  /** Le nom du groupe. Il range, il ne se choisit pas. */
+  label: string;
+  options: Option[];
+  /** Éteint tout le groupe. */
+  disabled?: boolean;
+}
+
+interface Props
+  extends Omit<HTMLAttributes<'button'>, 'type' | 'class' | 'disabled' | 'name' | 'value' | 'popovertarget'> {
+  /** Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Retire le libellé de l'écran sans le retirer du document. */
+  hideLabel?: boolean;
+  /**
+   * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses
+   * choix sous un nom, comme un <optgroup> : il ne s'imbrique pas.
+   */
+  options: (Option | OptionGroup)[];
+  /** La valeur choisie à l'ouverture. */
+  value?: string;
+  /** Ce que dit la boîte quand rien n'est choisi. */
+  placeholder?: string;
+  /** La hauteur de la boîte : le rembourrage vertical. */
+  size?: 'small' | 'medium' | 'large';
+  /** Pose un champ de recherche en haut de la liste, qui filtre les choix. */
+  searchable?: boolean;
+  /** Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche. */
+  creatable?: boolean;
+  /** Le nom lu du champ de recherche. Il n'est pas affiché. */
+  searchLabel?: string;
+  /** L'invite du champ de recherche. */
+  searchPlaceholder?: string;
+  /** Ce que dit la liste quand aucun choix ne correspond. */
+  noResultsLabel?: string;
+  /** Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre. */
+  resultsLabel?: string;
+  /** Le nombre de résultats quand il n'y en a qu'un. */
+  resultsOneLabel?: string;
+  /** La ligne de création au repos. */
+  createLabel?: string;
+  /** La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte. */
+  createQueryLabel?: string;
+  /** Le nom lu du bouton qui ferme la liste. */
+  closeLabel?: string;
+  /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
+  name?: string;
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Passe la boîte au rouge. */
+  error?: string;
+  /** Le message de succès. Cède à l'erreur. */
+  success?: string;
+  /** Un choix est nécessaire. Pose l'astérisque. */
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  hideLabel = false,
+  options,
+  value,
+  placeholder = 'Choisir',
+  size = 'medium',
+  searchable = false,
+  creatable = false,
+  searchLabel = 'Filtrer les choix',
+  searchPlaceholder = 'Rechercher',
+  noResultsLabel = 'Aucun résultat',
+  resultsLabel = '{n} résultats',
+  resultsOneLabel = '{n} résultat',
+  createLabel = 'Créer une option',
+  createQueryLabel = 'Créer « {q} »',
+  closeLabel = 'Fermer',
+  name,
+  hint,
+  error,
+  success,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Les choix sont rangés en blocs pour s'afficher : un groupe nommé, ou un choix sans groupe. Les
+// `id` des radios se numérotent d'un bout à l'autre, groupes compris.
+const isGroup = (o: Option | OptionGroup): o is OptionGroup => typeof o === 'object' && 'options' in o;
+let index = 0;
+const toItem = (o: Option, locked = false) => ({
+  ...(typeof o === 'string' ? { value: o, label: o } : o),
+  inputId: `${id}-${index++}`,
+  locked,
+});
+const blocks = options.map((o) =>
+  isGroup(o)
+    ? { label: o.label, items: o.options.map((x) => toItem(x, !!o.disabled)) }
+    : { label: undefined, items: [toItem(o)] },
+);
+const items = blocks.flatMap((b) => b.items);
+const summary = items.find((o) => o.value === value)?.label ?? placeholder;
+
+const field = resolveField(id, { hint, error, success });
+const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+
+const listId = `${id}-list`;
+// Le nom d'ancre lie la liste à sa boîte. Il est unique comme l'`id` dont il dérive.
+const anchor = `--select-${id}`;
+---
+
+<ds-select
+  data-placeholder={placeholder}
+  data-no-results={noResultsLabel}
+  data-results={resultsLabel}
+  data-results-one={resultsOneLabel}
+  data-create-query={createQueryLabel}
+>
+  <Field id={id} label={label} hideLabel={hideLabel} required={required} disabled={disabled} field={field} class={className}>
+    <div class="select-control" style={`--select-anchor: ${anchor}`}>
+      <button
+        {...rest}
+        type="button"
+        id={id}
+        class="ds-field-control trigger"
+        data-size={size}
+        data-trigger
+        data-validation={field.validation === 'none' ? undefined : field.validation}
+        aria-describedby={describedby}
+        popovertarget={listId}
+        disabled={disabled}
+      >
+        <span class="value" data-value data-empty={value === undefined || summary === placeholder ? '' : undefined}>
+          {summary}
+        </span>
+        <span class="chevron"><Icon name="chevron-down" /></span>
+      </button>
+      <SelectPanel
+        listId={listId}
+        title={label}
+        closeLabel={closeLabel}
+        blocks={blocks}
+        chosen={value}
+        fieldName={name ?? id}
+        required={required}
+        disabled={disabled}
+        searchable={searchable || creatable}
+        searchLabel={searchLabel}
+        searchPlaceholder={searchPlaceholder}
+        noResultsLabel={noResultsLabel}
+        creatable={creatable}
+        createLabel={createLabel}
+      />
+    </div>
+  </Field>
+</ds-select>
+
+<style>
+  /* L'élément personnalisé n'est qu'un point d'accroche pour le script : il ne dessine rien. */
+  ds-select {
+    display: contents;
+  }
+
+  .select-control {
+    position: relative;
+    anchor-name: var(--select-anchor);
+    inline-size: 100%;
+  }
+
+  /* La boîte se dessine comme un champ — la classe partagée — mais c'est un bouton : elle range la
+     valeur à gauche et le chevron à droite, et le texte ne se centre pas. */
+  .trigger {
+    --icon-size: var(--icon-small);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--stack-control-small-gap);
+    appearance: none;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .value {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .value[data-empty] {
+    color: var(--color-text-base-muted);
+  }
+
+  .chevron {
+    display: grid;
+    flex: none;
+    color: var(--color-icon-base-default);
+  }
+
+  .trigger:disabled .chevron {
+    color: var(--color-icon-base-disabled);
+  }
+</style>
+
+<script>
+  let anchorCount = 0;
+
+  // Un élément par champ : `connectedCallback` s'exécute à chaque instance, que la page en porte
+  // une ou vingt, ou qu'une soit clonée plus tard. L'élément ne cherche que dans ses enfants.
+  class DsSelect extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      const list = this.querySelector<HTMLElement>('[data-list]');
+      const trigger = this.querySelector<HTMLButtonElement>('[data-trigger]');
+      const valueEl = this.querySelector<HTMLElement>('[data-value]');
+      if (!list || !trigger || !valueEl) return;
+      this.dataset.ready = '';
+
+      // Une copie du champ — une ligne clonée depuis un <template>, par exemple — porte les mêmes
+      // `id` que son modèle. La boîte et sa liste ne se retrouvent donc plus par `popovertarget` ni
+      // par le nom d'ancre écrits côté serveur : l'élément les relie par référence, et donne à sa
+      // liste une ancre qui n'appartient qu'à lui.
+      trigger.popoverTargetElement = list;
+      const closeButton = list.querySelector<HTMLButtonElement>('[popovertargetaction="hide"]');
+      if (closeButton) closeButton.popoverTargetElement = list;
+      this.querySelector<HTMLElement>('.select-control')?.style.setProperty('--select-anchor', `--ds-select-${++anchorCount}`);
+
+      const d = this.dataset;
+      const radios = [...list.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
+      const options = [...list.querySelectorAll<HTMLElement>('[data-option]')];
+      const groups = [...list.querySelectorAll<HTMLElement>('[data-group]')];
+      const search = list.querySelector<HTMLInputElement>('[data-search]');
+      const status = list.querySelector<HTMLElement>('[data-status]');
+      const empty = list.querySelector<HTMLElement>('[data-empty]');
+      const create = list.querySelector<HTMLButtonElement>('[data-create]');
+      const createLabel = list.querySelector<HTMLElement>('[data-create-label]');
+
+      let arrowNav = false;
+      const fill = (template: string | undefined, n: number) => (template ?? '').replace('{n}', String(n));
+      const close = () => {
+        list.hidePopover();
+        trigger.focus();
+      };
+
+      // La boîte dit le choix : le libellé de la ligne cochée, ou l'invite.
+      const sync = () => {
+        const checked = radios.find((r) => r.checked);
+        valueEl.textContent = checked ? (checked.dataset.label ?? '') : (d.placeholder ?? '');
+        valueEl.toggleAttribute('data-empty', !checked);
+      };
+
+      // Le filtre masque ce qui ne contient pas le texte, puis ce que le groupe n'a plus à montrer.
+      const filter = () => {
+        const query = (search?.value ?? '').trim().toLowerCase();
+        let visible = 0;
+        for (const option of options) {
+          const show = !query || (option.dataset.text ?? '').includes(query);
+          option.hidden = !show;
+          if (show) visible++;
+        }
+        for (const group of groups) group.hidden = ![...group.querySelectorAll<HTMLElement>('[data-option]')].some((o) => !o.hidden);
+        if (empty) empty.hidden = visible > 0;
+        if (status) status.textContent = !query ? '' : visible === 0 ? (d.noResults ?? '') : fill(visible === 1 ? d.resultsOne : d.results, visible);
+        if (create && createLabel) {
+          const can = !!query && !options.some((o) => o.dataset.text === query);
+          create.disabled = !can;
+          createLabel.textContent = can ? (d.createQuery ?? '').replace('{q}', search?.value.trim() ?? '') : (create.dataset.labelRest ?? '');
+        }
+      };
+
+      for (const radio of radios) {
+        radio.addEventListener('change', () => {
+          sync();
+          // Les flèches parcourent les choix sans fermer la liste ; un clic ou Espace choisit.
+          if (!arrowNav) close();
+        });
+        // Un champ obligatoire sans choix : le navigateur ne peut pas focaliser un radio dans une
+        // liste fermée. On ouvre la liste à la place, qui est l'endroit où il faut répondre.
+        radio.addEventListener('invalid', (event) => {
+          event.preventDefault();
+          if (!list.matches(':popover-open')) list.showPopover();
+        });
+      }
+
+      list.addEventListener('keydown', (event) => {
+        if (event.key.startsWith('Arrow')) arrowNav = true;
+        if (event.key !== 'Enter') return;
+        const target = event.target;
+        if (target === search) {
+          // Entrée dans la recherche ne soumet pas le formulaire : elle choisit le premier résultat.
+          event.preventDefault();
+          const first = radios.find((r) => !r.disabled && !r.closest('[hidden]'));
+          if (first) {
+            first.checked = true;
+            first.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } else if (target instanceof HTMLInputElement && target.type === 'radio') {
+          event.preventDefault();
+          target.checked = true;
+          target.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      list.addEventListener('keyup', () => {
+        arrowNav = false;
+      });
+
+      trigger.addEventListener('keydown', (event) => {
+        if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && !list.matches(':popover-open')) {
+          event.preventDefault();
+          list.showPopover();
+        }
+      });
+
+      list.addEventListener('toggle', (event) => {
+        if ((event as Event & { newState: string }).newState === 'open') {
+          const first = radios.find((r) => r.checked && !r.disabled) ?? radios.find((r) => !r.disabled && !r.closest('[hidden]'));
+          (search ?? first)?.focus();
+        } else if (search) {
+          search.value = '';
+          filter();
+        }
+      });
+
+      search?.addEventListener('input', filter);
+
+      create?.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('select-create', { bubbles: true, detail: { value: search?.value.trim() ?? '' } }));
+        if (search) search.value = '';
+        filter();
+        close();
+      });
+    }
+  }
+
+  if (!customElements.get('ds-select')) customElements.define('ds-select', DsSelect);
+</script>

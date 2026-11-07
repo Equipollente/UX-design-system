@@ -709,6 +709,16 @@ ses enfants, et un champ ajouté ou cloné plus tard fonctionne sans rien réini
 Le rôle ARIA est celui d'un groupe de radios dans un popover, pas le motif `combobox` : le clavier (Tab,
 flèches, Espace, Échap) est celui du navigateur, et le motif `combobox` demanderait de le réécrire.
 
+**Écrit le 07/11, palier 4.** `Select` et `_SelectPanel` sont dans `components/forms/`. La boîte est un `<button>`
+(`popovertarget`), les choix de vrais radios sous le même `name`, et `<ds-select>` ne fait que ce que le HTML ne sait
+pas : montrer le choix dans la boîte, filtrer, annoncer le nombre de résultats, et annoncer `select-create`
+(`detail.value`). Il relie la boîte et sa liste **par référence** (`popoverTargetElement`) et leur donne une ancre
+propre : une ligne clonée depuis un `<template>` garde les `id` de son modèle, et le lien par `id` casserait.
+`required` ouvre la liste quand le navigateur ne peut pas focaliser un radio qu'elle cache. **Restent en place, jusqu'à
+la réécriture de `MultiSelect`** : `_Select.astro`, l'ancien `_SelectPanel.astro`, `MultiSelect.astro`, l'ancien
+`Checkbox.astro`, `FieldLabel.astro`, `_FieldMessage.astro`, `lib/field-message.ts`, et la recette de balise de
+`global.css` pour `select` et `.field-box`.
+
 **Le Select ne livre que le choix unique.** La liste à cases (`MultiSelect`) attend son tour, comme Judith l'a
 demandé ; le panneau est écrit pour le recevoir mais rien n'est branché ni testé.
 

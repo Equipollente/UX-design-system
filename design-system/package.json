@@ -16,6 +16,7 @@
   "// exports": "Ce que les sites consommateurs ont le droit d'importer. Rien d'autre n'est atteignable : la surface publique du système est décidée ici, pas subie.",
   "exports": {
     "./components/*": "./src/components/*",
+    "./components/forms/_*": null,
     "./layouts/*": "./src/layouts/*",
     "./lib/*.ts": "./src/lib/*.ts",
     "./lib/*": "./src/lib/*.ts",
