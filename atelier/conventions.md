@@ -38,9 +38,13 @@ Quatre habitudes qui reviennent partout :
 
 Destructuration avec valeurs par défaut, `class: className`, `...rest`. Puis la composition :
 
-```ts
-const classes = ['btn', `btn-${variant}`, className].filter(Boolean).join(' ');
+```astro
+<button class:list={['btn', `btn-${variant}`, className]} {...rest}>
 ```
+
+`class:list` est l'attribut d'Astro pour assembler des classes (`styling.mdx`) ; il remplace l'ancien assemblage
+`['btn', …].filter(Boolean).join(' ')` dans le code écrit à partir du 07/11. Les composants existants gardent le
+leur jusqu'à leur réécriture.
 
 Balise dynamique quand le rendu en dépend : `const Tag = href ? 'a' : 'button'`.
 

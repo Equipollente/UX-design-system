@@ -140,6 +140,8 @@ d'un enfant : le comportement interactif appartient à la composition qui le dem
 
 ## Le dessin d'un champ est une recette de balise, pas un style de composant
 
+*Révisé le 07/11 : la recette passe sur une classe `.ds-field-control` importée par les composants, voir « L'architecture du code des formulaires ».*
+
 Text field, Text Area et Select écrivaient chacun les mêmes déclarations — police, encre, fond,
 trait, rayon, rembourrage — et divergeaient tout de même sur trois points. Le dessin est parti dans
 [global.css](../src/design-system/styles/global.css), à côté de celui du `h2` et du `p` : « tu n'as
@@ -648,12 +650,20 @@ la page range déjà — et le préfixe `_` reste réservé aux pièces internes
 Phase 3 du passage de Figma au code, après [contrat-formulaires.md](contrat-formulaires.md). Le code des
 formulaires est réécrit : ce qui suit dit comment, avant d'écrire une ligne.
 
-**Le dessin d'un champ reste une recette de balise** (voir « Le dessin d'un champ est une recette de balise »).
-Elle sort de `global.css` vers `styles/fields.css`, que `global.css` importe, et ne vise que `input`, `textarea`
-et la boîte du Select, jamais `checkbox`, `radio` ni le curseur du Toggle, qui ont leur propre dessin. La base
-reste à spécificité zéro (`:where()`). Les états ne viennent pas de classes : `:disabled`, `:focus-visible`
-(épaisseur `border-width-focus`), `[aria-invalid="true"]` pour l'erreur, `[data-validation="success"]` pour le
-succès, `[data-size]` pour la taille. Un champ brut du bac à sable garde ainsi son dessin.
+**Le dessin d'un champ est une classe partagée, plus une recette de balise** (révisé le 07/11 d'après la doc d'Astro,
+qui veut des styles scopés par défaut et du global « seulement si nécessaire » : `styling.mdx`). Il quitte
+`global.css` pour `styles/field-control.css`, écrit sur la classe `.ds-field-control` et importé par `_Field.astro`
+(`import '../styles/field-control.css'`) : il ne part que dans une page qui porte un champ, et ne restyle plus un
+`<input>` nu posé par un site. La base reste à spécificité zéro (`:where()`). Les états ne viennent pas de classes :
+`:disabled`, `:focus-visible` (épaisseur `border-width-focus`), `[aria-invalid="true"]` pour l'erreur,
+`[data-validation="success"]` pour le succès, `[data-size]` pour la taille. Checkbox, radio et curseur du Toggle ne
+portent pas la classe : ils ont leur propre dessin. La géométrie propre à un composant reste dans son `<style>`
+scopé. **Contrepartie assumée :** les contrôles bruts du bac à sable perdent leur dessin automatique.
+
+**Les props prolongent le HTML.** `Props` étend `HTMLAttributes<'input'>` (ou `'textarea'`), de `astro/types`
+(`typescript.mdx`) : `maxlength`, `autocomplete`, `name`, `placeholder`… ne sont plus recopiés un à un, et `...rest`
+les pose sur la balise native, pas sur le conteneur. `size` est exclu par `Omit` et redéfini (`small`, `medium`,
+`large`), parce que HTML lui donne un autre sens. `class` va sur le conteneur.
 
 **`_Field` range, `lib/field.ts` décide.** `_Field.astro` ne fait que la pile (libellé, emplacement du champ,
 compteur, message, aide, dans cet ordre) : aucune logique. `lib/field.ts` remplace `field-message.ts` : il résout
@@ -676,9 +686,11 @@ une absence mesurée. Ici :
 - le Select : le bouton qui dit le choix, la recherche et la création d'une option. Sans script, la liste
   s'ouvre (`popover`) et les radios fonctionnent, mais le bouton n'affiche pas le choix.
 
-Le script du Select est un élément personnalisé (`connectedCallback`), comme le recommande la doc d'Astro pour
-un composant qui peut apparaître plusieurs fois par page. Les deux autres sont des `<script>` qui écoutent
-l'événement `input` à l'échelle de la page.
+**Les trois scripts sont des éléments personnalisés** (`<ds-checkbox>`, `<ds-textarea>`, `<ds-select>`), comme le
+recommande la doc d'Astro pour un composant qui peut apparaître plusieurs fois par page
+(`client-side-scripts.mdx`) : `connectedCallback` s'exécute à chaque instance, `this.querySelector` ne touche que
+ses enfants, et un champ ajouté ou cloné plus tard fonctionne sans rien réinitialiser. Aucun
+`document.querySelectorAll`, aucun `window.initSelect`. Les valeurs du serveur passent par des `data-*`.
 
 **La liste du Select se déduit du dessin de Judith (page ↳ Select Panel).**
 
@@ -699,6 +711,11 @@ flèches, Espace, Échap) est celui du navigateur, et le motif `combobox` demand
 
 **Le Select ne livre que le choix unique.** La liste à cases (`MultiSelect`) attend son tour, comme Judith l'a
 demandé ; le panneau est écrit pour le recevoir mais rien n'est branché ni testé.
+
+**Les pièces internes ne sont plus importables.** Les composants des formulaires vivent dans
+`design-system/src/components/forms/`, et `package.json` ajoute `"./components/forms/_*": null` à `exports` : Node
+exclut ce motif, `_Field`, `_FieldLabel` ou `_SelectPanel` ne s'importent plus depuis un site. À vérifier dans le
+portfolio avant la publication : un import de `_Select.astro` casserait.
 
 **Le paquet change de contrat.** `showCount` devient `counter`, `multiple` disparaît, `size` et `hideLabel`
 arrivent : changement cassant, une version mineure en 0.x et une note de migration par la convention de
