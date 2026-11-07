@@ -1,0 +1,106 @@
+---
+// RadioGroup — une question et ses réponses : un seul choix peut être retenu.
+//
+// Ce n'est pas un groupe de cases (c'est CheckboxGroup), ni une liste longue (c'est Select).
+//
+// Nœud Figma : `_RadioGroup.items` 875:53524 — `orientation` et un emplacement pour les radios.
+//
+// Le groupe prend des **données**, pas des enfants : `options`. Deux radios ne s'excluent que s'ils
+// partagent le même `name`, et un composant Astro ne peut pas écrire d'attribut sur ce qu'on glisse
+// dans son emplacement : c'est le groupe qui pose le même `name` sur tous. Le `Slot` de Figma reste
+// un dessin ; le code en fait une liste (décision du 07/11).
+//
+// Il se nomme par la <legend> de son <fieldset>. Le clavier est celui du navigateur : Tab entre
+// dans le groupe une seule fois, les flèches le parcourent. `required` pose l'attribut sur chaque
+// radio — c'est ce que le navigateur attend d'un groupe — et l'astérisque sur la légende.
+
+import FieldLabel from './_FieldLabel.astro';
+import Radio from './Radio.astro';
+
+interface Option {
+  value: string;
+  label: string;
+  /** L'aide de ce choix, sous son libellé. */
+  hint?: string;
+  disabled?: boolean;
+}
+
+interface Props {
+  /** Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page. */
+  id: string;
+  /** La question posée au groupe. */
+  legend: string;
+  /** Retire la légende de l'écran sans la retirer du document. */
+  hideLegend?: boolean;
+  /** Le `name` partagé par tous les radios. À défaut, l'`id`. */
+  name?: string;
+  /** Les choix. */
+  options: Option[];
+  /** La valeur choisie à l'ouverture. Une seule. */
+  value?: string;
+  orientation?: 'vertical' | 'horizontal';
+  required?: boolean;
+  /** Éteint tous les radios. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  legend,
+  hideLegend = false,
+  name,
+  options,
+  value,
+  orientation = 'vertical',
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<fieldset class:list={['group', className]} data-orientation={orientation} disabled={disabled} {...rest}>
+  <FieldLabel as="legend" required={required} disabled={disabled} visuallyHidden={hideLegend}>{legend}</FieldLabel>
+  <div class="items">
+    {
+      options.map((option) => (
+        <Radio
+          id={`${id}-${option.value}`}
+          label={option.label}
+          name={name ?? id}
+          value={option.value}
+          checked={option.value === value}
+          hint={option.hint}
+          required={required}
+          disabled={disabled || option.disabled}
+        />
+      ))
+    }
+  </div>
+</fieldset>
+
+<style>
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-control-xsmall-gap);
+    /* Un <fieldset> arrive avec un trait, un rembourrage et une largeur minimale du navigateur,
+       qui ne viennent d'aucune variable. */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-8);
+  }
+
+  .group[data-orientation='horizontal'] .items {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+</style>

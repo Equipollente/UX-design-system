@@ -1,0 +1,103 @@
+---
+// CheckboxGroup — une question et ses cases : plusieurs choix peuvent être retenus.
+//
+// Ce n'est pas une suite de choix exclusifs (c'est RadioGroup), ni une liste longue (c'est Select).
+// Ce n'est pas non plus une case isolée : « j'accepte les conditions » est une Checkbox seule.
+//
+// Nœud Figma : `_CheckboxGroup.items` 876:61534 — `orientation` et un emplacement pour les cases.
+//
+// Le groupe prend des **données**, pas des enfants : `options`. Un composant Astro ne peut pas écrire
+// d'attribut sur ce qu'on glisse dans son emplacement, et le groupe qui laisserait l'appelant poser
+// chaque case à la main ne garantirait plus qu'elles partagent leur nom. Le `Slot` de Figma reste un
+// dessin ; le code en fait une liste (décision du 07/11).
+//
+// Il se nomme par la <legend> de son <fieldset> : c'est ce qui donne un nom au groupe aux lecteurs
+// d'écran, là où un champ seul a son <label>. `disabled` éteint tout le groupe par le <fieldset>.
+
+import FieldLabel from './_FieldLabel.astro';
+import Checkbox from './Checkbox.astro';
+
+interface Option {
+  value: string;
+  label: string;
+  /** L'aide de cette case, sous son libellé. */
+  hint?: string;
+  disabled?: boolean;
+}
+
+interface Props {
+  /** Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page. */
+  id: string;
+  /** La question posée au groupe. */
+  legend: string;
+  /** Retire la légende de l'écran sans la retirer du document. */
+  hideLegend?: boolean;
+  /** Le `name` envoyé par chaque case cochée. À défaut, l'`id`. */
+  name?: string;
+  /** Les cases. */
+  options: Option[];
+  /** Les valeurs cochées à l'ouverture. */
+  values?: string[];
+  orientation?: 'vertical' | 'horizontal';
+  /** Éteint toutes les cases. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  legend,
+  hideLegend = false,
+  name,
+  options,
+  values = [],
+  orientation = 'vertical',
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<fieldset class:list={['group', className]} data-orientation={orientation} disabled={disabled} {...rest}>
+  <FieldLabel as="legend" disabled={disabled} visuallyHidden={hideLegend}>{legend}</FieldLabel>
+  <div class="items">
+    {
+      options.map((option) => (
+        <Checkbox
+          id={`${id}-${option.value}`}
+          label={option.label}
+          name={name ?? id}
+          value={option.value}
+          checked={values.includes(option.value)}
+          hint={option.hint}
+          disabled={disabled || option.disabled}
+        />
+      ))
+    }
+  </div>
+</fieldset>
+
+<style>
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-control-xsmall-gap);
+    /* Un <fieldset> arrive avec un trait, un rembourrage et une largeur minimale du navigateur,
+       qui ne viennent d'aucune variable. */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-8);
+  }
+
+  .group[data-orientation='horizontal'] .items {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+</style>

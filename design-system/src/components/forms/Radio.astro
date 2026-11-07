@@ -1,0 +1,136 @@
+---
+// Radio — un choix dans une courte liste où un seul peut être retenu.
+//
+// Ce n'est pas une case : une case se coche et se décoche seule, plusieurs peuvent l'être. Ce
+// n'est pas non plus une liste longue : au-delà de quelques choix, c'est Select. La question
+// posée au groupe n'est pas dans le radio : elle va en légende de son <fieldset> (RadioGroup).
+//
+// Nœuds Figma : `Radio` 876:64956 pour la ligne, `_RadioInput` 875:53423 pour le rond seul —
+// `state` rest, focus et disabled, `checked`, plus `hint?`.
+//
+// Le contrôle est un <input type="radio"> natif, et seul son dessin vient du système. Deux radios
+// ne s'excluent que s'ils partagent le même `name` : `name` est donc obligatoire, et le clavier —
+// Tab pour entrer dans le groupe, les flèches pour le parcourir — est celui du navigateur. L'état
+// est lu par `:checked`, `:disabled` et `:focus-visible`. Le survol n'est pas dessiné (07/11).
+//
+// Mesures : le rond fait 18, qui n'a pas de variable ; il se compose, `base/20` moins `base/2`.
+// C'est le même 18 que le curseur du Toggle. Le trait du rond coché passe à 2 (`border/width/thick`) :
+// c'est ce qui dessine l'anneau clair autour du point.
+
+import type { HTMLAttributes } from 'astro/types';
+import FieldLabel from './_FieldLabel.astro';
+import FieldHint from './_FieldHint.astro';
+
+interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'class' | 'checked' | 'required' | 'disabled' | 'name'> {
+  /** Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe. */
+  id: string;
+  /** Le mot qui nomme ce choix-ci — pas la question, qui va en légende. */
+  label: string;
+  /** Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent. */
+  name: string;
+  /** Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`. */
+  value?: string;
+  /** Le choix retenu à l'ouverture. Un seul du groupe doit le porter. */
+  checked?: boolean;
+  /** L'aide : ce que ce choix entraîne, dite sous le libellé. */
+  hint?: string;
+  /** Un radio isolé n'est pas obligatoire : c'est le groupe qui l'est. Posé par RadioGroup. */
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  value,
+  checked = false,
+  hint,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const hintId = hint ? `${id}-hint` : undefined;
+const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+---
+
+<div class:list={['radio', className]}>
+  <span class="box">
+    <input
+      {...rest}
+      type="radio"
+      id={id}
+      name={name}
+      value={value ?? id}
+      checked={checked}
+      required={required}
+      disabled={disabled}
+      aria-describedby={describedby}
+    />
+  </span>
+  <span class="text">
+    <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+    {hint && <FieldHint id={hintId!} disabled={disabled}>{hint}</FieldHint>}
+  </span>
+</div>
+
+<style>
+  .radio {
+    --radio-size: calc(var(--base-20) - var(--base-2));
+    display: flex;
+    align-items: flex-start;
+    gap: var(--base-8);
+  }
+
+  .box {
+    flex: none;
+    display: grid;
+    inline-size: var(--radio-size);
+    block-size: var(--radio-size);
+    /* Le rond se centre sur la première ligne du libellé, quelle que soit la hauteur de l'aide. */
+    margin-block-start: max(
+      0px,
+      calc((var(--text-body-medium-size) * var(--text-body-medium-line-height) - var(--radio-size)) / 2)
+    );
+  }
+
+  input {
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+  }
+
+  input:checked {
+    background: var(--color-background-primary-bold);
+    border-width: var(--border-width-thick);
+  }
+
+  input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: 0;
+  }
+
+  input:disabled {
+    background: var(--color-background-base-input-disabled);
+    border-color: var(--color-border-base-input-disabled);
+    cursor: not-allowed;
+  }
+
+  input:disabled:checked {
+    border-color: var(--color-border-primary-strong);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

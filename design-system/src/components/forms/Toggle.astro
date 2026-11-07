@@ -1,0 +1,146 @@
+---
+// Toggle — un interrupteur : il allume ou éteint un réglage, et l'effet est immédiat.
+//
+// Ce n'est pas une case : une case attend l'envoi du formulaire pour compter, un Toggle applique
+// son effet à l'instant où on le bascule (c'est Checkbox pour l'autre cas). Ce n'est pas non plus
+// un choix parmi plusieurs (c'est Radio). Son libellé nomme un état, pas une action :
+// « Notifications », pas « Notifier ».
+//
+// Nœuds Figma : `Toggle` 878:69950 pour la ligne, `_ToggleInput` 878:69938 pour la piste seule —
+// `state` rest, focus et disabled, `checked`, plus `hint?`.
+//
+// Le contrôle est un <input type="checkbox" role="switch"> natif : le rôle `switch` fait annoncer
+// « activé » ou « désactivé » au lieu de « coché », et la barre d'espace bascule, comme pour une
+// case. Seul son dessin vient du système — la piste est l'input lui-même (`appearance: none`), le
+// curseur un élément posé dessus et insensible au clic. Pas de script. Le survol n'est pas dessiné
+// (07/11).
+//
+// Mesures, aucune en dur : la piste fait 40 (`base/40`), le curseur 18 — qui n'a pas de variable
+// et se compose, `base/20` moins `base/2`, comme le rond du Radio — et la piste 26, soit le curseur
+// et 4 de marge de chaque côté (`base/4`). Le glissement vaut ce qui reste : 40 moins 18 moins les
+// deux marges. Il se joue sur `motion/duration/quick`, que tokens.css ramène à 0 sous
+// `prefers-reduced-motion` : le trajet disparaît, pas les états.
+
+import type { HTMLAttributes } from 'astro/types';
+import FieldLabel from './_FieldLabel.astro';
+import FieldHint from './_FieldHint.astro';
+
+interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'role' | 'class' | 'checked' | 'disabled'> {
+  /** Lie le libellé au contrôle. Unique dans la page. */
+  id: string;
+  /** Ce que l'interrupteur allume. Un état, pas une action. */
+  label: string;
+  /** Allumé à l'ouverture. */
+  checked?: boolean;
+  /** L'aide : ce que l'interrupteur change, dite sous le libellé. */
+  hint?: string;
+  disabled?: boolean;
+  class?: string;
+}
+
+const { id, label, name, checked = false, hint, disabled = false, class: className, ...rest } = Astro.props;
+
+const hintId = hint ? `${id}-hint` : undefined;
+const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+---
+
+<div class:list={['toggle', className]}>
+  <span class="track">
+    <input
+      {...rest}
+      type="checkbox"
+      role="switch"
+      id={id}
+      name={name ?? id}
+      checked={checked}
+      disabled={disabled}
+      aria-describedby={describedby}
+    />
+    <span class="thumb"></span>
+  </span>
+  <span class="text">
+    <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
+    {hint && <FieldHint id={hintId!} disabled={disabled}>{hint}</FieldHint>}
+  </span>
+</div>
+
+<style>
+  .toggle {
+    --toggle-thumb: calc(var(--base-20) - var(--base-2));
+    --toggle-inset: var(--base-4);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--base-8);
+  }
+
+  .track {
+    position: relative;
+    flex: none;
+    display: grid;
+    inline-size: var(--base-40);
+    block-size: calc(var(--toggle-thumb) + var(--toggle-inset) * 2);
+    margin-block-start: max(
+      0px,
+      calc(
+        (var(--text-body-medium-size) * var(--text-body-medium-line-height) - var(--toggle-thumb) - var(--toggle-inset) * 2) /
+          2
+      )
+    );
+  }
+
+  input {
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    background: var(--color-background-neutral-bold);
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+  }
+
+  input:checked {
+    background: var(--color-background-primary-bold);
+  }
+
+  .thumb {
+    position: absolute;
+    inset-block-start: var(--toggle-inset);
+    inset-inline-start: var(--toggle-inset);
+    box-sizing: border-box;
+    inline-size: var(--toggle-thumb);
+    block-size: var(--toggle-thumb);
+    pointer-events: none;
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-full);
+    transition: transform var(--motion-duration-quick) var(--motion-easing-standard);
+  }
+
+  input:checked ~ .thumb {
+    transform: translateX(calc(var(--base-40) - var(--toggle-thumb) - var(--toggle-inset) * 2));
+    background: var(--color-background-base-default);
+    border-color: var(--color-border-base-focus);
+  }
+
+  input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: 0;
+  }
+
+  input:disabled {
+    background: var(--color-background-neutral-subtle);
+    cursor: not-allowed;
+  }
+
+  input:disabled ~ .thumb,
+  input:disabled:checked ~ .thumb {
+    background: var(--color-background-base-input-disabled);
+    border-color: var(--color-border-base-input-disabled);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

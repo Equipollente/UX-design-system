@@ -1,0 +1,192 @@
+---
+// Checkbox — une case qui se coche et se décoche toute seule.
+//
+// Ce n'est pas un radio : un radio ne se relâche qu'en en choisissant un autre, et n'a de sens
+// qu'en groupe. Une case vit très bien seule — « j'accepte les conditions » en est une, et c'est
+// le cas où `required` a un sens. Ce n'est pas non plus un interrupteur : un Toggle applique son
+// effet à l'instant où on le bascule, une case attend l'envoi du formulaire.
+//
+// Nœuds Figma : `Checkbox` 954:3642 pour la ligne, `_CheckboxInput` 873:51724 pour la case seule
+// — `state` rest, focus et disabled, `checked`, `indeterminate`, plus `hint?`. Le libellé et
+// l'aide sont les pièces `_FieldLabel` et `_FieldHint`.
+//
+// Le contrôle est natif — un <input type="checkbox"> — et seul son dessin vient du système :
+// `appearance: none` efface celui du navigateur. La coche et le tiret de l'état indéterminé sont
+// les icônes `check` et `minus` du registre, posées au centre de la case à 10 (`icon-xsmall`) et
+// insensibles au clic. L'état est lu par les pseudo-classes du HTML (`:checked`, `:indeterminate`,
+// `:disabled`, `:focus-visible`) : aucun de ces états n'est une prop, sauf `checked`,
+// `indeterminate` et `disabled`, qui sont des valeurs. Le survol n'est pas dessiné (Judith, 07/11).
+//
+// `indeterminate` — « certaines cases d'un groupe le sont » — n'existe pas en HTML : seul le DOM
+// le porte. C'est le seul script du composant, un élément personnalisé de trois lignes qui pose la
+// propriété au chargement. Sans lui la case s'affiche décochée et le lecteur d'écran n'annonce pas
+// « partiellement cochée » (WCAG 4.1.2, nom, rôle et valeur). Elle l'emporte sur `checked`, et le
+// premier clic la remplace par cochée ou décochée, comme le navigateur le fait.
+//
+// Pas d'erreur : Figma ne dessine pas de case en erreur, et la variante n'est pas inventée.
+//
+// Mesures : la case fait 20 (`base/20`), son trait 1, son rayon `border/radius/small`, l'écart au
+// libellé `base/8`. Elle est posée à 2 du haut (`base/2`), comme le cadre `Checkbox wrapper`.
+
+import type { HTMLAttributes } from 'astro/types';
+import Icon from '../Icon.astro';
+import FieldLabel from './_FieldLabel.astro';
+import FieldHint from './_FieldHint.astro';
+
+interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'class' | 'checked' | 'required' | 'disabled'> {
+  /** Lie le libellé au contrôle. Unique dans la page. */
+  id: string;
+  /** Ce que la case affirme quand elle est cochée. Une phrase, pas une question. */
+  label: string;
+  /** Ce que le formulaire enverra si la case est cochée. À défaut, `on`. */
+  value?: string;
+  /** Cochée à l'ouverture. */
+  checked?: boolean;
+  /** Ni cochée ni décochée. Elle l'emporte sur `checked`. */
+  indeterminate?: boolean;
+  /** L'aide : ce que cocher entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`. */
+  hint?: string;
+  /** Pose l'astérisque et l'attribut. A du sens ici : une case peut être seule. */
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  name,
+  checked = false,
+  indeterminate = false,
+  hint,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const hintId = hint ? `${id}-hint` : undefined;
+const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+---
+
+<ds-checkbox class:list={['checkbox', className]} data-indeterminate={indeterminate ? '' : undefined}>
+  <span class="box">
+    <input
+      {...rest}
+      type="checkbox"
+      id={id}
+      name={name ?? id}
+      checked={checked}
+      required={required}
+      disabled={disabled}
+      aria-describedby={describedby}
+    />
+    <span class="mark mark-check"><Icon name="check" /></span>
+    <span class="mark mark-minus"><Icon name="minus" /></span>
+  </span>
+  <span class="text">
+    <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
+    {hint && <FieldHint id={hintId!} disabled={disabled}>{hint}</FieldHint>}
+  </span>
+</ds-checkbox>
+
+<style>
+  .checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--base-8);
+    /* Le cadre de Figma ajoute 6 / 8 autour de la ligne : c'est la cible du clic. */
+    padding: var(--stack-control-xsmall-padding-block) var(--stack-control-xsmall-padding-inline-normal);
+  }
+
+  .box {
+    position: relative;
+    display: grid;
+    flex: none;
+    inline-size: var(--base-20);
+    block-size: var(--base-20);
+    margin-block-start: var(--base-2);
+  }
+
+  .box > * {
+    grid-area: 1 / 1;
+  }
+
+  input {
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+  }
+
+  input:checked,
+  input:indeterminate {
+    background: var(--color-background-primary-bold);
+    border-color: var(--color-background-primary-bold);
+  }
+
+  /* La coche et le tiret sont des icônes décoratives posées sur la case. */
+  .mark {
+    --icon-size: var(--icon-xsmall);
+    display: none;
+    place-items: center;
+    pointer-events: none;
+    color: var(--color-icon-primary-on-bold);
+  }
+
+  input:checked ~ .mark-check {
+    display: grid;
+  }
+
+  input:indeterminate ~ .mark-check {
+    display: none;
+  }
+
+  input:indeterminate ~ .mark-minus {
+    display: grid;
+  }
+
+  /* L'anneau de focus se dessine contre la case, hors d'elle : 2 px, comme tous les champs. */
+  input:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: 0;
+  }
+
+  /* Désactivé, écrit en dernier : coché ou non, la case perd sa couleur d'accent. */
+  input:disabled,
+  input:disabled:checked,
+  input:disabled:indeterminate {
+    background: var(--color-background-base-input-disabled);
+    border-color: var(--color-border-base-input-disabled);
+    cursor: not-allowed;
+  }
+
+  input:disabled ~ .mark {
+    color: var(--color-icon-base-disabled);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+
+<script>
+  // Un élément par case : `connectedCallback` s'exécute à chaque instance, et l'élément ne touche
+  // que ses enfants. `indeterminate` se pose au chargement, une fois ; ensuite le navigateur
+  // en reprend la main au premier clic.
+  class DsCheckbox extends HTMLElement {
+    connectedCallback() {
+      if (!this.hasAttribute('data-indeterminate')) return;
+      const input = this.querySelector('input');
+      if (input) input.indeterminate = true;
+    }
+  }
+
+  if (!customElements.get('ds-checkbox')) customElements.define('ds-checkbox', DsCheckbox);
+</script>

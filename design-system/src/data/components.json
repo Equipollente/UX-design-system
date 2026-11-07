@@ -1168,69 +1168,6 @@
       "Icon"
     ]
   },
-  "Radio": {
-    "source": "design-system/src/components/Radio.astro",
-    "description": "",
-    "natifs": {
-      "balise": null,
-      "ecartes": []
-    },
-    "props": [
-      {
-        "nom": "id",
-        "type": "string",
-        "requis": true,
-        "description": "Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe."
-      },
-      {
-        "nom": "label",
-        "type": "string",
-        "requis": true,
-        "description": "Le mot qui nomme ce choix-ci — pas la question, qui va en <legend>."
-      },
-      {
-        "nom": "name",
-        "type": "string",
-        "requis": true,
-        "description": "Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent."
-      },
-      {
-        "nom": "value",
-        "type": "string",
-        "requis": false,
-        "description": "Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`."
-      },
-      {
-        "nom": "checked",
-        "type": "boolean",
-        "requis": false,
-        "description": "Le choix retenu à l'ouverture. Un seul du groupe doit le porter."
-      },
-      {
-        "nom": "hint",
-        "type": "string",
-        "requis": false,
-        "description": "L'aide : ce que ce choix entraîne, dite sous le libellé. Le champ la désigne par `aria-describedby`."
-      },
-      {
-        "nom": "disabled",
-        "type": "boolean",
-        "requis": false,
-        "description": ""
-      },
-      {
-        "nom": "class",
-        "type": "string",
-        "requis": false,
-        "description": ""
-      }
-    ],
-    "slots": [],
-    "utilise": [
-      "FieldLabel",
-      "FieldMessage"
-    ]
-  },
   "Sidebar": {
     "source": "design-system/src/components/Sidebar.astro",
     "description": "",
@@ -1330,63 +1267,6 @@
       "default"
     ],
     "utilise": []
-  },
-  "Toggle": {
-    "source": "design-system/src/components/Toggle.astro",
-    "description": "",
-    "natifs": {
-      "balise": null,
-      "ecartes": []
-    },
-    "props": [
-      {
-        "nom": "id",
-        "type": "string",
-        "requis": true,
-        "description": "Lie le libellé au contrôle. Unique dans la page."
-      },
-      {
-        "nom": "label",
-        "type": "string",
-        "requis": true,
-        "description": "Ce que l'interrupteur allume. Un état, pas une action : « Notifications », pas « Notifier »."
-      },
-      {
-        "nom": "name",
-        "type": "string",
-        "requis": false,
-        "description": "Le nom envoyé si l'interrupteur est dans un formulaire. À défaut, l'`id`."
-      },
-      {
-        "nom": "checked",
-        "type": "boolean",
-        "requis": false,
-        "description": "Allumé à l'ouverture."
-      },
-      {
-        "nom": "hint",
-        "type": "string",
-        "requis": false,
-        "description": "L'aide : ce que l'interrupteur change, dite sous le libellé. Le champ la désigne par `aria-describedby`."
-      },
-      {
-        "nom": "disabled",
-        "type": "boolean",
-        "requis": false,
-        "description": ""
-      },
-      {
-        "nom": "class",
-        "type": "string",
-        "requis": false,
-        "description": ""
-      }
-    ],
-    "slots": [],
-    "utilise": [
-      "FieldLabel",
-      "FieldMessage"
-    ]
   },
   "_FieldMessage": {
     "source": "design-system/src/components/_FieldMessage.astro",
