@@ -148,12 +148,12 @@ Ce que c'est : la boîte d'un choix unique. Ce que ce n'est pas : le choix de pl
 
 Props : celles d'`Input` (sans `type` ni `maxlength`), plus `options`, `value` et `placeholder`.
 
-**La liste est le dessin propre de Judith (07/11)**, pas celui de Primer : deux pièces, `_SelectPanel`
-(`type` `single` ou `multiple`, interrupteurs `searchable?`, `creatable?`, `showSelected?`, avec la
-recherche en `Input fields`) et `_SelectItem` (`type` `multiple`, `single` ou `create`, `selected`,
-`state`), plus `_SelectList` et `_SelectGroupLabel`. Six cas sont dessinés dans le cadre « Cas » de la
-page ↳ Select Panel. Le comportement (clavier, rôle ARIA de la liste, création) reste à écrire :
-c'est la phase 3.
+**La liste est le dessin de Judith sur la page ↳ Select Panel (07/11)** : un panneau (`_SelectPanel/Base`) qui
+range un en-tête avec titre et fermeture, un message, une recherche, un nom de section, des lignes à un choix
+ou à cases (`ActionList.Item/SingleSelect` et `MultiSelect`), et un pied avec les choix épinglés et la création
+d'une option ; le maximum atteint grise les lignes restantes. Le composant du code est à en déduire à la
+phase 3, une fois ce dessin relu avec Judith : rien du comportement (clavier, rôle ARIA, création) n'est
+encore arrêté.
 
 ## `Checkbox`
 

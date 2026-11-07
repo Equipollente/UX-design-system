@@ -631,11 +631,13 @@ la boîte est une pièce, `Textarea fields`, posée dans `FormGroup type=textare
 Cases, radios et interrupteurs gardent leur libellé à côté du contrôle et n'en ont pas besoin. `Textarea` n'a pas de
 `size` : sa hauteur se règle en lignes dans le code.
 
-**La liste du Select est le dessin propre, pas Primer (07/11).** La page ↳ Select Panel ne garde que `_SelectPanel`,
-`_SelectItem`, `_SelectList` et `_SelectGroupLabel`, tous sur les variables du système. Les treize composants
-`ActionList.*` et `_SelectPanel/*` issus de Primer, qu'aucun autre objet du fichier n'utilisait, sont supprimés avec
-leurs cadres de démonstration. La recherche de la liste est un `Input fields` en `small` : 51 px, contre 36 pour
-l'ancien `forms/search`.
+**La liste du Select est le dessin de Judith sur la page ↳ Select Panel (07/11).** Elle l'a dessinée avec
+`_SelectPanel/Header`, `Message`, `Content`, `Footer`, `Items`, `Base` et `List`, et les lignes `ActionList.Item/*`.
+Une suppression faite par erreur a été rétablie depuis l'historique de Figma ; **mettre au propre ne veut pas dire
+refaire**. Elle a été débarrassée de tout lien vers la bibliothèque Primer : variables d'espacement, de rayon et de
+couleur remplacées par celles du système, ombre `shadow/md`, style de texte `body/small`, icône `alert-triangle`
+locale. Les anciennes pièces `_SelectPanel`, `_SelectItem`, `_SelectList` et `_SelectGroupLabel` restent dans le
+cadre « DEPRECIATED » de la page.
 
 Un `?` en fin de nom désigne un interrupteur d'affichage (`hint?`, `label?`, `counter?`), jamais une
 variante : `inset?`, `fullWidth?` et `selected?` le perdent. Tout est en minuscules, sans préfixe `forms/` —
