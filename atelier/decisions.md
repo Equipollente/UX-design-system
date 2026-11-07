@@ -631,6 +631,12 @@ la boîte est une pièce, `Textarea fields`, posée dans `FormGroup type=textare
 Cases, radios et interrupteurs gardent leur libellé à côté du contrôle et n'en ont pas besoin. `Textarea` n'a pas de
 `size` : sa hauteur se règle en lignes dans le code.
 
+**La liste du Select est le dessin propre, pas Primer (07/11).** La page ↳ Select Panel ne garde que `_SelectPanel`,
+`_SelectItem`, `_SelectList` et `_SelectGroupLabel`, tous sur les variables du système. Les treize composants
+`ActionList.*` et `_SelectPanel/*` issus de Primer, qu'aucun autre objet du fichier n'utilisait, sont supprimés avec
+leurs cadres de démonstration. La recherche de la liste est un `Input fields` en `small` : 51 px, contre 36 pour
+l'ancien `forms/search`.
+
 Un `?` en fin de nom désigne un interrupteur d'affichage (`hint?`, `label?`, `counter?`), jamais une
 variante : `inset?`, `fullWidth?` et `selected?` le perdent. Tout est en minuscules, sans préfixe `forms/` —
 la page range déjà — et le préfixe `_` reste réservé aux pièces internes.

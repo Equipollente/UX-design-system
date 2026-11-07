@@ -148,10 +148,12 @@ Ce que c'est : la boîte d'un choix unique. Ce que ce n'est pas : le choix de pl
 
 Props : celles d'`Input` (sans `type` ni `maxlength`), plus `options`, `value` et `placeholder`.
 
-**Contrat partiel.** Figma ne dessine pour l'instant que la boîte. Tout ce qui touche la liste qui
-s'ouvre — recherche, création d'une option, clavier, rôle ARIA — attend le choix de la liste
-(Primer ou dessin propre, question 4). Aucune ligne n'est écrite sur le comportement tant que ce
-choix n'est pas fait.
+**La liste est le dessin propre de Judith (07/11)**, pas celui de Primer : deux pièces, `_SelectPanel`
+(`type` `single` ou `multiple`, interrupteurs `searchable?`, `creatable?`, `showSelected?`, avec la
+recherche en `Input fields`) et `_SelectItem` (`type` `multiple`, `single` ou `create`, `selected`,
+`state`), plus `_SelectList` et `_SelectGroupLabel`. Six cas sont dessinés dans le cadre « Cas » de la
+page ↳ Select Panel. Le comportement (clavier, rôle ARIA de la liste, création) reste à écrire :
+c'est la phase 3.
 
 ## `Checkbox`
 
@@ -251,7 +253,6 @@ reprend pas.
 
 ## Questions ouvertes pour Judith
 
-1. **La liste du `Select` : Primer ou dessin propre ?** Elle bloque tout le contrat du `Select`.
-2. **L'épaisseur de l'anneau de focus** n'a pas de rôle : le dessin lit `border/width/default` (1)
+1. **L'épaisseur de l'anneau de focus** n'a pas de rôle : le dessin lit `border/width/default` (1)
    pour le champ et `thick` (2) pour le rond. Un rôle `border/width/focus` dans `NEW Size` règlerait
    les deux.
