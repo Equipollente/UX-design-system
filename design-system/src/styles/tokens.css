@@ -422,6 +422,7 @@
   --border-width-thick:                             var(--base-2);
   --border-width-thicker:                           var(--base-4);
   --border-width-default:                           var(--border-width-thin);
+  --border-width-focus:                             var(--border-width-thick);
 
   --border-radius-small:                            var(--base-6);
   --border-radius-medium:                           14px;

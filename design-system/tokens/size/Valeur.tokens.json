@@ -1164,6 +1164,20 @@
             "WEB": "var(--border-width-default)"
           }
         }
+      },
+      "focus": {
+        "$type": "number",
+        "$value": "{border.width.thick}",
+        "$description": "L'épaisseur de l'anneau de focus : un trait de 2 px, lu par tous les champs et contrôles.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:994:303",
+          "com.figma.scopes": [
+            "STROKE_FLOAT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--border-width-focus)"
+          }
+        }
       }
     },
     "radius": {
