@@ -642,3 +642,64 @@ cadre « DEPRECIATED » de la page.
 Un `?` en fin de nom désigne un interrupteur d'affichage (`hint?`, `label?`, `counter?`), jamais une
 variante : `inset?`, `fullWidth?` et `selected?` le perdent. Tout est en minuscules, sans préfixe `forms/` —
 la page range déjà — et le préfixe `_` reste réservé aux pièces internes.
+
+## L'architecture du code des formulaires (07/11)
+
+Phase 3 du passage de Figma au code, après [contrat-formulaires.md](contrat-formulaires.md). Le code des
+formulaires est réécrit : ce qui suit dit comment, avant d'écrire une ligne.
+
+**Le dessin d'un champ reste une recette de balise** (voir « Le dessin d'un champ est une recette de balise »).
+Elle sort de `global.css` vers `styles/fields.css`, que `global.css` importe, et ne vise que `input`, `textarea`
+et la boîte du Select, jamais `checkbox`, `radio` ni le curseur du Toggle, qui ont leur propre dessin. La base
+reste à spécificité zéro (`:where()`). Les états ne viennent pas de classes : `:disabled`, `:focus-visible`
+(épaisseur `border-width-focus`), `[aria-invalid="true"]` pour l'erreur, `[data-validation="success"]` pour le
+succès, `[data-size]` pour la taille. Un champ brut du bac à sable garde ainsi son dessin.
+
+**`_Field` range, `lib/field.ts` décide.** `_Field.astro` ne fait que la pile (libellé, emplacement du champ,
+compteur, message, aide, dans cet ordre) : aucune logique. `lib/field.ts` remplace `field-message.ts` : il résout
+le message (l'erreur l'emporte sur le succès, l'aide reste toujours), déduit les identifiants (`${id}-hint`,
+`-message`, `-count`) et rend la valeur d'`aria-describedby`. `Input`, `Textarea` et `Select` appellent le
+résolveur, posent `aria-describedby` et `aria-invalid` sur leur propre balise, puis la rangent dans `_Field`. Le
+type `FieldProps` (`label`, `hideLabel`, `hint`, `error`, `success`, `required`, `disabled`) est écrit une fois.
+
+**Les groupes prennent des données, pas des enfants.** `RadioGroup` et `CheckboxGroup` reçoivent `options`
+(`value`, `label`, `hint?`, `disabled?`), le `name` et la sélection : Astro ne peut pas poser `name` ni `checked`
+sur ce qu'on glisse dans un emplacement, et le groupe qui l'écrirait à la place de l'appelant ne garantit plus
+qu'un radio partage son nom avec ses voisins. Le `Slot` de Figma reste un dessin ; le code en fait une liste.
+
+**Trois scripts, et seulement trois.** La règle 8 de [conventions.md](conventions.md) veut qu'un script réponde à
+une absence mesurée. Ici :
+- `indeterminate` de la case : n'existe pas en HTML, seul le DOM le porte (WCAG 4.1.2, nom, rôle et valeur).
+  Sans script la case s'affiche décochée et le lecteur d'écran n'annonce pas « partiellement cochée ».
+- le compteur du `Textarea` : **aucun échec WCAG**, c'est le choix de Judith. Sans script, il garde sa valeur
+  au chargement. `maxlength` est appliqué par le navigateur.
+- le Select : le bouton qui dit le choix, la recherche et la création d'une option. Sans script, la liste
+  s'ouvre (`popover`) et les radios fonctionnent, mais le bouton n'affiche pas le choix.
+
+Le script du Select est un élément personnalisé (`connectedCallback`), comme le recommande la doc d'Astro pour
+un composant qui peut apparaître plusieurs fois par page. Les deux autres sont des `<script>` qui écoutent
+l'événement `input` à l'échelle de la page.
+
+**La liste du Select se déduit du dessin de Judith (page ↳ Select Panel).**
+
+| Dans Figma | Dans le code |
+| --- | --- |
+| `_SelectPanel/Base` `variant=popover` | `_SelectPanel.astro`, un élément `popover` |
+| `Header` : titre, description, retour, fermeture | Un titre, et un bouton de fermeture natif (`popovertargetaction="hide"`) |
+| `Message` (`error`, `warning`, `info`) et `Content` `type=error`, `warning`, `loading` | Une ligne `role="status"` qui annonce l'état de la liste |
+| La recherche | `<input type="search">`, qui masque les options qui ne correspondent pas, et annonce leur nombre |
+| `ActionList.GroupHeading` | `<fieldset>` et `<legend>` |
+| `ActionList.Item/SingleSelect` | Un `<input type="radio">` natif |
+| `ActionList.Item/MultiSelect` | Un `<input type="checkbox">` natif |
+| `Footer` : choix épinglés, création d'une option | Une zone sous la liste ; la création est annoncée par l'événement `select-create` |
+| `ActionList.Item/ActionButton`, `Divider` | Pas intégrés : aucune vue n'en a besoin (règle 9) |
+
+Le rôle ARIA est celui d'un groupe de radios dans un popover, pas le motif `combobox` : le clavier (Tab,
+flèches, Espace, Échap) est celui du navigateur, et le motif `combobox` demanderait de le réécrire.
+
+**Le Select ne livre que le choix unique.** La liste à cases (`MultiSelect`) attend son tour, comme Judith l'a
+demandé ; le panneau est écrit pour le recevoir mais rien n'est branché ni testé.
+
+**Le paquet change de contrat.** `showCount` devient `counter`, `multiple` disparaît, `size` et `hideLabel`
+arrivent : changement cassant, une version mineure en 0.x et une note de migration par la convention de
+documentation. Les pages `/components/*` du site suivent à la phase 5.
