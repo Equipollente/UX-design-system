@@ -1,0 +1,131 @@
+---
+title: Dessiner un composant que le code peut suivre
+description: Structurer un composant Figma pour qu'il devienne un composant Astro sans traduction ni devinette.
+type: guide
+keywords: [figma, dessin, composant, props, variantes, astro, designer]
+---
+
+Ce guide s'adresse à la personne qui dessine les composants dans Figma. À la fin, un composant dessiné se lit comme un contrat : chaque propriété devient une prop, chaque état du navigateur devient du CSS, chaque zone libre devient un emplacement.
+
+Le développement n'invente rien. Ce qui n'est pas dans Figma n'est pas dans le code, et ce qui est dans Figma doit pouvoir s'écrire tel quel.
+
+## Prérequis
+
+- Un composant à dessiner ou à reprendre, dans le fichier Figma du système.
+- Les variables du système (couleurs, tailles, espacements) déjà créées. Un composant ne lit que des variables, voir [Mettre à jour les tokens depuis Figma](../../atelier/mettre-a-jour-les-tokens-depuis-figma.md).
+
+## Ce que devient chaque élément Figma
+
+Lire d'abord ce tableau : il dit dans quelle case tombe tout ce qui est dessiné.
+
+| Dans Figma | Dans Astro | Exemple |
+|---|---|---|
+| Un jeu de variantes (component set) | Un fichier `.astro` du même nom | `Checkbox` donne `Checkbox.astro` |
+| Une propriété de variante | Une prop aux valeurs fixes | `size="small"` |
+| Une propriété texte | Une prop texte | `label="Nom"` |
+| Un interrupteur `hint?` avec une propriété texte `hint` | Une seule prop optionnelle : présente, l'aide s'affiche | `hint="8 caractères minimum"` |
+| Un échange d'instance (icône) | Une prop qui porte le nom de l'icône | `icon="mail"` |
+| Un emplacement (slot) | Un `<slot />` : le contenu libre que le parent glisse dedans | le champ posé dans un `Field` |
+| Un composant dont le nom commence par `_` | Un fichier interne, jamais utilisé seul | `_FieldLabel.astro` |
+| Une variante `hover` ou `focus` | Du CSS automatique (`:hover`, `:focus-visible`), pas une prop | rien à écrire pour l'utilisateur |
+| Une variante `disabled` | Une prop `disabled` | `disabled` |
+| Une variante de validation (`error`, `success`) | Une prop qui porte le message | `error="Champ requis"` |
+| Une variable | Une variable CSS | `var(--…)` |
+| L'auto-layout | Du flexbox | |
+| La description du composant | Le commentaire en tête du fichier | « Ce que c'est / Ce que ce n'est pas » |
+
+## Marche à suivre
+
+### 1. Nommer comme le code
+
+Donner à chaque composant et à chaque propriété le nom que le code utilisera.
+
+- Écrire le nom du composant en `PascalCase`, sans préfixe de rangement : `Input`, pas `forms/Input`. La page Figma range déjà.
+- Écrire les propriétés de variante en minuscules : `size`, `checked`, `state`, `validation`.
+- Réserver `_` en tête de nom aux pièces internes (`_FieldLabel`, `_SelectPanel`).
+- Réserver `?` en fin de nom aux interrupteurs d'affichage (`hint?`, `label?`, `counter?`). Une variante ne porte jamais de `?`.
+
+Un nom qui diffère entre Figma et le code est un écart à signaler, jamais un détail.
+
+### 2. Trier les variantes : option ou état du navigateur
+
+Pour chaque variante, poser la question : « Le développeur choisit-il cette valeur ? »
+
+- **Oui** : c'est une prop. Garder la propriété de variante (`size`, `checked`, `indeterminate`, `orientation`, `validation`, `disabled`).
+- **Non**, parce que le navigateur la produit seul au survol ou au clavier (`hover`, `focus`, `pressed`) : c'est du CSS.
+
+Garder `hover` et `focus` comme variantes dans Figma, pour montrer le dessin. Le développeur en tire le CSS ; l'utilisateur du composant n'a rien à régler. Seul `disabled` devient une prop.
+
+### 3. Réserver les variantes à ce qui change la forme
+
+Une variante multiplie le nombre de dessins : trois propriétés de trois valeurs donnent vingt-sept variantes. Limiter les variantes à ce qui change l'anatomie ou le rendu.
+
+Pour tout le reste, utiliser une propriété :
+
+| Ce qui varie | Utiliser |
+|---|---|
+| Un texte (libellé, aide, compteur) | Une propriété texte |
+| Une icône | Un échange d'instance |
+| Une partie facultative | Un interrupteur booléen |
+| Une zone au contenu libre | Un emplacement (slot) |
+
+Une variante par icône, par texte ou par cas de contenu est à proscrire : le code n'a pas de prop pour la représenter.
+
+### 4. Lier chaque valeur à une variable
+
+Lier à une variable, sans exception :
+
+- chaque couleur de fond, de trait et de texte ;
+- chaque rembourrage, sur ses quatre côtés ;
+- chaque écart entre éléments (`gap`) ;
+- chaque rayon et chaque épaisseur de trait.
+
+Une valeur tapée à la main n'existe pas pour le code. Si aucune variable ne convient, ne pas écrire de valeur « en attendant » : signaler le manque, créer ou choisir la variable, puis lier.
+
+Utiliser l'auto-layout dans tout conteneur de plusieurs éléments liés entre eux. Le code le traduit en flexbox ; un conteneur posé en coordonnées libres n'a pas d'équivalent.
+
+### 5. Ne pas dessiner ce que le navigateur fait déjà
+
+Dessiner l'habillage, pas la mécanique : l'apparence de la case, du curseur de l'interrupteur, du champ. Ne pas redessiner ce que le système d'exploitation fournit (le menu natif, la barre de défilement, le sélecteur de fichiers).
+
+### 6. Écrire la description
+
+Remplir la description du composant dans Figma, en trois paragraphes :
+
+1. **Ce que c'est.** Une phrase qui définit le composant.
+2. **Ce que ce n'est pas.** Les composants à employer à la place.
+3. **Comportement.** Les variantes, les états, ce que fait chaque interrupteur.
+
+Terminer par une ligne `Code : Nom.astro. Props : …` quand le code existe. Cette description est la source du commentaire en tête du fichier : elle ne se corrige pas dans le code.
+
+### 7. Dessiner les cas, pas seulement les variantes
+
+Pour un composant dont le comportement dépend du contenu (liste longue, message d'erreur, compteur), ajouter une frame « Cas » à côté du jeu de variantes. Y poser des instances aux textes de longueur réaliste. Les cas montrent les limites ; ils ne sont pas des variantes.
+
+## Exemple : la case à cocher
+
+| Dessin Figma | Prop Astro |
+|---|---|
+| Propriété `checked` (`false`, `true`) | `checked` |
+| Propriété `indeterminate` (`false`, `true`) | `indeterminate` |
+| Propriété `state` : `rest`, `focus`, `disabled` | `disabled` ; `focus` est du CSS |
+| Interrupteur `hint?` | `hint` |
+| Propriété texte du libellé | `label` |
+
+Le fichier `Checkbox.astro` n'a donc que cinq entrées dans son `interface Props`, et aucune ne sort du dessin.
+
+## Liste de contrôle
+
+- [ ] Le nom du composant et ceux de ses propriétés sont ceux du code.
+- [ ] Chaque variante est une option du développeur, ou un état du navigateur (`hover`, `focus`).
+- [ ] Aucune variante ne sert à faire varier un texte ou une icône.
+- [ ] Chaque couleur, chaque rembourrage, chaque écart, chaque rayon est lié à une variable.
+- [ ] Chaque conteneur est en auto-layout.
+- [ ] La description du composant est écrite.
+- [ ] Les cas de contenu sont dessinés dans une frame « Cas ».
+
+## Ressources
+
+- [Ajouter un composant](../../atelier/ajouter-un-composant.md) : le chemin de la maquette au commit.
+- [Convention de documentation](../00%20Nos%20documents/CONVENTION-DOCUMENTATION-v1.md) : les règles de la doc et du front matter.
+- [Les composants Astro](./basics-astro-components.mdx) : comment une prop et un emplacement s'écrivent dans le fichier.
