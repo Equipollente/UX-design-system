@@ -18,10 +18,10 @@ import Tag from 'ux-design-system/components/Tag.astro';
 import Icon from 'ux-design-system/components/Icon.astro';
 import Card from 'ux-design-system/components/Card.astro';
 import Modal from 'ux-design-system/components/Modal.astro';
-import Input from 'ux-design-system/components/Input.astro';
+import Input from 'ux-design-system/components/forms/Input.astro';
 import Select from 'ux-design-system/components/Select.astro';
 import MultiSelect from 'ux-design-system/components/MultiSelect.astro';
-import Textarea from 'ux-design-system/components/Textarea.astro';
+import Textarea from 'ux-design-system/components/forms/Textarea.astro';
 import Radio from 'ux-design-system/components/Radio.astro';
 import Checkbox from 'ux-design-system/components/Checkbox.astro';
 import Toggle from 'ux-design-system/components/Toggle.astro';
@@ -195,7 +195,7 @@ const cleChamp = (t: string, r: boolean, d: boolean) => `${t}|${r ? 'r' : '-'}|$
 // exemple qui montre les deux façons dont un champ se remplit — on écrit, ou on
 // choisit. Sans JavaScript, c'est ce qui reste à l'écran, et c'est du code juste.
 const defautFormulaireEntete = `---
-import Input from 'ux-design-system/components/Input.astro';
+import Input from 'ux-design-system/components/forms/Input.astro';
 import Select from 'ux-design-system/components/Select.astro';
 ---`;
 

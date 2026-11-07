@@ -1,0 +1,124 @@
+---
+// Input — un champ pour une seule ligne : un nom, un courriel, un numéro, une recherche.
+//
+// Ce n'est pas une zone de texte : un champ d'une ligne se remplit de quelque chose dont on
+// connaît la forme, et son Entrée envoie le formulaire. Pour une phrase ou plusieurs, c'est
+// Textarea. Ce n'est pas non plus un choix dans une liste : c'est Select.
+//
+// Nœuds Figma : `FormGroup` 936:9502 (`type=text` et `type=search`) pour la pile, `Input fields`
+// 932:7425 pour la boîte — `state` × `validation` × `size`. Le libellé, l'aide et le message sont
+// les pièces internes de `_Field` : le mot du libellé, l'astérisque et le texte du message se
+// règlent sur elles, pas sur la boîte.
+//
+// Le <input> est natif. Les props prolongent le HTML : tout attribut d'un <input> (maxlength,
+// autocomplete, inputmode, pattern, name, value…) est accepté et posé sur la balise — la liste
+// n'est pas recopiée ici (HTMLAttributes, astro/types). `class` va sur le conteneur.
+//
+// Le dessin de la boîte vient de `styles/field-control.css`, partagé avec Textarea et Select.
+// Ce fichier ne déclare que la place de la loupe. Les états ne sont pas des props : `:hover`,
+// `:focus-visible` et `:disabled` sont ceux du navigateur ; seul `disabled` se donne. L'erreur
+// pose `aria-invalid`, le succès `data-validation="success"`.
+//
+// `error` et `success` portent le message : un seul à la fois, l'erreur l'emporte. L'aide reste
+// affichée avec eux, comme dans Figma. Tout ce qui est sous la boîte est désigné par
+// `aria-describedby`, que le lecteur d'écran lit en entrant dans le champ.
+//
+// Ce que Figma dessine et que le code ne suit pas : l'état `read-only`, qu'aucune vue ne demande.
+// `size` vaut `medium` par défaut ; Figma ne dit pas lequel des trois est celui du système.
+
+import type { HTMLAttributes } from 'astro/types';
+import Field from './_Field.astro';
+import Icon from '../Icon.astro';
+import { resolveField } from '../../lib/field';
+
+interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'size' | 'class' | 'required' | 'disabled'> {
+  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Retire le libellé de l'écran sans le retirer du document : le champ garde son nom. */
+  hideLabel?: boolean;
+  /** Ce que le champ accepte. Les types d'une seule ligne, et eux seuls. */
+  type?: 'text' | 'email' | 'tel' | 'url' | 'search';
+  /** La hauteur de la boîte : le rembourrage vertical. */
+  size?: 'small' | 'medium' | 'large';
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge. */
+  error?: string;
+  /** Le message de succès. Cède à l'erreur. */
+  success?: string;
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  hideLabel = false,
+  type = 'text',
+  size = 'medium',
+  hint,
+  error,
+  success,
+  name,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const field = resolveField(id, { hint, error, success });
+// Ce que l'appelant désigne déjà reste lu, après ce que le champ ajoute.
+const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+---
+
+<Field id={id} label={label} hideLabel={hideLabel} required={required} disabled={disabled} field={field} class={className}>
+  <div class="control">
+    {type === 'search' && <Icon name="search-2" />}
+    <input
+      {...rest}
+      id={id}
+      type={type}
+      name={name ?? id}
+      required={required}
+      disabled={disabled}
+      class="ds-field-control"
+      data-size={size}
+      data-validation={field.validation === 'success' ? 'success' : undefined}
+      data-search={type === 'search' ? '' : undefined}
+      aria-invalid={field.invalid ? 'true' : undefined}
+      aria-describedby={describedby}
+    />
+  </div>
+</Field>
+
+<style>
+  .control {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  /* La loupe : une icône décorative posée dans la boîte, devant le texte. La boîte lui laisse
+     la place par son rembourrage, et elle ne reçoit pas le clic. */
+  .control :global(svg) {
+    --icon-size: var(--icon-small);
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--stack-control-small-padding-inline-normal);
+    margin-block: auto;
+    pointer-events: none;
+    color: var(--color-icon-base-default);
+  }
+
+  input[data-search] {
+    padding-inline-start: calc(
+      var(--stack-control-small-padding-inline-normal) + var(--icon-small) + var(--stack-control-small-gap)
+    );
+  }
+
+  .control:has(input:disabled) :global(svg) {
+    color: var(--color-icon-base-disabled);
+  }
+</style>

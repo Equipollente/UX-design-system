@@ -4,13 +4,13 @@
 import DocsLayout from '../layouts/DocsLayout.astro';
 import DocExample from '../layouts/blocks/DocExample.astro';
 import FieldLabel from 'ux-design-system/components/FieldLabel.astro';
-import Input from 'ux-design-system/components/Input.astro';
+import Input from 'ux-design-system/components/forms/Input.astro';
 import Select from 'ux-design-system/components/Select.astro';
 import MultiSelect from 'ux-design-system/components/MultiSelect.astro';
 import Radio from 'ux-design-system/components/Radio.astro';
 import Checkbox from 'ux-design-system/components/Checkbox.astro';
 import Toggle from 'ux-design-system/components/Toggle.astro';
-import Textarea from 'ux-design-system/components/Textarea.astro';
+import Textarea from 'ux-design-system/components/forms/Textarea.astro';
 import Chip from 'ux-design-system/components/Chip.astro';
 import AddImage from 'ux-design-system/components/AddImage.astro';
 import EditImageGallery from 'ux-design-system/components/EditImageGallery.astro';
@@ -127,7 +127,7 @@ const textareaProps = [
   ['placeholder', 'string', '—', 'L’invite dans la boîte vide. Une consigne, pas un exemple à recopier.'],
   ['rows', 'number', '2 (natif)', 'Le nombre de lignes visibles. C’est la hauteur du champ, exprimée en lignes.'],
   ['maxlength', 'number', '—', 'La limite de caractères. C’est elle qui allume le compteur.'],
-  ['showCount', 'boolean', 'false', 'Montre le compteur. Sans maxlength, il n’y a rien à compter.'],
+  ['counter', 'boolean', 'false', 'Montre le compteur. Sans maxlength, il n’y a rien à compter.'],
   ['hint', 'string', '—', 'L’aide : ce que le champ attend, lue avant que personne ne se trompe. Désignée par aria-describedby.'],
   ['error', 'string', '—', 'Le message d’erreur. Pose aria-invalid, passe le trait en rouge et remplace l’aide.'],
   ['success', 'string', '—', 'Le message de succès. Remplace l’aide, et cède à error : un seul message à la fois.'],
@@ -1093,7 +1093,7 @@ const exemplesMultiple: Exemple[] = [
       <p class="section-note">
         <strong>Ce qu'elle est.</strong> Un champ pour du texte qui court sur plusieurs lignes. Nœud
         Figma <code>343:273</code>, douze variantes — quatre états, trois validations — et
-        {' '}<code>showCount?</code>, <code>hint?</code>, <code>label?</code>.
+        {' '}<code>counter?</code>, <code>hint?</code>, <code>label?</code>.
         <br />
         <strong>Ce qu'elle n'est pas.</strong> Ni un champ texte — un champ texte tient sur une ligne
         et se remplit d'un nom, d'un courriel, d'un nombre, quelque chose dont on connaît la forme ;
@@ -1166,30 +1166,30 @@ const exemplesMultiple: Exemple[] = [
 
       <p class="section-note">
         Le compteur n'a de sens qu'avec une limite : « 12 caractères » ne dit rien, « 12 / 500 » dit
-        combien il en reste. <code>showCount</code> sans <code>maxlength</code> n'affiche donc rien.
+        combien il en reste. <code>counter</code> sans <code>maxlength</code> n'affiche donc rien.
       </p>
 
       <div class="demo demo-fields">
         <div class="demo-case">
-          <p class="demo-name">showCount + maxlength</p>
+          <p class="demo-name">counter + maxlength</p>
           <Textarea
             id="desc-e"
             label="Description"
             placeholder="Ce que vous voulez me raconter du projet"
             rows={5}
             maxlength={500}
-            showCount
+            counter
           />
         </div>
         <div class="demo-case">
-          <p class="demo-name">showCount + maxlength — déjà rempli</p>
+          <p class="demo-name">counter + maxlength — déjà rempli</p>
           <Textarea
             id="desc-f"
             label="Description"
             value="Une refonte du parcours d’inscription, à mener avec l’équipe produit."
             rows={5}
             maxlength={500}
-            showCount
+            counter
           />
         </div>
       </div>

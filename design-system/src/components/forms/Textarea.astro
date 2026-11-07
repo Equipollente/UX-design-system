@@ -1,0 +1,137 @@
+---
+// Textarea — une zone pour du texte qui court sur plusieurs lignes : une description, un
+// message. La seule à compter ses caractères.
+//
+// Ce n'est pas un champ d'une ligne : celui-là se remplit de quelque chose dont on connaît la
+// forme (c'est Input). Ce n'est pas non plus un éditeur : rien ici ne met en gras, n'insère de
+// lien ni ne garde de mise en forme.
+//
+// Nœuds Figma : `FormGroup` 936:9502 (`type=textarea`) pour la pile, `Textarea fields` 979:952
+// pour la boîte — `state` × `validation` × `text`. Libellé, aide, message et compteur sont les
+// pièces de `_Field`.
+//
+// Le <textarea> est natif ; ses attributs (maxlength, rows, placeholder, name, wrap…) viennent
+// de HTMLAttributes et se posent sur la balise. `class` va sur le conteneur.
+//
+// La hauteur passe par `rows`, en lignes : la boîte se mesure sur sa propre typographie et
+// grandit avec elle. Figma dessine 120 px, soit trois lignes et demie de texte ; `rows` vaut 4
+// par défaut, parce qu'une ligne coupée à moitié ne se dessine pas. Pas de `size` : décidé le
+// 07/11. `resize: vertical` : un glissement horizontal casserait la mise en page autour.
+//
+// Le compteur — « 12/500 » — n'existe qu'avec `counter` et `maxlength` : sans limite il n'y a
+// rien à compter. C'est le seul script d'un champ de texte, et il est écrit pour le
+// compteur seul : l'élément personnalisé `<ds-textarea>` met à jour le nombre à la frappe.
+// Sans JavaScript, le compteur garde sa valeur au chargement et `maxlength` reste appliqué par
+// le navigateur : le texte se limite, seul le nombre ne bouge pas. Aucun échec WCAG, c'est le
+// choix de Judith (décision du 07/11). Le compteur n'est pas une région vivante.
+
+import type { HTMLAttributes } from 'astro/types';
+import Field from './_Field.astro';
+import { resolveField } from '../../lib/field';
+
+interface Props extends Omit<HTMLAttributes<'textarea'>, 'class' | 'required' | 'disabled' | 'maxlength'> {
+  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Retire le libellé de l'écran sans le retirer du document : le champ garde son nom. */
+  hideLabel?: boolean;
+  /** Le contenu déjà saisi. */
+  value?: string;
+  /** Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes. */
+  rows?: number;
+  /** La limite de caractères, appliquée par le navigateur. C'est elle qui allume le compteur. */
+  maxlength?: number;
+  /** Montre le compteur. Sans `maxlength`, il n'y a rien à compter. */
+  counter?: boolean;
+  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  hint?: string;
+  /** Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge. */
+  error?: string;
+  /** Le message de succès. Cède à l'erreur. */
+  success?: string;
+  required?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  hideLabel = false,
+  value = '',
+  rows = 4,
+  counter = false,
+  hint,
+  error,
+  success,
+  name,
+  maxlength,
+  required = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Le compteur n'a de sens qu'avec une limite : « 12 caractères » ne dit rien,
+// « 12/500 » dit combien il en reste.
+const field = resolveField(id, {
+  hint,
+  error,
+  success,
+  counter: counter && maxlength ? { current: value.length, max: maxlength } : undefined,
+});
+const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+---
+
+<ds-textarea>
+  <Field id={id} label={label} hideLabel={hideLabel} required={required} disabled={disabled} field={field} class={className}>
+    <textarea
+      {...rest}
+      id={id}
+      name={name ?? id}
+      rows={rows}
+      maxlength={maxlength}
+      required={required}
+      disabled={disabled}
+      class="ds-field-control"
+      data-validation={field.validation === 'success' ? 'success' : undefined}
+      aria-invalid={field.invalid ? 'true' : undefined}
+      aria-describedby={describedby}
+    >{value}</textarea>
+  </Field>
+</ds-textarea>
+
+<style>
+  /* L'élément personnalisé n'est qu'un point d'accroche pour le script : il ne dessine rien et
+     ne change pas la mise en page. */
+  ds-textarea {
+    display: contents;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+</style>
+
+<script>
+  // Un élément par zone de texte : `connectedCallback` s'exécute à chaque instance, que la page
+  // en porte une ou vingt, ou qu'une soit ajoutée plus tard. L'élément ne cherche que dans ses
+  // enfants. Le nombre se met à jour à la frappe ; la limite elle-même est celle du navigateur.
+  class DsTextarea extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      const area = this.querySelector('textarea');
+      const current = this.querySelector('[data-count-current]');
+      if (!area || !current) return;
+      this.dataset.ready = '';
+      const update = () => {
+        current.textContent = String(area.value.length);
+      };
+      area.addEventListener('input', update);
+      update();
+    }
+  }
+
+  if (!customElements.get('ds-textarea')) customElements.define('ds-textarea', DsTextarea);
+</script>
