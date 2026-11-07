@@ -599,3 +599,26 @@ suivi. La palette DSFR, qui n'a pas de syntaxe, garde la règle.
 
 La collection Motion est préfixée par le script (`--motion-duration-quick`) : sa syntaxe dans Figma doit
 le dire aussi. `node scripts/liste-syntaxes.mjs` dresse la liste et relève les écarts.
+
+## Les variantes d'un champ ont un vocabulaire commun : `state` × `validation`
+
+Décidé le 07/11, après l'audit des formulaires dans Figma. Le fichier mêlait `status`, `validation`, `state`,
+`State`, `default` et `rest`, un interrupteur `focus` en plus, et un `Property 1` sans nom.
+
+| Propriété | Valeurs |
+| --- | --- |
+| `state` | `rest`, `hover`, `focus`, `disabled` (+ `read-only` sur les champs texte) |
+| `validation` | `none`, `error`, `success` |
+| `size` | `small`, `medium`, `large` — `xsmall` est retiré, rien dans le code ne l'emploie |
+| `checked`, `indeterminate`, `selected` | `true`, `false` |
+| `orientation` | `vertical`, `horizontal` |
+| `text` | `value`, `placeholder` |
+| `type` | la sorte de champ (`text`, `search`, `select`) |
+
+L'état d'interaction et la validation sont **deux axes**, comme dans le code où `error` et `success` sont
+indépendants de `disabled` : un champ peut être au focus et en erreur, ce que le `status` unique ne dessine
+pas. Les combinaisons impossibles (désactivé et en erreur) ne sont pas dessinées.
+
+Un `?` en fin de nom désigne un interrupteur d'affichage (`hint?`, `label?`, `counter?`), jamais une
+variante : `inset?`, `fullWidth?` et `selected?` le perdent. Tout est en minuscules, sans préfixe `forms/` —
+la page range déjà — et le préfixe `_` reste réservé aux pièces internes.
