@@ -16,9 +16,10 @@
 // (07/11).
 //
 // Mesures, aucune en dur : la piste fait 40 (`base/40`), le curseur 18 — qui n'a pas de variable
-// et se compose, `base/20` moins `base/2`, comme le rond du Radio — et la piste 26, soit le curseur
-// et 4 de marge de chaque côté (`base/4`). Le glissement vaut ce qui reste : 40 moins 18 moins les
-// deux marges. Il se joue sur `motion/duration/quick`, que tokens.css ramène à 0 sous
+// et se compose, `base/20` moins `base/2`, comme le rond du Radio. Le 26 de la piste n'est pas une
+// mesure : il découle du rembourrage de la piste dans Figma, `stack/control/xsmall/padding-inline-condensed`
+// (4), de chaque côté du curseur. Le glissement vaut ce qui reste : 40 moins 18 moins les deux
+// rembourrages. Il se joue sur `motion/duration/quick`, que tokens.css ramène à 0 sous
 // `prefers-reduced-motion` : le trajet disparaît, pas les états.
 
 import type { HTMLAttributes } from 'astro/types';
@@ -67,7 +68,8 @@ const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ')
 <style>
   .toggle {
     --toggle-thumb: calc(var(--base-20) - var(--base-2));
-    --toggle-inset: var(--base-4);
+    /* Le rembourrage de la piste : c'est lui qui fait sa hauteur, et son glissement. */
+    --toggle-inset: var(--stack-control-xsmall-padding-inline-condensed);
     display: flex;
     align-items: flex-start;
     gap: var(--base-8);
