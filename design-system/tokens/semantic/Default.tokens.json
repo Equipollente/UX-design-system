@@ -7307,6 +7307,36 @@
             "targetVariableSetName": "NEW-Primitives"
           }
         }
+      },
+      "backdrop": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7882353067398071,
+            0.772549033164978,
+            0.8156862854957581
+          ],
+          "alpha": 1,
+          "hex": "#C9C5D0"
+        },
+        "$description": "Le voile derrière une fenêtre modale. Aliasé à une rampe opaque : l'opacité (40 %) se règle sur le calque.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:993:3664",
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--color-surface-backdrop)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e99f1d681eac9359e48c04680ed6b588e8e9f4d6/-1:-1",
+            "targetVariableName": "ramp/grey/400",
+            "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+            "targetVariableSetName": "NEW-Primitives"
+          }
+        }
       }
     }
   },

@@ -379,6 +379,7 @@
   --color-surface-selected:                         var(--ramp-indigo-100);
   --color-surface-feature:                          var(--ramp-indigo-700);
   --color-surface-celebrate:                        var(--ramp-lime-300);
+  --color-surface-backdrop:                         var(--ramp-grey-400);
 
   /* ── Échelle — les valeurs brutes, que les contrôles et les piles lisent ───── */
   --base-2:                                         2px;
