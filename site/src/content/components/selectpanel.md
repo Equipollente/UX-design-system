@@ -43,7 +43,7 @@ accessibilite:
   - "Quand la limite est atteinte, la liste le dit à voix haute et éteint les cases restantes."
   - "Les groupes sont des `<fieldset>` avec leur `<legend>`."
 voirAussi:
-  - { nom: Select, texte: Le champ qui ouvre cette liste. }
+  - { nom: Select, texte: Une liste déroulante simple, sans recherche. }
   - { nom: CheckboxGroup, texte: Quelques cases affichées d'emblée. }
 ---
 

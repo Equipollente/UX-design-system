@@ -145,7 +145,7 @@ pre {
  * les contrôles bruts du bac à sable, et disparaît avec le dernier d'entre eux. */
 :where(
     input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control),
-    select,
+    select:not(.ds-field-control),
     textarea:not(.ds-field-control),
     .field-box
   ) {
@@ -175,7 +175,7 @@ pre {
  * `padding-y` n'est pas appliqué non plus. */
 :where(
     input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control),
-    select,
+    select:not(.ds-field-control),
     .field-box
   ) {
   height: var(--control-small-size); /* 44 */
@@ -201,7 +201,7 @@ pre {
  * il l'emporte parce qu'il se voit : `neutral/100` sur `bg/surface` ne diffère
  * que par le canal bleu, 245 contre 255. */
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control):hover,
-select:hover,
+select:not(.ds-field-control):hover,
 textarea:not(.ds-field-control):hover,
 .field-box:hover {
   border-color: var(--color-border-neutral-strong);
@@ -220,14 +220,14 @@ textarea:not(.ds-field-control):hover,
  * l'accompagne que pour la forme. Le trait ne change pas : le succès teinte en plus
  * le fond du champ, `feedback/success/bg`. L'écart est dans arbitrages.md. */
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control)[data-validation='error'],
-select[data-validation='error'],
+select:not(.ds-field-control)[data-validation='error'],
 textarea:not(.ds-field-control)[data-validation='error'],
 .field-box[data-validation='error'] {
   border-color: var(--color-border-danger-strong);
 }
 
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control)[data-validation='success'],
-select[data-validation='success'],
+select:not(.ds-field-control)[data-validation='success'],
 textarea:not(.ds-field-control)[data-validation='success'],
 .field-box[data-validation='success'] {
   border-color: var(--color-icon-success);
@@ -239,7 +239,7 @@ textarea:not(.ds-field-control)[data-validation='success'],
  * fond et son trait et s'atténue — c'est elle qui dit « éteint », plus seulement
  * l'encre de son libellé. */
 input:is([type='text'], [type='email'], [type='tel'], [type='url'], [type='search']):not(.ds-field-control):disabled,
-select:disabled,
+select:not(.ds-field-control):disabled,
 textarea:not(.ds-field-control):disabled,
 fieldset:disabled .field-box {
   border-color: var(--color-border-base-subtle);

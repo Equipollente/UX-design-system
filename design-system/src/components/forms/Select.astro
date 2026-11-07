@@ -1,61 +1,47 @@
 ---
-// Select — un champ où l'on choisit une valeur, ou plusieurs, dans une liste.
+// Select — une liste déroulante simple : on choisit une valeur parmi des options connues d'avance.
 //
-// Ce n'est pas un menu natif : la liste est dessinée, parce que le menu du système est hors
-// d'atteinte du CSS et ne sait ni chercher, ni épingler, ni créer une option. Ce n'est pas non plus
-// quelques choix affichés d'emblée (c'est RadioGroup ou CheckboxGroup).
-//
-// Le Select est la boîte ; la liste qui s'ouvre dessous est SelectPanel, un composant à part avec sa
-// propre page. Les réglages de la liste — type, en-tête, pied — passent par ici tels quels.
+// C'est le <select> natif, comme chez Primer : un seul choix, aucune recherche, aucune création, et
+// la liste qui s'ouvre est celle du système — clavier, lecteurs d'écran, mobile, tout vient du
+// navigateur. Pour un choix avec recherche, plusieurs valeurs, un en-tête ou un pied, c'est
+// SelectPanel. Pour quatre choix ou moins, RadioGroup.
 //
 // Nœuds Figma : `FormGroup` 936:9502 (`type=select`) pour la pile, `Select` 954:6709 pour la boîte
-// — `state` × `validation` × `size`. La liste est `SelectPanel`, le dessin de Judith sur la page
-// ↳ Select Panel. Libellé, aide et message sont les pièces de `_Field`.
+// — `state` × `validation` × `size`. Libellé, aide et message sont les pièces de `_Field`.
 //
-// La boîte est un <button> qui ouvre la liste par `popovertarget` : l'ouverture, la fermeture à Échap
-// et au clic à côté sont celles du navigateur, sans script. Les choix sont de vrais radios (un choix)
-// ou de vraies cases (plusieurs), qui se soumettent avec le formulaire sous `name` : sans JavaScript,
-// la liste s'ouvre et le choix part, mais la boîte ne montre pas ce qu'on vient de choisir. C'est le
-// rôle de `<ds-select>` : dire le choix dans la boîte, ouvrir et fermer au bon moment.
+// Le <select> est natif. Les props prolongent le HTML : tout attribut d'un <select> (name, form,
+// autocomplete…) est accepté et posé sur la balise. `class` va sur le conteneur.
 //
-// `aria-invalid` n'est pas posé : un bouton ne le porte pas en ARIA. C'est le message, avec son
-// icône, qui dit l'erreur en toutes lettres, et le trait rouge de la boîte n'en est que
-// l'accompagnement (`data-validation`).
+// La boîte se dessine comme un champ (`styles/field-control.css`), sans l'apparence du système :
+// le chevron est une icône posée par-dessus, qui ne reçoit pas le clic. Les états ne sont pas des
+// props : `:hover`, `:focus-visible` et `:disabled` sont ceux du navigateur ; seul `disabled` se
+// donne. L'erreur pose `aria-invalid`, le succès `data-validation="success"`.
 //
-// La création n'enregistre rien : le champ annonce `select-create` (`detail.value`), et la page
-// décide de la garder. `creatable` pose la recherche, où se tape le nom.
-//
-// Un `<ds-select>` peut apparaître vingt fois dans une page, ou être cloné plus tard : l'élément
-// ne cherche que dans ses enfants, et `connectedCallback` s'exécute à chaque instance.
+// L'invite est une première option vide : éteinte quand le champ est obligatoire, elle ne peut plus
+// être rechoisie une fois un choix fait.
 
 import type { HTMLAttributes } from 'astro/types';
 import Field from './_Field.astro';
-import SelectPanel from './SelectPanel.astro';
 import Icon from '../Icon.astro';
 import { resolveField } from '../../lib/field';
 import { buildBlocks, chosenValues, type Option, type OptionGroup } from '../../lib/select';
 
 /**
- * Un champ où l'on choisit une valeur, ou plusieurs, dans une liste.
+ * Une liste déroulante simple : on choisit une valeur parmi des options connues d'avance.
  * @since 0.3.0
  */
-interface Props
-  extends Omit<HTMLAttributes<'button'>, 'type' | 'class' | 'disabled' | 'name' | 'value' | 'popovertarget'> {
+interface Props extends Omit<HTMLAttributes<'select'>, 'size' | 'class' | 'required' | 'disabled' | 'value'> {
   /**
-   * `id` de la boîte que le libellé nomme, et préfixe des choix. Unique dans la page.
+   * Lie le libellé au champ, et sert de `name` si aucun n'est donné.
    * @example pays
    */
   id: string;
   /**
    * Le texte du libellé.
    * @example Pays
-   * @group Libellé
    */
   label: string;
-  /**
-   * Retire le libellé de l'écran sans le retirer du document.
-   * @group Libellé
-   */
+  /** Retire le libellé de l'écran sans le retirer du document : le champ garde son nom. */
   hideLabel?: boolean;
   /**
    * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses
@@ -64,138 +50,35 @@ interface Props
    */
   options: (Option | OptionGroup)[];
   /**
-   * Un seul choix, ou plusieurs.
-   * @default single
-   */
-  type?: 'single' | 'multiple';
-  /**
-   * La taille : la hauteur de la boîte, et le rembourrage de chaque ligne de la liste.
-   * @default medium
-   */
-  size?: 'small' | 'medium' | 'large';
-  /**
-   * La valeur choisie à l'ouverture, pour un seul choix.
+   * La valeur choisie à l'ouverture.
    * @playground off
    */
   value?: string;
-  /**
-   * Les valeurs choisies à l'ouverture, pour plusieurs.
-   * @playground off
-   */
-  values?: string[];
   /**
    * Ce que dit la boîte quand rien n'est choisi.
    * @default Choisir
    */
   placeholder?: string;
   /**
-   * Le titre de l'en-tête de la liste. À défaut, le libellé du champ.
-   * @group En-tête
+   * La hauteur de la boîte : le rembourrage vertical.
+   * @default medium
    */
-  heading?: string;
-  /**
-   * Une phrase sous le titre de la liste.
-   * @group En-tête
-   */
-  description?: string;
-  /**
-   * Le nom lu du bouton qui ferme la liste.
-   * @group En-tête
-   * @default Fermer
-   */
-  closeLabel?: string;
-  /**
-   * Pose un champ de recherche dans l'en-tête de la liste, qui filtre les choix.
-   * @group Recherche
-   */
-  searchable?: boolean;
-  /**
-   * Le nom lu du champ de recherche. Il n'est pas affiché.
-   * @group Recherche
-   * @default Filtrer les choix
-   */
-  searchLabel?: string;
-  /**
-   * L'invite du champ de recherche.
-   * @group Recherche
-   * @default Rechercher
-   */
-  searchPlaceholder?: string;
-  /**
-   * Ce que dit la liste quand aucun choix ne correspond.
-   * @group Recherche
-   * @default Aucun résultat
-   */
-  noResultsLabel?: string;
-  /**
-   * Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre.
-   * @group Recherche
-   * @default {n} résultats
-   */
-  resultsLabel?: string;
-  /**
-   * Le nombre de résultats quand il n'y en a qu'un.
-   * @group Recherche
-   * @default {n} résultat
-   */
-  resultsOneLabel?: string;
-  /**
-   * Épingle en bas de la liste les choix faits, pour plusieurs choix.
-   * @group Pied
-   */
-  showSelected?: boolean;
-  /**
-   * Le nombre de choix à ne pas dépasser, pour plusieurs.
-   * @group Pied
-   */
-  max?: number;
-  /**
-   * Ce que dit la liste quand la limite est atteinte. `{n}` et `{max}` y sont remplacés.
-   * @group Pied
-   * @default Maximum atteint : {n} sur {max}
-   */
-  maxLabel?: string;
-  /**
-   * Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.
-   * @group Pied
-   */
-  creatable?: boolean;
-  /**
-   * La ligne de création au repos.
-   * @group Pied
-   * @default Créer une option
-   */
-  createLabel?: string;
-  /**
-   * La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.
-   * @group Pied
-   * @default Créer « {q} »
-   */
-  createQueryLabel?: string;
-  /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
-  name?: string;
+  size?: 'small' | 'medium' | 'large';
   /**
    * L'aide : ce que le champ attend, lue avant que personne ne se trompe.
    * @playground off
-   * @group Aide
    */
   hint?: string;
   /**
-   * Le message d'erreur. Passe la boîte au rouge.
+   * Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge.
    * @playground off
-   * @group Message
    */
   error?: string;
   /**
    * Le message de succès. Cède à l'erreur.
    * @playground off
-   * @group Message
    */
   success?: string;
-  /**
-   * Un choix est nécessaire. Pose l'astérisque.
-   * @group Libellé
-   */
   required?: boolean;
   disabled?: boolean;
   class?: string;
@@ -206,217 +89,111 @@ const {
   label,
   hideLabel = false,
   options,
-  type = 'single',
-  size = 'medium',
   value,
-  values,
   placeholder = 'Choisir',
-  heading,
-  description,
-  closeLabel = 'Fermer',
-  searchable = false,
-  searchLabel = 'Filtrer les choix',
-  searchPlaceholder = 'Rechercher',
-  noResultsLabel = 'Aucun résultat',
-  resultsLabel = '{n} résultats',
-  resultsOneLabel = '{n} résultat',
-  showSelected = false,
-  max,
-  maxLabel = 'Maximum atteint : {n} sur {max}',
-  creatable = false,
-  createLabel = 'Créer une option',
-  createQueryLabel = 'Créer « {q} »',
-  name,
+  size = 'medium',
   hint,
   error,
   success,
+  name,
   required = false,
   disabled = false,
   class: className,
   ...rest
 } = Astro.props;
 
-const multiple = type === 'multiple';
-const listId = `${id}-list`;
-// La boîte dit les libellés des choix faits, séparés par une virgule ; l'invite quand il n'y en a pas.
-const { items } = buildBlocks(listId, options);
-const chosen = chosenValues(multiple, value, values);
-const labels = items.filter((o) => chosen.includes(o.value)).map((o) => o.label);
-const summary = labels.length ? labels.join(', ') : placeholder;
+const { blocks } = buildBlocks(id, options);
+const chosen = chosenValues(false, value, undefined)[0];
 
 const field = resolveField(id, { hint, error, success });
 const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
-
-// Le nom d'ancre lie la liste à sa boîte. Il est unique comme l'`id` dont il dérive.
-const anchor = `--select-${id}`;
 ---
 
-<ds-select data-placeholder={placeholder}>
-  <Field id={id} label={label} hideLabel={hideLabel} required={required} disabled={disabled} field={field} class={className}>
-    <div class="select-control" style={`--select-anchor: ${anchor}`}>
-      <button
-        {...rest}
-        type="button"
-        id={id}
-        class="ds-field-control trigger"
-        data-size={size}
-        data-trigger
-        data-validation={field.validation === 'none' ? undefined : field.validation}
-        aria-describedby={describedby}
-        popovertarget={listId}
-        disabled={disabled}
-      >
-        <span class="value" data-value data-empty={labels.length === 0 ? '' : undefined}>
-          {summary}
-        </span>
-        <span class="chevron"><Icon name="chevron-down" /></span>
-      </button>
-      <SelectPanel
-        id={listId}
-        name={name ?? id}
-        popover
-        options={options}
-        type={type}
-        size={size}
-        value={value}
-        values={values}
-        heading={heading ?? label}
-        description={description}
-        closeLabel={closeLabel}
-        searchable={searchable}
-        searchLabel={searchLabel}
-        searchPlaceholder={searchPlaceholder}
-        noResultsLabel={noResultsLabel}
-        resultsLabel={resultsLabel}
-        resultsOneLabel={resultsOneLabel}
-        showSelected={showSelected}
-        max={max}
-        maxLabel={maxLabel}
-        creatable={creatable}
-        createLabel={createLabel}
-        createQueryLabel={createQueryLabel}
-        required={required}
-        disabled={disabled}
-      />
-    </div>
-  </Field>
-</ds-select>
+<Field id={id} label={label} hideLabel={hideLabel} required={required} disabled={disabled} field={field} class={className}>
+  <div class="control">
+    <select
+      {...rest}
+      id={id}
+      name={name ?? id}
+      required={required}
+      disabled={disabled}
+      class="ds-field-control"
+      data-size={size}
+      data-validation={field.validation === 'success' ? 'success' : undefined}
+      data-empty={chosen === undefined ? '' : undefined}
+      aria-invalid={field.invalid ? 'true' : undefined}
+      aria-describedby={describedby}
+    >
+      <option value="" disabled={required} selected={chosen === undefined} hidden={required}>{placeholder}</option>
+      {
+        blocks.map((block) =>
+          block.label ? (
+            <optgroup label={block.label} disabled={block.items.every((i) => i.locked)}>
+              {block.items.map((i) => (
+                <option value={i.value} selected={i.value === chosen} disabled={i.locked}>{i.label}</option>
+              ))}
+            </optgroup>
+          ) : (
+            block.items.map((i) => (
+              <option value={i.value} selected={i.value === chosen} disabled={i.locked}>{i.label}</option>
+            ))
+          ),
+        )
+      }
+    </select>
+    <span class="chevron"><Icon name="chevron-down" /></span>
+  </div>
+</Field>
 
 <style>
-  /* L'élément personnalisé n'est qu'un point d'accroche pour le script : il ne dessine rien. */
-  ds-select {
-    display: contents;
-  }
-
-  .select-control {
+  .control {
     position: relative;
-    anchor-name: var(--select-anchor);
     inline-size: 100%;
   }
 
-  /* La boîte se dessine comme un champ — la classe partagée — mais c'est un bouton : elle range la
-     valeur à gauche et le chevron à droite, et le texte ne se centre pas. */
-  .trigger {
-    --icon-size: var(--icon-small);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--stack-control-small-gap);
+  /* Le système dessine sa propre flèche : on la retire, et la place du chevron est réservée par le
+     rembourrage de la fin. */
+  select {
     appearance: none;
-    text-align: start;
     cursor: pointer;
+    padding-inline-end: calc(
+      var(--stack-control-small-padding-inline-normal) + var(--icon-small) + var(--stack-control-small-gap)
+    );
   }
 
-  .value {
-    min-inline-size: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .value[data-empty] {
+  /* Rien de choisi : la boîte montre l'invite en couleur d'invite, les options gardent la leur. */
+  select[data-empty]:invalid,
+  select[data-empty]:not(:disabled) {
     color: var(--color-text-base-muted);
   }
 
+  select[data-empty] option {
+    color: var(--color-text-base-default);
+  }
+
   .chevron {
+    --icon-size: var(--icon-small);
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--stack-control-small-padding-inline-normal);
     display: grid;
-    flex: none;
+    place-items: center;
+    pointer-events: none;
     color: var(--color-icon-base-default);
   }
 
-  .trigger:disabled .chevron {
+  .control:has(select:disabled) .chevron {
     color: var(--color-icon-base-disabled);
   }
 </style>
 
 <script>
-  let anchorCount = 0;
-
-  // Un élément par champ : `connectedCallback` s'exécute à chaque instance, que la page en porte
-  // une ou vingt, ou qu'une soit clonée plus tard. L'élément ne cherche que dans ses enfants. La liste
-  // est un <ds-select-panel> qui filtre, épingle et limite ; le Select ouvre, ferme et dit le choix.
-  class DsSelect extends HTMLElement {
-    connectedCallback() {
-      if (this.dataset.ready) return;
-      const list = this.querySelector<HTMLElement>('[data-panel]');
-      const panel = this.querySelector<HTMLElement & { reset(): void; focusFirst(): void }>('ds-select-panel');
-      const trigger = this.querySelector<HTMLButtonElement>('[data-trigger]');
-      const valueEl = this.querySelector<HTMLElement>('[data-value]');
-      if (!list || !panel || !trigger || !valueEl) return;
-      this.dataset.ready = '';
-
-      // Une copie du champ — une ligne clonée depuis un <template>, par exemple — porte les mêmes
-      // `id` que son modèle. La boîte et sa liste ne se retrouvent donc plus par `popovertarget` ni
-      // par le nom d'ancre écrits côté serveur : l'élément les relie par référence, et donne à sa
-      // liste une ancre qui n'appartient qu'à lui.
-      trigger.popoverTargetElement = list;
-      const closeButton = list.querySelector<HTMLButtonElement>('[popovertargetaction="hide"]');
-      if (closeButton) closeButton.popoverTargetElement = list;
-      this.querySelector<HTMLElement>('.select-control')?.style.setProperty('--select-anchor', `--ds-select-${++anchorCount}`);
-
-      const inputs = [...list.querySelectorAll<HTMLInputElement>('[data-option] input')];
-      const close = () => {
-        if (list.matches(':popover-open')) list.hidePopover();
-        trigger.focus();
-      };
-
-      // La boîte dit les choix : les libellés des lignes cochées, ou l'invite.
-      const sync = () => {
-        const labels = inputs.filter((i) => i.checked).map((i) => i.dataset.label ?? '');
-        valueEl.textContent = labels.length ? labels.join(', ') : (this.dataset.placeholder ?? '');
-        valueEl.toggleAttribute('data-empty', labels.length === 0);
-      };
-
-      this.addEventListener('select-change', (event) => {
-        sync();
-        // À un choix, un clic ou Espace choisit et ferme ; les flèches parcourent sans fermer. À
-        // plusieurs, la liste reste ouverte : on coche, on décoche, puis on ferme.
-        const { pointer } = (event as CustomEvent<{ pointer: boolean }>).detail;
-        if (panel.dataset.type !== 'multiple' && pointer) close();
-      });
-
-      // Un champ obligatoire sans choix : le navigateur ne peut pas focaliser une case dans une liste
-      // fermée. On ouvre la liste à la place, qui est l'endroit où il faut répondre.
-      this.addEventListener('select-invalid', (event) => {
-        event.preventDefault();
-        if (!list.matches(':popover-open')) list.showPopover();
-      });
-
-      this.addEventListener('select-create', () => close());
-
-      trigger.addEventListener('keydown', (event) => {
-        if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && !list.matches(':popover-open')) {
-          event.preventDefault();
-          list.showPopover();
-        }
-      });
-
-      list.addEventListener('toggle', (event) => {
-        if ((event as Event & { newState: string }).newState === 'open') panel.focusFirst();
-        else panel.reset();
-      });
+  // Une fois un choix fait, la boîte reprend la couleur d'une valeur. Sans ce script, elle garde
+  // celle de l'invite jusqu'au rechargement : le choix reste juste, seule la couleur est en retard.
+  document.addEventListener('change', (event) => {
+    const select = event.target;
+    if (select instanceof HTMLSelectElement && select.classList.contains('ds-field-control')) {
+      select.toggleAttribute('data-empty', select.value === '');
     }
-  }
-
-  if (!customElements.get('ds-select')) customElements.define('ds-select', DsSelect);
+  });
 </script>
