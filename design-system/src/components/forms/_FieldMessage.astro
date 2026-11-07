@@ -1,0 +1,59 @@
+---
+// _FieldMessage — ce que dit un champ sous sa boîte quand il est faux ou réussi, et rien
+// d'autre. Pièce interne : les champs la posent, personne ne la pose seule.
+//
+// Deux sortes de message, un seul dessin : une erreur (un triangle), un succès (une coche).
+// L'icône n'est pas là pour décorer : c'est elle qui sépare l'erreur du succès sans passer
+// par la couleur seule (WCAG 1.4.1). Elle est `aria-hidden`, parce que le sens est déjà dans
+// les mots et que le champ porte `aria-invalid` quand il est en erreur.
+//
+// Ce n'est pas une alerte : pas une région vivante. Un message qui apparaît à la frappe
+// n'a pas à interrompre la dictée du texte. Le champ le désigne par `aria-describedby`, et
+// un lecteur d'écran le lit en entrant dedans.
+//
+// Nœud Figma : 918:2405 — `_FieldMessage`, `validation` error et success. L'aide n'en fait
+// plus partie : c'est `_FieldHint`.
+//
+// Mesures liées aux variables du système : écart icône ↔ texte `base/4`, icône `icon-small`
+// (20), texte `label/default` (12).
+
+import Icon from '../Icon.astro';
+
+interface Props {
+  /** Ce que dit le message. Il décide de l'encre et de l'icône. */
+  type: 'error' | 'success';
+  /** L'`id` que le champ désigne par `aria-describedby`. */
+  id: string;
+  class?: string;
+}
+
+const { type, id, class: className, ...rest } = Astro.props;
+const icon = type === 'error' ? 'alert-triangle' : 'check';
+---
+
+<p id={id} class:list={['field-message', type, className]} {...rest}>
+  <Icon name={icon} /><span><slot /></span>
+</p>
+
+<style>
+  .field-message {
+    display: flex;
+    align-items: center;
+    gap: var(--base-4);
+    margin: 0;
+    /* La taille d'icône descend par héritage jusqu'au <svg>. */
+    --icon-size: var(--icon-small);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--text-caption-weight);
+    line-height: var(--text-caption-line-height);
+  }
+
+  .error {
+    color: var(--color-text-danger-default);
+  }
+
+  .success {
+    color: var(--color-text-success-default);
+  }
+</style>

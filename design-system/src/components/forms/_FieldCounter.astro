@@ -1,0 +1,58 @@
+---
+// _FieldCounter — le compteur de caractères sous une zone de texte, « 12/500 ». Pièce
+// interne : Textarea la pose, personne ne la pose seule.
+//
+// Ce n'est pas une limite : la limite est l'attribut `maxlength` du champ, que le
+// navigateur applique. Le compteur dit seulement combien il en reste. Il n'est pas une
+// région vivante : annoncer chaque lettre interromprait la dictée. Le champ le désigne par
+// `aria-describedby`.
+//
+// Le nombre actuel est dans un `<span data-count-current>` : c'est l'élément personnalisé
+// `<ds-textarea>` qui le met à jour à la frappe. Sans JavaScript, il garde sa valeur au
+// chargement — c'est le choix de Judith, aucun échec WCAG (décision du 07/11).
+//
+// Nœud Figma : 938:10738 — `_FieldCounter`, `state` rest et disabled, `validation` none et
+// error.
+
+interface Props {
+  /** L'`id` que le champ désigne par `aria-describedby`. */
+  id: string;
+  /** Le nombre de caractères au chargement. */
+  current: number;
+  /** La limite : celle de `maxlength`. */
+  max: number;
+  /** Passe l'encre en rouge. */
+  invalid?: boolean;
+  /** L'encre passe en `text/disabled`. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const { id, current, max, invalid = false, disabled = false, class: className, ...rest } = Astro.props;
+---
+
+<p
+  id={id}
+  class:list={['field-counter', { 'is-invalid': invalid, 'is-disabled': disabled }, className]}
+  {...rest}
+><span data-count-current>{current}</span>/{max}</p>
+
+<style>
+  .field-counter {
+    margin: 0;
+    padding-block: var(--stack-control-xsmall-padding-inline-condensed);
+    color: var(--color-text-base-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--text-caption-weight);
+    line-height: var(--text-caption-line-height);
+  }
+
+  .field-counter.is-invalid {
+    color: var(--color-text-danger-default);
+  }
+
+  .field-counter.is-disabled {
+    color: var(--color-text-base-disabled);
+  }
+</style>

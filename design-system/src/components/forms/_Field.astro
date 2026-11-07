@@ -1,0 +1,75 @@
+---
+// _Field — la pile d'un champ : libellé, champ, compteur, message, aide, dans cet ordre.
+// Pièce interne : Input, Textarea et Select la posent, personne ne la pose seule.
+//
+// Elle range, elle ne décide pas. Ce qui se décide — quel message l'emporte, quels
+// identifiants, quel `aria-describedby` — l'est dans `lib/field.ts`, que le champ appelle
+// avant de ranger sa balise ici. Un composant Astro ne peut pas écrire un attribut sur ce
+// qu'on glisse dans son emplacement : si `_Field` était public et recevait le champ de
+// l'appelant, `aria-describedby` et `aria-invalid` seraient à écrire deux fois. C'est la
+// raison pour laquelle le `Field` de Figma devient ici une pièce interne.
+//
+// Ce n'est pas un groupe de cases : les cases, les radios et l'interrupteur portent leur
+// libellé à côté du contrôle, pas au-dessus, et n'ont pas besoin d'elle.
+//
+// Nœud Figma : 936:9502 — `FormGroup`. Le champ lui-même (`type`) est ce qu'on glisse dans
+// l'emplacement. Écart entre les éléments : `stack/control/xsmall/gap`.
+//
+// Elle importe le dessin partagé de la boîte, `styles/field-control.css`, que les champs
+// posent par la classe `.ds-field-control` : la feuille n'arrive dans une page que si un
+// champ y est.
+
+import '../../styles/field-control.css';
+import FieldLabel from './_FieldLabel.astro';
+import FieldHint from './_FieldHint.astro';
+import FieldMessage from './_FieldMessage.astro';
+import FieldCounter from './_FieldCounter.astro';
+import type { ResolvedField } from '../../lib/field';
+
+interface Props {
+  /** L'`id` du champ glissé dans l'emplacement : c'est ce qui le lie au libellé. */
+  id: string;
+  /** Le texte du libellé. */
+  label: string;
+  /** Retire le libellé de l'écran sans le retirer du document. */
+  hideLabel?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  /** Ce que `resolveField` a décidé : message, aide, compteur et identifiants. */
+  field: ResolvedField;
+  class?: string;
+}
+
+const { id, label, hideLabel = false, required = false, disabled = false, field, class: className, ...rest } =
+  Astro.props;
+---
+
+<div class:list={['field', className]} {...rest}>
+  <FieldLabel for={id} required={required} disabled={disabled} visuallyHidden={hideLabel}>{label}</FieldLabel>
+  <slot />
+  {field.counter && (
+    <FieldCounter
+      id={field.counter.id}
+      current={field.counter.current}
+      max={field.counter.max}
+      disabled={disabled}
+    />
+  )}
+  {field.message && <FieldMessage id={field.message.id} type={field.message.type}>{field.message.text}</FieldMessage>}
+  {field.hint && <FieldHint id={field.hint.id} disabled={disabled}>{field.hint.text}</FieldHint>}
+</div>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stack-control-xsmall-gap);
+  }
+
+  /* Le champ glissé prend toute la colonne : l'alignement du début, nécessaire au libellé
+     et au message, ne doit pas rétrécir la boîte. */
+  .field > :global(.ds-field-control) {
+    align-self: stretch;
+  }
+</style>

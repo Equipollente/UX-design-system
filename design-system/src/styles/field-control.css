@@ -1,0 +1,103 @@
+/* Le dessin commun de la boîte d'un champ : Input, Textarea et la boîte du Select.
+ *
+ * Il tient sur une classe, `.ds-field-control`, que les composants posent sur leur propre
+ * balise. Il ne vise aucune balise nue : un <input> écrit par un site n'est pas touché, et
+ * la feuille n'arrive dans une page que si un champ y est, parce que `_Field` l'importe
+ * (la doc d'Astro veut des styles scopés par défaut, et du global seulement quand il le
+ * faut). Il est partagé et non scopé pour une raison : trois composants ont la même boîte,
+ * et un style par composant ferait diverger les trois sans que rien ne l'ait décidé.
+ *
+ * Nœuds Figma : `Input fields` 932:7425 et `Textarea fields` 979:952.
+ *
+ * Cette feuille habille, elle ne place pas : la largeur d'un champ et la hauteur d'une zone
+ * de texte restent au composant qui le monte.
+ *
+ * La base est à spécificité zéro (`:where()`) : un composant qui doit s'en écarter l'emporte
+ * sans dépendre de l'ordre des feuilles. Les états gardent leur spécificité : ils doivent
+ * battre la base.
+ *
+ * Les états ne sont pas des classes. Ils lisent ce que le HTML dit déjà : `:disabled`,
+ * `:focus-visible`, `[aria-invalid='true']` pour l'erreur. Le succès n'a pas d'équivalent
+ * ARIA : il passe par `data-validation='success'`. La taille passe par `data-size`.
+ *
+ * Écart connu, tranché par Judith le 07/11 : le trait au repos (`color/border/base/input`)
+ * mesure 1,28:1 sur le fond du champ, loin des 3:1 de WCAG 1.4.11. Le dessin est gardé tel
+ * quel ; le message et son icône portent l'état, pas la couleur du trait (WCAG 1.4.1). */
+
+:where(.ds-field-control) {
+  box-sizing: border-box;
+  inline-size: 100%;
+  margin: 0;
+  /* Le texte du champ : le style `label/field` de Figma, 16 en Medium. */
+  font-family: var(--font-stack-body);
+  font-size: var(--text-body-medium-size);
+  font-weight: var(--base-text-weight-medium);
+  line-height: var(--text-body-medium-line-height);
+  letter-spacing: var(--base-text-letter-spacing-normal);
+  color: var(--color-text-base-default);
+  background: var(--color-background-base-input);
+  border: var(--border-width-default) solid var(--color-border-base-input);
+  border-radius: var(--border-radius-small);
+  padding-block: var(--stack-control-medium-padding-block);
+  padding-inline: var(--stack-control-small-padding-inline-normal);
+}
+
+/* Les trois tailles ne changent que le rembourrage vertical : le rembourrage horizontal est
+ * le même dans Figma pour les trois. */
+:where(.ds-field-control[data-size='small']) {
+  padding-block: var(--stack-control-small-padding-block);
+}
+
+:where(.ds-field-control[data-size='large']) {
+  padding-block: var(--stack-control-large-padding-block);
+}
+
+/* L'exemple s'écrit dans l'encre atténuée du système. */
+:where(.ds-field-control)::placeholder {
+  color: var(--color-text-base-muted);
+}
+
+/* — survol — Le trait fonce, le fond ne bouge pas : c'est le geste que `Textarea fields`
+ * dessine, repris pour les autres champs. */
+.ds-field-control:hover {
+  border-color: var(--color-border-neutral-strong);
+}
+
+/* — validation — Le fond et le trait prennent la teinte du verdict, et la gardent au
+ * survol : un champ en erreur qui reprendrait son gris dès que la souris passe dessus
+ * cacherait ce qu'on est en train de lire. Écrit après le survol : à spécificité égale,
+ * c'est l'ordre qui tranche. */
+.ds-field-control[aria-invalid='true'] {
+  background: var(--color-background-danger-subtlest);
+  border-color: var(--color-border-danger-default);
+}
+
+.ds-field-control[data-validation='success'] {
+  background: var(--color-background-success-subtlest);
+  border-color: var(--color-border-success-default);
+}
+
+/* — focus — Un anneau de 2 px dessiné vers l'intérieur : il couvre le trait au lieu de
+ * l'épaissir, et la boîte ne change pas de taille (WCAG 2.4.7, 2.4.11). Sa couleur suit
+ * la validation, comme dans Figma. */
+.ds-field-control:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-border-base-focus);
+  outline-offset: calc(var(--border-width-focus) * -1);
+}
+
+.ds-field-control[aria-invalid='true']:focus-visible {
+  outline-color: var(--color-border-danger-strong);
+}
+
+.ds-field-control[data-validation='success']:focus-visible {
+  outline-color: var(--color-border-success-strong);
+}
+
+/* — désactivé — écrit en dernier : un champ éteint ne réagit pas à la souris et n'affiche
+ * plus de verdict. Figma le dessine sans validation. */
+.ds-field-control:disabled {
+  background: var(--color-background-base-input-disabled);
+  border-color: var(--color-border-base-input-disabled);
+  color: var(--color-text-base-disabled);
+  cursor: not-allowed;
+}

@@ -1,0 +1,106 @@
+---
+// _FieldLabel — le libellé d'un champ, et lui seul. Pièce interne : Input, Textarea, Select,
+// les groupes de cases et de radios la posent, personne ne la pose seule.
+//
+// Ce n'est pas un titre : un libellé nomme un champ pour les lecteurs d'écran autant que
+// pour les yeux, et il doit lui être lié. Pour un champ, c'est un <label for> ; pour un
+// groupe de cases ou de radios, qui n'ont pas un champ à désigner mais plusieurs, c'est la
+// <legend> d'un <fieldset> — `as="legend"` rend le même dessin dans cette balise.
+//
+// Nœud Figma : 918:2412 — `_FieldLabel`, `state` rest et disabled, `required` et `text`.
+//
+// L'astérisque n'est pas le signal d'obligation, il en est la trace visible. Le signal est
+// porté par le champ lui-même, par l'attribut `required` que les lecteurs d'écran annoncent :
+// l'astérisque est donc `aria-hidden`, sans quoi il serait lu deux fois. Le formulaire qui
+// s'en sert doit ouvrir sur la phrase « Les champs marqués * sont obligatoires ».
+//
+// Figma l'écrit en deux encres selon l'état : rouge « on-subtle » au repos, rouge « default »
+// quand le libellé est éteint. Le code suit.
+//
+// `visuallyHidden` est le `label?` éteint de Figma : le libellé reste dans le document, pour
+// le nom accessible du champ (WCAG 1.3.1, 4.1.2), et disparaît de l'écran.
+
+interface Props {
+  /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. Sans objet en légende. */
+  for?: string;
+  /** `legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`. */
+  as?: 'label' | 'legend';
+  /** Pose l'astérisque. Le champ doit porter `required` de son côté. */
+  required?: boolean;
+  /** L'encre passe en `text/disabled`. Le champ doit porter `disabled` de son côté. */
+  disabled?: boolean;
+  /** Retire le libellé de l'écran sans le retirer du document. */
+  visuallyHidden?: boolean;
+  class?: string;
+}
+
+const {
+  for: htmlFor,
+  as = 'label',
+  required = false,
+  disabled = false,
+  visuallyHidden = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['field-label', { 'is-disabled': disabled, 'is-hidden': visuallyHidden }, className];
+---
+
+{
+  as === 'legend' ? (
+    <legend class:list={classes} {...rest}>
+      <slot />{required && <span class="mark" aria-hidden="true">*</span>}
+    </legend>
+  ) : (
+    <label class:list={classes} for={htmlFor} {...rest}>
+      <slot />{required && <span class="mark" aria-hidden="true">*</span>}
+    </label>
+  )
+}
+
+<style>
+  .field-label {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--base-2);
+    /* Une <legend> arrive avec un rembourrage du navigateur, qui ne vient d'aucune
+       variable : il s'efface, et les deux balises se posent pareil. */
+    padding: 0;
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--text-body-medium-line-height);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+  }
+
+  .field-label.is-disabled {
+    color: var(--color-text-base-disabled);
+  }
+
+  /* L'astérisque garde sa propre taille, comme dans Figma (`label/field-required`) :
+     14 en semi-gras, sur l'interligne du texte de corps. */
+  .mark {
+    color: var(--color-text-danger-on-subtle);
+    font-size: var(--text-body-small-size);
+    font-weight: var(--base-text-weight-semibold);
+    line-height: var(--text-body-small-line-height);
+  }
+
+  .is-disabled .mark {
+    color: var(--color-text-danger-default);
+  }
+
+  /* Le masquage visuel : une technique, pas une mesure de design. Le libellé reste lu par
+     les lecteurs d'écran et ne prend aucune place. */
+  .is-hidden {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+// _FieldHint — l'aide sous un champ : ce qu'il attend, dit avant que personne ne se trompe.
+// Pièce interne : les champs la posent, personne ne la pose seule.
+//
+// Ce n'est pas un message de validation : une aide ne dit pas si le champ est bon ou faux,
+// et elle reste affichée quand un message apparaît, comme dans Figma. Le champ la désigne
+// par `aria-describedby`, un lecteur d'écran la lit en entrant dedans.
+//
+// Nœud Figma : 938:10734 — `_FieldHint`, `state` rest et disabled.
+
+interface Props {
+  /** L'`id` que le champ désigne par `aria-describedby`. */
+  id: string;
+  /** L'encre passe en `text/disabled`. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const { id, disabled = false, class: className, ...rest } = Astro.props;
+---
+
+<p id={id} class:list={['field-hint', { 'is-disabled': disabled }, className]} {...rest}><slot /></p>
+
+<style>
+  .field-hint {
+    margin: 0;
+    /* L'aide respire de 4 en haut et en bas, comme le compteur : la même mesure que
+       l'écart du champ, lue dans le même rôle que Figma. */
+    padding-block: var(--stack-control-xsmall-padding-inline-condensed);
+    color: var(--color-text-base-muted);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-caption-size);
+    font-weight: var(--text-caption-weight);
+    line-height: var(--text-caption-line-height);
+  }
+
+  .field-hint.is-disabled {
+    color: var(--color-text-base-disabled);
+  }
+</style>
