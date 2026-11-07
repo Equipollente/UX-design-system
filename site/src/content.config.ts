@@ -5,7 +5,8 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // La valeur d'un réglage dans un exemple : un mot, un nombre ou oui / non.
-const valeur = z.union([z.string(), z.number(), z.boolean()]);
+// Une liste (`options` d'un Select, d'un groupe de cases) est aussi une valeur : des mots, ou des objets.
+const valeur = z.union([z.string(), z.number(), z.boolean(), z.array(z.union([z.string(), z.record(z.string(), z.any())]))]);
 
 const components = defineCollection({
   // Un fichier par composant, nommé comme lui en minuscules : inputpg.md pour InputPG.

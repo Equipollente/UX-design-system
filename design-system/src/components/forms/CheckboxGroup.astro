@@ -30,17 +30,29 @@ interface Option {
  * @since 0.3.0
  */
 interface Props {
-  /** Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page. */
+  /**
+   * Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page.
+   * @example techniques
+   */
   id: string;
-  /** La question posée au groupe. */
+  /**
+   * La question posée au groupe.
+   * @example Techniques
+   */
   legend: string;
   /** Retire la légende de l'écran sans la retirer du document. */
   hideLegend?: boolean;
   /** Le `name` envoyé par chaque case cochée. À défaut, l'`id`. */
   name?: string;
-  /** Les cases. */
+  /**
+   * Les cases.
+   * @example [{"value":"a","label":"Gouache"},{"value":"b","label":"Encre","hint":"Noire ou de couleur"},{"value":"c","label":"Collage"}]
+   */
   options: Option[];
-  /** Les valeurs cochées à l'ouverture. */
+  /**
+   * Les valeurs cochées à l'ouverture.
+   * @playground off
+   */
   values?: string[];
   orientation?: 'vertical' | 'horizontal';
   /** Éteint toutes les cases. */

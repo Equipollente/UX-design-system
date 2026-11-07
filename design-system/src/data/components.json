@@ -1627,13 +1627,15 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page."
+        "description": "Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page.",
+        "exemple": "techniques"
       },
       {
         "nom": "legend",
         "type": "string",
         "requis": true,
-        "description": "La question posée au groupe."
+        "description": "La question posée au groupe.",
+        "exemple": "Techniques"
       },
       {
         "nom": "hideLegend",
@@ -1651,13 +1653,15 @@
         "nom": "options",
         "type": "Option[]",
         "requis": true,
-        "description": "Les cases."
+        "description": "Les cases.",
+        "exemple": "[{\"value\":\"a\",\"label\":\"Gouache\"},{\"value\":\"b\",\"label\":\"Encre\",\"hint\":\"Noire ou de couleur\"},{\"value\":\"c\",\"label\":\"Collage\"}]"
       },
       {
         "nom": "values",
         "type": "string[]",
         "requis": false,
-        "description": "Les valeurs cochées à l'ouverture."
+        "description": "Les valeurs cochées à l'ouverture.",
+        "playground": false
       },
       {
         "nom": "orientation",
@@ -1900,13 +1904,15 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page."
+        "description": "Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page.",
+        "exemple": "format"
       },
       {
         "nom": "legend",
         "type": "string",
         "requis": true,
-        "description": "La question posée au groupe."
+        "description": "La question posée au groupe.",
+        "exemple": "Format"
       },
       {
         "nom": "hideLegend",
@@ -1924,13 +1930,15 @@
         "nom": "options",
         "type": "Option[]",
         "requis": true,
-        "description": "Les choix."
+        "description": "Les choix.",
+        "exemple": "[{\"value\":\"a4\",\"label\":\"A4\"},{\"value\":\"a3\",\"label\":\"A3\",\"hint\":\"Pour les grandes œuvres\"},{\"value\":\"a2\",\"label\":\"A2\",\"disabled\":true}]"
       },
       {
         "nom": "value",
         "type": "string",
         "requis": false,
-        "description": "La valeur choisie à l'ouverture. Une seule."
+        "description": "La valeur choisie à l'ouverture. Une seule.",
+        "playground": false
       },
       {
         "nom": "orientation",
@@ -1987,13 +1995,15 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page."
+        "description": "Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page.",
+        "exemple": "pays"
       },
       {
         "nom": "label",
         "type": "string",
         "requis": true,
-        "description": "Le texte du libellé."
+        "description": "Le texte du libellé.",
+        "exemple": "Pays"
       },
       {
         "nom": "hideLabel",
@@ -2005,13 +2015,15 @@
         "nom": "options",
         "type": "(Option | OptionGroup)[]",
         "requis": true,
-        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\r\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas."
+        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\r\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas.",
+        "exemple": "[{\"value\":\"france\",\"label\":\"France\"},{\"value\":\"belgique\",\"label\":\"Belgique\"},{\"value\":\"suisse\",\"label\":\"Suisse\"}]"
       },
       {
         "nom": "value",
         "type": "string",
         "requis": false,
-        "description": "La valeur choisie à l'ouverture."
+        "description": "La valeur choisie à l'ouverture.",
+        "playground": false
       },
       {
         "nom": "placeholder",
@@ -2100,19 +2112,22 @@
         "nom": "hint",
         "type": "string",
         "requis": false,
-        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe."
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe.",
+        "playground": false
       },
       {
         "nom": "error",
         "type": "string",
         "requis": false,
-        "description": "Le message d'erreur. Passe la boîte au rouge."
+        "description": "Le message d'erreur. Passe la boîte au rouge.",
+        "playground": false
       },
       {
         "nom": "success",
         "type": "string",
         "requis": false,
-        "description": "Le message de succès. Cède à l'erreur."
+        "description": "Le message de succès. Cède à l'erreur.",
+        "playground": false
       },
       {
         "nom": "required",

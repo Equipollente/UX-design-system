@@ -18,7 +18,7 @@ interface Reglage {
 interface Exemple {
   titre: string;
   texte?: string;
-  instances: Record<string, string | number | boolean>[];
+  instances: Record<string, string | number | boolean | unknown[]>[];
 }
 
 interface Props {
@@ -37,7 +37,7 @@ for (const exemple of exemples) {
     for (const [cle, valeur] of Object.entries(instance)) {
       const reglage = reglages.find((r) => r.nom === cle);
       if (!reglage) throw new Error(`Exemple « ${exemple.titre} » : ${nom} n'a pas de réglage « ${cle} ».`);
-      if (reglage.valeurs && !reglage.valeurs.includes(String(valeur))) {
+      if (reglage.valeurs && !Array.isArray(valeur) && !reglage.valeurs.includes(String(valeur))) {
         throw new Error(`Exemple « ${exemple.titre} » : « ${valeur} » n'est pas une valeur de ${cle} (${reglage.valeurs.join(', ')}).`);
       }
     }
@@ -46,7 +46,8 @@ for (const exemple of exemples) {
 
 // ── Le code à copier ─────────────────────────────────────────────────────────
 // Seulement ce qui s'écarte du départ, dans l'ordre des réglages du composant.
-function ligne(reglage: Reglage, valeur: string | number | boolean) {
+function ligne(reglage: Reglage, valeur: string | number | boolean | unknown[]) {
+  if (Array.isArray(valeur)) return `${reglage.nom}={${JSON.stringify(valeur, null, 2).replace(/\n/g, '\n  ')}}`;
   if (typeof valeur === 'boolean') {
     const parDefaut = reglage.default === 'true';
     if (valeur === parDefaut) return null;

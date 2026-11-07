@@ -48,18 +48,28 @@ interface OptionGroup {
  */
 interface Props
   extends Omit<HTMLAttributes<'button'>, 'type' | 'class' | 'disabled' | 'name' | 'value' | 'popovertarget'> {
-  /** Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page. */
+  /**
+   * Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page.
+   * @example pays
+   */
   id: string;
-  /** Le texte du libellé. */
+  /**
+   * Le texte du libellé.
+   * @example Pays
+   */
   label: string;
   /** Retire le libellé de l'écran sans le retirer du document. */
   hideLabel?: boolean;
   /**
    * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses
    * choix sous un nom, comme un <optgroup> : il ne s'imbrique pas.
+   * @example [{"value":"france","label":"France"},{"value":"belgique","label":"Belgique"},{"value":"suisse","label":"Suisse"}]
    */
   options: (Option | OptionGroup)[];
-  /** La valeur choisie à l'ouverture. */
+  /**
+   * La valeur choisie à l'ouverture.
+   * @playground off
+   */
   value?: string;
   /** Ce que dit la boîte quand rien n'est choisi. */
   placeholder?: string;
@@ -87,11 +97,20 @@ interface Props
   closeLabel?: string;
   /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
   name?: string;
-  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  /**
+   * L'aide : ce que le champ attend, lue avant que personne ne se trompe.
+   * @playground off
+   */
   hint?: string;
-  /** Le message d'erreur. Passe la boîte au rouge. */
+  /**
+   * Le message d'erreur. Passe la boîte au rouge.
+   * @playground off
+   */
   error?: string;
-  /** Le message de succès. Cède à l'erreur. */
+  /**
+   * Le message de succès. Cède à l'erreur.
+   * @playground off
+   */
   success?: string;
   /** Un choix est nécessaire. Pose l'astérisque. */
   required?: boolean;

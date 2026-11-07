@@ -53,6 +53,17 @@ const essayable = (r: Reglage) => sorteDe(r) !== null && r.playground !== false;
 const reglables = reglages.filter(essayable);
 const nonReglables = reglages.filter((r) => !essayable(r));
 
+// Les réglages qu'on ne règle pas mais que le composant exige — une liste d'options — se donnent par leur
+// `@example`, écrit en JSON. Ils sont posés tels quels, et réécrits dans le code à copier.
+const fixes = nonReglables.flatMap((r) => {
+  if (r.exemple === undefined) return [];
+  try {
+    return [{ nom: r.nom, valeur: JSON.parse(r.exemple) }];
+  } catch {
+    return [];
+  }
+});
+
 const defautDe = (r: Reglage): string | boolean | number => {
   const sorte = sorteDe(r);
   if (sorte === 'choix') return r.default ?? r.valeurs![0];
@@ -76,14 +87,15 @@ const combinaisons = axes.reduce<Combinaison[]>(
 const cleDe = (c: Combinaison) => axes.map((r) => String(c[r.nom])).join('|');
 
 const reglagesDe = (c: Combinaison, avecRepere: boolean) =>
-  Object.fromEntries(
-    reglables.map((r) => {
+  Object.fromEntries([
+    ...fixes.map((f) => [f.nom, f.valeur] as const),
+    ...reglables.map((r) => {
       const sorte = sorteDe(r);
       if (c[r.nom] !== undefined) return [r.nom, c[r.nom]];
       if (avecRepere && (sorte === 'texte' || sorte === 'nombre')) return [r.nom, repere(r.nom)];
       return [r.nom, defautDe(r)];
     }),
-  );
+  ]);
 
 // Les réglages se rangent par section, comme dans le Storybook de Primer : la section du composant
 // d'abord, puis celles de ses pièces (libellé, aide, message), lues dans `@group`.
@@ -94,6 +106,7 @@ const groupes = [...parGroupe.entries()].sort(([a], [b]) => (a === nom ? -1 : b 
 const config = {
   nom,
   chemin,
+  fixes: fixes.map((f) => ({ nom: f.nom, code: JSON.stringify(f.valeur, null, 2) })),
   axes: axes.map((r) => r.nom),
   reglages: reglables.map((r) => ({ nom: r.nom, sorte: sorteDe(r), defaut: defautDe(r), requis: r.requis })),
 };
@@ -380,6 +393,7 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
   interface Config {
     nom: string;
     chemin: string;
+    fixes: { nom: string; code: string }[];
     axes: string[];
     reglages: Reglage[];
   }
@@ -409,8 +423,9 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
         lignes.push(`${r.nom}="${v}"`);
       }
     }
+    for (const f of config.fixes) lignes.push(`${f.nom}={${f.code}}`);
     const importation = `import ${config.nom} from '${config.chemin}';`;
-    return `${importation}\n\n<${config.nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
+    return `${importation}\n\n<${config.nom}\n${lignes.map((l) => `  ${l.replace(/\n/g, '\n  ')}`).join('\n')}\n/>`;
   }
 
   document.querySelectorAll<HTMLElement>('[data-playground]').forEach((racine) => {

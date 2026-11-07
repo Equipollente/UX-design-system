@@ -30,17 +30,29 @@ interface Option {
  * @since 0.3.0
  */
 interface Props {
-  /** Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page. */
+  /**
+   * Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page.
+   * @example format
+   */
   id: string;
-  /** La question posée au groupe. */
+  /**
+   * La question posée au groupe.
+   * @example Format
+   */
   legend: string;
   /** Retire la légende de l'écran sans la retirer du document. */
   hideLegend?: boolean;
   /** Le `name` partagé par tous les radios. À défaut, l'`id`. */
   name?: string;
-  /** Les choix. */
+  /**
+   * Les choix.
+   * @example [{"value":"a4","label":"A4"},{"value":"a3","label":"A3","hint":"Pour les grandes œuvres"},{"value":"a2","label":"A2","disabled":true}]
+   */
   options: Option[];
-  /** La valeur choisie à l'ouverture. Une seule. */
+  /**
+   * La valeur choisie à l'ouverture. Une seule.
+   * @playground off
+   */
   value?: string;
   orientation?: 'vertical' | 'horizontal';
   required?: boolean;
