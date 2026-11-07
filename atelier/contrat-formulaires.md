@@ -35,7 +35,8 @@ Ce contrat retient donc une variante qui garde ce que le `Field` apportait :
 - **`FormGroup` dans Figma ne change pas** : c'est la maquette de cette pile, et `type` dit quel
   champ elle contient.
 
-C'est le seul point du contrat qui revient sur une décision. Il est posé en question 1.
+C'est le seul point du contrat qui revient sur une décision. **Validé par Judith le 07/11 :** pièce
+interne `_Field`, pas de `Field` public.
 
 ## Le vocabulaire commun
 
@@ -238,17 +239,19 @@ reprend pas.
 | Rembourrage, rayon et écarts en tokens `control/*`, `space/*` | Les rôles `stack/control/*` et `border/*` de Figma |
 | `xsmall` | Retiré du dessin le 07/11, aucune prop |
 
+## Décisions du 07/11
+
+1. **Pièce interne `_Field`**, pas de `Field` public : la pile est écrite une fois, et chaque champ la
+   pose lui-même.
+2. **L'aide reste affichée avec un message d'erreur ou de succès**, comme Figma. Les deux sont lus par
+   `aria-describedby`.
+3. **Le compteur se met à jour à la frappe** : un petit script dans `Textarea`.
+4. **Le survol** : pas dessiné pour `Checkbox`, `Radio` et `Toggle`. Seuls le curseur et le focus
+   les distinguent.
+
 ## Questions ouvertes pour Judith
 
-1. **`Field` public ou pièce interne `_Field` ?** Voir la section sur la limite d'Astro. Le contrat
-   retient la pièce interne : le même gain (une pile, un seul endroit) sans dire la validation deux
-   fois. Si le `Field` public reste préféré, il faut décider de la répétition de `error`.
-2. **L'aide reste-t-elle affichée avec un message d'erreur ?** Figma permet les deux. L'ancien code
-   n'en montrait qu'un.
-3. **Le compteur se met-il à jour à la frappe ?** Oui, ce contrat le suppose, ce qui fait un petit
-   script dans `Textarea`. La seule alternative est un compteur figé au chargement, inutile.
-4. **La liste du `Select` : Primer ou dessin propre ?** Elle bloque tout le contrat du `Select`.
-5. **Le survol des cases, des radios et de l'interrupteur** : dessiné, ou seulement le curseur et le
-   focus ?
-6. **L'épaisseur de l'anneau de focus** n'a pas de rôle : le dessin lit `border/width/default` pour
-   le champ et `thick` pour le rond. Un rôle `focus` dans `NEW Size` règlerait les deux.
+1. **La liste du `Select` : Primer ou dessin propre ?** Elle bloque tout le contrat du `Select`.
+2. **L'épaisseur de l'anneau de focus** n'a pas de rôle : le dessin lit `border/width/default` (1)
+   pour le champ et `thick` (2) pour le rond. Un rôle `border/width/focus` dans `NEW Size` règlerait
+   les deux.
