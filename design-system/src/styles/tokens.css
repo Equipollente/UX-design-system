@@ -296,6 +296,9 @@
   --color-background-base-disabled:                 var(--ramp-grey-200);
   --color-background-base-input-disabled:           var(--color-background-neutral-subtle);
   --color-background-base-input:                    var(--color-background-primary-subtlest);
+  --color-background-base-input-hover:              var(--color-background-base-input);
+  --color-background-base-input-pressed:            var(--color-background-primary-subtlest-pressed);
+  --color-background-base-default:                  var(--ramp-grey-0);
 
   --color-border-primary-strong:                    var(--ramp-indigo-500);
   --color-border-primary-default:                   var(--ramp-indigo-300);
@@ -460,7 +463,7 @@
   --stack-gap-spacious:                             var(--base-24);
 
   --stack-control-xsmall-size:                      var(--base-36);
-  --stack-control-xsmall-padding-block:             2px;
+  --stack-control-xsmall-padding-block:             var(--base-6);
   --stack-control-xsmall-gap:                       var(--base-4);
   --stack-control-xsmall-padding-inline-condensed:  var(--base-4);
   --stack-control-xsmall-padding-inline-normal:     var(--base-8);
@@ -712,6 +715,9 @@
   --color-background-rose-bold:                     var(--ramp-rose-500);
   --color-background-base-input-disabled:           var(--ramp-grey-200);
   --color-background-base-input:                    var(--ramp-blue-france-50);
+  --color-background-base-input-hover:              #FFFFFF;
+  --color-background-base-input-pressed:            #FFFFFF;
+  --color-background-base-default:                  #FFFFFF;
   --color-border-primary-strong:                    var(--ramp-blue-france-800);
   --color-border-primary-default:                   var(--ramp-blue-france-300);
   --color-border-secondary-strong:                  var(--ramp-blue-france-500);

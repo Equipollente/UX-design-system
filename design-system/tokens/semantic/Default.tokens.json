@@ -4933,6 +4933,63 @@
               "WEB": "var(--color-background-base-input)"
             }
           }
+        },
+        "input-hover": {
+          "$type": "color",
+          "$value": "{color.background.base.input}",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:954:6160",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-background-base-input-hover)"
+            }
+          }
+        },
+        "input-pressed": {
+          "$type": "color",
+          "$value": "{color.background.primary.subtlest.pressed}",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:955:31761",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-background-base-input-pressed)"
+            }
+          }
+        },
+        "default": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 1,
+            "hex": "#FFFFFF"
+          },
+          "$extensions": {
+            "com.figma.variableId": "VariableID:960:11806",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--color-background-base-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:43a60c056a4ad98c14b38dd7c71b9b5ea01b2e46/-1:-1",
+              "targetVariableName": "ramp/grey/0",
+              "targetVariableSetId": "VariableCollectionId:7a768976dca728fd6aac004b7363f44dd34cfa92/-1:-1",
+              "targetVariableSetName": "NEW-Primitives"
+            }
+          }
         }
       }
     },
@@ -5764,7 +5821,7 @@
           "$extensions": {
             "com.figma.variableId": "VariableID:922:8840",
             "com.figma.scopes": [
-              "ALL_SCOPES"
+              "STROKE"
             ],
             "com.figma.codeSyntax": {
               "WEB": "var(--color-border-base-input)"

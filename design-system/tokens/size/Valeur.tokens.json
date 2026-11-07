@@ -638,7 +638,7 @@
         },
         "paddingBlock": {
           "$type": "number",
-          "$value": 2,
+          "$value": "{base.6}",
           "$description": "Marge verticale (2 px) d'un contrôle de taille très petite (xsmall). Le Button n'en utilise pas (hauteur fixe) : à réserver aux contrôles sans hauteur fixe.",
           "$extensions": {
             "com.figma.variableId": "VariableID:904:11250",
