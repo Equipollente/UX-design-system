@@ -29,26 +29,54 @@ import type { HTMLAttributes } from 'astro/types';
 import Field from './_Field.astro';
 import { resolveField } from '../../lib/field';
 
+/**
+ * Une zone pour du texte sur plusieurs lignes, avec un compteur de caractères.
+ * @since 0.3.0
+ */
 interface Props extends Omit<HTMLAttributes<'textarea'>, 'class' | 'required' | 'disabled' | 'maxlength'> {
-  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  /**
+   * Lie le libellé au champ, et sert de `name` si aucun n'est donné.
+   * @example champ
+   */
   id: string;
-  /** Le texte du libellé. */
+  /**
+   * Le texte du libellé.
+   * @example Libellé
+   */
   label: string;
   /** Retire le libellé de l'écran sans le retirer du document : le champ garde son nom. */
   hideLabel?: boolean;
   /** Le contenu déjà saisi. */
   value?: string;
-  /** Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes. */
+  /** L'invite dans la boîte vide. Une consigne, pas un exemple à recopier. */
+  placeholder?: string;
+  /**
+   * Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes.
+   * @default 4
+   * @example 4
+   */
   rows?: number;
-  /** La limite de caractères, appliquée par le navigateur. C'est elle qui allume le compteur. */
+  /**
+   * La limite de caractères, appliquée par le navigateur. C'est elle qui allume le compteur.
+   * @example 140
+   */
   maxlength?: number;
   /** Montre le compteur. Sans `maxlength`, il n'y a rien à compter. */
   counter?: boolean;
-  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  /**
+   * L'aide : ce que le champ attend, lue avant que personne ne se trompe.
+   * @playground off
+   */
   hint?: string;
-  /** Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge. */
+  /**
+   * Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge.
+   * @playground off
+   */
   error?: string;
-  /** Le message de succès. Cède à l'erreur. */
+  /**
+   * Le message de succès. Cède à l'erreur.
+   * @playground off
+   */
   success?: string;
   required?: boolean;
   disabled?: boolean;

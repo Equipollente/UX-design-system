@@ -26,10 +26,20 @@ import type { HTMLAttributes } from 'astro/types';
 import FieldLabel from './_FieldLabel.astro';
 import FieldHint from './_FieldHint.astro';
 
+/**
+ * Un interrupteur dont l'effet est immédiat.
+ * @since 0.3.0
+ */
 interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'role' | 'class' | 'checked' | 'disabled'> {
-  /** Lie le libellé au contrôle. Unique dans la page. */
+  /**
+   * Lie le libellé au contrôle. Unique dans la page.
+   * @example notifications
+   */
   id: string;
-  /** Ce que l'interrupteur allume. Un état, pas une action. */
+  /**
+   * Ce que l'interrupteur allume. Un état, pas une action.
+   * @example Notifications
+   */
   label: string;
   /** Allumé à l'ouverture. */
   checked?: boolean;

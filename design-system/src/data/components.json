@@ -470,30 +470,33 @@
     ]
   },
   "Checkbox": {
-    "source": "design-system/src/components/Checkbox.astro",
-    "description": "",
+    "source": "design-system/src/components/forms/Checkbox.astro",
+    "description": "Une case qui se coche et se décoche toute seule, ou qui reste indéterminée.",
+    "since": "0.3.0",
     "natifs": {
-      "balise": null,
-      "ecartes": []
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "class",
+        "checked",
+        "required",
+        "disabled"
+      ]
     },
     "props": [
       {
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Lie le libellé au contrôle. Unique dans la page."
+        "description": "Lie le libellé au contrôle. Unique dans la page.",
+        "exemple": "case"
       },
       {
         "nom": "label",
         "type": "string",
         "requis": true,
-        "description": "Ce que la case affirme quand elle est cochée. Une phrase, pas une question."
-      },
-      {
-        "nom": "name",
-        "type": "string",
-        "requis": false,
-        "description": "Le nom envoyé par le formulaire. À défaut, l'`id`."
+        "description": "Ce que la case affirme quand elle est cochée. Une phrase, pas une question.",
+        "exemple": "J'accepte les conditions"
       },
       {
         "nom": "value",
@@ -511,7 +514,7 @@
         "nom": "indeterminate",
         "type": "boolean",
         "requis": false,
-        "description": "Ni cochée ni décochée : « certaines des cases d'un groupe le sont ». Elle l'emporte sur `checked`, et le premier clic la remplace par cochée ou décochée."
+        "description": "Ni cochée ni décochée. Elle l'emporte sur `checked`."
       },
       {
         "nom": "hint",
@@ -540,9 +543,9 @@
     ],
     "slots": [],
     "utilise": [
+      "Icon",
       "FieldLabel",
-      "FieldMessage",
-      "Icon"
+      "FieldHint"
     ]
   },
   "Chip": {
@@ -1269,7 +1272,7 @@
     "utilise": []
   },
   "_FieldMessage": {
-    "source": "design-system/src/components/_FieldMessage.astro",
+    "source": "design-system/src/components/forms/_FieldMessage.astro",
     "description": "",
     "natifs": {
       "balise": null,
@@ -1278,7 +1281,11 @@
     "props": [
       {
         "nom": "type",
-        "type": "FieldMessageType",
+        "type": "'error' | 'success'",
+        "valeurs": [
+          "error",
+          "success"
+        ],
         "requis": true,
         "description": "Ce que dit le message. Il décide de l'encre et de l'icône."
       },
@@ -1510,7 +1517,7 @@
     ]
   },
   "_SelectPanel": {
-    "source": "design-system/src/components/_SelectPanel.astro",
+    "source": "design-system/src/components/forms/_SelectPanel.astro",
     "description": "",
     "natifs": {
       "balise": null,
@@ -1524,40 +1531,34 @@
         "description": "L'id de la liste : c'est ce que la boîte désigne par `popovertarget`."
       },
       {
+        "nom": "title",
+        "type": "string",
+        "requis": true,
+        "description": "Le titre du cadre."
+      },
+      {
+        "nom": "closeLabel",
+        "type": "string",
+        "requis": true,
+        "description": ""
+      },
+      {
         "nom": "blocks",
         "type": "Block[]",
         "requis": true,
         "description": ""
       },
       {
-        "nom": "items",
-        "type": "Item[]",
-        "requis": true,
-        "description": "Les choix mis à plat, dans l'ordre."
-      },
-      {
         "nom": "chosen",
-        "type": "string[]",
+        "type": "string | undefined",
         "requis": true,
-        "description": "Les valeurs cochées à l'ouverture."
+        "description": "La valeur choisie à l'ouverture."
       },
       {
-        "nom": "count",
-        "type": "number",
+        "nom": "fieldName",
+        "type": "string",
         "requis": true,
-        "description": "Le nombre de choix faits : c'est lui qui montre ou cache la zone épinglée."
-      },
-      {
-        "nom": "full",
-        "type": "boolean",
-        "requis": true,
-        "description": "La limite est atteinte : les cases décochées s'éteignent."
-      },
-      {
-        "nom": "multiple",
-        "type": "boolean",
-        "requis": true,
-        "description": ""
+        "description": "Le `name` envoyé par le formulaire."
       },
       {
         "nom": "required",
@@ -1570,12 +1571,6 @@
         "type": "boolean",
         "requis": true,
         "description": ""
-      },
-      {
-        "nom": "fieldName",
-        "type": "string",
-        "requis": true,
-        "description": "Le `name` envoyé par le formulaire, le même pour tous les contrôles."
       },
       {
         "nom": "searchable",
@@ -1596,8 +1591,8 @@
         "description": ""
       },
       {
-        "nom": "showSelected",
-        "type": "boolean",
+        "nom": "noResultsLabel",
+        "type": "string",
         "requis": true,
         "description": ""
       },
@@ -1612,18 +1607,904 @@
         "type": "string",
         "requis": true,
         "description": ""
-      },
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Icon"
+    ]
+  },
+  "CheckboxGroup": {
+    "source": "design-system/src/components/forms/CheckboxGroup.astro",
+    "description": "Une question et ses cases : plusieurs choix peuvent être retenus.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
       {
-        "nom": "createPlaceholder",
+        "nom": "id",
         "type": "string",
         "requis": true,
+        "description": "Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page."
+      },
+      {
+        "nom": "legend",
+        "type": "string",
+        "requis": true,
+        "description": "La question posée au groupe."
+      },
+      {
+        "nom": "hideLegend",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire la légende de l'écran sans la retirer du document."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le `name` envoyé par chaque case cochée. À défaut, l'`id`."
+      },
+      {
+        "nom": "options",
+        "type": "Option[]",
+        "requis": true,
+        "description": "Les cases."
+      },
+      {
+        "nom": "values",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les valeurs cochées à l'ouverture."
+      },
+      {
+        "nom": "orientation",
+        "type": "'vertical' | 'horizontal'",
+        "valeurs": [
+          "vertical",
+          "horizontal"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "Éteint toutes les cases."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
         "description": ""
       }
     ],
     "slots": [],
     "utilise": [
-      "Checkbox",
+      "FieldLabel",
+      "Checkbox"
+    ]
+  },
+  "Input": {
+    "source": "design-system/src/components/forms/Input.astro",
+    "description": "Un champ pour une seule ligne : un nom, un courriel, un numéro, une recherche.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "size",
+        "class",
+        "required",
+        "disabled"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au champ, et sert de `name` si aucun n'est donné.",
+        "exemple": "champ"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé.",
+        "exemple": "Libellé"
+      },
+      {
+        "nom": "hideLabel",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire le libellé de l'écran sans le retirer du document : le champ garde son nom."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Le texte déjà saisi."
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Un exemple, pas une consigne : il disparaît à la première frappe."
+      },
+      {
+        "nom": "type",
+        "type": "'text' | 'email' | 'tel' | 'url' | 'search'",
+        "valeurs": [
+          "text",
+          "email",
+          "tel",
+          "url",
+          "search"
+        ],
+        "requis": false,
+        "description": "Ce que le champ accepte. Les types d'une seule ligne, et eux seuls.",
+        "default": "text"
+      },
+      {
+        "nom": "size",
+        "type": "'small' | 'medium' | 'large'",
+        "valeurs": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "requis": false,
+        "description": "La hauteur de la boîte : le rembourrage vertical.",
+        "default": "medium"
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe.",
+        "playground": false
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge.",
+        "playground": false
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Cède à l'erreur.",
+        "playground": false
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Field",
       "Icon"
     ]
+  },
+  "Radio": {
+    "source": "design-system/src/components/forms/Radio.astro",
+    "description": "Un choix dans une courte liste où un seul peut être retenu.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "class",
+        "checked",
+        "required",
+        "disabled",
+        "name"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe.",
+        "exemple": "choix-a"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le mot qui nomme ce choix-ci — pas la question, qui va en légende.",
+        "exemple": "A4"
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": true,
+        "description": "Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent.",
+        "exemple": "format"
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`."
+      },
+      {
+        "nom": "checked",
+        "type": "boolean",
+        "requis": false,
+        "description": "Le choix retenu à l'ouverture. Un seul du groupe doit le porter."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que ce choix entraîne, dite sous le libellé."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Un radio isolé n'est pas obligatoire : c'est le groupe qui l'est. Posé par RadioGroup."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldHint"
+    ]
+  },
+  "RadioGroup": {
+    "source": "design-system/src/components/forms/RadioGroup.astro",
+    "description": "Une question et ses réponses : un seul choix peut être retenu.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page."
+      },
+      {
+        "nom": "legend",
+        "type": "string",
+        "requis": true,
+        "description": "La question posée au groupe."
+      },
+      {
+        "nom": "hideLegend",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire la légende de l'écran sans la retirer du document."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le `name` partagé par tous les radios. À défaut, l'`id`."
+      },
+      {
+        "nom": "options",
+        "type": "Option[]",
+        "requis": true,
+        "description": "Les choix."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "La valeur choisie à l'ouverture. Une seule."
+      },
+      {
+        "nom": "orientation",
+        "type": "'vertical' | 'horizontal'",
+        "valeurs": [
+          "vertical",
+          "horizontal"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "Éteint tous les radios."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "Radio"
+    ]
+  },
+  "Select": {
+    "source": "design-system/src/components/forms/Select.astro",
+    "description": "Un champ où l'on choisit une valeur dans une liste.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "button",
+      "ecartes": [
+        "type",
+        "class",
+        "disabled",
+        "name",
+        "value",
+        "popovertarget"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé."
+      },
+      {
+        "nom": "hideLabel",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire le libellé de l'écran sans le retirer du document."
+      },
+      {
+        "nom": "options",
+        "type": "(Option | OptionGroup)[]",
+        "requis": true,
+        "description": "Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses\r\nchoix sous un nom, comme un <optgroup> : il ne s'imbrique pas."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "La valeur choisie à l'ouverture."
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la boîte quand rien n'est choisi."
+      },
+      {
+        "nom": "size",
+        "type": "'small' | 'medium' | 'large'",
+        "valeurs": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "requis": false,
+        "description": "La hauteur de la boîte : le rembourrage vertical."
+      },
+      {
+        "nom": "searchable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose un champ de recherche en haut de la liste, qui filtre les choix."
+      },
+      {
+        "nom": "creatable",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche."
+      },
+      {
+        "nom": "searchLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du champ de recherche. Il n'est pas affiché."
+      },
+      {
+        "nom": "searchPlaceholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite du champ de recherche."
+      },
+      {
+        "nom": "noResultsLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit la liste quand aucun choix ne correspond."
+      },
+      {
+        "nom": "resultsLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre."
+      },
+      {
+        "nom": "resultsOneLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nombre de résultats quand il n'y en a qu'un."
+      },
+      {
+        "nom": "createLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création au repos."
+      },
+      {
+        "nom": "createQueryLabel",
+        "type": "string",
+        "requis": false,
+        "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte."
+      },
+      {
+        "nom": "closeLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu du bouton qui ferme la liste."
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom envoyé par le formulaire. À défaut, l'`id`."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe."
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Passe la boîte au rouge."
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Cède à l'erreur."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Un choix est nécessaire. Pose l'astérisque."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Field",
+      "SelectPanel",
+      "Icon"
+    ]
+  },
+  "Textarea": {
+    "source": "design-system/src/components/forms/Textarea.astro",
+    "description": "Une zone pour du texte sur plusieurs lignes, avec un compteur de caractères.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "textarea",
+      "ecartes": [
+        "class",
+        "required",
+        "disabled",
+        "maxlength"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au champ, et sert de `name` si aucun n'est donné.",
+        "exemple": "champ"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé.",
+        "exemple": "Libellé"
+      },
+      {
+        "nom": "hideLabel",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire le libellé de l'écran sans le retirer du document : le champ garde son nom."
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Le contenu déjà saisi."
+      },
+      {
+        "nom": "placeholder",
+        "type": "string",
+        "requis": false,
+        "description": "L'invite dans la boîte vide. Une consigne, pas un exemple à recopier."
+      },
+      {
+        "nom": "rows",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de lignes visibles. C'est la hauteur du champ, exprimée en lignes.",
+        "default": "4",
+        "exemple": "4"
+      },
+      {
+        "nom": "maxlength",
+        "type": "number",
+        "requis": false,
+        "description": "La limite de caractères, appliquée par le navigateur. C'est elle qui allume le compteur.",
+        "exemple": "140"
+      },
+      {
+        "nom": "counter",
+        "type": "boolean",
+        "requis": false,
+        "description": "Montre le compteur. Sans `maxlength`, il n'y a rien à compter."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe.",
+        "playground": false
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge.",
+        "playground": false
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès. Cède à l'erreur.",
+        "playground": false
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Field"
+    ]
+  },
+  "Toggle": {
+    "source": "design-system/src/components/forms/Toggle.astro",
+    "description": "Un interrupteur dont l'effet est immédiat.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "role",
+        "class",
+        "checked",
+        "disabled"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Lie le libellé au contrôle. Unique dans la page.",
+        "exemple": "notifications"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Ce que l'interrupteur allume. Un état, pas une action.",
+        "exemple": "Notifications"
+      },
+      {
+        "nom": "checked",
+        "type": "boolean",
+        "requis": false,
+        "description": "Allumé à l'ouverture."
+      },
+      {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide : ce que l'interrupteur change, dite sous le libellé."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "FieldLabel",
+      "FieldHint"
+    ]
+  },
+  "_Field": {
+    "source": "design-system/src/components/forms/_Field.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'`id` du champ glissé dans l'emplacement : c'est ce qui le lie au libellé."
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le texte du libellé."
+      },
+      {
+        "nom": "hideLabel",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire le libellé de l'écran sans le retirer du document."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "field",
+        "type": "ResolvedField",
+        "requis": true,
+        "description": "Ce que `resolveField` a décidé : message, aide, compteur et identifiants."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "utilise": [
+      "FieldLabel",
+      "FieldHint",
+      "FieldMessage",
+      "FieldCounter"
+    ]
+  },
+  "_FieldCounter": {
+    "source": "design-system/src/components/forms/_FieldCounter.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'`id` que le champ désigne par `aria-describedby`."
+      },
+      {
+        "nom": "current",
+        "type": "number",
+        "requis": true,
+        "description": "Le nombre de caractères au chargement."
+      },
+      {
+        "nom": "max",
+        "type": "number",
+        "requis": true,
+        "description": "La limite : celle de `maxlength`."
+      },
+      {
+        "nom": "invalid",
+        "type": "boolean",
+        "requis": false,
+        "description": "Passe l'encre en rouge."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "L'encre passe en `text/disabled`."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": []
+  },
+  "_FieldHint": {
+    "source": "design-system/src/components/forms/_FieldHint.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'`id` que le champ désigne par `aria-describedby`."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "L'encre passe en `text/disabled`."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "utilise": []
+  },
+  "_FieldLabel": {
+    "source": "design-system/src/components/forms/_FieldLabel.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "for",
+        "type": "string",
+        "requis": false,
+        "description": "L'`id` du champ que ce libellé nomme. C'est ce qui les lie. Sans objet en légende."
+      },
+      {
+        "nom": "as",
+        "type": "'label' | 'legend'",
+        "valeurs": [
+          "label",
+          "legend"
+        ],
+        "requis": false,
+        "description": "`legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": "Pose l'astérisque. Le champ doit porter `required` de son côté."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "L'encre passe en `text/disabled`. Le champ doit porter `disabled` de son côté."
+      },
+      {
+        "nom": "visuallyHidden",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire le libellé de l'écran sans le retirer du document."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "utilise": []
   }
 }

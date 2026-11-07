@@ -46,6 +46,9 @@ const etiquettes = (noeud) => {
     else if (nom === 'group') out.groupe = texte;
     else if (nom === 'example') out.exemple = texte.replace(/^['"`]|['"`]$/g, '');
     else if (nom === 'since') out.since = texte;
+    // `@playground off` : un réglage dont la valeur change la structure du composant (un message dont
+    // la présence se décide côté serveur) ne se règle pas dans le playground ; les exemples le montrent.
+    else if (nom === 'playground') out.playground = texte !== 'off';
     else if (nom === 'deprecated') out.deprecated = texte || true;
     else if (nom === 'experimental') out.experimental = true;
   }
@@ -179,11 +182,18 @@ function lire(fichier) {
 
 const resultat = {};
 const illisibles = [];
-for (const f of readdirSync(COMPONENTS).filter((n) => n.endsWith('.astro')).sort()) {
-  const nom = f.replace(/\.astro$/, '');
-  const lu = lire(join(COMPONENTS, f));
-  if (lu.erreur) illisibles.push(`${nom} : ${lu.erreur}`);
-  else resultat[nom] = { source: `design-system/src/components/${f}`, ...lu };
+// Le dossier du composant, puis forms/ : un composant réécrit prend la place de l'ancien de même nom
+// (Checkbox, tant que l'ancien existe pour MultiSelect). `forms/` passe en dernier pour l'emporter.
+for (const sous of ['', 'forms']) {
+  const dossier = join(COMPONENTS, sous);
+  if (!existsSync(dossier)) continue;
+  for (const f of readdirSync(dossier).filter((n) => n.endsWith('.astro')).sort()) {
+    const nom = f.replace(/\.astro$/, '');
+    const lu = lire(join(dossier, f));
+    const chemin = ['design-system/src/components', sous, f].filter(Boolean).join('/');
+    if (lu.erreur) illisibles.push(`${nom} : ${lu.erreur}`);
+    else resultat[nom] = { source: chemin, ...lu };
+  }
 }
 
 writeFileSync(OUT, JSON.stringify(resultat, null, 2) + '\n');

@@ -25,6 +25,10 @@ interface Option {
   disabled?: boolean;
 }
 
+/**
+ * Une question et ses réponses : un seul choix peut être retenu.
+ * @since 0.3.0
+ */
 interface Props {
   /** Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page. */
   id: string;

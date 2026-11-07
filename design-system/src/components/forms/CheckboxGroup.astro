@@ -25,6 +25,10 @@ interface Option {
   disabled?: boolean;
 }
 
+/**
+ * Une question et ses cases : plusieurs choix peuvent être retenus.
+ * @since 0.3.0
+ */
 interface Props {
   /** Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page. */
   id: string;

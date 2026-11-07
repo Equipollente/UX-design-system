@@ -21,12 +21,25 @@ import type { HTMLAttributes } from 'astro/types';
 import FieldLabel from './_FieldLabel.astro';
 import FieldHint from './_FieldHint.astro';
 
+/**
+ * Un choix dans une courte liste où un seul peut être retenu.
+ * @since 0.3.0
+ */
 interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'class' | 'checked' | 'required' | 'disabled' | 'name'> {
-  /** Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe. */
+  /**
+   * Lie le libellé au contrôle. Unique dans la page, pas seulement dans le groupe.
+   * @example choix-a
+   */
   id: string;
-  /** Le mot qui nomme ce choix-ci — pas la question, qui va en légende. */
+  /**
+   * Le mot qui nomme ce choix-ci — pas la question, qui va en légende.
+   * @example A4
+   */
   label: string;
-  /** Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent. */
+  /**
+   * Le `name` du groupe. Deux radios ne s'excluent que s'ils le partagent.
+   * @example format
+   */
   name: string;
   /** Ce que le formulaire enverra si ce choix est retenu. À défaut, l'`id`. */
   value?: string;

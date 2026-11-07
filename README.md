@@ -10,7 +10,7 @@ composants en vrai plutôt qu'une copie de leur markup : si un composant change,
 | --- | --- |
 | [Fondations](https://equipollente.github.io/UX-design-system/foundations) | 121 tokens : couleur, typographie, espacement, rayon, contrôle, trait, opacité, ombre, mouvement, ratio et layout. Chaque valeur affichée est lue dans sa variable CSS. |
 | [Composants](https://equipollente.github.io/UX-design-system/components) | Button, Tag, Nav, CardDefault, la fiche, la carte d'étude de cas avec son en-tête et son carrousel, et la modale. Doctrine d'usage, états, props. |
-| [Formulaire](https://equipollente.github.io/UX-design-system/formulaire) | FieldLabel — le libellé que tous les champs partagent — puis Input, Select, Radio, Checkbox, Toggle, Textarea, Chip, Add Image et Edit Image Gallery. |
+| [Formulaire](https://equipollente.github.io/UX-design-system/formulaire) | `_Field` — la pile que tous les champs partagent : libellé, champ, compteur, message, aide — puis Input, Textarea, Select, Checkbox, Radio, Toggle et leurs groupes ; Chip, Add Image et Edit Image Gallery attendent leur réécriture. |
 
 ## La source de vérité est Figma
 

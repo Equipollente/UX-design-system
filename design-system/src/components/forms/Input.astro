@@ -31,22 +31,51 @@ import Field from './_Field.astro';
 import Icon from '../Icon.astro';
 import { resolveField } from '../../lib/field';
 
+/**
+ * Un champ pour une seule ligne : un nom, un courriel, un numéro, une recherche.
+ * @since 0.3.0
+ */
 interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'size' | 'class' | 'required' | 'disabled'> {
-  /** Lie le libellé au champ, et sert de `name` si aucun n'est donné. */
+  /**
+   * Lie le libellé au champ, et sert de `name` si aucun n'est donné.
+   * @example champ
+   */
   id: string;
-  /** Le texte du libellé. */
+  /**
+   * Le texte du libellé.
+   * @example Libellé
+   */
   label: string;
   /** Retire le libellé de l'écran sans le retirer du document : le champ garde son nom. */
   hideLabel?: boolean;
-  /** Ce que le champ accepte. Les types d'une seule ligne, et eux seuls. */
+  /** Le texte déjà saisi. */
+  value?: string;
+  /** Un exemple, pas une consigne : il disparaît à la première frappe. */
+  placeholder?: string;
+  /**
+   * Ce que le champ accepte. Les types d'une seule ligne, et eux seuls.
+   * @default text
+   */
   type?: 'text' | 'email' | 'tel' | 'url' | 'search';
-  /** La hauteur de la boîte : le rembourrage vertical. */
+  /**
+   * La hauteur de la boîte : le rembourrage vertical.
+   * @default medium
+   */
   size?: 'small' | 'medium' | 'large';
-  /** L'aide : ce que le champ attend, lue avant que personne ne se trompe. */
+  /**
+   * L'aide : ce que le champ attend, lue avant que personne ne se trompe.
+   * @playground off
+   */
   hint?: string;
-  /** Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge. */
+  /**
+   * Le message d'erreur. Pose `aria-invalid` et passe la boîte au rouge.
+   * @playground off
+   */
   error?: string;
-  /** Le message de succès. Cède à l'erreur. */
+  /**
+   * Le message de succès. Cède à l'erreur.
+   * @playground off
+   */
   success?: string;
   required?: boolean;
   disabled?: boolean;

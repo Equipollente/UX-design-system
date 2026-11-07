@@ -31,8 +31,11 @@ export function getStaticPaths() {
 const { page } = Astro.props;
 
 // Les composants du paquet, chargés d'avance : Astro doit connaître chaque fichier à la construction.
-const modules = import.meta.glob<{ default: any }>('../../../../design-system/src/components/*.astro', { eager: true });
-const Composant = Object.entries(modules).find(([chemin]) => chemin.endsWith(`/${page.nom}.astro`))![1].default;
+const modules = import.meta.glob<{ default: any }>('../../../../design-system/src/components/{,forms/}*.astro', { eager: true });
+// Un composant réécrit (forms/) l'emporte sur l'ancien de même nom : le script des props fait de même.
+const Composant = Object.entries(modules)
+  .filter(([chemin]) => chemin.endsWith(`/${page.nom}.astro`))
+  .sort(([a], [b]) => Number(b.includes('/forms/')) - Number(a.includes('/forms/')))[0][1].default;
 
 const fiche = (components as unknown as Record<string, any>)[page.nom];
 
@@ -78,7 +81,7 @@ const donnees = texte?.data;
     )}
 
     <!-- 4. Le playground -->
-    <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} />
+    <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} source={fiche.source} />
 
     <!-- 5. Les props -->
     <ComponentElements

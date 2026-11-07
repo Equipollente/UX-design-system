@@ -33,10 +33,20 @@ import Icon from '../Icon.astro';
 import FieldLabel from './_FieldLabel.astro';
 import FieldHint from './_FieldHint.astro';
 
+/**
+ * Une case qui se coche et se décoche toute seule, ou qui reste indéterminée.
+ * @since 0.3.0
+ */
 interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'class' | 'checked' | 'required' | 'disabled'> {
-  /** Lie le libellé au contrôle. Unique dans la page. */
+  /**
+   * Lie le libellé au contrôle. Unique dans la page.
+   * @example case
+   */
   id: string;
-  /** Ce que la case affirme quand elle est cochée. Une phrase, pas une question. */
+  /**
+   * Ce que la case affirme quand elle est cochée. Une phrase, pas une question.
+   * @example J'accepte les conditions
+   */
   label: string;
   /** Ce que le formulaire enverra si la case est cochée. À défaut, `on`. */
   value?: string;

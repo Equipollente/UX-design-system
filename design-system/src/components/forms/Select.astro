@@ -42,6 +42,10 @@ interface OptionGroup {
   disabled?: boolean;
 }
 
+/**
+ * Un champ où l'on choisit une valeur dans une liste.
+ * @since 0.3.0
+ */
 interface Props
   extends Omit<HTMLAttributes<'button'>, 'type' | 'class' | 'disabled' | 'name' | 'value' | 'popovertarget'> {
   /** Préfixe des `id` des choix, et `id` de la boîte que le libellé nomme. Unique dans la page. */

@@ -24,6 +24,8 @@ interface Reglage {
   default?: string;
   exemple?: string;
   groupe?: string;
+  /** `false` : le réglage change la structure du composant, le playground ne l'essaie pas. */
+  playground?: boolean;
 }
 
 interface Props {
@@ -31,9 +33,13 @@ interface Props {
   nom: string;
   reglages: Reglage[];
   Composant: any; // un composant Astro : aucun type d'Astro ne le décrit
+  /** Où vit le fichier, tel que components.json le donne : c'est de là que vient la ligne d'import. */
+  source?: string;
 }
 
-const { nom, reglages, Composant } = Astro.props;
+const { nom, reglages, Composant, source } = Astro.props;
+// `design-system/src/components/forms/Input.astro` s'importe `ux-design-system/components/forms/Input.astro`.
+const chemin = source ? source.replace('design-system/src/', 'ux-design-system/') : `ux-design-system/components/${nom}.astro`;
 
 const PLAFOND = 300;
 const repere = (n: string) => `⟦${n}⟧`;
@@ -43,8 +49,9 @@ type Sorte = 'choix' | 'oui-non' | 'nombre' | 'texte';
 const sorteDe = (r: Reglage): Sorte | null =>
   r.valeurs ? 'choix' : r.type === 'boolean' ? 'oui-non' : r.type === 'number' ? 'nombre' : r.type === 'string' ? 'texte' : null;
 
-const reglables = reglages.filter((r) => sorteDe(r));
-const nonReglables = reglages.filter((r) => !sorteDe(r));
+const essayable = (r: Reglage) => sorteDe(r) !== null && r.playground !== false;
+const reglables = reglages.filter(essayable);
+const nonReglables = reglages.filter((r) => !essayable(r));
 
 const defautDe = (r: Reglage): string | boolean | number => {
   const sorte = sorteDe(r);
@@ -86,6 +93,7 @@ const groupes = [...parGroupe.entries()].sort(([a], [b]) => (a === nom ? -1 : b 
 
 const config = {
   nom,
+  chemin,
   axes: axes.map((r) => r.nom),
   reglages: reglables.map((r) => ({ nom: r.nom, sorte: sorteDe(r), defaut: defautDe(r), requis: r.requis })),
 };
@@ -371,6 +379,7 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
   }
   interface Config {
     nom: string;
+    chemin: string;
     axes: string[];
     reglages: Reglage[];
   }
@@ -400,7 +409,7 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
         lignes.push(`${r.nom}="${v}"`);
       }
     }
-    const importation = `import ${config.nom} from 'ux-design-system/components/${config.nom}.astro';`;
+    const importation = `import ${config.nom} from '${config.chemin}';`;
     return `${importation}\n\n<${config.nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
   }
 
