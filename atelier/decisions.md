@@ -619,6 +619,18 @@ L'état d'interaction et la validation sont **deux axes**, comme dans le code o�
 indépendants de `disabled` : un champ peut être au focus et en erreur, ce que le `status` unique ne dessine
 pas. Les combinaisons impossibles (désactivé et en erreur) ne sont pas dessinées.
 
+**Appliqué dans Figma le 07/11** à `Input fields`, `FormGroup`, `Select`, `_FieldLabel`, `_FieldHint`, `_FieldCounter`,
+`_FieldMessage` (`validation` seule), `_FieldValue`, `_FieldType`, `Textarea`, `Checkbox`, `Radio`, `Toggle`. `xsmall` est
+retiré d'`Input fields` : son seul emploi, la recherche de l'en-tête du `_SelectPanel`, passe en `small` et mesure 51 px
+au lieu de la hauteur compacte d'avant — à regarder. `Select` perd sa propriété `variant`, qui n'avait qu'une valeur.
+Reste : `size` sur `Textarea`, le `hover` des cases et de l'interrupteur, `MultiSelect` à redessiner sur la nouvelle base.
+
+**Le `Field` enveloppe (07/11).** Libellé, aide, message et compteur ne sont pas écrits par chaque champ : `FormGroup`
+dans Figma, un `Field` dans le code, qui reçoit le champ par un emplacement. `Textarea` y entre comme un `type` de plus :
+la boîte est une pièce, `Textarea fields`, posée dans `FormGroup type=textarea`, comme `Input fields` dans `type=text`.
+Cases, radios et interrupteurs gardent leur libellé à côté du contrôle et n'en ont pas besoin. `Textarea` n'a pas de
+`size` : sa hauteur se règle en lignes dans le code.
+
 Un `?` en fin de nom désigne un interrupteur d'affichage (`hint?`, `label?`, `counter?`), jamais une
 variante : `inset?`, `fullWidth?` et `selected?` le perdent. Tout est en minuscules, sans préfixe `forms/` —
 la page range déjà — et le préfixe `_` reste réservé aux pièces internes.
