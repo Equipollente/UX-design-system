@@ -2003,13 +2003,15 @@
         "type": "string",
         "requis": true,
         "description": "Le texte du libellé.",
-        "exemple": "Pays"
+        "exemple": "Pays",
+        "groupe": "Libellé"
       },
       {
         "nom": "hideLabel",
         "type": "boolean",
         "requis": false,
-        "description": "Retire le libellé de l'écran sans le retirer du document."
+        "description": "Retire le libellé de l'écran sans le retirer du document.",
+        "groupe": "Libellé"
       },
       {
         "nom": "options",
@@ -2029,7 +2031,8 @@
         "nom": "placeholder",
         "type": "string",
         "requis": false,
-        "description": "Ce que dit la boîte quand rien n'est choisi."
+        "description": "Ce que dit la boîte quand rien n'est choisi.",
+        "default": "Choisir"
       },
       {
         "nom": "size",
@@ -2040,67 +2043,86 @@
           "large"
         ],
         "requis": false,
-        "description": "La hauteur de la boîte : le rembourrage vertical."
+        "description": "La hauteur de la boîte : le rembourrage vertical.",
+        "default": "medium"
       },
       {
         "nom": "searchable",
         "type": "boolean",
         "requis": false,
-        "description": "Pose un champ de recherche en haut de la liste, qui filtre les choix."
+        "description": "Pose un champ de recherche en haut de la liste, qui filtre les choix.",
+        "groupe": "Recherche"
       },
       {
         "nom": "creatable",
         "type": "boolean",
         "requis": false,
-        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche."
+        "description": "Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.",
+        "groupe": "Création"
       },
       {
         "nom": "searchLabel",
         "type": "string",
         "requis": false,
-        "description": "Le nom lu du champ de recherche. Il n'est pas affiché."
+        "description": "Le nom lu du champ de recherche. Il n'est pas affiché.",
+        "groupe": "Recherche",
+        "default": "Filtrer les choix"
       },
       {
         "nom": "searchPlaceholder",
         "type": "string",
         "requis": false,
-        "description": "L'invite du champ de recherche."
+        "description": "L'invite du champ de recherche.",
+        "groupe": "Recherche",
+        "default": "Rechercher"
       },
       {
         "nom": "noResultsLabel",
         "type": "string",
         "requis": false,
-        "description": "Ce que dit la liste quand aucun choix ne correspond."
+        "description": "Ce que dit la liste quand aucun choix ne correspond.",
+        "groupe": "Recherche",
+        "default": "Aucun résultat"
       },
       {
         "nom": "resultsLabel",
         "type": "string",
         "requis": false,
-        "description": "Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre."
+        "description": "Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre.",
+        "groupe": "Recherche",
+        "default": "{n} résultats"
       },
       {
         "nom": "resultsOneLabel",
         "type": "string",
         "requis": false,
-        "description": "Le nombre de résultats quand il n'y en a qu'un."
+        "description": "Le nombre de résultats quand il n'y en a qu'un.",
+        "groupe": "Recherche",
+        "default": "{n} résultat"
       },
       {
         "nom": "createLabel",
         "type": "string",
         "requis": false,
-        "description": "La ligne de création au repos."
+        "description": "La ligne de création au repos.",
+        "groupe": "Création",
+        "default": "Créer une option"
       },
       {
         "nom": "createQueryLabel",
         "type": "string",
         "requis": false,
-        "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte."
+        "description": "La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.",
+        "groupe": "Création",
+        "default": "Créer « {q} »"
       },
       {
         "nom": "closeLabel",
         "type": "string",
         "requis": false,
-        "description": "Le nom lu du bouton qui ferme la liste."
+        "description": "Le nom lu du bouton qui ferme la liste.",
+        "groupe": "Liste",
+        "default": "Fermer"
       },
       {
         "nom": "name",
@@ -2113,27 +2135,31 @@
         "type": "string",
         "requis": false,
         "description": "L'aide : ce que le champ attend, lue avant que personne ne se trompe.",
-        "playground": false
+        "playground": false,
+        "groupe": "Aide"
       },
       {
         "nom": "error",
         "type": "string",
         "requis": false,
         "description": "Le message d'erreur. Passe la boîte au rouge.",
-        "playground": false
+        "playground": false,
+        "groupe": "Message"
       },
       {
         "nom": "success",
         "type": "string",
         "requis": false,
         "description": "Le message de succès. Cède à l'erreur.",
-        "playground": false
+        "playground": false,
+        "groupe": "Message"
       },
       {
         "nom": "required",
         "type": "boolean",
         "requis": false,
-        "description": "Un choix est nécessaire. Pose l'astérisque."
+        "description": "Un choix est nécessaire. Pose l'astérisque.",
+        "groupe": "Libellé"
       },
       {
         "nom": "disabled",

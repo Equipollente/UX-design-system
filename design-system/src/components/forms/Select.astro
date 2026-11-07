@@ -56,9 +56,13 @@ interface Props
   /**
    * Le texte du libellé.
    * @example Pays
+   * @group Libellé
    */
   label: string;
-  /** Retire le libellé de l'écran sans le retirer du document. */
+  /**
+   * Retire le libellé de l'écran sans le retirer du document.
+   * @group Libellé
+   */
   hideLabel?: boolean;
   /**
    * Les choix. Une chaîne vaut pour sa propre valeur. Un groupe — `{ label, options }` — range ses
@@ -71,48 +75,98 @@ interface Props
    * @playground off
    */
   value?: string;
-  /** Ce que dit la boîte quand rien n'est choisi. */
+  /**
+   * Ce que dit la boîte quand rien n'est choisi.
+   * @default Choisir
+   */
   placeholder?: string;
-  /** La hauteur de la boîte : le rembourrage vertical. */
+  /**
+   * La hauteur de la boîte : le rembourrage vertical.
+   * @default medium
+   */
   size?: 'small' | 'medium' | 'large';
-  /** Pose un champ de recherche en haut de la liste, qui filtre les choix. */
+  /**
+   * Pose un champ de recherche en haut de la liste, qui filtre les choix.
+   * @group Recherche
+   */
   searchable?: boolean;
-  /** Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche. */
+  /**
+   * Pose en bas de la liste la ligne qui crée une option. Elle suppose la recherche.
+   * @group Création
+   */
   creatable?: boolean;
-  /** Le nom lu du champ de recherche. Il n'est pas affiché. */
+  /**
+   * Le nom lu du champ de recherche. Il n'est pas affiché.
+   * @group Recherche
+   * @default Filtrer les choix
+   */
   searchLabel?: string;
-  /** L'invite du champ de recherche. */
+  /**
+   * L'invite du champ de recherche.
+   * @group Recherche
+   * @default Rechercher
+   */
   searchPlaceholder?: string;
-  /** Ce que dit la liste quand aucun choix ne correspond. */
+  /**
+   * Ce que dit la liste quand aucun choix ne correspond.
+   * @group Recherche
+   * @default Aucun résultat
+   */
   noResultsLabel?: string;
-  /** Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre. */
+  /**
+   * Le nombre de résultats, lu à voix haute. `{n}` vaut le nombre.
+   * @group Recherche
+   * @default {n} résultats
+   */
   resultsLabel?: string;
-  /** Le nombre de résultats quand il n'y en a qu'un. */
+  /**
+   * Le nombre de résultats quand il n'y en a qu'un.
+   * @group Recherche
+   * @default {n} résultat
+   */
   resultsOneLabel?: string;
-  /** La ligne de création au repos. */
+  /**
+   * La ligne de création au repos.
+   * @group Création
+   * @default Créer une option
+   */
   createLabel?: string;
-  /** La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte. */
+  /**
+   * La ligne de création quand un texte est tapé dans la recherche. `{q}` vaut ce texte.
+   * @group Création
+   * @default Créer « {q} »
+   */
   createQueryLabel?: string;
-  /** Le nom lu du bouton qui ferme la liste. */
+  /**
+   * Le nom lu du bouton qui ferme la liste.
+   * @group Liste
+   * @default Fermer
+   */
   closeLabel?: string;
   /** Le nom envoyé par le formulaire. À défaut, l'`id`. */
   name?: string;
   /**
    * L'aide : ce que le champ attend, lue avant que personne ne se trompe.
    * @playground off
+   * @group Aide
    */
   hint?: string;
   /**
    * Le message d'erreur. Passe la boîte au rouge.
    * @playground off
+   * @group Message
    */
   error?: string;
   /**
    * Le message de succès. Cède à l'erreur.
    * @playground off
+   * @group Message
    */
   success?: string;
-  /** Un choix est nécessaire. Pose l'astérisque. */
+  /**
+   * Un choix est nécessaire. Pose l'astérisque.
+   * @group Libellé
+   */
   required?: boolean;
   disabled?: boolean;
   class?: string;
