@@ -361,7 +361,7 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
     justify-content: space-between;
     gap: var(--base-16);
   }
-  button {
+  button[data-copier], button[data-reinitialiser] {
     padding: var(--base-4) var(--base-16);
     border: var(--border-width-default) solid var(--color-border-base-input);
     border-radius: 999px;
