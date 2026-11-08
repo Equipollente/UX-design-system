@@ -1,0 +1,210 @@
+---
+// IconLabel — une icône seule dans un carré arrondi : le repère visuel d'un type ou d'une catégorie.
+//
+// Ce n'est pas un bouton-icône : aucun clic, aucun état au survol ni à l'appui. Un carré sur lequel on
+// clique est un IconButton. Ce n'est pas non plus une étiquette avec un mot (Label), ni une étiquette
+// à trait (LabelCounter). Et l'icône seule ne dit rien : le sens doit être écrit à côté, en toutes
+// lettres, la couleur ne le porte pas à elle seule (WCAG 1.4.1).
+//
+// Nœuds Figma : `IconLabel-subtle` 1046:32536 et `IconLabel-bold` 1046:33140 — `variant` × `size`, plus
+// l'icône (`icon`, un échange d'instance). Comme pour Label, les deux jeux ne diffèrent que par la
+// profondeur du fond, et le code les réunit sous une prop, `emphasis`.
+//
+// Douze couleurs, les mêmes familles de rôles que Label : le fond lit `color/background/<famille>/subtle`
+// ou `bold`, le tracé de l'icône `color/icon/<famille>/on-subtle` ou `on-bold`. Figma écrit `alert` pour
+// `danger` et `sucess` pour `success` : le premier a été corrigé dans Figma, le second est signalé dans
+// arbitrages.md.
+//
+// Les trois tailles sont celles des contrôles : le carré fait `stack/control/small/size` (44), `medium/size`
+// (48) et `large/size` (56), l'icône 20, 24 et 28 (`icon-small`, `icon-medium`, `icon-large`), son tracé
+// grossit avec elle comme dans Figma (1,5, 1,8 et 2,1). Le rayon est `border/radius/small`, et non la
+// pilule de Label.
+//
+// L'icône est décorative et masquée aux lecteurs d'écran, comme partout dans le système : elle double un
+// mot déjà écrit à côté. `label` n'est à remplir que lorsqu'elle est seule à porter le sens, et alors le
+// texte dit la chose, pas le dessin.
+//
+// Contrastes mesurés (WCAG 1.4.11, 3:1 pour un objet graphique) sur les 24 paires de chaque thème : le
+// fond clair ne descend jamais sous 7,74:1 ; le fond plein tient 3:1 partout sauf `warning`, à 1,75:1
+// dans les deux thèmes (icône blanche sur ambre). Le code suit Figma et l'écrit : la correction va dans
+// les variables `color/icon/warning/on-bold` (arbitrages.md).
+
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+/**
+ * Une icône seule dans un carré arrondi : le repère visuel d'un type ou d'une catégorie.
+ * @since 0.3.0
+ */
+interface Props {
+  /**
+   * L'icône, par son nom dans le registre.
+   * @example '"book-open"'
+   */
+  icon: IconName;
+  /**
+   * La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».
+   * @default primary
+   */
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'rose'
+    | 'sun'
+    | 'clay'
+    | 'teal'
+    | 'highlight'
+    | 'neutral'
+    | 'warning'
+    | 'success'
+    | 'info';
+  /**
+   * `subtle` : fond clair, icône foncée. `bold` : fond plein, icône claire.
+   * @default subtle
+   */
+  emphasis?: 'subtle' | 'bold';
+  /**
+   * La taille du carré, et celle de l'icône qu'il porte.
+   * @default md
+   */
+  size?: 'sm' | 'md' | 'lg';
+  /**
+   * Le nom lu de l'icône, quand elle est seule à porter le sens. Sans lui elle est décorative.
+   */
+  label?: string;
+  class?: string;
+}
+
+const { icon, variant = 'primary', emphasis = 'subtle', size = 'md', label, class: className, ...rest } = Astro.props;
+---
+
+<span class:list={['icon-label', className]} data-variant={variant} data-emphasis={emphasis} data-size={size} {...rest}>
+  <Icon name={icon} label={label} />
+</span>
+
+<style>
+  .icon-label {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-small);
+  }
+
+  /* — les trois tailles — Le carré et l'icône grandissent ensemble. */
+  .icon-label[data-size='sm'] {
+    inline-size: var(--stack-control-small-size);
+    block-size: var(--stack-control-small-size);
+    --icon-size: var(--icon-small);
+  }
+
+  .icon-label[data-size='md'] {
+    inline-size: var(--stack-control-medium-size);
+    block-size: var(--stack-control-medium-size);
+    --icon-size: var(--icon-medium);
+  }
+
+  .icon-label[data-size='lg'] {
+    inline-size: var(--stack-control-large-size);
+    block-size: var(--stack-control-large-size);
+    --icon-size: var(--icon-large);
+  }
+
+  /* — les douze couleurs — Chaque famille donne son fond et son icône, en clair et en plein ;
+       l'emphase choisit la paire. */
+  .icon-label[data-variant='primary'] {
+    --icon-label-bg-subtle: var(--color-background-primary-subtle);
+    --icon-label-fg-subtle: var(--color-icon-primary-on-subtle);
+    --icon-label-bg-bold: var(--color-background-primary-bold);
+    --icon-label-fg-bold: var(--color-icon-primary-on-bold);
+  }
+
+  .icon-label[data-variant='secondary'] {
+    --icon-label-bg-subtle: var(--color-background-secondary-subtle);
+    --icon-label-fg-subtle: var(--color-icon-secondary-on-subtle);
+    --icon-label-bg-bold: var(--color-background-secondary-bold);
+    --icon-label-fg-bold: var(--color-icon-secondary-on-bold);
+  }
+
+  .icon-label[data-variant='danger'] {
+    --icon-label-bg-subtle: var(--color-background-danger-subtle);
+    --icon-label-fg-subtle: var(--color-icon-danger-on-subtle);
+    --icon-label-bg-bold: var(--color-background-danger-bold);
+    --icon-label-fg-bold: var(--color-icon-danger-on-bold);
+  }
+
+  .icon-label[data-variant='rose'] {
+    --icon-label-bg-subtle: var(--color-background-rose-subtle);
+    --icon-label-fg-subtle: var(--color-icon-rose-on-subtle);
+    --icon-label-bg-bold: var(--color-background-rose-bold);
+    --icon-label-fg-bold: var(--color-icon-rose-on-bold);
+  }
+
+  .icon-label[data-variant='sun'] {
+    --icon-label-bg-subtle: var(--color-background-sun-subtle);
+    --icon-label-fg-subtle: var(--color-icon-sun-on-subtle);
+    --icon-label-bg-bold: var(--color-background-sun-bold);
+    --icon-label-fg-bold: var(--color-icon-sun-on-bold);
+  }
+
+  .icon-label[data-variant='clay'] {
+    --icon-label-bg-subtle: var(--color-background-clay-subtle);
+    --icon-label-fg-subtle: var(--color-icon-clay-on-subtle);
+    --icon-label-bg-bold: var(--color-background-clay-bold);
+    --icon-label-fg-bold: var(--color-icon-clay-on-bold);
+  }
+
+  .icon-label[data-variant='teal'] {
+    --icon-label-bg-subtle: var(--color-background-teal-subtle);
+    --icon-label-fg-subtle: var(--color-icon-teal-on-subtle);
+    --icon-label-bg-bold: var(--color-background-teal-bold);
+    --icon-label-fg-bold: var(--color-icon-teal-on-bold);
+  }
+
+  .icon-label[data-variant='highlight'] {
+    --icon-label-bg-subtle: var(--color-background-highlight-subtle);
+    --icon-label-fg-subtle: var(--color-icon-highlight-on-subtle);
+    --icon-label-bg-bold: var(--color-background-highlight-bold);
+    --icon-label-fg-bold: var(--color-icon-highlight-on-bold);
+  }
+
+  .icon-label[data-variant='neutral'] {
+    --icon-label-bg-subtle: var(--color-background-neutral-subtle);
+    --icon-label-fg-subtle: var(--color-icon-neutral-on-subtle);
+    --icon-label-bg-bold: var(--color-background-neutral-bold);
+    --icon-label-fg-bold: var(--color-icon-neutral-on-bold);
+  }
+
+  .icon-label[data-variant='warning'] {
+    --icon-label-bg-subtle: var(--color-background-warning-subtle);
+    --icon-label-fg-subtle: var(--color-icon-warning-on-subtle);
+    --icon-label-bg-bold: var(--color-background-warning-bold);
+    --icon-label-fg-bold: var(--color-icon-warning-on-bold);
+  }
+
+  .icon-label[data-variant='success'] {
+    --icon-label-bg-subtle: var(--color-background-success-subtle);
+    --icon-label-fg-subtle: var(--color-icon-success-on-subtle);
+    --icon-label-bg-bold: var(--color-background-success-bold);
+    --icon-label-fg-bold: var(--color-icon-success-on-bold);
+  }
+
+  .icon-label[data-variant='info'] {
+    --icon-label-bg-subtle: var(--color-background-info-subtle);
+    --icon-label-fg-subtle: var(--color-icon-info-on-subtle);
+    --icon-label-bg-bold: var(--color-background-info-bold);
+    --icon-label-fg-bold: var(--color-icon-info-on-bold);
+  }
+
+  /* L'icône lit `--icon-color` : elle prend la teinte de la paire sans que le carré ait à la viser. */
+  .icon-label[data-emphasis='subtle'] {
+    background: var(--icon-label-bg-subtle);
+    --icon-color: var(--icon-label-fg-subtle);
+  }
+
+  .icon-label[data-emphasis='bold'] {
+    background: var(--icon-label-bg-bold);
+    --icon-color: var(--icon-label-fg-bold);
+  }
+</style>

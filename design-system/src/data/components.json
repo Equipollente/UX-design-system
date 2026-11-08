@@ -856,6 +856,84 @@
       "Button"
     ]
   },
+  "IconLabel": {
+    "source": "design-system/src/components/IconLabel.astro",
+    "description": "Une icône seule dans un carré arrondi : le repère visuel d'un type ou d'une catégorie.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "icon",
+        "type": "IconName",
+        "requis": true,
+        "description": "L'icône, par son nom dans le registre.",
+        "exemple": "\"book-open\""
+      },
+      {
+        "nom": "variant",
+        "type": "'primary' | 'secondary' | 'danger' | 'rose' | 'sun' | 'clay' | 'teal' | 'highlight' | 'neutral' | 'warning' | 'success' | 'info'",
+        "valeurs": [
+          "primary",
+          "secondary",
+          "danger",
+          "rose",
+          "sun",
+          "clay",
+          "teal",
+          "highlight",
+          "neutral",
+          "warning",
+          "success",
+          "info"
+        ],
+        "requis": false,
+        "description": "La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».",
+        "default": "primary"
+      },
+      {
+        "nom": "emphasis",
+        "type": "'subtle' | 'bold'",
+        "valeurs": [
+          "subtle",
+          "bold"
+        ],
+        "requis": false,
+        "description": "`subtle` : fond clair, icône foncée. `bold` : fond plein, icône claire.",
+        "default": "subtle"
+      },
+      {
+        "nom": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "valeurs": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "requis": false,
+        "description": "La taille du carré, et celle de l'icône qu'il porte.",
+        "default": "md"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": false,
+        "description": "Le nom lu de l'icône, quand elle est seule à porter le sens. Sans lui elle est décorative."
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Icon"
+    ]
+  },
   "InputPG": {
     "source": "design-system/src/components/InputPG.astro",
     "description": "Un champ texte d'une ligne, avec son libellé, son aide et son message.",
