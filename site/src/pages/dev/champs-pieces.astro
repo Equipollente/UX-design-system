@@ -1,0 +1,162 @@
+---
+// Page de contrôle des champs réécrits (paliers 1 et 2). Éphémère : elle ne se commite pas, et se
+// retire quand les paliers suivants sont validés.
+import Input from 'ux-design-system/components/forms/Input.astro';
+import Textarea from 'ux-design-system/components/forms/Textarea.astro';
+import Checkbox from 'ux-design-system/components/forms/Checkbox.astro';
+import CheckboxGroup from 'ux-design-system/components/forms/CheckboxGroup.astro';
+import Radio from 'ux-design-system/components/forms/Radio.astro';
+import RadioGroup from 'ux-design-system/components/forms/RadioGroup.astro';
+import Toggle from 'ux-design-system/components/forms/Toggle.astro';
+import Select from 'ux-design-system/components/forms/Select.astro';
+import BaseLayout from 'ux-design-system/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Champs réécrits">
+  <main>
+    <h1>Input</h1>
+    <p>Clique dans un champ : l'anneau de focus fait 2 px. Passe la souris dessus : le trait fonce.</p>
+
+    <h2>Les trois tailles</h2>
+    <div class="row">
+      <Input id="s" label="Petit" size="small" value="Valeur" />
+      <Input id="m" label="Moyen" size="medium" value="Valeur" />
+      <Input id="l" label="Grand" size="large" value="Valeur" />
+    </div>
+
+    <h2>États</h2>
+    <div class="grid">
+      <Input id="i1" label="Au repos" value="Valeur" />
+      <Input id="i2" label="Exemple" placeholder="Un exemple de saisie" />
+      <Input id="i3" label="Avec aide" hint="Huit caractères minimum" />
+      <Input id="i4" label="Obligatoire" required value="Valeur" />
+      <Input id="i5" label="En erreur" error="Adresse invalide" hint="Format nom@domaine.fr" value="bonjour@exemple" />
+      <Input id="i6" label="En succès" success="Adresse disponible" value="bonjour@exemple.fr" />
+      <Input id="i7" label="Désactivé" disabled hint="Indisponible" value="Valeur" />
+      <Input id="i8" label="Recherche" type="search" placeholder="Rechercher" />
+      <Input id="i9" label="Libellé masqué" hideLabel placeholder="Le libellé existe, mais il est caché" />
+    </div>
+
+    <h1>Textarea</h1>
+    <p>Tape dans la zone avec compteur : le nombre bouge à chaque lettre.</p>
+    <div class="grid">
+      <Textarea id="t1" label="Description" placeholder="Décris l'œuvre" />
+      <Textarea id="t2" label="Avec compteur" counter maxlength={140} value="Un début de texte" hint="Ce que l'on lit en entrant" />
+      <Textarea id="t3" label="En erreur" error="Le texte est trop court" value="Court" />
+      <Textarea id="t4" label="En succès" success="Merci, c'est reçu" value="Un texte complet" />
+      <Textarea id="t5" label="Désactivé" disabled value="Texte verrouillé" />
+      <Textarea id="t6" label="Obligatoire, 6 lignes" required rows={6} />
+    </div>
+
+    <h1>Select</h1>
+    <p>Clique la boîte : la liste s'ouvre. Tape dans la recherche, valide avec Entrée, ou parcours avec les flèches.</p>
+    <form class="grid" onsubmit="event.preventDefault(); document.getElementById('sortie').textContent = JSON.stringify(Object.fromEntries(new FormData(this)))">
+      <Select id="p1" label="Pays" options={['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon', 'Portugal', 'Autriche', 'Brésil']} value="France" />
+      <Select id="p2" label="Avec recherche" placeholder="Choisir un pays" options={['France', 'Belgique', 'Suisse', 'Canada', 'Italie', 'Japon', 'Portugal', 'Autriche', 'Brésil']} />
+      <Select
+        id="p3"
+        label="Recherche et création"
+        placeholder="Choisir une technique"
+        hint="Tape un nom absent pour le créer"
+        options={[
+          { label: 'Peinture', options: ['Gouache', 'Aquarelle', 'Huile'] },
+          { label: 'Dessin', options: ['Encre', 'Fusain'] },
+          'Collage',
+        ]}
+      />
+      <Select id="p4" label="En erreur" error="Un choix est nécessaire" options={['A', 'B']} />
+      <Select id="p5" label="Désactivé" disabled value="A" options={['A', 'B']} />
+      <Select id="p6" label="Obligatoire" required options={['A', 'B']} />
+      <div><button type="submit">Envoyer le formulaire</button> <code id="sortie"></code></div>
+    </form>
+
+    <h1>Checkbox</h1>
+    <div class="grid">
+      <Checkbox id="k1" label="Décochée" />
+      <Checkbox id="k2" label="Cochée" checked />
+      <Checkbox id="k3" label="Indéterminée" indeterminate />
+      <Checkbox id="k4" label="Avec aide" hint="Ce que cocher entraîne" />
+      <Checkbox id="k5" label="Obligatoire" required />
+      <Checkbox id="k6" label="Désactivée" disabled />
+      <Checkbox id="k7" label="Cochée et désactivée" checked disabled />
+      <Checkbox id="k8" label="Indéterminée et désactivée" indeterminate disabled />
+    </div>
+
+    <h1>Radio</h1>
+    <div class="grid">
+      <Radio id="r1" name="solo" label="Non retenu" />
+      <Radio id="r2" name="solo" label="Retenu" checked />
+      <Radio id="r3" name="solo-d" label="Désactivé" disabled />
+      <Radio id="r4" name="solo-d" label="Retenu et désactivé" checked disabled />
+      <Radio id="r5" name="solo-h" label="Avec aide" hint="Ce que ce choix entraîne" />
+    </div>
+
+    <h1>Toggle</h1>
+    <div class="grid">
+      <Toggle id="g1" label="Éteint" />
+      <Toggle id="g2" label="Allumé" checked />
+      <Toggle id="g3" label="Avec aide" hint="Ce que l'interrupteur change" />
+      <Toggle id="g4" label="Éteint, désactivé" disabled />
+      <Toggle id="g5" label="Allumé, désactivé" checked disabled />
+    </div>
+
+    <h1>Groupes</h1>
+    <div class="grid">
+      <CheckboxGroup
+        id="cg1"
+        legend="Techniques"
+        values={['gouache']}
+        options={[
+          { value: 'gouache', label: 'Gouache' },
+          { value: 'encre', label: 'Encre', hint: 'Noire ou de couleur' },
+          { value: 'collage', label: 'Collage' },
+        ]}
+      />
+      <RadioGroup
+        id="rg1"
+        legend="Format"
+        required
+        value="a4"
+        options={[
+          { value: 'a4', label: 'A4' },
+          { value: 'a3', label: 'A3', hint: 'Pour les grandes œuvres' },
+          { value: 'a2', label: 'A2', disabled: true },
+        ]}
+      />
+      <RadioGroup
+        id="rg2"
+        legend="Orientation horizontale"
+        orientation="horizontal"
+        options={[
+          { value: 'p', label: 'Portrait' },
+          { value: 'l', label: 'Paysage' },
+        ]}
+      />
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    padding: 32px;
+    max-width: 1100px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 32px;
+    align-items: start;
+  }
+  h1 {
+    margin-block: 48px 8px;
+  }
+  h2 {
+    margin-block: 32px 16px;
+  }
+</style>

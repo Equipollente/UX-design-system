@@ -20,6 +20,10 @@ import ComponentExemples from '../../layouts/blocks/ComponentExemples.astro';
 import ComponentPlaygroundAuto from '../../layouts/blocks/ComponentPlaygroundAuto.astro';
 import ComponentElements from '../../layouts/blocks/ComponentElements.astro';
 import TexteCode from '../../layouts/blocks/TexteCode.astro';
+import Tabs from 'ux-design-system/components/tabs/Tabs.astro';
+import TabList from 'ux-design-system/components/tabs/TabList.astro';
+import TabButton from 'ux-design-system/components/tabs/TabButton.astro';
+import TabPanel from 'ux-design-system/components/tabs/TabPanel.astro';
 import components from 'ux-design-system/data/components.json';
 import { withBase } from 'ux-design-system/lib/url';
 import { componentPageGroups, generatedPages } from '../_component-pages';
@@ -39,10 +43,22 @@ const Composant = Object.entries(modules)
 
 const fiche = (components as unknown as Record<string, any>)[page.nom];
 
+// Les autres composants que les exemples de la page montrent (`composant:` dans leur texte).
+const composantDe = (nom: string) =>
+  Object.entries(modules)
+    .filter(([chemin]) => chemin.endsWith(`/${nom}.astro`))
+    .sort(([a], [b]) => Number(b.includes('/forms/')) - Number(a.includes('/forms/')))[0][1].default;
+
 // Le texte écrit à la main, s'il existe.
 const texte = await getEntry('components', page.slug);
 const Presentation = texte ? (await render(texte)).Content : null;
 const donnees = texte?.data;
+const autres = Object.fromEntries(
+  [...new Set((donnees?.exemples ?? []).map((e) => e.composant).filter((n): n is string => !!n))].map((nom) => [
+    nom,
+    { Composant: composantDe(nom), reglages: (components as unknown as Record<string, any>)[nom].props },
+  ]),
+);
 ---
 
 <ComponentPageLayout
@@ -55,96 +71,146 @@ const donnees = texte?.data;
   sidebarLabel="Navigation des composants"
 >
   <div slot="header">
-    <!-- 1. L'en-tête -->
-    <nav class="fil" aria-label="Fil d'Ariane">
-      <a href={withBase('/components')}>Composants</a> <span aria-hidden="true">/</span> <span>{donnees?.title ?? page.title}</span>
-    </nav>
+    <!-- 1. L'en-tête : le nom et la phrase qui le définit -->
     <ComponentIntroduction title={donnees?.title ?? page.title} description={donnees?.description ?? page.description} />
-    <ul class="liens">
-      {fiche.experimental && <li><span class="badge">Expérimental</span></li>}
-      {donnees?.figma && <li><a href={donnees.figma}>Voir dans Figma</a></li>}
-      <li>Source : <code>{fiche.source}</code></li>
-    </ul>
   </div>
 
   <div slot="content">
-    <!-- 2. La présentation -->
-    {Presentation && (
-      <section class="presentation">
-        <Presentation />
-      </section>
-    )}
+    <!-- 2. Trois onglets : la vue d'ensemble, les conseils d'usage, l'accessibilité -->
+    <Tabs>
+      <TabList label="Sections de la page">
+        <TabButton id="onglet-apercu" controls="panneau-apercu" selected>Overview</TabButton>
+        <TabButton id="onglet-usage" controls="panneau-usage">Guidelines</TabButton>
+        <TabButton id="onglet-accessibilite" controls="panneau-accessibilite">Accessibility</TabButton>
+      </TabList>
 
-    <!-- 3. Les exemples -->
-    {donnees && donnees.exemples.length > 0 && (
-      <ComponentExemples nom={page.nom} reglages={fiche.props} Composant={Composant} exemples={donnees.exemples} />
-    )}
+      <TabPanel class="panneau" id="panneau-apercu" labelledby="onglet-apercu">
+        <div class="apercu">
+          <!-- 3. Les statuts : où en est le composant, côté code et côté Figma -->
+          <div class="statuts">
+            <section class="statut">
+              <h2>Astro</h2>
+              <p>{fiche.experimental ? 'Expérimental' : 'Prêt'} · <code>{fiche.source}</code> · Page de doc</p>
+            </section>
+            <section class="statut">
+              <h2>Figma</h2>
+              <p>{donnees?.figma ? <a href={donnees.figma}>Voir dans Figma</a> : 'Pas de lien'}</p>
+            </section>
+          </div>
 
-    <!-- 4. Le playground -->
-    <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} source={fiche.source} />
+          <!-- 4. Les exemples -->
+          {donnees && donnees.exemples.length > 0 && (
+            <ComponentExemples nom={page.nom} reglages={fiche.props} Composant={Composant} exemples={donnees.exemples} autres={autres} />
+          )}
 
-    <!-- 5. Les props -->
-    <ComponentElements
-      reglages={fiche.props}
-      slots={fiche.slots}
-      utilise={fiche.utilise}
-      natifs={fiche.natifs}
-      source={fiche.source}
-    />
+          <!-- 5. Le playground -->
+          <ComponentPlaygroundAuto nom={page.nom} reglages={fiche.props} Composant={Composant} source={fiche.source} />
 
-    <!-- 6. L'accessibilité, puis les composants voisins -->
-    {donnees && donnees.accessibilite.length > 0 && (
-      <section class="suite">
-        <h2>Accessibilité</h2>
-        <ul>
-          {donnees.accessibilite.map((ligne) => <li><TexteCode texte={ligne} /></li>)}
-        </ul>
-      </section>
-    )}
-    {donnees && donnees.voirAussi.length > 0 && (
-      <section class="suite">
-        <h2>Voir aussi</h2>
-        <ul>
-          {donnees.voirAussi.map((v) => <li><code>{v.nom}</code> : {v.texte}</li>)}
-        </ul>
-      </section>
-    )}
+          <!-- 6. Les props -->
+          <ComponentElements
+            nom={page.nom}
+            reglages={fiche.props}
+            slots={fiche.slots}
+            utilise={fiche.utilise}
+            natifs={fiche.natifs}
+            source={fiche.source}
+          />
+
+          <!-- 7. Les liens connexes -->
+          {donnees && donnees.voirAussi.length > 0 && (
+            <section class="liens-connexes">
+              <h2>Liens connexes</h2>
+              <ul>
+                {donnees.voirAussi.map((v) => <li><code>{v.nom}</code> : {v.texte}</li>)}
+              </ul>
+            </section>
+          )}
+        </div>
+      </TabPanel>
+
+      <TabPanel class="panneau" id="panneau-usage" labelledby="onglet-usage" hidden>
+        {Presentation ? (
+          <section class="presentation">
+            <Presentation />
+          </section>
+        ) : (
+          <p>Pas encore de conseils d'usage pour ce composant.</p>
+        )}
+      </TabPanel>
+
+      <TabPanel class="panneau" id="panneau-accessibilite" labelledby="onglet-accessibilite" hidden>
+        {donnees && donnees.accessibilite.length > 0 ? (
+          <ul class="accessibilite">
+            {donnees.accessibilite.map((ligne) => <li><TexteCode texte={ligne} /></li>)}
+          </ul>
+        ) : (
+          <p>Pas encore de notes d'accessibilité pour ce composant.</p>
+        )}
+      </TabPanel>
+    </Tabs>
   </div>
 </ComponentPageLayout>
 
 <style>
-  .fil {
-    margin-block-end: var(--base-16);
+  /* Le panneau d'onglet est ici de la page, pas une carte : le fond et le cadre s'effacent. */
+  :global(div.tabs-tabpanel.panneau) {
+    padding: 0;
+    background: none;
+    border: 0;
+    align-items: stretch;
+  }
+
+  /* Le fil de la page : chaque bloc se sépare du suivant de la même mesure. */
+  .apercu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-32);
+    padding-block-start: var(--base-32);
+  }
+
+  .statuts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--base-24);
+  }
+
+  /* Une carte de statut : un titre vert, une ligne d'état en discret. */
+  .statut {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-12);
+    padding: var(--base-24);
+    background: var(--color-surface-default);
+    border: var(--border-width-default) solid var(--color-border-base-subtle);
+    border-radius: var(--border-radius-medium);
+  }
+  .statut h2 {
+    margin: 0;
+    color: var(--color-text-success-default);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-bold);
+  }
+  .statut p {
+    margin: 0;
     color: var(--color-text-base-muted);
     font-size: var(--text-body-small-size);
   }
-  .liens {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--base-8) var(--base-24);
-    margin: 0 0 var(--base-32);
-    padding: 0;
-    list-style: none;
-    font-size: var(--text-body-small-size);
+
+  .liens-connexes h2 {
+    margin: 0 0 var(--base-16);
+    font-size: var(--text-title-medium-size);
   }
-  .badge {
-    padding: var(--base-4) var(--base-12);
-    border-radius: 999px;
-    background: var(--color-background-highlight-subtle);
-    font-size: var(--text-caption-size);
+  .liens-connexes ul {
+    margin: 0;
   }
+
   .presentation :global(h2) {
     margin-block: var(--base-24) var(--base-8);
     font-size: var(--text-title-small-size);
   }
-  .presentation {
+  .presentation,
+  .accessibilite {
     max-inline-size: 70ch;
-    margin-block-end: var(--base-32);
-  }
-  .suite {
-    margin-block-start: var(--base-48);
-  }
-  .suite h2 {
-    font-size: var(--text-title-large-size);
+    padding-block-start: var(--base-32);
   }
 </style>

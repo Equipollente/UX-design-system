@@ -27,7 +27,23 @@ const components = defineCollection({
         z.object({
           titre: z.string(),
           texte: z.string().optional(),
-          instances: z.array(z.record(z.string(), valeur)).min(1),
+          instances: z.array(z.record(z.string(), valeur)).default([]),
+          /** Plusieurs cartes côte à côte sous un même titre, chacune avec son code. Remplace `instances`. */
+          cartes: z
+            .array(
+              z.object({
+                instances: z.array(z.record(z.string(), valeur)).min(1),
+                /** `focus` dessine l'anneau de focus, qu'un exemple ne peut pas avoir au clavier. */
+                etat: z.enum(['focus']).optional(),
+              }),
+            )
+            .optional(),
+          /** Les instances s'empilent (`colonne`) ou se posent côte à côte (`ligne`, par défaut). */
+          disposition: z.enum(['colonne', 'ligne']).default('ligne'),
+          /** Le composant montré, quand ce n'est pas celui de la page : `CheckboxGroup` sur la page `Checkbox`. */
+          composant: z.string().optional(),
+          /** Des exemples qui portent le même nom de rangée se posent côte à côte. */
+          rangee: z.string().optional(),
         }),
       )
       .default([]),

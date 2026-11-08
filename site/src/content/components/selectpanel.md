@@ -1,50 +1,35 @@
 ---
-title: Panneau de sélection
-description: "Le panneau de sélection fait choisir une valeur, ou plusieurs, dans un panneau qui s'ouvre sous une boîte : avec recherche, en-tête et pied."
+title: Select Panel
+description: "Choisir une valeur, ou plusieurs, dans un panneau qui s'ouvre sous une boîte : avec recherche, en-tête et pied."
 figma: https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=955-17742
 exemples:
-  - titre: Un choix
+  - titre: Single select
+    texte: Un seul choix. Cliquer une ligne choisit et ferme le panneau.
     instances:
-      - { id: un, label: Pays, options: [France, Belgique, Suisse, Canada, Italie] }
-      - { id: valeur, label: Pays, options: [France, Belgique, Suisse], value: Belgique }
-  - titre: Plusieurs choix
+      - { id: un, label: Choix, value: Choix 1, options: [Choix 1, Choix 2, Choix 3] }
+  - titre: Multi select
     texte: "`type=multiple` remplace les coches par des cases. La boîte dit les choix faits, séparés par une virgule."
     instances:
-      - { id: plusieurs, label: Techniques, type: multiple, options: [Gouache, Encre, Collage, Fusain], values: [Gouache] }
-  - titre: En-tête
-    texte: Un titre, une phrase qui dit ce qu'on choisit, et la recherche.
-    instances:
-      - { id: entete, label: Technique, heading: Technique dominante, description: "Celle qui domine dans l'œuvre.", searchable: true, options: [Gouache, Aquarelle, Huile, Encre, Fusain, Collage] }
-  - titre: Avec des groupes
+      - { id: plusieurs, label: Choix, type: multiple, values: [Choix 1, Choix 2], options: [Choix 1, Choix 2, Choix 3] }
+  - titre: Grouped
     texte: Un groupe range ses options sous un nom. Il ne s'imbrique pas, et `disabled` l'éteint tout entier.
     instances:
-      - { id: groupes, label: Technique, options: [{ label: Peinture, options: [Gouache, Aquarelle, Huile] }, { label: Dessin, options: [Encre, Fusain] }, Collage] }
-  - titre: Choix épinglés
-    texte: "`showSelected` répète en bas du panneau les choix faits ; on les décoche de là."
+      - { id: groupes, label: Sélections, type: multiple, values: [Choix 1, Item 2], options: [{ label: Groupe A, options: [Choix 1, Choix 2] }, { label: Groupe B, options: [Item 1, Item 2] }] }
+  - titre: With search
+    texte: "`searchable` pose un champ de recherche dans l'en-tête, qui filtre les choix."
     instances:
-      - { id: epingles, label: Techniques, type: multiple, showSelected: true, options: [Gouache, Encre, Collage, Fusain], values: [Gouache, Collage] }
-  - titre: Limite
-    texte: "`max` éteint les cases restantes quand la limite est atteinte."
-    instances:
-      - { id: limite, label: Techniques, type: multiple, max: 2, options: [Gouache, Encre, Collage, Fusain], values: [Gouache, Collage] }
-  - titre: Création
+      - { id: recherche, label: Choix, type: multiple, searchable: true, values: [Choix 1, Choix 2], options: [Choix 1, Choix 2, Choix 3, Choix 4] }
+  - titre: With create action
     texte: "La ligne « Créer une option » n'enregistre rien : le champ annonce l'événement `select-create`, et la page décide de garder l'option."
     instances:
-      - { id: creation, label: Technique, creatable: true, placeholder: Choisir une technique, options: [Gouache, Encre, Collage] }
-  - titre: Tailles
+      - { id: creation, label: Choix, type: multiple, creatable: true, values: [Choix 1, Choix 2], options: [Choix 1, Choix 2, Choix 3] }
+  - titre: With selected items
+    texte: "`showSelected` répète en bas du panneau les choix faits ; on les décoche de là."
     instances:
-      - { id: petit, label: Petit, size: small, options: [A, B] }
-      - { id: grand, label: Grand, size: large, options: [A, B] }
-  - titre: Obligatoire
-    texte: Si aucun choix n'est fait à l'envoi, le panneau s'ouvre à la place du message du navigateur.
+      - { id: epingles, label: Choix, type: multiple, searchable: true, showSelected: true, values: [Choix 1, Choix 2], options: [Choix 1, Choix 2, Choix 3] }
+  - titre: With selected items and create action
     instances:
-      - { id: obligatoire, label: Pays, required: true, options: [France, Belgique] }
-  - titre: Erreur
-    instances:
-      - { id: erreur, label: Pays, error: Un choix est nécessaire., options: [France, Belgique] }
-  - titre: Désactivé
-    instances:
-      - { id: desactive, label: Pays, disabled: true, value: France, options: [France, Belgique] }
+      - { id: epingles-creation, label: Choix, type: multiple, searchable: true, showSelected: true, creatable: true, values: [Choix 1, Choix 2], options: [Choix 1, Choix 2, Choix 3] }
 accessibilite:
   - "La boîte est un bouton nommé par son libellé. Il ouvre le panneau, et le navigateur annonce qu'il est ouvert."
   - "Les lignes sont de vrais radios (un choix) ou de vraies cases (plusieurs) : Tab entre dans le panneau, les flèches le parcourent, Espace choisit, Échap ferme. À un choix, un clic ferme le panneau."

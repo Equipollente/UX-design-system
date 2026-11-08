@@ -1,28 +1,27 @@
 ---
-title: Groupe de cases
+title: Checkbox Group
 description: "Le groupe de cases pose une question et ses cases : plusieurs choix peuvent être retenus."
 figma: https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=876-61534
 exemples:
-  - titre: Par défaut
+  - titre: Vertical
     instances:
-      - { id: defaut, legend: Techniques, options: [{ value: gouache, label: Gouache }, { value: encre, label: Encre }, { value: collage, label: Collage }] }
-  - titre: Cases cochées
-    texte: "`values` liste ce qui est coché à l'ouverture."
-    instances:
-      - { id: cochees, legend: Techniques, values: [gouache, collage], options: [{ value: gouache, label: Gouache }, { value: encre, label: Encre }, { value: collage, label: Collage }] }
-  - titre: Avec une aide
-    instances:
-      - { id: aide, legend: Techniques, options: [{ value: gouache, label: Gouache }, { value: encre, label: Encre, hint: Noire ou de couleur. }] }
+      - { id: vertical, legend: Label text, options: [{ value: a, label: Choice 1 }, { value: b, label: Choice 2 }, { value: c, label: Choice 3 }, { value: d, label: Choice 4 }] }
   - titre: Horizontal
     instances:
-      - { id: horizontal, legend: Disponibilité, orientation: horizontal, options: [{ value: vente, label: En vente }, { value: expose, label: Exposée }] }
-  - titre: Désactivé
-    texte: "`disabled` éteint tout le groupe ; une option peut aussi s'éteindre seule."
+      - { id: horizontal, legend: Label text, orientation: horizontal, hint: Caption text, options: [{ value: a, label: Choice 1 }, { value: b, label: Choice 2 }, { value: c, label: Choice 3 }, { value: d, label: Choice 4 }] }
+  - titre: Avec une aide
     instances:
-      - { id: desactive, legend: Techniques, disabled: true, options: [{ value: gouache, label: Gouache }, { value: encre, label: Encre }] }
+      - { id: aide, legend: Label text, hint: Caption text, options: [{ value: a, label: Choice 1 }, { value: b, label: Choice 2 }, { value: c, label: Choice 3 }, { value: d, label: Choice 4 }] }
+  - titre: Avec validation
+    instances:
+      - { id: validation, legend: Label text, success: Validation message, options: [{ value: a, label: Choice 1 }, { value: b, label: Choice 2 }, { value: c, label: Choice 3 }, { value: d, label: Choice 4 }] }
+  - titre: Avec une aide
+    instances:
+      - { id: aide-seule, legend: Label text, hideLegend: true, options: [{ value: a, label: Label text, hint: Caption text }] }
 accessibilite:
   - "Le groupe est un `<fieldset>`, nommé par sa `<legend>` : un lecteur d'écran annonce la question avant la première case."
   - "Chaque case garde son propre libellé et son aide, reliés comme pour une case seule."
+  - "L'aide et le message sont désignés par `aria-describedby` sur le `<fieldset>`, et lus après la légende."
   - "`hideLegend` retire la légende de l'écran, jamais du document."
 voirAussi:
   - { nom: Checkbox, texte: Une case seule, ou à placer à la main. }

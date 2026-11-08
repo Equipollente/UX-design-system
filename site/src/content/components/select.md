@@ -1,35 +1,27 @@
 ---
-title: Liste déroulante
-description: La liste déroulante fait choisir une valeur parmi des options connues d'avance, dans la liste du navigateur.
+title: Select
+description: Choisir une seule option dans une liste fermée de choix prévus d'avance.
 figma: https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=954-6709
 exemples:
   - titre: Par défaut
     instances:
-      - { id: defaut, label: Pays, options: [France, Belgique, Suisse, Canada, Italie] }
-  - titre: Avec une valeur
-    texte: La boîte montre le choix fait. Sans choix, elle montre l'invite, `Choisir` par défaut.
+      - { id: defaut, label: Libellé, value: Valeur, options: [Valeur, Choix 2, Choix 3] }
+  - titre: Taille personnalisée
+    texte: Choisir la taille selon la place disponible et le contexte. Les petites tailles pour les espaces serrés, les grandes pour les zones ouvertes, sinon le champ paraît disproportionné à côté de grands éléments.
     instances:
-      - { id: valeur, label: Pays, options: [France, Belgique, Suisse], value: Belgique }
-      - { id: invite, label: Pays, options: [France, Belgique, Suisse], placeholder: Aucun pays choisi }
-  - titre: Avec des groupes
-    texte: Un groupe range ses options sous un nom. Il ne s'imbrique pas, et `disabled` l'éteint tout entier.
+      - { id: petit, label: Small, size: small, value: Valeur, options: [Valeur, Choix 2] }
+      - { id: moyen, label: Medium (par défaut), size: medium, value: Valeur, options: [Valeur, Choix 2] }
+      - { id: grand, label: Large, size: large, value: Valeur, options: [Valeur, Choix 2] }
+  - titre: Avec une aide
     instances:
-      - { id: groupes, label: Technique, options: [{ label: Peinture, options: [Gouache, Aquarelle, Huile] }, { label: Dessin, options: [Encre, Fusain] }, Collage] }
-  - titre: Tailles
+      - { id: aide, label: Libellé, hint: Texte d'aide, value: Valeur, options: [Valeur, Choix 2] }
+  - titre: Avec un placeholder
+    texte: Affiche un texte quand aucune option n'est choisie. Il est masqué dans un champ requis dès qu'un choix est fait.
     instances:
-      - { id: petit, label: Petit, size: small, options: [A, B] }
-      - { id: moyen, label: Moyen, size: medium, options: [A, B] }
-      - { id: grand, label: Grand, size: large, options: [A, B] }
-  - titre: Obligatoire
-    texte: L'astérisque s'ajoute au libellé, et l'invite ne peut plus être rechoisie une fois un choix fait.
+      - { id: invite, label: Libellé, placeholder: Aucun choix sélectionné, options: [Valeur, Choix 2] }
+  - titre: Avec un message de validation
     instances:
-      - { id: obligatoire, label: Pays, required: true, options: [France, Belgique] }
-  - titre: Erreur
-    instances:
-      - { id: erreur, label: Pays, error: Un choix est nécessaire., options: [France, Belgique] }
-  - titre: Désactivé
-    instances:
-      - { id: desactive, label: Pays, disabled: true, value: France, options: [France, Belgique] }
+      - { id: erreur, label: Libellé, error: Une erreur s'est produite, value: Valeur, options: [Valeur, Choix 2] }
 accessibilite:
   - "C'est le `<select>` du navigateur : le clavier (flèches, saisie de la première lettre, Échap), les lecteurs d'écran et la liste sur mobile viennent du système."
   - "Le libellé est lié au champ par `for` ; l'aide et le message sont désignés par `aria-describedby`."

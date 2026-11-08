@@ -15,10 +15,19 @@ interface Reglage {
   default?: string;
 }
 
+type Instance = Record<string, string | number | boolean | unknown[]>;
+interface Carte {
+  instances: Instance[];
+  etat?: 'focus';
+}
 interface Exemple {
   titre: string;
   texte?: string;
-  instances: Record<string, string | number | boolean | unknown[]>[];
+  instances: Instance[];
+  cartes?: Carte[];
+  disposition: 'colonne' | 'ligne';
+  composant?: string;
+  rangee?: string;
 }
 
 interface Props {
@@ -27,13 +36,27 @@ interface Props {
   reglages: Reglage[];
   Composant: any; // un composant Astro : aucun type d'Astro ne le décrit
   exemples: Exemple[];
+  /** Les autres composants que des exemples montrent, par nom : le composant et ses réglages. */
+  autres?: Record<string, { Composant: any; reglages: Reglage[] }>;
 }
 
-const { nom, reglages, Composant, exemples } = Astro.props;
+const { nom, reglages, Composant, exemples, autres = {} } = Astro.props;
+
+// Le composant d'un exemple : celui de la page, ou celui que l'exemple nomme.
+const cible = (exemple: Exemple) => {
+  if (!exemple.composant) return { nom, Composant, reglages };
+  const autre = autres[exemple.composant];
+  if (!autre) throw new Error(`Exemple « ${exemple.titre} » : le composant « ${exemple.composant} » est inconnu.`);
+  return { nom: exemple.composant, ...autre };
+};
 
 // ── Un exemple ne peut pas mentir ────────────────────────────────────────────
+// Un exemple a ses instances, ou ses cartes : chaque carte est un canvas avec son code.
+const cartesDe = (exemple: Exemple): Carte[] => exemple.cartes ?? [{ instances: exemple.instances }];
+
 for (const exemple of exemples) {
-  for (const instance of exemple.instances) {
+  const { nom, reglages } = cible(exemple);
+  for (const instance of cartesDe(exemple).flatMap((c) => c.instances)) {
     for (const [cle, valeur] of Object.entries(instance)) {
       const reglage = reglages.find((r) => r.nom === cle);
       if (!reglage) throw new Error(`Exemple « ${exemple.titre} » : ${nom} n'a pas de réglage « ${cle} ».`);
@@ -58,7 +81,7 @@ function ligne(reglage: Reglage, valeur: string | number | boolean | unknown[]) 
   return valeur.includes('"') ? `${reglage.nom}={${JSON.stringify(valeur)}}` : `${reglage.nom}="${valeur}"`;
 }
 
-const codeDe = (instances: Exemple['instances']) =>
+const codeDe = (nom: string, reglages: Reglage[], instances: Exemple['instances']) =>
   instances
     .map((instance) => {
       const lignes = reglages
@@ -68,90 +91,167 @@ const codeDe = (instances: Exemple['instances']) =>
       return `<${nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
     })
     .join('\n\n');
+// Les exemples d'une même rangée se posent côte à côte ; les autres, l'un sous l'autre.
+const rangees: Exemple[][] = [];
+for (const exemple of exemples) {
+  const derniere = rangees[rangees.length - 1];
+  if (exemple.rangee && derniere?.[0].rangee === exemple.rangee) derniere.push(exemple);
+  else rangees.push([exemple]);
+}
 ---
 
 <section class="exemples">
-  <h2>Exemples</h2>
+  <h2>Exemples Astro</h2>
 
-  {exemples.map((exemple) => (
-    <section class="exemple">
-      <h3>{exemple.titre}</h3>
-      {exemple.texte && <p><TexteCode texte={exemple.texte} /></p>}
+  {rangees.map((rangee) => (
+    <div class="rangee">
+      {rangee.map((exemple) => (
+        <section class="exemple">
+          <h3>{exemple.titre}</h3>
+          {exemple.texte && <p><TexteCode texte={exemple.texte} /></p>}
 
-      <div class="demo">
-        {exemple.instances.map((instance) => <Composant {...instance} />)}
-      </div>
+          <div class="cartes">
+            {cartesDe(exemple).map((carte) => (
+              <div class="canvas" data-etat={carte.etat}>
+                {/* Un formulaire, pour que « Réinitialiser » remette les champs comme au chargement. */}
+                <form class="demo" data-disposition={exemple.disposition} novalidate>
+                  {carte.instances.map((instance) => { const C = cible(exemple).Composant; return <C {...instance} />; })}
+                </form>
 
-      <div class="code">
-        <button type="button" data-copie>Copier</button>
-        <pre><code>{codeDe(exemple.instances)}</code></pre>
-      </div>
-    </section>
+                <div class="code">
+                  <div class="actions">
+                    <button type="button" data-copie>Copier</button>
+                    <span aria-hidden="true">·</span>
+                    <button type="button" data-reinitialise>Réinitialiser</button>
+                  </div>
+                  <pre><code>{codeDe(cible(exemple).nom, cible(exemple).reglages, carte.instances)}</code></pre>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
   ))}
 </section>
 
 <style>
+  .exemples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-32);
+  }
   h2 {
-    font-size: var(--text-title-large-size);
+    margin: 0;
+    font-size: var(--text-title-medium-size);
   }
-  .exemple {
-    margin-block-start: var(--base-32);
-  }
-  h3 {
-    margin-block: 0 var(--base-4);
-    font-size: var(--text-title-small-size);
-  }
-  p {
-    margin-block: 0 var(--base-12);
-    color: var(--color-text-base-muted);
-    max-inline-size: 60ch;
-  }
-
-  /* La démo : le composant sur un fond neutre, les instances côte à côte. */
-  .demo {
+  .rangee {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--base-24);
-    padding: var(--base-32);
-    background: var(--color-surface-raised);
+    align-items: start;
+  }
+  .exemple {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-16);
+    min-inline-size: 0;
+  }
+  .cartes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--base-16);
+    align-items: stretch;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-bold);
+  }
+  p {
+    margin: 0;
+    max-inline-size: 70ch;
+  }
+
+  /* La carte d'un exemple : le composant en haut, son code en bas, sur un fond à part. */
+  .canvas {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--color-surface-default);
     border: var(--border-width-default) solid var(--color-border-base-subtle);
-    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    border-radius: var(--border-radius-medium);
+  }
+
+  .demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--base-24);
+    padding: var(--base-24);
+  }
+
+  .demo[data-disposition='colonne'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* L'anneau de focus, montré tel qu'on le voit au clavier : un exemple ne peut pas avoir le focus. */
+  .canvas[data-etat='focus'] :global(input:not(:disabled)) {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
   }
 
   .code {
-    position: relative;
+    flex: 1;
+    padding: var(--base-12) var(--base-8);
+    background: var(--color-surface-raised);
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--base-8);
+    color: var(--color-text-base-muted);
+    font-size: var(--text-caption-size);
+  }
+  .actions button {
+    padding: var(--base-4) var(--base-8);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .actions button:hover {
+    color: var(--color-text-base-default);
+  }
+  .actions button:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
   }
   pre {
     margin: 0;
-    padding: var(--base-16);
+    padding: var(--base-8);
     overflow-x: auto;
-    border: var(--border-width-default) solid var(--color-border-base-subtle);
-    border-block-start: 0;
-    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
     font-size: var(--text-body-small-size);
-  }
-  button[data-copie] {
-    position: absolute;
-    inset-block-start: var(--base-8);
-    inset-inline-end: var(--base-8);
-    padding: var(--base-4) var(--base-12);
-    border: var(--border-width-default) solid var(--color-border-base-input);
-    border-radius: 999px;
-    background: var(--color-surface-default);
-    color: inherit;
-    font: inherit;
-    font-size: var(--text-caption-size);
-    cursor: pointer;
   }
 </style>
 
 <script>
-  // Un seul écouteur pour tous les boutons « Copier » de la page.
+  // Un seul écouteur pour tous les boutons de la page.
   document.addEventListener('click', async (event) => {
-    const bouton = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copie]');
-    if (!bouton) return;
-    await navigator.clipboard.writeText(bouton.parentElement?.querySelector('pre')?.textContent ?? '');
-    bouton.textContent = 'Copié';
-    setTimeout(() => (bouton.textContent = 'Copier'), 1500);
+    const cible = event.target as HTMLElement;
+    const copie = cible.closest<HTMLButtonElement>('[data-copie]');
+    if (copie) {
+      await navigator.clipboard.writeText(copie.closest('.code')?.querySelector('pre')?.textContent ?? '');
+      copie.textContent = 'Copié';
+      setTimeout(() => (copie.textContent = 'Copier'), 1500);
+      return;
+    }
+    // Réinitialiser : l'exemple retrouve ses valeurs d'origine.
+    cible.closest('[data-reinitialise]')?.closest('.canvas')?.querySelector('form')?.reset();
+  });
+
+  // Entrée dans un champ d'exemple n'envoie rien.
+  document.addEventListener('submit', (event) => {
+    if ((event.target as HTMLElement).closest('.canvas')) event.preventDefault();
   });
 </script>

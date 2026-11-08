@@ -16,6 +16,10 @@ exemples:
   - titre: Avec une aide
     instances:
       - { id: aide, legend: Format, options: [{ value: a4, label: A4 }, { value: a3, label: A3, hint: Pour les grandes œuvres. }] }
+  - titre: Avec validation
+    texte: "`hint`, `error` et `success` se disent sous le groupe, comme pour un champ. L'erreur l'emporte sur le succès."
+    instances:
+      - { id: validation, legend: Format, hint: Un seul format par œuvre., error: Choisir un format., options: [{ value: a4, label: A4 }, { value: a3, label: A3 }] }
   - titre: Horizontal
     instances:
       - { id: horizontal, legend: Orientation, orientation: horizontal, options: [{ value: portrait, label: Portrait }, { value: paysage, label: Paysage }] }

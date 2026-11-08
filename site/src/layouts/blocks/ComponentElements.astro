@@ -13,6 +13,8 @@ interface Reglage {
 }
 
 interface Props {
+  /** Le nom du composant, en sous-titre du tableau. */
+  nom?: string;
   reglages: Reglage[];
   slots: string[];
   utilise: string[];
@@ -20,22 +22,25 @@ interface Props {
   source: string;
 }
 
-const { reglages, slots, utilise, natifs, source } = Astro.props;
+const { nom, reglages, slots, utilise, natifs, source } = Astro.props;
 ---
 
 <section class="elements">
   <h2>Props</h2>
+  {nom && <h3 class="nom">{nom}</h3>}
   <p class="note">Tableau généré d'après le code du composant (<code>{source}</code>). Une étoile marque un réglage obligatoire.</p>
   <table>
     <thead>
-      <tr><th scope="col">Name</th><th scope="col">Default</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+      <tr><th scope="col">Nom</th><th scope="col">Défaut / Type</th><th scope="col">Description</th></tr>
     </thead>
     <tbody>
       {reglages.map((r) => (
         <tr>
           <th scope="row"><code>{r.nom}</code>{r.requis && <span class="requis" title="Obligatoire"> *</span>}</th>
-          <td>{r.default !== undefined ? <code>{r.default}</code> : '—'}</td>
-          <td>{r.valeurs ? r.valeurs.map((v) => <code>{v}</code>) : <code>{r.type}</code>}</td>
+          <td>
+            {r.valeurs ? r.valeurs.map((v) => <code>{v}</code>) : <code>{r.type}</code>}
+            {r.default !== undefined && <span class="defaut"> · défaut <code>{r.default}</code></span>}
+          </td>
           <td>{r.description}</td>
         </tr>
       ))}
@@ -71,7 +76,16 @@ const { reglages, slots, utilise, natifs, source } = Astro.props;
 
 <style>
   h2 {
-    font-size: var(--text-title-large-size);
+    margin-block-end: var(--base-8);
+    font-size: var(--text-title-medium-size);
+  }
+  .nom {
+    margin-block: 0 var(--base-8);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+  }
+  .defaut {
+    color: var(--color-text-base-muted);
   }
   h3 {
     margin-block: var(--base-24) var(--base-8);
@@ -91,7 +105,10 @@ const { reglages, slots, utilise, natifs, source } = Astro.props;
   }
   thead th {
     color: var(--color-text-base-muted);
+    font-size: var(--text-caption-size);
     font-weight: var(--base-text-weight-medium);
+    letter-spacing: var(--base-text-letter-spacing-widest);
+    text-transform: uppercase;
   }
   td code + code {
     margin-inline-start: var(--base-4);
