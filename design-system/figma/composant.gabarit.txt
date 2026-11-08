@@ -1,0 +1,60 @@
+GABARIT — relier un composant Figma à son composant Astro.
+
+Ce fichier n'est pas un .figma.ts : le motif `figma/**/*.figma.ts` de figma.config.json le laisse
+de côté, et c'est voulu — il porte des {PLACEHOLDERS} qui feraient échouer la publication.
+
+Pour l'utiliser : copier le bloc entre les deux traits dans `figma/<Nom>.figma.ts`, <Nom> étant le nom du composant dans Figma, puis remplacer
+chaque {PLACEHOLDER}. La marche à suivre, étape par étape, est dans atelier/connecter-un-composant.md.
+
+Règle d'or : un nom entre guillemets dans getString / getEnum / getBoolean est le nom EXACT de la
+propriété dans Figma (majuscules, « ? » compris). Le nom après `=` ou `:` est celui de la prop dans
+le `interface Props` du .astro. Si une propriété Figma n'a pas de prop dans le code, on ne l'écrit
+pas — ni on n'invente de prop.
+
+------------------------------------------------------------------------------------------------
+/// <reference types="@figma/code-connect/figma-types" />
+// url={LIEN_FIGMA}
+// source=design-system/src/components/{Nom}.astro
+// component={Nom}
+import figma from 'figma'
+const instance = figma.selectedInstance
+
+// ── TEXTE : une propriété Figma de type texte devient une chaîne ───────────────────────────
+const {prop} = instance.getString('{PROPRIETE_TEXTE_FIGMA}')
+
+// ── VARIANTE : une propriété à choix. Lister TOUTES les valeurs, sans en oublier ───────────
+//    à gauche le mot de Figma, à droite le mot du code (souvent le même)
+const {prop} = instance.getEnum('{PROPRIETE_VARIANTE_FIGMA}', {
+  '{valeur_figma_1}': '{valeur_code_1}',
+  '{valeur_figma_2}': '{valeur_code_2}',
+})
+
+// ── INTERRUPTEUR (oui/non) : à n'écrire que si le code a une prop booléenne équivalente ────
+// const {prop} = instance.getBoolean('{PROPRIETE_BOOLEENNE_FIGMA}')
+
+export default {
+  // Le code que Figma affichera. ${...} insère une valeur lue plus haut.
+  // Une valeur texte ou variante va entre guillemets : variant="${variant}"
+  // Une prop booléenne n'apparaît que si elle est vraie : ${disabled ? 'disabled' : ''}
+  example: figma.code`<{Nom} {prop}="${ {prop} }" />`,
+  imports: ['import {Nom} from "ux-design-system/components/{Nom}.astro"'],
+  id: '{nom-en-minuscules-avec-tirets}',
+  metadata: { nestable: true },
+}
+------------------------------------------------------------------------------------------------
+
+Jeux fusionnés dans le code : si deux jeux Figma (`X-subtle`, `X-bold`) sont un seul composant Astro
+avec une prop (`emphasis`), on écrit un fichier par jeu, et on met la valeur en dur dans l'exemple :
+  example: figma.code`<X label="${label}" emphasis="subtle" />`
+Les règles complètes sont dans atelier/connecter-un-composant.md (« Les règles pour que tous les
+gabarits se ressemblent »).
+
+{LIEN_FIGMA}     le lien du JEU DE VARIANTES entier (clic droit → Copy link to selection), pas
+                 celui d'une seule variante : Figma refuse une variante seule.
+{Nom}            le nom du composant Astro, tel qu'il s'écrit dans design-system/src/components/
+{prop}           le nom de la prop dans l'`interface Props` du .astro
+
+Ce qu'on laisse de côté, exprès :
+- les états (`state` : hover, pressed, disabled, focus…) : ce sont des états CSS, pas des props.
+- les icônes : Figma ne donne que le nom du calque (« Icon »), pas celui de l'icône. On omet la
+  prop `icon` plutôt que d'afficher un nom faux.

@@ -53,6 +53,7 @@ que de le recopier.
 | [ajouter-une-page-composant.md](ajouter-une-page-composant.md) | un composant confirmé devient une page `/components/<slug>` |
 | [bilan-redesign-design-system-interface.md](bilan-redesign-design-system-interface.md) | le bilan daté de la refonte des pages et du playground |
 | [modifier-un-composant.md](modifier-un-composant.md) | on touche à un composant existant |
+| [connecter-un-composant.md](connecter-un-composant.md) | faire apparaître le code d'un composant dans le mode Dev de Figma (Code Connect) |
 | [ajouter-une-icone-ou-un-token.md](ajouter-une-icone-ou-un-token.md) | la source Figma a bougé |
 | [mettre-a-jour-les-tokens-depuis-figma.md](mettre-a-jour-les-tokens-depuis-figma.md) | le chemin complet, de la variable changée à la page qui l'affiche |
 | [verifier-la-typographie.md](verifier-la-typographie.md) | un interligne ou un interlettrage a bougé — les deux familles que Figma ne sait pas lier |
