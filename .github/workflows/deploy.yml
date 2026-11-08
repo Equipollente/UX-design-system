@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 22
           path: ./site
+          # Le lockfile est à la racine (workspaces), pas dans ./site : sans ce réglage l'action
+          # le cherche dans ./site seulement et s'arrête sur « No lockfile found ».
+          package-manager: npm
 
   deploy:
     needs: build
