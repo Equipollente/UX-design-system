@@ -23,8 +23,13 @@
 interface Props {
   /** L'`id` du champ que ce libellé nomme. C'est ce qui les lie. Sans objet en légende. */
   for?: string;
-  /** `legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`. */
-  as?: 'label' | 'legend';
+  /**
+   * `legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`. `span`
+   * quand le groupe est un `role="group"` qui se nomme par `aria-labelledby` : une légende ne
+   * peut pas se poser à côté d'un autre élément de la même rangée, un `<fieldset>` ne l'accepte
+   * qu'en premier enfant.
+   */
+  as?: 'label' | 'legend' | 'span';
   /** Pose l'astérisque. Le champ doit porter `required` de son côté. */
   required?: boolean;
   /** L'encre passe en `text/disabled`. Le champ doit porter `disabled` de son côté. */
@@ -52,6 +57,10 @@ const classes = ['field-label', { 'is-disabled': disabled, 'is-hidden': visually
     <legend class:list={classes} {...rest}>
       <slot />{required && <span class="mark" aria-hidden="true">*</span>}
     </legend>
+  ) : as === 'span' ? (
+    <span class:list={classes} {...rest}>
+      <slot />{required && <span class="mark" aria-hidden="true">*</span>}
+    </span>
   ) : (
     <label class:list={classes} for={htmlFor} {...rest}>
       <slot />{required && <span class="mark" aria-hidden="true">*</span>}

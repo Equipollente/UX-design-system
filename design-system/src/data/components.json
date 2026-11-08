@@ -1281,10 +1281,12 @@
     "props": [
       {
         "nom": "type",
-        "type": "'error' | 'success'",
+        "type": "'error' | 'warning' | 'success' | 'info'",
         "valeurs": [
           "error",
-          "success"
+          "warning",
+          "success",
+          "info"
         ],
         "requis": true,
         "description": "Ce que dit le message. Il décide de l'encre et de l'icône."
@@ -1730,6 +1732,174 @@
     "utilise": [
       "FieldGroup",
       "Checkbox"
+    ]
+  },
+  "ChipItem": {
+    "source": "design-system/src/components/forms/ChipItem.astro",
+    "description": "Une pastille qu'on retient ou qu'on relâche, avec sa croix quand elle est retenue.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": "input",
+      "ecartes": [
+        "type",
+        "class",
+        "checked",
+        "disabled"
+      ]
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "L'identifiant de la case. Unique dans la page.",
+        "exemple": "gouache"
+      },
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le mot porté par la pastille. Court : elle ne se coupe pas en deux lignes.",
+        "exemple": "Gouache"
+      },
+      {
+        "nom": "value",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que le formulaire enverra si la pastille est retenue. À défaut, `on`."
+      },
+      {
+        "nom": "selected",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retenue à l'ouverture."
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Icon"
+    ]
+  },
+  "ChipsField": {
+    "source": "design-system/src/components/forms/ChipsField.astro",
+    "description": "Une question et ses pastilles : plusieurs choix peuvent être retenus, jusqu'à un maximum.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "id",
+        "type": "string",
+        "requis": true,
+        "description": "Préfixe des `id` des pastilles : `${id}-${rang}`. Unique dans la page.",
+        "exemple": "techniques"
+      },
+      {
+        "nom": "legend",
+        "type": "string",
+        "requis": true,
+        "description": "La question posée au groupe.",
+        "exemple": "Techniques"
+      },
+      {
+        "nom": "name",
+        "type": "string",
+        "requis": false,
+        "description": "Le `name` envoyé par chaque pastille retenue. À défaut, l'`id`."
+      },
+      {
+        "nom": "options",
+        "type": "Option[]",
+        "requis": true,
+        "description": "Les pastilles.",
+        "exemple": "[{\"value\":\"a\",\"label\":\"Gouache\"},{\"value\":\"b\",\"label\":\"Encre\"},{\"value\":\"c\",\"label\":\"Collage\"},{\"value\":\"d\",\"label\":\"Aquarelle\"},{\"value\":\"e\",\"label\":\"Fusain\"}]"
+      },
+      {
+        "nom": "values",
+        "type": "string[]",
+        "requis": false,
+        "description": "Les valeurs retenues à l'ouverture.",
+        "playground": false
+      },
+      {
+        "nom": "selectable",
+        "type": "boolean",
+        "requis": false,
+        "description": "`true` : toutes les options sont visibles, on retient ou on relâche. `false` : seules les\npastilles retenues s'affichent, et la croix en retire une.",
+        "default": "true"
+      },
+      {
+        "nom": "for",
+        "type": "string",
+        "requis": false,
+        "description": "L'`id` d'un SelectPanel à choix multiples que ce champ suit. Il ne se règle qu'avec\n`selectable` à `false` : les pastilles montrent alors ce que le panneau a retenu, et les\nretirer décoche le panneau."
+      },
+      {
+        "nom": "max",
+        "type": "number",
+        "requis": false,
+        "description": "Le nombre de choix au plus, à partir de 1. Atteint, les autres pastilles s'éteignent jusqu'à ce qu'on en relâche une."
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Ce qui est faux, avec son icône. Il l'emporte sur le compte et sur l'avertissement.",
+        "playground": false
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": "Éteint toutes les pastilles."
+      },
+      {
+        "nom": "countLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit le compte, plusieurs choix retenus. `{n}` vaut le nombre.",
+        "default": "{n} choix sélectionnés"
+      },
+      {
+        "nom": "countOneLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit le compte quand un seul choix est retenu. `{n}` vaut le nombre.",
+        "default": "{n} choix sélectionné"
+      },
+      {
+        "nom": "maxLabel",
+        "type": "string",
+        "requis": false,
+        "description": "Ce que dit l'avertissement quand le maximum est atteint. `{n}` et `{max}` y sont remplacés.",
+        "default": "{n} choix sélectionnés sur {max} maximum"
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "ChipItem",
+      "FieldLabel",
+      "FieldMessage"
     ]
   },
   "Input": {
@@ -2803,13 +2973,14 @@
       },
       {
         "nom": "as",
-        "type": "'label' | 'legend'",
+        "type": "'label' | 'legend' | 'span'",
         "valeurs": [
           "label",
-          "legend"
+          "legend",
+          "span"
         ],
         "requis": false,
-        "description": "`legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`."
+        "description": "`legend` quand le libellé nomme un groupe, posé en premier enfant d'un `<fieldset>`. `span`\nquand le groupe est un `role=\"group\"` qui se nomme par `aria-labelledby` : une légende ne\npeut pas se poser à côté d'un autre élément de la même rangée, un `<fieldset>` ne l'accepte\nqu'en premier enfant."
       },
       {
         "nom": "required",

@@ -1,18 +1,24 @@
 ---
-// _FieldMessage — ce que dit un champ sous sa boîte quand il est faux ou réussi, et rien
-// d'autre. Pièce interne : les champs la posent, personne ne la pose seule.
+// _FieldMessage — ce que dit un champ quand il est faux, réussi, ou qu'il y a quelque chose à
+// savoir, et rien d'autre. Pièce interne : les champs la posent, personne ne la pose seule.
 //
-// Deux sortes de message, un seul dessin : une erreur (un triangle), un succès (une coche).
-// L'icône n'est pas là pour décorer : c'est elle qui sépare l'erreur du succès sans passer
-// par la couleur seule (WCAG 1.4.1). Elle est `aria-hidden`, parce que le sens est déjà dans
-// les mots et que le champ porte `aria-invalid` quand il est en erreur.
+// Quatre sortes de message, un seul dessin : une erreur et un avertissement (un triangle), un
+// succès (une coche), une information (un « i » dans un rond). L'icône n'est pas là pour
+// décorer : c'est elle qui sépare le succès de l'information sans passer par la couleur seule
+// (WCAG 1.4.1). Elle est `aria-hidden`, parce que le sens est déjà dans les mots et que le champ
+// porte `aria-invalid` quand il est en erreur.
+//
+// L'erreur et l'avertissement partagent le triangle : seule l'encre les sépare, car le système
+// n'a pas d'autre icône d'alerte. Les mots du message portent alors la différence. C'est un
+// écart avec WCAG 1.4.1, signalé dans arbitrages.md.
 //
 // Ce n'est pas une alerte : pas une région vivante. Un message qui apparaît à la frappe
 // n'a pas à interrompre la dictée du texte. Le champ le désigne par `aria-describedby`, et
 // un lecteur d'écran le lit en entrant dedans.
 //
-// Nœud Figma : 918:2405 — `_FieldMessage`, `validation` error et success. L'aide n'en fait
-// plus partie : c'est `_FieldHint`.
+// Nœud Figma : 918:2405 — `_FieldMessage`, `validation` error, success et info. `warning` est
+// décidé (Judith, 08/11) mais pas encore dessiné dans Figma. L'aide n'en fait plus partie :
+// c'est `_FieldHint`.
 //
 // Mesures liées aux variables du système : écart icône ↔ texte `base/4`, icône `icon-small`
 // (20), texte `label/default` (12).
@@ -21,14 +27,15 @@ import Icon from '../Icon.astro';
 
 interface Props {
   /** Ce que dit le message. Il décide de l'encre et de l'icône. */
-  type: 'error' | 'success';
+  type: 'error' | 'warning' | 'success' | 'info';
   /** L'`id` que le champ désigne par `aria-describedby`. */
   id: string;
   class?: string;
 }
 
 const { type, id, class: className, ...rest } = Astro.props;
-const icon = type === 'error' ? 'alert-triangle' : 'check';
+const icons = { error: 'alert-triangle', warning: 'alert-triangle', success: 'check', info: 'circle-info' } as const;
+const icon = icons[type];
 ---
 
 <p id={id} class:list={['field-message', type, className]} {...rest}>
@@ -53,7 +60,15 @@ const icon = type === 'error' ? 'alert-triangle' : 'check';
     color: var(--color-text-danger-default);
   }
 
+  .warning {
+    color: var(--color-text-warning-default);
+  }
+
   .success {
     color: var(--color-text-success-default);
+  }
+
+  .info {
+    color: var(--color-text-info-default);
   }
 </style>

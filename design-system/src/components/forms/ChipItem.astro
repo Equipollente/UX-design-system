@@ -1,0 +1,157 @@
+---
+// ChipItem — une pastille qu'on retient ou qu'on relâche, avec sa croix quand elle est retenue.
+//
+// Ce n'est pas un bouton : un bouton déclenche et retombe, une pastille reste enfoncée. Ce n'est
+// pas une étiquette non plus : une étiquette (Tag) affiche une catégorie qu'on ne touche pas. Et
+// la croix n'est pas un second contrôle : cliquer n'importe où sur la pastille, croix comprise,
+// la décoche. Un bouton posé dans un contrôle serait un contrôle dans un contrôle, que les
+// lecteurs d'écran annoncent mal (WCAG 4.1.2).
+//
+// Nœud Figma : `ChipItem` 1025:6238 — `selected` × `state` (rest, hover, pressed, disabled). Le
+// focus n'est pas une variante : Figma le dessine comme un anneau posé sur n'importe quelle
+// variante, et le code le lit sur `:focus-visible`, comme tous les champs de `forms/`.
+//
+// C'est une case à cocher, ce qui lui permet de marcher sans une ligne de JavaScript : cliquer
+// la retient, la barre d'espace aussi, et le formulaire l'envoie. La case est posée sur toute la
+// pastille et rendue transparente plutôt que masquée — `display: none` la retirerait du parcours
+// au clavier et de l'arbre d'accessibilité, ce qui reviendrait à supprimer le contrôle pour n'en
+// garder que le dessin. L'état se lit par les pseudo-classes du HTML (`:checked`, `:disabled`,
+// `:hover`, `:active`, `:focus-visible`) : seul `selected` — la valeur de départ — est une prop.
+//
+// La pastille ne se coupe pas en deux lignes : elle perdrait sa forme. Un libellé long déborde
+// plutôt que de se plier — c'est à l'appelant de choisir des mots courts.
+//
+// Contrastes mesurés (WCAG 1.4.3 et 1.4.11), blanc sur fond retenu : 7,00:1 au repos et 8,24:1 au
+// survol en Default ; 14,91:1 et 11,41:1 en Prof Hub. Le trait fait 7,00:1 sur blanc en Default,
+// 14,91:1 en Prof Hub. La hauteur (39) dépasse les 24 de WCAG 2.5.8.
+//
+// Désactivée, la pastille garde son trait, comme Figma le dessine : c'est le fond et l'encre qui
+// s'éteignent. Le texte désactivé est exempt de contraste (WCAG 1.4.3).
+
+import type { HTMLAttributes } from 'astro/types';
+import Icon from '../Icon.astro';
+
+/**
+ * Une pastille qu'on retient ou qu'on relâche, avec sa croix quand elle est retenue.
+ * @since 0.3.0
+ */
+interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'class' | 'checked' | 'disabled'> {
+  /**
+   * L'identifiant de la case. Unique dans la page.
+   * @example gouache
+   */
+  id: string;
+  /**
+   * Le mot porté par la pastille. Court : elle ne se coupe pas en deux lignes.
+   * @example Gouache
+   */
+  label: string;
+  /** Ce que le formulaire enverra si la pastille est retenue. À défaut, `on`. */
+  value?: string;
+  /** Retenue à l'ouverture. */
+  selected?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const { id, label, name, value, selected = false, disabled = false, class: className, ...rest } = Astro.props;
+---
+
+<label class:list={['chip-item', className]}>
+  <input {...rest} type="checkbox" id={id} name={name ?? id} value={value} checked={selected} disabled={disabled} />
+  <span class="text">{label}</span>
+  <span class="close"><Icon name="close" /></span>
+</label>
+
+<style>
+  .chip-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--stack-control-xsmall-gap);
+    padding: var(--stack-control-xsmall-padding-block) var(--stack-control-xsmall-padding-inline-spacious);
+    border: var(--border-width-default) solid var(--color-border-primary-strong);
+    border-radius: var(--border-radius-full);
+    background: var(--color-background-base-default);
+    color: var(--color-text-base-default);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-medium-size);
+    font-weight: var(--base-text-weight-medium);
+    line-height: var(--text-body-medium-line-height);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+    /* Une pastille ne se coupe pas : elle perdrait sa forme. */
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  /* La case couvre toute la pastille : c'est elle la cible du clic, croix comprise (WCAG 2.5.8). */
+  input {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  /* La croix n'existe qu'une fois la pastille retenue. */
+  .close {
+    --icon-size: var(--icon-small);
+    display: none;
+    color: var(--color-icon-primary-on-bold);
+    pointer-events: none;
+  }
+
+  /* — survol, appui — */
+  .chip-item:hover {
+    background: var(--color-background-primary-subtlest-hover);
+  }
+
+  .chip-item:active {
+    background: var(--color-background-primary-subtlest-pressed);
+  }
+
+  /* — retenue — Le fond plein et la croix portent l'état : la couleur n'est pas le seul indice
+     (WCAG 1.4.1). */
+  .chip-item:has(input:checked) {
+    background: var(--color-background-primary-bold);
+    color: var(--color-text-base-inverse);
+  }
+
+  .chip-item:has(input:checked):hover {
+    background: var(--color-background-primary-bold-hover);
+  }
+
+  .chip-item:has(input:checked):active {
+    background: var(--color-background-primary-bold-pressed);
+  }
+
+  .chip-item:has(input:checked) .close {
+    display: inline-flex;
+  }
+
+  /* — focus — L'anneau des champs de `forms/`, posé sur le trait de la pastille : le cadre de
+     Figma s'étend d'un trait vers l'extérieur et recouvre le sien. WCAG 2.4.7. */
+  .chip-item:has(input:focus-visible) {
+    outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: calc(var(--border-width-default) * -1);
+  }
+
+  /* — désactivée — Écrit en dernier : à spécificité égale c'est l'ordre qui tranche, et une
+     pastille désactivée ne prend ni le survol, ni l'appui, ni l'état retenu. */
+  .chip-item:has(input:disabled),
+  .chip-item:has(input:disabled):hover,
+  .chip-item:has(input:disabled):active,
+  .chip-item:has(input:checked:disabled),
+  .chip-item:has(input:checked:disabled):hover,
+  .chip-item:has(input:checked:disabled):active {
+    background: var(--color-background-base-disabled);
+    color: var(--color-text-base-disabled);
+    cursor: not-allowed;
+  }
+
+  .chip-item:has(input:disabled) .close {
+    color: var(--color-icon-base-disabled);
+  }
+</style>

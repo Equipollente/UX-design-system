@@ -1,0 +1,376 @@
+---
+// ChipsField — une question et ses pastilles : plusieurs choix peuvent être retenus, jusqu'à un
+// maximum si on en pose un.
+//
+// Ce n'est pas CheckboxGroup : c'est la même logique — des cases, un nom partagé, un formulaire
+// qui envoie les cochées — dessinée en pastilles dans un cadre, avec le compte des choix retenus
+// à droite du libellé. Ce n'est pas non plus un Select : toutes les options sont visibles, on les
+// retient d'un clic, on ne les cherche pas dans une liste. Et ce n'est pas une liste de choix
+// exclusifs (c'est RadioGroup).
+//
+// Nœuds Figma : `ChipsField` 1025:26987, `ChipItem` 1025:6238 pour les pastilles, `_ChipsList`
+// 1025:27028 pour la liste — cette dernière reste une pièce de Figma sans fichier : c'est ici
+// la rangée `.list`. Le libellé, le message et leurs encres sont `_FieldLabel` 918:2412 et
+// `_FieldMessage` 918:2405.
+//
+// Le groupe prend des **données**, pas des enfants : `options`, comme CheckboxGroup. Un composant
+// Astro ne peut pas écrire d'attribut sur ce qu'on glisse dans son emplacement, et un groupe qui
+// laisserait l'appelant poser chaque pastille à la main ne saurait plus les compter ni les
+// éteindre au maximum. Le `Slot` de Figma reste un dessin (décision du 07/11).
+//
+// Il se nomme par un `role="group"` relié à son libellé, et non par un `<fieldset>` : une
+// `<legend>` ne peut être que le premier enfant d'un fieldset, donc ne peut pas partager sa
+// rangée avec le message, que Figma pose à sa droite.
+//
+// Le maximum est le seul script du composant, un élément personnalisé. Sans lui, la pastille
+// en trop se retient sans qu'aucune règle l'en empêche et le compte ne bouge pas. Il compte les
+// pastilles retenues, éteint les autres une fois la limite atteinte — elles se rallument dès
+// qu'on en relâche une — et change le message : une information « n choix » en dessous, un
+// avertissement « n sur max » à la limite. Le serveur dessine déjà le bon état, le script ne
+// fait que le suivre : rien ne saute au chargement. Le message vit dans une zone `aria-live`
+// polie, pour que le compte soit annoncé sans interrompre (WCAG 4.1.3).
+//
+// L'avertissement n'est pas une erreur : la limite atteinte est permise, c'est la règle qui joue.
+// Seule `error`, donnée de l'extérieur, déclare quelque chose de faux, et elle l'emporte sur les
+// deux autres messages.
+//
+// Les mots du compte viennent des props (`countLabel`, `countOneLabel`, `maxLabel`), en français
+// par défaut ; les « choices selected » de la maquette sont ses exemples.
+//
+// Écarts avec la maquette, signalés dans la doc et dans arbitrages.md :
+// — `_ChipsList` porte `min-width` lié à `viewport/width`, qui vaut la largeur de l'écran (1200
+//   sur ordinateur, 390 sur mobile) : le code ne l'applique pas, la liste déborderait ;
+// — `_FieldMessage` n'a pas encore de variante `warning` dans Figma, et le code lui prête le
+//   triangle de l'erreur : seule l'encre les sépare ;
+// — `_ChipsList` a deux contenus (`selectable option` vrai ou faux), et le code les porte par la
+//   prop `selectable`, du même nom : à `false`, seules les pastilles retenues s'affichent.
+//
+// Les pastilles retenues d'un `SelectPanel` : avec `selectable={false}` et `for`, l'`id` du
+// SelectPanel (`type="multiple"`), le champ n'affiche que les choix que le panneau a retenus, et la
+// croix d'une pastille décoche l'option dans le panneau, qui met sa boîte à jour tout seul. Le
+// SelectPanel n'est pas modifié : il annonce déjà chaque changement (`select-change`), le champ
+// n'a qu'à l'écouter. Les pastilles de ce champ ne s'envoient pas avec le formulaire — le panneau
+// porte déjà les mêmes valeurs : les envoyer deux fois serait une faute. Sans `for`, le champ n'est
+// qu'une liste de pastilles qu'on retire.
+
+import ChipItem from './ChipItem.astro';
+import FieldLabel from './_FieldLabel.astro';
+import FieldMessage from './_FieldMessage.astro';
+
+interface Option {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+/**
+ * Une question et ses pastilles : plusieurs choix peuvent être retenus, jusqu'à un maximum.
+ * @since 0.3.0
+ */
+interface Props {
+  /**
+   * Préfixe des `id` des pastilles : `${id}-${rang}`. Unique dans la page.
+   * @example techniques
+   */
+  id: string;
+  /**
+   * La question posée au groupe.
+   * @example Techniques
+   */
+  legend: string;
+  /** Le `name` envoyé par chaque pastille retenue. À défaut, l'`id`. */
+  name?: string;
+  /**
+   * Les pastilles.
+   * @example [{"value":"a","label":"Gouache"},{"value":"b","label":"Encre"},{"value":"c","label":"Collage"},{"value":"d","label":"Aquarelle"},{"value":"e","label":"Fusain"}]
+   */
+  options: Option[];
+  /**
+   * Les valeurs retenues à l'ouverture.
+   * @playground off
+   */
+  values?: string[];
+  /**
+   * `true` : toutes les options sont visibles, on retient ou on relâche. `false` : seules les
+   * pastilles retenues s'affichent, et la croix en retire une.
+   * @default true
+   */
+  selectable?: boolean;
+  /**
+   * L'`id` d'un SelectPanel à choix multiples que ce champ suit. Il ne se règle qu'avec
+   * `selectable` à `false` : les pastilles montrent alors ce que le panneau a retenu, et les
+   * retirer décoche le panneau.
+   */
+  for?: string;
+  /** Le nombre de choix au plus, à partir de 1. Atteint, les autres pastilles s'éteignent jusqu'à ce qu'on en relâche une. */
+  max?: number;
+  /**
+   * Ce qui est faux, avec son icône. Il l'emporte sur le compte et sur l'avertissement.
+   * @playground off
+   */
+  error?: string;
+  /** Éteint toutes les pastilles. */
+  disabled?: boolean;
+  /**
+   * Ce que dit le compte, plusieurs choix retenus. `{n}` vaut le nombre.
+   * @default {n} choix sélectionnés
+   */
+  countLabel?: string;
+  /**
+   * Ce que dit le compte quand un seul choix est retenu. `{n}` vaut le nombre.
+   * @default {n} choix sélectionné
+   */
+  countOneLabel?: string;
+  /**
+   * Ce que dit l'avertissement quand le maximum est atteint. `{n}` et `{max}` y sont remplacés.
+   * @default {n} choix sélectionnés sur {max} maximum
+   */
+  maxLabel?: string;
+  class?: string;
+}
+
+const {
+  id,
+  legend,
+  name,
+  options,
+  values = [],
+  selectable = true,
+  for: forId,
+  max,
+  error,
+  disabled = false,
+  countLabel = '{n} choix sélectionnés',
+  countOneLabel = '{n} choix sélectionné',
+  maxLabel = '{n} choix sélectionnés sur {max} maximum',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const labelId = `${id}-label`;
+const statusId = `${id}-status`;
+
+// L'état de départ, décidé ici pour que la page arrive juste : le script ne fait ensuite que suivre.
+const count = options.filter((option) => values.includes(option.value)).length;
+// Un maximum n'a de sens qu'à partir de 1 : 0 (la valeur d'un réglage laissé vide dans le
+// playground) ou moins éteindrait tout, et se lit comme « pas de maximum ».
+const limit = max !== undefined && max >= 1 ? Math.floor(max) : undefined;
+const atMax = limit !== undefined && count >= limit;
+const fill = (text: string) => text.replace('{n}', String(count)).replace('{max}', String(limit ?? ''));
+const countText = fill(count === 1 ? countOneLabel : countLabel);
+// Une pastille non retenue d'un champ qui ne montre que les retenues est enveloppée, pour pouvoir
+// se cacher sans que son `display` ne l'en empêche.
+const Wrapper = selectable ? Fragment : 'span';
+---
+
+<ds-chips-field
+  class:list={['chips-field', className]}
+  data-max={limit}
+  data-for={forId}
+  data-selectable={selectable ? undefined : ''}
+  data-has-error={error ? '' : undefined}
+  data-count-label={countLabel}
+  data-count-one-label={countOneLabel}
+  data-max-label={maxLabel}
+  {...rest}
+>
+  <div class="box" role="group" aria-labelledby={labelId} aria-describedby={statusId}>
+    <div class="heading">
+      <span id={labelId}><FieldLabel as="span" disabled={disabled}>{legend}</FieldLabel></span>
+      <div class="status" id={statusId} aria-live="polite">
+        {error && <FieldMessage type="error" id={`${id}-error`}>{error}</FieldMessage>}
+        {
+          !error && (
+            <>
+              {limit !== undefined && (
+                <div data-kind="warning" hidden={!atMax}>
+                  <FieldMessage type="warning" id={`${id}-warning`}>{fill(maxLabel)}</FieldMessage>
+                </div>
+              )}
+              <div data-kind="info" hidden={atMax || count === 0}>
+                <FieldMessage type="info" id={`${id}-info`}>{countText}</FieldMessage>
+              </div>
+            </>
+          )
+        }
+      </div>
+    </div>
+    <div class="list">
+      {
+        options.map((option, index) => {
+          const retained = values.includes(option.value);
+          // Éteinte par l'appelant (le groupe ou cette option) : le script n'y touche jamais.
+          const locked = disabled || option.disabled;
+          // Sans `selectable`, une pastille non retenue reste dans la page, cachée : c'est elle
+          // que le script montre quand le panneau retient son choix.
+          return (
+            <Wrapper {...(selectable ? {} : { 'data-option': '', hidden: !retained })}>
+              <ChipItem
+                id={`${id}-${index}`}
+                label={option.label}
+                name={forId ? '' : (name ?? id)}
+                value={option.value}
+                selected={retained}
+                disabled={locked || (selectable && atMax && !retained)}
+                data-locked={locked ? '' : undefined}
+              />
+            </Wrapper>
+          );
+        })
+      }
+    </div>
+  </div>
+</ds-chips-field>
+
+<style>
+  .chips-field {
+    display: block;
+  }
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stack-control-large-gap);
+    padding: var(--stack-control-medium-padding-block) var(--stack-control-medium-padding-inline-condensed);
+    background: var(--color-background-base-input);
+    border: var(--border-width-default) solid var(--color-border-base-input);
+    border-radius: var(--border-radius-small);
+  }
+
+  /* Le libellé à gauche, le message à droite, alignés sur leur ligne de base basse. Sur une
+     boîte étroite ils passent l'un sous l'autre plutôt que de se recouvrir. */
+  .heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--stack-control-small-gap);
+    inline-size: 100%;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--stack-control-medium-gap);
+    inline-size: 100%;
+  }
+</style>
+
+<script>
+  // Un élément par champ : `connectedCallback` s'exécute à chaque instance, et l'élément ne touche
+  // que ses enfants — sauf le SelectPanel qu'il suit, qu'il écoute à distance. Il rejoue le même
+  // calcul que le serveur.
+  class DsChipsField extends HTMLElement {
+    #form: HTMLFormElement | null = null;
+    #onReset = () => setTimeout(() => this.sync());
+
+    // Le panneau suivi, retrouvé à chaque fois : il peut arriver après ce champ dans la page.
+    #panel(): Element | null {
+      const id = this.dataset.for;
+      return id ? (document.getElementById(id)?.closest('ds-select-panel') ?? null) : null;
+    }
+
+    #panelInputs(panel: Element) {
+      // Les cases épinglées du pied du panneau (`data-pin`) répètent des choix : elles ne comptent pas.
+      return [...panel.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:not([data-pin])')];
+    }
+
+    // Le panneau annonce un changement : ses choix deviennent ceux de ce champ.
+    #onPanelChange = (event: Event) => {
+      const panel = this.#panel();
+      if (panel && (event.target as Element).closest('ds-select-panel') === panel) this.sync();
+    };
+
+    // Une pastille qu'on relâche : dans un champ qui suit un panneau, c'est le panneau qu'on décoche ;
+    // il annoncera le changement, et c'est lui qui remettra ce champ à jour.
+    #onChange = (event: Event) => {
+      const input = event.target as HTMLInputElement;
+      const panel = this.#panel();
+      if (panel && !input.checked) {
+        const choix = this.#panelInputs(panel).find((i) => i.value === input.value);
+        if (choix?.checked) {
+          choix.click();
+          return;
+        }
+      }
+      this.sync();
+    };
+
+    connectedCallback() {
+      this.addEventListener('change', this.#onChange);
+      document.addEventListener('select-change', this.#onPanelChange);
+      // Réinitialiser un formulaire rend les cases à leur valeur de départ sans événement `change`.
+      this.#form = this.closest('form');
+      this.#form?.addEventListener('reset', this.#onReset);
+      this.sync();
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('change', this.#onChange);
+      document.removeEventListener('select-change', this.#onPanelChange);
+      this.#form?.removeEventListener('reset', this.#onReset);
+    }
+
+    sync() {
+      const inputs = [...this.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+      const panel = this.#panel();
+      const selectable = !this.hasAttribute('data-selectable');
+
+      // Un champ qui suit un panneau prend ses choix chez lui.
+      if (panel) {
+        const retenus = new Set(
+          this.#panelInputs(panel)
+            .filter((i) => i.checked)
+            .map((i) => i.value),
+        );
+        for (const input of inputs) input.checked = retenus.has(input.value);
+      }
+
+      // Un champ qui ne montre que les retenues cache les autres.
+      if (!selectable) {
+        for (const input of inputs) {
+          const enveloppe = input.closest<HTMLElement>('[data-option]');
+          if (enveloppe) enveloppe.hidden = !input.checked;
+        }
+      }
+
+      const count = inputs.filter((input) => input.checked).length;
+      const max = this.dataset.max ? Number(this.dataset.max) : Infinity;
+      const atMax = count >= max;
+
+      // Au maximum, les pastilles non retenues s'éteignent ; celles que l'appelant a éteintes
+      // (`data-locked`) restent comme il les a posées. Un champ qui ne montre que les retenues n'a
+      // rien à éteindre : c'est le panneau qui tient la limite.
+      if (selectable) {
+        for (const input of inputs) {
+          if (input.dataset.locked !== undefined) continue;
+          input.disabled = atMax && !input.checked;
+        }
+      }
+
+      // Une erreur donnée de l'extérieur l'emporte : le message ne change plus.
+      if (this.hasAttribute('data-has-error')) return;
+
+      const fill = (text: string) => text.replace('{n}', String(count)).replace('{max}', String(max));
+      const warning = this.querySelector<HTMLElement>('[data-kind="warning"]');
+      const info = this.querySelector<HTMLElement>('[data-kind="info"]');
+      const label = count === 1 ? this.dataset.countOneLabel : this.dataset.countLabel;
+
+      // L'avertissement n'existe que si un maximum est posé.
+      if (warning) {
+        warning.hidden = !atMax;
+        const text = warning.querySelector('span');
+        if (text) text.textContent = fill(this.dataset.maxLabel ?? '');
+      }
+      if (info) {
+        info.hidden = atMax || count === 0;
+        const text = info.querySelector('span');
+        if (text) text.textContent = fill(label ?? '');
+      }
+    }
+  }
+
+  if (!customElements.get('ds-chips-field')) customElements.define('ds-chips-field', DsChipsField);
+</script>

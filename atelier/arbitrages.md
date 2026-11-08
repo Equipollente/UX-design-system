@@ -78,6 +78,8 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Textarea | `343:273` | casse `TITLE` sur le libellé : elle capitalise le texte de l'appelant | /formulaire → Textarea | ouvert |
 | Textarea | `343:273` | le libellé passe en `muted` au survol et au focus — FieldLabel n'a que deux états | /formulaire → Textarea | ouvert |
 | Chip | `351:273` | Figma ne distingue pas le choix multiple du choix unique | /formulaire → Chip | ouvert |
+| ChipsField · `_ChipsList` | `1025:27028` | `min-width` lié à `viewport/width` (1200 sur ordinateur, 390 sur mobile) : le code ne l'applique pas | /components → ChipsField | ouvert |
+| `_FieldMessage` | `918:2405` | pas de variante `validation=warning` ; le code lui prête le triangle de l'erreur, que seule l'encre sépare (WCAG 1.4.1) | /components → ChipsField | ouvert |
 | Checkbox · Radio · Toggle | `876:61534` · `875:53524` | le **groupe** n'est dessiné qu'à moitié : `_CheckboxGroup.items` et `_RadioGroup.items` posent les lignes (colonne ou ligne, écart 8) mais il manque l'enveloppe — légende (`_FieldLabel` en légende), aide et validation sous le groupe. Le code n'a aucun composant de groupe : la page écrit son `<fieldset>` à la main. Une instance `CheckboxGroup` posée sur la page « ↳ Checkbox » vient d'une bibliothèque distante | /formulaire → Radio, Checkbox | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
 | ~~Add Image~~ | `343:315`, `418:1020` | ~~le nœud dessine aussi l'état `add` en trait pointillé ; le code le gardait plein~~ | /formulaire → Add Image | *réglé — 31/08, `add`/`in-progress`/`fail` partagent maintenant le même trait pointillé* |
