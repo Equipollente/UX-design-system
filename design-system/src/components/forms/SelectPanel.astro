@@ -390,6 +390,13 @@ const anchor = `--select-${id}`;
         valueEl.toggleAttribute('data-empty', labels.length === 0);
       };
 
+      // Un formulaire réinitialisé, ou un retour en arrière qui rend les choix, ne disent pas `change` :
+      // la boîte relit les lignes une fois que le navigateur a fini.
+      this.closest('form')?.addEventListener('reset', () => setTimeout(sync));
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) sync();
+      });
+
       this.addEventListener('select-change', (event) => {
         sync();
         // À un choix, un clic ou Espace choisit et ferme ; les flèches parcourent sans fermer. À

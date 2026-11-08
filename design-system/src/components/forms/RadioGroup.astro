@@ -14,7 +14,8 @@
 // dans le groupe une seule fois, les flèches le parcourent. `required` pose l'attribut sur chaque
 // radio — c'est ce que le navigateur attend d'un groupe — et l'astérisque sur la légende.
 
-import FieldLabel from './_FieldLabel.astro';
+import FieldGroup from './_FieldGroup.astro';
+import { resolveField } from '../../lib/field';
 import Radio from './Radio.astro';
 
 interface Option {
@@ -31,7 +32,7 @@ interface Option {
  */
 interface Props {
   /**
-   * Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page.
+   * Préfixe des `id` des radios : `${id}-${rang}`. Unique dans la page.
    * @example format
    */
   id: string;
@@ -55,6 +56,21 @@ interface Props {
    */
   value?: string;
   orientation?: 'vertical' | 'horizontal';
+  /**
+   * L'aide du groupe : ce qu'il attend, lue avant que personne ne se trompe.
+   * @playground off
+   */
+  hint?: string;
+  /**
+   * Le message d'erreur du groupe, avec son icône. Il l'emporte sur le succès.
+   * @playground off
+   */
+  error?: string;
+  /**
+   * Le message de succès du groupe. Cède à l'erreur.
+   * @playground off
+   */
+  success?: string;
   required?: boolean;
   /** Éteint tous les radios. */
   disabled?: boolean;
@@ -69,54 +85,40 @@ const {
   options,
   value,
   orientation = 'vertical',
+  hint,
+  error,
+  success,
   required = false,
   disabled = false,
   class: className,
   ...rest
 } = Astro.props;
+
+const field = resolveField(id, { hint, error, success });
 ---
 
-<fieldset class:list={['group', className]} data-orientation={orientation} disabled={disabled} {...rest}>
-  <FieldLabel as="legend" required={required} disabled={disabled} visuallyHidden={hideLegend}>{legend}</FieldLabel>
-  <div class="items">
-    {
-      options.map((option) => (
-        <Radio
-          id={`${id}-${option.value}`}
-          label={option.label}
-          name={name ?? id}
-          value={option.value}
-          checked={option.value === value}
-          hint={option.hint}
-          required={required}
-          disabled={disabled || option.disabled}
-        />
-      ))
-    }
-  </div>
-</fieldset>
-
-<style>
-  .group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--stack-control-xsmall-gap);
-    /* Un <fieldset> arrive avec un trait, un rembourrage et une largeur minimale du navigateur,
-       qui ne viennent d'aucune variable. */
-    margin: 0;
-    padding: 0;
-    border: 0;
-    min-inline-size: 0;
+<FieldGroup
+  legend={legend}
+  hideLegend={hideLegend}
+  required={required}
+  disabled={disabled}
+  field={field}
+  orientation={orientation}
+  class={className}
+  {...rest}
+>
+  {
+  options.map((option, index) => (
+    <Radio
+      id={`${id}-${index}`}
+      label={option.label}
+      name={name ?? id}
+      value={option.value}
+      checked={option.value === value}
+      hint={option.hint}
+      required={required}
+      disabled={disabled || option.disabled}
+    />
+  ))
   }
-
-  .items {
-    display: flex;
-    flex-direction: column;
-    gap: var(--base-8);
-  }
-
-  .group[data-orientation='horizontal'] .items {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-</style>
+</FieldGroup>

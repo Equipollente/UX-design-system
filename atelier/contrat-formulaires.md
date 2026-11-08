@@ -82,6 +82,7 @@ Préfixe `_`, jamais importées par un site.
 | `_FieldHint` | `938:10734` | `id`, texte | Lue par `aria-describedby` |
 | `_FieldMessage` | `918:2405` | `id`, `type` (`error` ou `success`), texte | Lue par `aria-describedby` ; l'icône est décorative |
 | `_FieldCounter` | `938:10738` | `id`, `current`, `max` | Lue par `aria-describedby` ; mis à jour à la frappe par un petit script |
+| `_FieldGroup` | `876:61534`, `875:53524` | `legend`, `hideLegend`, `required`, `disabled`, `field`, `orientation`, emplacement des choix | `fieldset` nommé par sa `legend` ; message et aide lus par `aria-describedby` sur le `fieldset` |
 
 `_FieldValue` et `_FieldType` ne sont pas des composants du code : ce sont des morceaux du dessin
 du champ (le texte et l'icône de loupe ou de chevron), qui deviennent du CSS et une icône.

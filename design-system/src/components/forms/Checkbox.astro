@@ -32,6 +32,7 @@ import type { HTMLAttributes } from 'astro/types';
 import Icon from '../Icon.astro';
 import FieldLabel from './_FieldLabel.astro';
 import FieldHint from './_FieldHint.astro';
+import { resolveField } from '../../lib/field';
 
 /**
  * Une case qui se coche et se décoche toute seule, ou qui reste indéterminée.
@@ -75,8 +76,9 @@ const {
   ...rest
 } = Astro.props;
 
-const hintId = hint ? `${id}-hint` : undefined;
-const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+// Les identifiants et `aria-describedby` se décident comme pour les champs de saisie.
+const field = resolveField(id, { hint });
+const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
 ---
 
 <ds-checkbox class:list={['checkbox', className]} data-indeterminate={indeterminate ? '' : undefined}>
@@ -96,7 +98,7 @@ const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ')
   </span>
   <span class="text">
     <FieldLabel for={id} required={required} disabled={disabled}>{label}</FieldLabel>
-    {hint && <FieldHint id={hintId!} disabled={disabled}>{hint}</FieldHint>}
+    {field.hint && <FieldHint id={field.hint.id} disabled={disabled}>{field.hint.text}</FieldHint>}
   </span>
 </ds-checkbox>
 

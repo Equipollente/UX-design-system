@@ -1646,7 +1646,7 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des cases : `${id}-${value}`. Unique dans la page.",
+        "description": "Préfixe des `id` des cases : `${id}-${rang}`. Unique dans la page.",
         "exemple": "techniques"
       },
       {
@@ -1693,6 +1693,27 @@
         "description": ""
       },
       {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide du groupe : ce qu'il attend, lue avant que personne ne se trompe.",
+        "playground": false
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur du groupe, avec son icône. Il l'emporte sur le succès.",
+        "playground": false
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès du groupe. Cède à l'erreur.",
+        "playground": false
+      },
+      {
         "nom": "disabled",
         "type": "boolean",
         "requis": false,
@@ -1707,7 +1728,7 @@
     ],
     "slots": [],
     "utilise": [
-      "FieldLabel",
+      "FieldGroup",
       "Checkbox"
     ]
   },
@@ -1923,7 +1944,7 @@
         "nom": "id",
         "type": "string",
         "requis": true,
-        "description": "Préfixe des `id` des radios : `${id}-${value}`. Unique dans la page.",
+        "description": "Préfixe des `id` des radios : `${id}-${rang}`. Unique dans la page.",
         "exemple": "format"
       },
       {
@@ -1970,6 +1991,27 @@
         "description": ""
       },
       {
+        "nom": "hint",
+        "type": "string",
+        "requis": false,
+        "description": "L'aide du groupe : ce qu'il attend, lue avant que personne ne se trompe.",
+        "playground": false
+      },
+      {
+        "nom": "error",
+        "type": "string",
+        "requis": false,
+        "description": "Le message d'erreur du groupe, avec son icône. Il l'emporte sur le succès.",
+        "playground": false
+      },
+      {
+        "nom": "success",
+        "type": "string",
+        "requis": false,
+        "description": "Le message de succès du groupe. Cède à l'erreur.",
+        "playground": false
+      },
+      {
         "nom": "required",
         "type": "boolean",
         "requis": false,
@@ -1990,7 +2032,7 @@
     ],
     "slots": [],
     "utilise": [
-      "FieldLabel",
+      "FieldGroup",
       "Radio"
     ]
   },
@@ -2648,6 +2690,70 @@
     ],
     "slots": [],
     "utilise": []
+  },
+  "_FieldGroup": {
+    "source": "design-system/src/components/forms/_FieldGroup.astro",
+    "description": "",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "legend",
+        "type": "string",
+        "requis": true,
+        "description": "La question posée au groupe."
+      },
+      {
+        "nom": "hideLegend",
+        "type": "boolean",
+        "requis": false,
+        "description": "Retire la légende de l'écran sans la retirer du document."
+      },
+      {
+        "nom": "required",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "disabled",
+        "type": "boolean",
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "field",
+        "type": "ResolvedField",
+        "requis": true,
+        "description": "Ce que `resolveField` a décidé : message, aide et identifiants."
+      },
+      {
+        "nom": "orientation",
+        "type": "'vertical' | 'horizontal'",
+        "valeurs": [
+          "vertical",
+          "horizontal"
+        ],
+        "requis": false,
+        "description": ""
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "utilise": [
+      "FieldLabel",
+      "FieldHint",
+      "FieldMessage"
+    ]
   },
   "_FieldHint": {
     "source": "design-system/src/components/forms/_FieldHint.astro",

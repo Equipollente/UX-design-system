@@ -237,6 +237,7 @@ const isChosen = (v: string) => chosen.includes(v);
     popover={popover ? '' : undefined}
     data-panel
     data-size={size}
+    role={popover ? 'dialog' : 'group'}
     aria-labelledby={titleId}
   >
     <header class="header">
@@ -381,6 +382,17 @@ const isChosen = (v: string) => chosen.includes(v);
     width: anchor-size(width);
     margin: var(--base-8) 0 0;
     position-try-fallbacks: flip-block;
+  }
+
+  /* Sans ancrage CSS, le panneau ne sait pas où se poser : il s'ouvre centré, à la largeur du dessin,
+     comme une boîte de dialogue. */
+  @supports not (top: anchor(bottom)) {
+    .panel[popover] {
+      inset: 0;
+      width: min(100% - 2 * var(--base-16), calc(4 * var(--base-80)));
+      height: fit-content;
+      margin: auto;
+    }
   }
 
   /* `display` seulement ouverte : posé sans condition, il l'emporterait sur le `display: none` que le
@@ -744,8 +756,15 @@ const isChosen = (v: string) => chosen.includes(v);
 
       // Plusieurs cases obligatoires ne veulent pas dire « toutes » : c'est le premier choix qui porte
       // le message du navigateur, tant qu'aucun n'est coché.
+      // Le message se pose sur le premier choix qui peut le porter : un choix éteint est exclu de la
+      // validation, et la contrainte ne se déclencherait jamais.
+      let carrier: HTMLInputElement | undefined;
       const validate = () => {
-        if (required && multiple) inputs[0]?.setCustomValidity(checked().length === 0 ? (d.requiredMessage ?? '') : '');
+        if (!required || !multiple) return;
+        carrier?.setCustomValidity('');
+        const none = checked().length === 0;
+        carrier = inputs.find((i) => !i.disabled);
+        carrier?.setCustomValidity(none ? (d.requiredMessage ?? '') : '');
       };
 
       const changed = () => {
@@ -777,6 +796,8 @@ const isChosen = (v: string) => chosen.includes(v);
         if ((key === 'ArrowDown' || key === 'ArrowUp') && (multiple || target === search)) {
           const list = [...(search ? [search] : []), ...usable()];
           const at = list.indexOf(target as HTMLInputElement);
+          // Le focus est sur un bouton du panneau (fermer, créer) ou un choix épinglé : le clavier natif.
+          if (at === -1) return;
           const next = list[(at + (key === 'ArrowDown' ? 1 : -1) + list.length) % list.length];
           if (next && (multiple || target === search)) {
             event.preventDefault();
@@ -799,6 +820,22 @@ const isChosen = (v: string) => chosen.includes(v);
           else target.dispatchEvent(new Event('change', { bubbles: true }));
         }
       });
+      // À un choix, cliquer la ligne déjà choisie ne dit pas `change` : le panneau l'annonce quand même,
+      // comme Entrée le fait, pour que souris et clavier se ferment pareil.
+      if (!multiple) {
+        let armed: HTMLInputElement | undefined;
+        panel.addEventListener('pointerdown', (event) => {
+          const input = (event.target as HTMLElement).closest('[data-option]')?.querySelector('input');
+          armed = input?.checked ? input : undefined;
+        });
+        panel.addEventListener('click', (event) => {
+          // Un clic sur un libellé en fait suivre un second, sur la case : c'est celui-là qui compte.
+          if (armed && event.target === armed) {
+            armed = undefined;
+            changed();
+          }
+        });
+      }
       panel.addEventListener('keyup', () => {
         arrowNav = false;
       });

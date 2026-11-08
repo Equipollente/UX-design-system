@@ -46,8 +46,12 @@ export function buildBlocks(id: string, options: (Option | OptionGroup)[]): { bl
   return { blocks, items: blocks.flatMap((b) => b.items) };
 }
 
-/** Les valeurs choisies à l'ouverture : une seule en choix unique, la première qu'on donne. */
+/**
+ * Les valeurs choisies à l'ouverture : une seule en choix unique, la première qu'on donne.
+ * Une chaîne vide n'est pas un choix : c'est « rien », comme l'invite du `<select>`.
+ */
 export function chosenValues(multiple: boolean, value: string | undefined, values: string[] | undefined): string[] {
-  if (multiple) return values ?? (value !== undefined ? [value] : []);
-  return value !== undefined ? [value] : (values ?? []).slice(0, 1);
+  const one = value === undefined || value === '' ? undefined : value;
+  if (multiple) return values ?? (one !== undefined ? [one] : []);
+  return one !== undefined ? [one] : (values ?? []).slice(0, 1);
 }

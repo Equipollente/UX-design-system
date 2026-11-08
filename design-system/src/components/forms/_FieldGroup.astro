@@ -1,0 +1,85 @@
+---
+// _FieldGroup — la pile d'un groupe de cases ou de radios : une légende, les choix, un message,
+// une aide, dans cet ordre. Pièce interne : CheckboxGroup et RadioGroup la posent, personne ne
+// la pose seule.
+//
+// C'est `_Field` pour un groupe. Un champ seul a un <label> ; un groupe a plusieurs contrôles,
+// donc une <legend> en tête d'un <fieldset>, qui donne un nom au groupe aux lecteurs d'écran.
+// Elle range, elle ne décide pas : le message qui l'emporte, les identifiants et
+// `aria-describedby` sont décidés dans `lib/field.ts`, par le même `resolveField` que celui des
+// champs de saisie — les mots et les règles de `hint`, `error` et `success` sont donc les mêmes.
+//
+// Nœud Figma : `_CheckboxGroup.items` 876:61534 et `_RadioGroup.items` 875:53524 pour les choix ;
+// la légende, le message et l'aide sont les pièces `_FieldLabel`, `_FieldMessage` et `_FieldHint`.
+//
+// `disabled` éteint tout le groupe par le <fieldset>. L'erreur ne pose pas `aria-invalid` : un
+// <fieldset> ne le porte pas en ARIA. C'est le message, avec son icône, qui la dit.
+
+import FieldLabel from './_FieldLabel.astro';
+import FieldHint from './_FieldHint.astro';
+import FieldMessage from './_FieldMessage.astro';
+import type { ResolvedField } from '../../lib/field';
+
+interface Props {
+  /** La question posée au groupe. */
+  legend: string;
+  /** Retire la légende de l'écran sans la retirer du document. */
+  hideLegend?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  /** Ce que `resolveField` a décidé : message, aide et identifiants. */
+  field: ResolvedField;
+  orientation?: 'vertical' | 'horizontal';
+  class?: string;
+}
+
+const {
+  legend,
+  hideLegend = false,
+  required = false,
+  disabled = false,
+  field,
+  orientation = 'vertical',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<fieldset
+  class:list={['group', className]}
+  data-orientation={orientation}
+  disabled={disabled}
+  aria-describedby={field.describedby}
+  {...rest}
+>
+  <FieldLabel as="legend" required={required} disabled={disabled} visuallyHidden={hideLegend}>{legend}</FieldLabel>
+  <div class="items"><slot /></div>
+  {field.message && <FieldMessage id={field.message.id} type={field.message.type}>{field.message.text}</FieldMessage>}
+  {field.hint && <FieldHint id={field.hint.id} disabled={disabled}>{field.hint.text}</FieldHint>}
+</fieldset>
+
+<style>
+  .group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stack-control-xsmall-gap);
+    /* Un <fieldset> arrive avec un trait, un rembourrage et une largeur minimale du navigateur,
+       qui ne viennent d'aucune variable. */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-8);
+  }
+
+  .group[data-orientation='horizontal'] .items {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+</style>

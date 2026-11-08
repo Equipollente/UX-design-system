@@ -25,6 +25,7 @@
 import type { HTMLAttributes } from 'astro/types';
 import FieldLabel from './_FieldLabel.astro';
 import FieldHint from './_FieldHint.astro';
+import { resolveField } from '../../lib/field';
 
 /**
  * Un interrupteur dont l'effet est immédiat.
@@ -51,8 +52,9 @@ interface Props extends Omit<HTMLAttributes<'input'>, 'type' | 'role' | 'class' 
 
 const { id, label, name, checked = false, hint, disabled = false, class: className, ...rest } = Astro.props;
 
-const hintId = hint ? `${id}-hint` : undefined;
-const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+// Les identifiants et `aria-describedby` se décident comme pour les champs de saisie.
+const field = resolveField(id, { hint });
+const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
 ---
 
 <div class:list={['toggle', className]}>
@@ -71,7 +73,7 @@ const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ')
   </span>
   <span class="text">
     <FieldLabel for={id} disabled={disabled}>{label}</FieldLabel>
-    {hint && <FieldHint id={hintId!} disabled={disabled}>{hint}</FieldHint>}
+    {field.hint && <FieldHint id={field.hint.id} disabled={disabled}>{field.hint.text}</FieldHint>}
   </span>
 </div>
 
@@ -133,6 +135,11 @@ const describedby = [hintId, rest['aria-describedby']].filter(Boolean).join(' ')
     transform: translateX(calc(var(--base-40) - var(--toggle-thumb) - var(--toggle-inset) * 2));
     background: var(--color-background-base-default);
     border-color: var(--color-border-base-focus);
+  }
+
+  /* Le curseur part du début de la ligne : en lecture de droite à gauche, il glisse vers la gauche. */
+  .toggle:dir(rtl) input:checked ~ .thumb {
+    transform: translateX(calc(-1 * (var(--base-40) - var(--toggle-thumb) - var(--toggle-inset) * 2)));
   }
 
   input:focus-visible {

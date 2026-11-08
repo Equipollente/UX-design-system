@@ -730,3 +730,5 @@ portfolio avant la publication : un import de `_Select.astro` casserait.
 **Le paquet change de contrat.** `showCount` devient `counter`, `multiple` disparaît, `size` et `hideLabel`
 arrivent : changement cassant, une version mineure en 0.x et une note de migration par la convention de
 documentation. Les pages `/components/*` du site suivent à la phase 5.
+
+**Les groupes de cases et de radios ont leur pièce, `_FieldGroup` (08/11).** Ils prennent `hint`, `error` et `success` comme les champs de saisie, par le même `resolveField` : les règles (l'erreur l'emporte, les identifiants, `aria-describedby`) ne s'écrivent qu'une fois. Une case seule, un radio seul et un interrupteur n'ont que `hint` : pas d'`error` ni de `success` (Judith, 08/11). Les `id` des choix d'un groupe se numérotent (`id-0`, `id-1`…) au lieu de reprendre la valeur, qui peut contenir une espace.

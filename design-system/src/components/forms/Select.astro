@@ -196,4 +196,16 @@ const describedby = [field.describedby, rest['aria-describedby']].filter(Boolean
       select.toggleAttribute('data-empty', select.value === '');
     }
   });
+
+  // Un formulaire réinitialisé remet les choix sans dire `change` : la couleur suit après coup,
+  // quand le navigateur a fini de rendre les valeurs.
+  document.addEventListener('reset', (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    setTimeout(() => {
+      for (const select of form.querySelectorAll<HTMLSelectElement>('select.ds-field-control')) {
+        select.toggleAttribute('data-empty', select.value === '');
+      }
+    });
+  });
 </script>
