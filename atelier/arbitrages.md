@@ -84,7 +84,12 @@ qui manque n'est plus une composition d'en-tête mais **l'état empilé lui-mêm
 | Label-subtle · Label-bold | `1046:30984` · `1046:32137` | le rembourrage vertical de `md` est lié à `stack/control/small/gap`, un écart : aucune variable de rembourrage ne vaut 8 | /components → Label | ouvert |
 | IconLabel-subtle · IconLabel-bold | `1046:32536` · `1046:33140` | la variante `sucess` est mal écrite, quand Label écrit `success` | /components → Icon Label | ouvert |
 | IconLabel-bold | `1046:33140` | l'icône du `warning` fait 1,75:1 sur son fond ambre, dans les deux thèmes — WCAG 1.4.11 en demande 3 | /components → Icon Label | ouvert |
-| Label-counter | `1046:33241` | pas de variante `success`, que tous les autres jeux ont | — | ouvert |
+| Label-counter | `1046:33241` | pas de variante `success`, que tous les autres jeux ont | /components → Label Counter | ouvert |
+| Label-counter | `1046:33241` | le trait (1) n'est lié à aucune variable, alors que `border/width/default` existe | /components → Label Counter | ouvert |
+| Label-counter | `1046:33241` | `iconEnd` et `iconEnd?` sont déclarés, aucun calque ne les dessine | /components → Label Counter | ouvert |
+| Label-counter | `1046:34083` | la variante `info` n'a pas ses propriétés liées : son icône et son texte ne suivent ni `icon` ni `label` | /components → Label Counter | ouvert |
+| Label-counter | `1046:33241` | le trait `color/border/*/strong` est sous 3:1 sur blanc pour `sun` et `warning` (1,75), `highlight` (2,20 en Default), `teal` et `info` (2,94) — WCAG 1.4.11 | /components → Label Counter | ouvert |
+| Label-counter | `1046:33246` | le rembourrage vertical de `md` lit `stack/control/small/gap`, un écart, comme Label | /components → Label Counter | ouvert |
 | Checkbox · Radio · Toggle | `876:61534` · `875:53524` | le **groupe** n'est dessiné qu'à moitié : `_CheckboxGroup.items` et `_RadioGroup.items` posent les lignes (colonne ou ligne, écart 8) mais il manque l'enveloppe — légende (`_FieldLabel` en légende), aide et validation sous le groupe. Le code n'a aucun composant de groupe : la page écrit son `<fieldset>` à la main. Une instance `CheckboxGroup` posée sur la page « ↳ Checkbox » vient d'une bibliothèque distante | /formulaire → Radio, Checkbox | ouvert |
 | Add Image | `343:315` | la couleur de l'icône est liée à une variable d'une **autre bibliothèque** | /formulaire → Add Image | ouvert |
 | ~~Add Image~~ | `343:315`, `418:1020` | ~~le nœud dessine aussi l'état `add` en trait pointillé ; le code le gardait plein~~ | /formulaire → Add Image | *réglé — 31/08, `add`/`in-progress`/`fail` partagent maintenant le même trait pointillé* |

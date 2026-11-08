@@ -1,0 +1,189 @@
+---
+// LabelCounter — une étiquette à trait, sans fond : une icône facultative et un mot.
+//
+// Ce n'est pas une étiquette pleine (Label) ni une icône seule (IconLabel). Ce n'est pas un bouton :
+// aucun clic, aucun état au survol ni à l'appui. Et malgré son nom dans Figma elle n'affiche pas de
+// nombre : le libellé est du texte libre, le « counter » est un reste de nom. Le mot doit dire ce
+// qu'il veut dire : la couleur ne le porte pas à elle seule (WCAG 1.4.1).
+//
+// Nœud Figma : `Label-counter` 1046:33241 — `variant` × `size`, plus l'icône (`icon`, un échange
+// d'instance, affichée par `icon?`) et le texte (`label`). Onze couleurs, celles de Label moins
+// `success`, que ce jeu n'a pas : Figma ne le dessine pas, le code ne l'invente pas.
+//
+// Rayon `border/radius/small` et non la pilule de Label ; la boîte est sans fond, un trait de
+// `color/border/<famille>/strong`, un texte et une icône de `color/text/<famille>/on-subtle` et
+// `color/icon/<famille>/on-subtle`. Les trois tailles sont celles du Label — rembourrage et écart
+// icône ↔ texte —, l'icône grandit avec elles : 20, 24 et 28.
+//
+// Le trait est un `outline` rentré, pas un `border` : dans Figma le trait est tracé en dedans, et
+// la boîte mesure 32, 40 et 52 — l'icône et deux rembourrages. Un `border` s'y ajouterait. C'est
+// aussi la parade de Tag. L'outline survit au mode à contraste forcé, ce qu'une ombre ne ferait pas.
+//
+// Contrastes mesurés sur blanc, dans les deux thèmes : le texte et l'icône ne descendent jamais sous
+// 8,44:1 (WCAG 1.4.3). Le trait est plus faible — `sun` et `warning` 1,75:1, `highlight` 2,20:1 en
+// Default, `teal` et `info` 2,94:1 — sous les 3:1 de WCAG 1.4.11. Il ne dessine pas un contrôle et
+// le sens est dans le mot : le code suit Figma et l'écrit (arbitrages.md).
+//
+// Écarts avec Figma, dans arbitrages.md : le trait (1) n'est lié à aucune variable ; `iconEnd` et
+// `iconEnd?` sont déclarés sans qu'aucun calque les dessine, le code ne les implémente pas ; la
+// variante `info` n'a pas ses propriétés liées (icône, texte) ; le rembourrage vertical de `md` lit
+// `stack/control/small/gap`, un écart, faute de variable de rembourrage valant 8, comme Label.
+
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+/**
+ * Une étiquette à trait, sans fond : une icône facultative et un mot.
+ * @since 0.3.0
+ */
+interface Props {
+  /**
+   * Le mot porté par l'étiquette. Court : elle ne se coupe pas en deux lignes.
+   * @example Brouillon
+   */
+  label: string;
+  /**
+   * L'icône qui précède le mot, par son nom dans le registre. Décorative : le mot dit déjà la chose.
+   * @example '"book-open"'
+   */
+  icon?: IconName;
+  /**
+   * La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».
+   * @default primary
+   */
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'rose'
+    | 'sun'
+    | 'clay'
+    | 'teal'
+    | 'highlight'
+    | 'neutral'
+    | 'info'
+    | 'warning';
+  /**
+   * La taille : le rembourrage, l'écart et l'icône. Le texte ne change pas.
+   * @default md
+   */
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { label, icon, variant = 'primary', size = 'md', class: className, ...rest } = Astro.props;
+---
+
+<span class:list={['label-counter', className]} data-variant={variant} data-size={size} {...rest}>
+  {icon && <Icon name={icon} />}
+  <span class="text">{label}</span>
+</span>
+
+<style>
+  .label-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-small);
+    /* Le trait est tracé en dedans, comme dans Figma : il ne s'ajoute pas à la boîte. */
+    outline: var(--border-width-default) solid var(--label-counter-border);
+    outline-offset: calc(var(--border-width-default) * -1);
+    color: var(--label-counter-text);
+    /* L'icône lit --icon-color, que le composant Icon déclare déjà. */
+    --icon-color: var(--label-counter-icon);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-small-size);
+    font-weight: var(--base-text-weight-semibold);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+    /* Une étiquette ne se coupe pas : elle perdrait sa forme. */
+    white-space: nowrap;
+  }
+
+  /* — les trois tailles — L'icône grandit avec le rembourrage ; le texte reste à 14. */
+  .label-counter[data-size='sm'] {
+    gap: var(--stack-control-small-gap);
+    padding: var(--stack-control-xsmall-padding-block) var(--stack-control-xsmall-padding-inline-normal);
+    --icon-size: var(--icon-small);
+  }
+
+  /* L'écart est lu comme un rembourrage : c'est ce que Figma lie, voir le pavé. */
+  .label-counter[data-size='md'] {
+    gap: var(--stack-control-medium-gap);
+    padding: var(--stack-control-small-gap) var(--stack-control-small-padding-inline-condensed);
+    --icon-size: var(--icon-medium);
+  }
+
+  .label-counter[data-size='lg'] {
+    gap: var(--stack-control-large-gap);
+    padding: var(--stack-control-small-padding-block) var(--stack-control-medium-padding-inline-condensed);
+    --icon-size: var(--icon-large);
+  }
+
+  /* — les onze couleurs — Chaque famille donne son trait, son texte et son icône. */
+  .label-counter[data-variant='primary'] {
+    --label-counter-border: var(--color-border-primary-strong);
+    --label-counter-text: var(--color-text-primary-on-subtle);
+    --label-counter-icon: var(--color-icon-primary-on-subtle);
+  }
+
+  .label-counter[data-variant='secondary'] {
+    --label-counter-border: var(--color-border-secondary-strong);
+    --label-counter-text: var(--color-text-secondary-on-subtle);
+    --label-counter-icon: var(--color-icon-secondary-on-subtle);
+  }
+
+  .label-counter[data-variant='danger'] {
+    --label-counter-border: var(--color-border-danger-strong);
+    --label-counter-text: var(--color-text-danger-on-subtle);
+    --label-counter-icon: var(--color-icon-danger-on-subtle);
+  }
+
+  .label-counter[data-variant='rose'] {
+    --label-counter-border: var(--color-border-rose-strong);
+    --label-counter-text: var(--color-text-rose-on-subtle);
+    --label-counter-icon: var(--color-icon-rose-on-subtle);
+  }
+
+  .label-counter[data-variant='sun'] {
+    --label-counter-border: var(--color-border-sun-strong);
+    --label-counter-text: var(--color-text-sun-on-subtle);
+    --label-counter-icon: var(--color-icon-sun-on-subtle);
+  }
+
+  .label-counter[data-variant='clay'] {
+    --label-counter-border: var(--color-border-clay-strong);
+    --label-counter-text: var(--color-text-clay-on-subtle);
+    --label-counter-icon: var(--color-icon-clay-on-subtle);
+  }
+
+  .label-counter[data-variant='teal'] {
+    --label-counter-border: var(--color-border-teal-strong);
+    --label-counter-text: var(--color-text-teal-on-subtle);
+    --label-counter-icon: var(--color-icon-teal-on-subtle);
+  }
+
+  .label-counter[data-variant='highlight'] {
+    --label-counter-border: var(--color-border-highlight-strong);
+    --label-counter-text: var(--color-text-highlight-on-subtle);
+    --label-counter-icon: var(--color-icon-highlight-on-subtle);
+  }
+
+  .label-counter[data-variant='neutral'] {
+    --label-counter-border: var(--color-border-neutral-strong);
+    --label-counter-text: var(--color-text-neutral-on-subtle);
+    --label-counter-icon: var(--color-icon-neutral-on-subtle);
+  }
+
+  .label-counter[data-variant='info'] {
+    --label-counter-border: var(--color-border-info-strong);
+    --label-counter-text: var(--color-text-info-on-subtle);
+    --label-counter-icon: var(--color-icon-info-on-subtle);
+  }
+
+  .label-counter[data-variant='warning'] {
+    --label-counter-border: var(--color-border-warning-strong);
+    --label-counter-text: var(--color-text-warning-on-subtle);
+    --label-counter-icon: var(--color-icon-warning-on-subtle);
+  }
+</style>
