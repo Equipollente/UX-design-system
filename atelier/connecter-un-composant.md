@@ -64,10 +64,11 @@ Un gabarit se génère, il ne s'invente pas : à partir des mêmes entrées, on 
 Les entrées sont deux : les propriétés du jeu de variantes dans Figma (`get_context_for_code_connect`
 du MCP Figma les donne avec leur type), et l'`interface Props` du `.astro`.
 
-**Un jeu de variantes Figma = un fichier = un nœud.** Si le code fusionne deux jeux en un seul
-composant (une prop `emphasis` pour deux jeux `-subtle` et `-bold`), il y a quand même **un fichier
-par jeu**, et la valeur qui les distingue s'écrit en dur dans l'exemple. À l'inverse, deux jeux qui
-sont deux composants distincts dans le code pointent chacun vers leur `.astro`.
+**Un jeu de variantes Figma = un fichier = un nœud, et Figma a la même forme que le code.** Une prop
+du code est une propriété du jeu, pas une différence de nom entre deux jeux : deux jeux `X-subtle` et
+`X-bold` pour une prop `emphasis` sont à fondre en un seul jeu à propriété `emphasis`, sans quoi rien
+ne dit à Figma, ni à l'aperçu de l'interface, que la prop existe. Deux jeux qui sont deux composants
+distincts dans le code pointent chacun vers leur `.astro`.
 
 **Le nom du fichier est le nom Figma**, avec sa casse et ses tirets : `<NomFigma>.figma.ts`.
 `id` est ce nom en minuscules avec des tirets, et il est unique dans le dossier.

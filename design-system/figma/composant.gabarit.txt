@@ -42,9 +42,8 @@ export default {
 }
 ------------------------------------------------------------------------------------------------
 
-Jeux fusionnés dans le code : si deux jeux Figma (`X-subtle`, `X-bold`) sont un seul composant Astro
-avec une prop (`emphasis`), on écrit un fichier par jeu, et on met la valeur en dur dans l'exemple :
-  example: figma.code`<X label="${label}" emphasis="subtle" />`
+Une prop du code est une propriété du jeu Figma (jamais une différence de nom entre deux jeux) : si
+Figma a deux jeux `X-subtle` et `X-bold` pour une prop `emphasis`, on les fond d'abord en un jeu.
 Les règles complètes sont dans atelier/connecter-un-composant.md (« Les règles pour que tous les
 gabarits se ressemblent »).
 

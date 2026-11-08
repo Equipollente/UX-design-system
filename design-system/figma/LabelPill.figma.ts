@@ -1,10 +1,12 @@
-// url=https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=1046-32137
+// url=https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=1046-30984
 // source=design-system/src/components/LabelPill.astro
 // component=LabelPill
 import figma from 'figma'
 const instance = figma.selectedInstance
 
 const label = instance.getString('label')
+
+const emphasis = instance.getEnum('emphasis', { subtle: 'subtle', bold: 'bold' })
 
 const variant = instance.getEnum('variant', {
   primary: 'primary',
@@ -23,10 +25,9 @@ const variant = instance.getEnum('variant', {
 
 const size = instance.getEnum('size', { sm: 'sm', md: 'md', lg: 'lg' })
 
-// Ce jeu de variantes Figma est « bold » : LabelPill.astro le porte par la prop `emphasis`.
 export default {
-  example: figma.code`<LabelPill label="${label}" variant="${variant}" emphasis="bold" size="${size}" />`,
+  example: figma.code`<LabelPill label="${label}" variant="${variant}" emphasis="${emphasis}" size="${size}" />`,
   imports: ['import LabelPill from "ux-design-system/components/LabelPill.astro"'],
-  id: 'label-bold',
+  id: 'label-pill',
   metadata: { nestable: true },
 }

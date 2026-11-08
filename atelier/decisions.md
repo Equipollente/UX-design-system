@@ -751,9 +751,9 @@ pour suivre les rôles du code.
 ## Code Connect : un fichier par jeu Figma, nommé comme lui (08/11)
 
 Le mode Dev de Figma affiche le code d'un composant grâce à des gabarits `design-system/figma/<NomFigma>.figma.ts`,
-publiés par `npx figma connect publish`. Trois choix : **un fichier par jeu de variantes Figma**, même quand le code
-les fusionne (`Label-subtle` et `Label-bold` sont deux fichiers pour un seul `LabelPill.astro`, la valeur de `emphasis`
-est écrite en dur) ; **le nom du fichier est le nom Figma** ; **les états et les icônes ne sont pas repris**, parce
+publiés par `npx figma connect publish`. Trois choix : **un fichier par jeu de variantes Figma**, et Figma prend la même forme que le code : quand le code a une prop,
+Figma a une propriété de variante du même nom (`Label-subtle` et `Label-bold` ont été fondus en un seul jeu
+`LabelPill` avec `emphasis`, le 08/11, parce que l'aperçu de l'interface ne trouvait pas une intensité portée par le nom) ; **le nom du fichier est le nom Figma** ; **les états et les icônes ne sont pas repris**, parce
 que Figma ne donne pas le nom d'une icône mais celui de son calque, et qu'un nom faux est pire qu'aucun.
 
 L'interface « Connect components to code » de Figma ne sert pas ici : elle refuse le `.astro`, et même acceptée elle
