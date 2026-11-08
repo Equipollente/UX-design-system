@@ -110,6 +110,11 @@ const { nom, reglages, slots, utilise, natifs, source } = Astro.props;
     letter-spacing: var(--base-text-letter-spacing-widest);
     text-transform: uppercase;
   }
+  /* Les valeurs d'une liste se posent sans espace entre elles : sans blocs en ligne, douze valeurs
+     forment un seul mot que la cellule ne peut pas couper, et la page déborde. */
+  td code {
+    display: inline-block;
+  }
   td code + code {
     margin-inline-start: var(--base-4);
   }
