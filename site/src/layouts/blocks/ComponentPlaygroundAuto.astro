@@ -423,7 +423,8 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
         lignes.push(`${r.nom}="${v}"`);
       }
     }
-    for (const f of config.fixes) lignes.push(`${f.nom}={${f.code}}`);
+    // Un réglage fixe qui est un mot (`icon="book-open"`) s'écrit comme un attribut, pas comme une expression.
+    for (const f of config.fixes) lignes.push(f.code.startsWith('"') ? `${f.nom}=${f.code}` : `${f.nom}={${f.code}}`);
     const importation = `import ${config.nom} from '${config.chemin}';`;
     // Un fichier Astro entier, comme les exemples : l'import va dans l'en-tête entre les `---`.
     return `---\n${importation}\n---\n\n<${config.nom}\n${lignes.map((l) => `  ${l.replace(/\n/g, '\n  ')}`).join('\n')}\n/>`;
