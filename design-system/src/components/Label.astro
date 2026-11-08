@@ -1,0 +1,201 @@
+---
+// Label — une étiquette courte qui nomme ou classe ce qu'elle accompagne : un statut, une catégorie,
+// un thème. Elle remplace Tag.
+//
+// Ce n'est pas un bouton : aucun état au survol ni à l'appui, aucun clic. Une pastille sur laquelle on
+// clique est un Button. Ce n'est pas non plus une icône seule (IconLabel), ni une étiquette à trait
+// (LabelCounter). Et le mot doit dire ce qu'il veut dire : la couleur ne porte pas le sens à elle
+// seule (WCAG 1.4.1).
+//
+// Nœuds Figma : `Label-subtle` 1046:30984 et `Label-bold` 1046:32137 — `variant` × `size`, plus le
+// texte. Les deux jeux ne diffèrent que par la profondeur du fond : `subtle` pose un fond clair et
+// une encre foncée de la même couleur, `bold` un fond plein et une encre claire. Le code les réunit
+// sous une seule prop, `emphasis`, parce que c'est le même objet à deux intensités.
+//
+// Douze couleurs, qui sont les familles de rôles du système (`color/background/<famille>/subtle`
+// et `bold`, `color/text/<famille>/on-subtle` et `on-bold`). `danger` est réservé à ce qui échoue ou
+// détruit ; `warning` dit « à savoir », sans rien de faux. Figma écrit `alert` pour `danger` :
+// c'est Figma qui a suivi le code (Judith, 08/11).
+//
+// Le texte est une prop, `label`, comme dans Figma, et non un emplacement : une étiquette est un mot
+// court, et la prop permet de l'essayer dans la doc. Elle ne se coupe pas en deux lignes : elle
+// perdrait sa forme de pilule.
+//
+// Contrastes mesurés sur les 24 paires de chaque thème (WCAG 1.4.3, texte de 14 qui n'est pas « grand »,
+// donc 4,5:1) : `subtle` ne descend jamais sous 7,74:1. `bold` en laisse cinq sous le seuil, ce que le
+// code ne corrige pas — la correction va dans Figma (arbitrages.md) : `warning` 1,75:1 (texte blanc sur
+// ambre), `success` 3,02:1, dans les deux thèmes, et `rose` 4,31:1 en Prof Hub.
+//
+// Écart de mesure : le rembourrage vertical de `md` lit `stack/control/small/gap`, un écart, parce que
+// Figma l'y lie et qu'aucune variable de rembourrage ne vaut 8 (xsmall 6, small 12). Signalé dans
+// arbitrages.md.
+
+/**
+ * Une étiquette courte qui nomme ou classe ce qu'elle accompagne. Elle remplace Tag.
+ * @since 0.3.0
+ */
+interface Props {
+  /**
+   * Le mot porté par l'étiquette. Court : elle ne se coupe pas en deux lignes.
+   * @example Brouillon
+   */
+  label: string;
+  /**
+   * La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».
+   * @default primary
+   */
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'rose'
+    | 'sun'
+    | 'clay'
+    | 'teal'
+    | 'highlight'
+    | 'neutral'
+    | 'warning'
+    | 'success'
+    | 'info';
+  /**
+   * `subtle` : fond clair, encre foncée. `bold` : fond plein, encre claire.
+   * @default subtle
+   */
+  emphasis?: 'subtle' | 'bold';
+  /**
+   * La taille : le rembourrage de la pilule. Le texte ne change pas.
+   * @default md
+   */
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { label, variant = 'primary', emphasis = 'subtle', size = 'md', class: className, ...rest } = Astro.props;
+---
+
+<span class:list={['label', className]} data-variant={variant} data-emphasis={emphasis} data-size={size} {...rest}>{label}</span>
+
+<style>
+  .label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-full);
+    font-family: var(--font-stack-body);
+    font-size: var(--text-body-small-size);
+    font-weight: var(--base-text-weight-semibold);
+    line-height: var(--base-text-line-height-snug);
+    letter-spacing: var(--base-text-letter-spacing-normal);
+    /* Une étiquette ne se coupe pas : elle perdrait sa forme. */
+    white-space: nowrap;
+  }
+
+  /* — les trois tailles — Le texte reste à 14 : seule la pastille grandit. */
+  .label[data-size='sm'] {
+    padding: var(--stack-control-xsmall-padding-block) var(--stack-control-xsmall-padding-inline-normal);
+  }
+
+  /* L'écart est lu comme un rembourrage : c'est ce que Figma lie, voir le pavé. */
+  .label[data-size='md'] {
+    padding: var(--stack-control-small-gap) var(--stack-control-small-padding-inline-condensed);
+  }
+
+  .label[data-size='lg'] {
+    padding: var(--stack-control-small-padding-block) var(--stack-control-medium-padding-inline-condensed);
+  }
+
+  /* — les douze couleurs — Chaque famille donne ses quatre rôles ; l'emphase choisit la paire. */
+  .label[data-variant='primary'] {
+    --label-bg-subtle: var(--color-background-primary-subtle);
+    --label-fg-subtle: var(--color-text-primary-on-subtle);
+    --label-bg-bold: var(--color-background-primary-bold);
+    --label-fg-bold: var(--color-text-primary-on-bold);
+  }
+
+  .label[data-variant='secondary'] {
+    --label-bg-subtle: var(--color-background-secondary-subtle);
+    --label-fg-subtle: var(--color-text-secondary-on-subtle);
+    --label-bg-bold: var(--color-background-secondary-bold);
+    --label-fg-bold: var(--color-text-secondary-on-bold);
+  }
+
+  .label[data-variant='danger'] {
+    --label-bg-subtle: var(--color-background-danger-subtle);
+    --label-fg-subtle: var(--color-text-danger-on-subtle);
+    --label-bg-bold: var(--color-background-danger-bold);
+    --label-fg-bold: var(--color-text-danger-on-bold);
+  }
+
+  .label[data-variant='rose'] {
+    --label-bg-subtle: var(--color-background-rose-subtle);
+    --label-fg-subtle: var(--color-text-rose-on-subtle);
+    --label-bg-bold: var(--color-background-rose-bold);
+    --label-fg-bold: var(--color-text-rose-on-bold);
+  }
+
+  .label[data-variant='sun'] {
+    --label-bg-subtle: var(--color-background-sun-subtle);
+    --label-fg-subtle: var(--color-text-sun-on-subtle);
+    --label-bg-bold: var(--color-background-sun-bold);
+    --label-fg-bold: var(--color-text-sun-on-bold);
+  }
+
+  .label[data-variant='clay'] {
+    --label-bg-subtle: var(--color-background-clay-subtle);
+    --label-fg-subtle: var(--color-text-clay-on-subtle);
+    --label-bg-bold: var(--color-background-clay-bold);
+    --label-fg-bold: var(--color-text-clay-on-bold);
+  }
+
+  .label[data-variant='teal'] {
+    --label-bg-subtle: var(--color-background-teal-subtle);
+    --label-fg-subtle: var(--color-text-teal-on-subtle);
+    --label-bg-bold: var(--color-background-teal-bold);
+    --label-fg-bold: var(--color-text-teal-on-bold);
+  }
+
+  .label[data-variant='highlight'] {
+    --label-bg-subtle: var(--color-background-highlight-subtle);
+    --label-fg-subtle: var(--color-text-highlight-on-subtle);
+    --label-bg-bold: var(--color-background-highlight-bold);
+    --label-fg-bold: var(--color-text-highlight-on-bold);
+  }
+
+  .label[data-variant='neutral'] {
+    --label-bg-subtle: var(--color-background-neutral-subtle);
+    --label-fg-subtle: var(--color-text-neutral-on-subtle);
+    --label-bg-bold: var(--color-background-neutral-bold);
+    --label-fg-bold: var(--color-text-neutral-on-bold);
+  }
+
+  .label[data-variant='warning'] {
+    --label-bg-subtle: var(--color-background-warning-subtle);
+    --label-fg-subtle: var(--color-text-warning-on-subtle);
+    --label-bg-bold: var(--color-background-warning-bold);
+    --label-fg-bold: var(--color-text-warning-on-bold);
+  }
+
+  .label[data-variant='success'] {
+    --label-bg-subtle: var(--color-background-success-subtle);
+    --label-fg-subtle: var(--color-text-success-on-subtle);
+    --label-bg-bold: var(--color-background-success-bold);
+    --label-fg-bold: var(--color-text-success-on-bold);
+  }
+
+  .label[data-variant='info'] {
+    --label-bg-subtle: var(--color-background-info-subtle);
+    --label-fg-subtle: var(--color-text-info-on-subtle);
+    --label-bg-bold: var(--color-background-info-bold);
+    --label-fg-bold: var(--color-text-info-on-bold);
+  }
+
+  .label[data-emphasis='subtle'] {
+    background: var(--label-bg-subtle);
+    color: var(--label-fg-subtle);
+  }
+
+  .label[data-emphasis='bold'] {
+    background: var(--label-bg-bold);
+    color: var(--label-fg-bold);
+  }
+</style>

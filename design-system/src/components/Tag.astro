@@ -3,6 +3,9 @@
 // dans une ligne de tableau, un mot-clé sur une slide, une catégorie dans un
 // document. Ici, les méthodes d'une étude de cas.
 //
+// DÉPRÉCIÉ (08/11) : Label le remplace, et la variante `outline` disparaît avec lui. Le fichier reste
+// tant que le portfolio et Prof Hub l'importent ; voir atelier/decisions.md.
+//
 // Ce n'est pas un bouton : aucun état interactif, aucun href, jamais de clic.
 // Une pilule sur laquelle on clique est un Button. Et le texte doit dire ce
 // qu'il veut dire — la couleur ne porte pas de sens à elle seule.
@@ -21,6 +24,10 @@
 // s'ajoute au padding et l'aurait portée à 35. L'outline ne compte pas dans la
 // boîte — les quatre variantes ont donc exactement la même hauteur.
 
+/**
+ * Une étiquette courte. Remplacée par Label : sa variante `outline` disparaît.
+ * @deprecated Utiliser Label.
+ */
 interface Props {
   /**
    * Les quatre variantes de Figma. Les trois premières sont remplies, la

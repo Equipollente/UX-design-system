@@ -732,3 +732,18 @@ arrivent : changement cassant, une version mineure en 0.x et une note de migrati
 documentation. Les pages `/components/*` du site suivent à la phase 5.
 
 **Les groupes de cases et de radios ont leur pièce, `_FieldGroup` (08/11).** Ils prennent `hint`, `error` et `success` comme les champs de saisie, par le même `resolveField` : les règles (l'erreur l'emporte, les identifiants, `aria-describedby`) ne s'écrivent qu'une fois. Une case seule, un radio seul et un interrupteur n'ont que `hint` : pas d'`error` ni de `success` (Judith, 08/11). Les `id` des choix d'un groupe se numérotent (`id-0`, `id-1`…) au lieu de reprendre la valeur, qui peut contenir une espace.
+
+## Label remplace Tag, et la variante `outline` disparaît (08/11)
+
+Les deux jeux `Label-subtle` et `Label-bold` (1046:30984, 1046:32137) deviennent un seul composant, `Label`, avec une
+prop `emphasis` : c'est le même objet à deux intensités. Il remplace `Tag`, dont les trois variantes remplies
+(`accent`, `lime`, `neutral`) deviennent `primary`, `highlight` et `neutral` ; **la variante `outline`, qui était le
+défaut de `Tag`, n'a pas d'équivalent et disparaît** (décision de Judith). Une pilule à liseré n'existe plus dans le
+système.
+
+`Tag` n'est pas supprimé : le portfolio et Prof Hub l'importent par son chemin, et Judith gère ces deux sites. Il est
+déprécié le jour où `Label` entre, puis retiré quand ils ont migré. Le texte de `Label` est une prop, `label`, comme
+la propriété Figma, et non un emplacement : une étiquette est un mot court, et la prop permet de l'essayer dans la doc.
+
+`IconLabel` et `Label-counter` (le trait seul, rayon petit) restent à écrire ; `alert` est devenu `danger` dans Figma
+pour suivre les rôles du code.
