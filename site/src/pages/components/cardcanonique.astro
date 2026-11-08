@@ -12,7 +12,7 @@ import PlaygroundImage from '../../layouts/blocks/PlaygroundImage.astro';
 import PlaygroundTags from '../../layouts/blocks/PlaygroundTags.astro';
 import PlaygroundText from '../../layouts/blocks/PlaygroundText.astro';
 import Input from 'ux-design-system/components/forms/Input.astro';
-import Tag from 'ux-design-system/components/Tag.astro';
+import Label from 'ux-design-system/components/Label.astro';
 import { iconNames } from 'ux-design-system/lib/icons';
 import { withBase } from 'ux-design-system/lib/url';
 import { componentPageGroups } from '../_component-pages';
@@ -29,7 +29,7 @@ import CardDefault from 'ux-design-system/components/cards/CardDefault.astro';
 import CardImage from 'ux-design-system/components/cards/CardImage.astro';
 import CardTags from 'ux-design-system/components/cards/CardTags.astro';
 import CardText from 'ux-design-system/components/cards/CardText.astro';
-import Tag from 'ux-design-system/components/Tag.astro';
+import Label from 'ux-design-system/components/Label.astro';
 import { withBase } from 'ux-design-system/lib/url';
 ---
 
@@ -47,11 +47,11 @@ import { withBase } from 'ux-design-system/lib/url';
     height={800}
   />
   <CardTags slot="tags-top">
-    <Tag variant="accent">En cours</Tag>
+    <Label variant="primary" label="En cours" />
   </CardTags>
   <CardTags slot="tags-bottom">
-    <Tag>Gouache</Tag>
-    <Tag>Encre</Tag>
+    <Label variant="neutral" label="Gouache" />
+    <Label variant="neutral" label="Encre" />
   </CardTags>
   <CardActions slot="actions">
     <Button variant="secondary">Modifier</Button>
@@ -82,11 +82,11 @@ import { withBase } from 'ux-design-system/lib/url';
         height={800}
       />
       <CardTags slot="tags-top">
-        <Tag variant="accent">En cours</Tag>
+        <Label variant="primary" label="En cours" />
       </CardTags>
       <CardTags slot="tags-bottom">
-        <Tag>Gouache</Tag>
-        <Tag>Encre</Tag>
+        <Label variant="neutral" label="Gouache" />
+        <Label variant="neutral" label="Encre" />
       </CardTags>
       <CardActions slot="actions">
         <Button variant="secondary">Modifier</Button>
@@ -106,10 +106,10 @@ import { withBase } from 'ux-design-system/lib/url';
       />
       <Input id="cardcanonique-playground-meta" name="text-meta" label="Meta" value="Exemple" />
     </PlaygroundText>
-    <PlaygroundTags id="tags-top" tags={[{ label: 'En cours', variant: 'accent' }]} />
+    <PlaygroundTags id="tags-top" tags={[{ label: 'En cours', variant: 'primary' }]} />
     <PlaygroundTags
       id="tags-bottom"
-      tags={[{ label: 'Gouache', variant: 'outline' }, { label: 'Encre', variant: 'outline' }]}
+      tags={[{ label: 'Gouache', variant: 'neutral' }, { label: 'Encre', variant: 'neutral' }]}
     />
     <PlaygroundButtons
       id="actions"
@@ -137,11 +137,11 @@ import { withBase } from 'ux-design-system/lib/url';
         meta="Exemple"
       />
       <CardTags slot="tags-top" data-playground-preview="tags-top">
-        <Tag variant="accent">En cours</Tag>
+        <Label variant="primary" label="En cours" />
       </CardTags>
       <CardTags slot="tags-bottom" data-playground-preview="tags-bottom">
-        <Tag>Gouache</Tag>
-        <Tag>Encre</Tag>
+        <Label variant="neutral" label="Gouache" />
+        <Label variant="neutral" label="Encre" />
       </CardTags>
       <CardActions slot="actions" data-playground-preview="actions">
         <Button variant="secondary">Modifier</Button>
@@ -190,7 +190,7 @@ import { withBase } from 'ux-design-system/lib/url';
     const tagValues = (controls: HTMLElement) =>
       Array.from(controls.querySelectorAll<HTMLElement>('[data-playground-tag-row]')).map((row) => ({
         label: row.querySelector<HTMLInputElement>('[name="tag-label"]')?.value ?? '',
-        variant: row.querySelector<HTMLSelectElement>('[name="tag-variant"]')?.value ?? 'outline',
+        variant: row.querySelector<HTMLSelectElement>('[name="tag-variant"]')?.value ?? 'neutral',
       }));
     const tagsEnabled = (controls: HTMLElement, id: string) =>
       controls.querySelector<HTMLInputElement>(`[data-playground-toggle="${id}"] input`)?.checked ?? false;
@@ -209,7 +209,7 @@ import { withBase } from 'ux-design-system/lib/url';
 
     const renderTags = (controls: HTMLElement, preview: HTMLElement) => {
       const tags = tagValues(controls);
-      const template = preview.querySelector<HTMLElement>('.tag');
+      const template = preview.querySelector<HTMLElement>('.label');
       if (!template) return;
 
       while (preview.children.length < tags.length) {
@@ -221,7 +221,7 @@ import { withBase } from 'ux-design-system/lib/url';
 
       tags.forEach(({ label, variant }, index) => {
         const tag = preview.children[index] as HTMLElement;
-        tag.className = `tag tag-${variant}`;
+        tag.dataset.variant = variant;
         tag.textContent = label;
       });
     };
@@ -236,7 +236,7 @@ import { withBase } from 'ux-design-system/lib/url';
           /\n  <CardTags slot="tags-top">[\s\S]*?<\/CardTags>/,
           tagsEnabled(topTagsControls, 'tags-top')
             ? `\n  <CardTags slot="tags-top">\n${tagValues(topTagsControls)
-                .map(({ label, variant }) => `    <Tag variant="${variant}">${label}</Tag>`)
+                .map(({ label, variant }) => `    <Label variant="${variant}" label="${label}" />`)
                 .join('\n')}\n  </CardTags>`
             : '',
         )
@@ -244,7 +244,7 @@ import { withBase } from 'ux-design-system/lib/url';
           /\n  <CardTags slot="tags-bottom">[\s\S]*?<\/CardTags>/,
           tagsEnabled(bottomTagsControls, 'tags-bottom')
             ? `\n  <CardTags slot="tags-bottom">\n${tagValues(bottomTagsControls)
-                .map(({ label, variant }) => `    <Tag variant="${variant}">${label}</Tag>`)
+                .map(({ label, variant }) => `    <Label variant="${variant}" label="${label}" />`)
                 .join('\n')}\n  </CardTags>`
             : '',
         )

@@ -4,9 +4,12 @@ import Select from 'ux-design-system/components/forms/Select.astro';
 import Input from 'ux-design-system/components/forms/Input.astro';
 import Toggle from 'ux-design-system/components/forms/Toggle.astro';
 
+// Les douze couleurs de Label, qui remplace Tag.
+const variants: string[] = ['primary', 'secondary', 'danger', 'rose', 'sun', 'clay', 'teal', 'highlight', 'neutral', 'warning', 'success', 'info'];
+
 interface TagItem {
   label: string;
-  variant?: 'accent' | 'lime' | 'neutral' | 'outline';
+  variant?: string;
 }
 
 interface Props {
@@ -15,7 +18,7 @@ interface Props {
 }
 
 const { id, tags = [] } = Astro.props;
-const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outline' as const }];
+const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'neutral' }];
 ---
 
 <fieldset data-playground-group="tags">
@@ -27,7 +30,7 @@ const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outl
         <div class="playground-tag-row" data-playground-tag-row>
           <Input id={`${id}-label-${index + 1}`} name="tag-label" label="Libellé" value={tag.label} />
           <div class="playground-tag-options">
-            <Select id={`${id}-variant-${index + 1}`} name="tag-variant" label="Variante" options={['accent', 'lime', 'neutral', 'outline']} value={tag.variant ?? 'outline'} />
+            <Select id={`${id}-variant-${index + 1}`} name="tag-variant" label="Variante" options={variants} value={tag.variant ?? 'neutral'} />
             <Button type="button" variant="secondary" icon="close" data-remove-tag aria-label="Supprimer ce tag" />
           </div>
         </div>
@@ -38,7 +41,7 @@ const tagRows = tags.length > 0 ? tags : [{ label: 'Nouveau tag', variant: 'outl
       <div class="playground-tag-row" data-playground-tag-row>
         <Input id={`${id}-label-template`} name="tag-label" label="Libellé" value="Nouveau tag" />
         <div class="playground-tag-options">
-          <Select id={`${id}-variant-template`} name="tag-variant" label="Variante" options={['accent', 'lime', 'neutral', 'outline']} value="outline" />
+          <Select id={`${id}-variant-template`} name="tag-variant" label="Variante" options={variants} value="neutral" />
           <Button type="button" variant="secondary" icon="close" data-remove-tag aria-label="Supprimer ce tag" />
         </div>
       </div>

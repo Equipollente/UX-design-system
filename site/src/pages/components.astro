@@ -6,6 +6,7 @@ import DocsLayout from '../layouts/DocsLayout.astro';
 import Button from 'ux-design-system/components/Button.astro';
 import IconButton from 'ux-design-system/components/IconButton.astro';
 import Tag from 'ux-design-system/components/Tag.astro';
+import Label from 'ux-design-system/components/Label.astro';
 import CardDefault from 'ux-design-system/components/cards/CardDefault.astro';
 import CardActions from 'ux-design-system/components/cards/CardActions.astro';
 import CardImage from 'ux-design-system/components/cards/CardImage.astro';
@@ -549,6 +550,12 @@ const modalProps = [
         <span class="source">Description du composant Figma <code>19:12</code>.</span>
       </p>
 
+      <p class="flag">
+        <strong>Déprécié (08/11).</strong> <em>Label</em> remplace <em>Tag</em>, et sa variante
+        <code>outline</code>, qui était le défaut, disparaît. Cette section reste tant que le portfolio
+        et Prof Hub importent <em>Tag</em> ; la page de <em>Label</em> est <code>/components/label</code>.
+      </p>
+
       <div class="demo">
         <div class="tag-row">
           <Tag variant="accent">Accent</Tag>
@@ -919,10 +926,10 @@ const modalProps = [
             alt={cardDefaultWorks[0].imageAlt}
           />
           <CardTags slot="tags-top">
-            <Tag variant="accent">{cardDefaultWorks[0].status.replace('_', ' ')}</Tag>
+            <Label variant="primary" label={cardDefaultWorks[0].status.replace('_', ' ')} />
           </CardTags>
           <CardTags slot="tags-bottom">
-            {cardDefaultWorks[0].techniques.map((technique) => <Tag>{technique}</Tag>)}
+            {cardDefaultWorks[0].techniques.map((technique) => <Label variant="neutral" label={technique} />)}
           </CardTags>
         </CardDefault>
 
@@ -961,11 +968,11 @@ const modalProps = [
               <CardImage slot="image" src={work.image} alt={work.imageAlt} />
             )}
             <CardTags slot="tags-top" >
-              <Tag variant="accent">{work.status.replace('_', ' ')}</Tag>
+              <Label variant="primary" label={work.status.replace('_', ' ')} />
             </CardTags>
             {work.techniques.length > 0 && (
               <CardTags slot="tags-bottom">
-                {work.techniques.map((technique) => <Tag>{technique}</Tag>)}
+                {work.techniques.map((technique) => <Label variant="neutral" label={technique} />)}
               </CardTags>
             )}
           </CardDefault>
@@ -1060,10 +1067,10 @@ const modalProps = [
             headingLevel={3}
           >
             <Fragment slot="tags-top">
-              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tagsTop.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="tags">
-              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tags.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="actions">
               <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">
@@ -1093,10 +1100,10 @@ const modalProps = [
             headingLevel={3}
           >
             <Fragment slot="tags-top">
-              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tagsTop.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="tags">
-              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tags.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="actions">
               <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">
@@ -1150,10 +1157,10 @@ const modalProps = [
             titleSize="heading"
           >
             <Fragment slot="tags-top">
-              {cardDemo.tagsTop.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tagsTop.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="tags">
-              {cardDemo.tags.map((t) => <Tag>{t}</Tag>)}
+              {cardDemo.tags.map((t) => <Label variant="neutral" label={t} />)}
             </Fragment>
             <Fragment slot="actions">
               <Button size="sm" variant="secondary" iconEnd="arrow-narrow-right">

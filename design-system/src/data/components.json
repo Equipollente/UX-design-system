@@ -416,7 +416,7 @@
     "slots": [],
     "utilise": [
       "Button",
-      "Tag"
+      "Label"
     ]
   },
   "CaseStudyList": {
