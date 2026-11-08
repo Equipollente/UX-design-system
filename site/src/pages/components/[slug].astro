@@ -53,10 +53,19 @@ const composantDe = (nom: string) =>
 const texte = await getEntry('components', page.slug);
 const Presentation = texte ? (await render(texte)).Content : null;
 const donnees = texte?.data;
+// Un exemple nomme son composant, ou chacune de ses instances le sien (`composant: SelectPanel`).
+const nomsAutres = (donnees?.exemples ?? []).flatMap((e) => [
+  e.composant,
+  ...[...e.instances, ...(e.cartes ?? []).flatMap((c) => c.instances)].map((i) => i.composant),
+]);
 const autres = Object.fromEntries(
-  [...new Set((donnees?.exemples ?? []).map((e) => e.composant).filter((n): n is string => !!n))].map((nom) => [
+  [...new Set(nomsAutres.filter((n): n is string => typeof n === 'string' && n !== page.nom))].map((nom) => [
     nom,
-    { Composant: composantDe(nom), reglages: (components as unknown as Record<string, any>)[nom].props },
+    {
+      Composant: composantDe(nom),
+      reglages: (components as unknown as Record<string, any>)[nom].props,
+      source: (components as unknown as Record<string, any>)[nom].source,
+    },
   ]),
 );
 ---
@@ -100,7 +109,7 @@ const autres = Object.fromEntries(
 
           <!-- 4. Les exemples -->
           {donnees && donnees.exemples.length > 0 && (
-            <ComponentExemples nom={page.nom} reglages={fiche.props} Composant={Composant} exemples={donnees.exemples} autres={autres} />
+            <ComponentExemples nom={page.nom} reglages={fiche.props} Composant={Composant} source={fiche.source} exemples={donnees.exemples} autres={autres} />
           )}
 
           <!-- 5. Le playground -->

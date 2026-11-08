@@ -6,7 +6,18 @@
 // (site/src/content/components/<nom>.md) : seulement leurs réglages. Le code à copier, lui, est
 // fabriqué ici d'après ces réglages, et un réglage qui n'existe pas — ou une valeur hors liste —
 // fait échouer la construction : un exemple faux ne peut pas être publié.
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { Code } from 'astro:components';
 import TexteCode from './TexteCode.astro';
+import { formatHtml } from '../../lib/html';
+import components from 'ux-design-system/data/components.json';
+
+// Les fichiers des composants, lus tels quels : c'est de là que vient l'onglet CSS.
+const fichiers = import.meta.glob('../../../../design-system/src/components/**/*.astro', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
 
 interface Reglage {
   nom: string;
@@ -25,7 +36,7 @@ interface Exemple {
   texte?: string;
   instances: Instance[];
   cartes?: Carte[];
-  disposition: 'colonne' | 'ligne';
+  disposition: 'colonne' | 'ligne' | 'contenu';
   composant?: string;
   rangee?: string;
 }
@@ -35,29 +46,44 @@ interface Props {
   nom: string;
   reglages: Reglage[];
   Composant: any; // un composant Astro : aucun type d'Astro ne le décrit
+  /** Où vit le fichier, tel que components.json le donne : c'est de là que vient la ligne d'import. */
+  source?: string;
   exemples: Exemple[];
-  /** Les autres composants que des exemples montrent, par nom : le composant et ses réglages. */
-  autres?: Record<string, { Composant: any; reglages: Reglage[] }>;
+  /** Les autres composants que des exemples montrent, par nom : le composant, ses réglages et sa source. */
+  autres?: Record<string, { Composant: any; reglages: Reglage[]; source?: string }>;
 }
 
-const { nom, reglages, Composant, exemples, autres = {} } = Astro.props;
+const { nom, reglages, Composant, source, exemples, autres = {} } = Astro.props;
+
+// `design-system/src/components/forms/Input.astro` s'importe `ux-design-system/components/forms/Input.astro`.
+const cheminDe = (nomComposant: string, sourceComposant?: string) =>
+  sourceComposant
+    ? sourceComposant.replace('design-system/src/', 'ux-design-system/')
+    : `ux-design-system/components/${nomComposant}.astro`;
 
 // Le composant d'un exemple : celui de la page, ou celui que l'exemple nomme.
-const cible = (exemple: Exemple) => {
-  if (!exemple.composant) return { nom, Composant, reglages };
-  const autre = autres[exemple.composant];
-  if (!autre) throw new Error(`Exemple « ${exemple.titre} » : le composant « ${exemple.composant} » est inconnu.`);
-  return { nom: exemple.composant, ...autre };
+const cible = (exemple: Exemple, nomVoulu: string | undefined = exemple.composant) => {
+  if (!nomVoulu) return { nom, Composant, reglages, source };
+  const autre = autres[nomVoulu];
+  if (!autre) throw new Error(`Exemple « ${exemple.titre} » : le composant « ${nomVoulu} » est inconnu.`);
+  return { nom: nomVoulu, ...autre };
 };
+
+// Une instance peut nommer son propre composant (`composant: SelectPanel`) : c'est ce qui permet à un
+// exemple de montrer deux composants qui marchent ensemble. Ce n'est pas un réglage, il ne part pas
+// dans le code ni dans le composant.
+const cibleDe = (exemple: Exemple, instance: Instance) =>
+  cible(exemple, typeof instance.composant === 'string' ? instance.composant : exemple.composant);
+const reglagesDe = (instance: Instance) => Object.fromEntries(Object.entries(instance).filter(([cle]) => cle !== 'composant'));
 
 // ── Un exemple ne peut pas mentir ────────────────────────────────────────────
 // Un exemple a ses instances, ou ses cartes : chaque carte est un canvas avec son code.
 const cartesDe = (exemple: Exemple): Carte[] => exemple.cartes ?? [{ instances: exemple.instances }];
 
 for (const exemple of exemples) {
-  const { nom, reglages } = cible(exemple);
   for (const instance of cartesDe(exemple).flatMap((c) => c.instances)) {
-    for (const [cle, valeur] of Object.entries(instance)) {
+    const { nom, reglages } = cibleDe(exemple, instance);
+    for (const [cle, valeur] of Object.entries(reglagesDe(instance))) {
       const reglage = reglages.find((r) => r.nom === cle);
       if (!reglage) throw new Error(`Exemple « ${exemple.titre} » : ${nom} n'a pas de réglage « ${cle} ».`);
       if (reglage.valeurs && !Array.isArray(valeur) && !reglage.valeurs.includes(String(valeur))) {
@@ -81,9 +107,15 @@ function ligne(reglage: Reglage, valeur: string | number | boolean | unknown[]) 
   return valeur.includes('"') ? `${reglage.nom}={${JSON.stringify(valeur)}}` : `${reglage.nom}="${valeur}"`;
 }
 
-const codeDe = (nom: string, reglages: Reglage[], instances: Exemple['instances']) =>
-  instances
+// Le code à copier est un fichier Astro entier : la ligne d'import dans son en-tête, puis le composant.
+// Sans elle, un développeur ne sait ni d'où il vient ni comment le nommer — le sous-dossier `forms/`
+// ne se devine pas.
+const codeDe = (exemple: Exemple, instances: Exemple['instances']) => {
+  const importations = new Map<string, string>();
+  const corps = instances
     .map((instance) => {
+      const { nom, source, reglages } = cibleDe(exemple, instance);
+      importations.set(nom, `import ${nom} from '${cheminDe(nom, source)}';`);
       const lignes = reglages
         .filter((r) => r.nom in instance)
         .map((r) => ligne(r, instance[r.nom]))
@@ -91,6 +123,60 @@ const codeDe = (nom: string, reglages: Reglage[], instances: Exemple['instances'
       return `<${nom}\n${lignes.map((l) => `  ${l}`).join('\n')}\n/>`;
     })
     .join('\n\n');
+  return `---\n${[...importations.values()].join('\n')}\n---\n\n${corps}`;
+};
+
+// ── Le CSS ───────────────────────────────────────────────────────────────────
+// Les styles du composant, tels qu'écrits dans son fichier, puis ceux des composants qu'il pose :
+// c'est là qu'on voit quelles variables un site peut surcharger, et ce que les pastilles d'un
+// champ à pastilles portent. Lus dans les fichiers, jamais recopiés : ils ne peuvent pas diverger.
+const fiches = components as unknown as Record<string, { source: string; utilise?: string[] }>;
+
+/** Le contenu du `<style>` d'un fichier, remis à gauche. `null` s'il n'en a pas. */
+function styleDe(sourceFichier: string): string | null {
+  const brut = fichiers[`../../../../${sourceFichier}`] ?? '';
+  const trouve = /<style[^>]*>([\s\S]*?)<\/style>/.exec(brut);
+  if (!trouve) return null;
+  const lignes = trouve[1].replace(/^\n+/, '').replace(/\s+$/, '').split('\n');
+  const retrait = Math.min(...lignes.filter((l) => l.trim()).map((l) => (l.match(/^ */) as RegExpMatchArray)[0].length));
+  return lignes.map((l) => l.slice(retrait)).join('\n');
+}
+
+function cssDe(composants: { nom: string; source?: string }[]): string {
+  const vus = new Set<string>();
+  const blocs: string[] = [];
+  const ajouter = (fichier?: string) => {
+    if (!fichier || vus.has(fichier)) return;
+    vus.add(fichier);
+    const css = styleDe(fichier);
+    if (css) blocs.push(`/* ${fichier.split('/').pop()} */\n${css}`);
+  };
+  for (const { nom: nomComposant, source: sourceComposant } of composants) {
+    ajouter(sourceComposant ?? fiches[nomComposant]?.source);
+    // `utilise` ne porte pas le tiret bas des pièces internes : `FieldLabel` est `_FieldLabel`.
+    for (const utilise of fiches[nomComposant]?.utilise ?? []) ajouter((fiches[`_${utilise}`] ?? fiches[utilise])?.source);
+  }
+  return blocs.join('\n\n');
+}
+
+// ── Le HTML que le navigateur reçoit ─────────────────────────────────────────
+// Fabriqué en rendant le vrai composant, avec les mêmes réglages que l'exemple : il ne peut pas
+// diverger de ce qu'on voit à l'écran. Les cartes sont calculées une fois, ici, pour que le gabarit
+// n'ait qu'à les lire.
+const conteneur = await AstroContainer.create();
+const cartes = new Map(exemples.map((exemple) => [exemple, cartesDe(exemple)]));
+const html = new Map<Carte, string>();
+const css = new Map<Exemple, string>();
+for (const exemple of exemples) {
+  const instancesDeLExemple = cartes.get(exemple)!.flatMap((c) => c.instances);
+  css.set(exemple, cssDe(instancesDeLExemple.map((instance) => cibleDe(exemple, instance))));
+  for (const carte of cartes.get(exemple)!) {
+    const rendus = await Promise.all(
+      carte.instances.map((instance) => conteneur.renderToString(cibleDe(exemple, instance).Composant, { props: reglagesDe(instance) })),
+    );
+    html.set(carte, formatHtml(rendus.join('\n')));
+  }
+}
 // Les exemples d'une même rangée se posent côte à côte ; les autres, l'un sous l'autre.
 const rangees: Exemple[][] = [];
 for (const exemple of exemples) {
@@ -111,20 +197,35 @@ for (const exemple of exemples) {
           {exemple.texte && <p><TexteCode texte={exemple.texte} /></p>}
 
           <div class="cartes">
-            {cartesDe(exemple).map((carte) => (
+            {cartes.get(exemple)!.map((carte) => (
               <div class="canvas" data-etat={carte.etat}>
                 {/* Un formulaire, pour que « Réinitialiser » remette les champs comme au chargement. */}
                 <form class="demo" data-disposition={exemple.disposition} novalidate>
-                  {carte.instances.map((instance) => { const C = cible(exemple).Composant; return <C {...instance} />; })}
+                  {carte.instances.map((instance) => { const C = cibleDe(exemple, instance).Composant; return <C {...reglagesDe(instance)} />; })}
                 </form>
 
                 <div class="code">
                   <div class="actions">
+                    <div class="langues" role="group" aria-label="Langage du code">
+                      <button type="button" data-langue="astro" aria-pressed="true">Astro</button>
+                      <button type="button" data-langue="html" aria-pressed="false">HTML</button>
+                      {css.get(exemple) && <button type="button" data-langue="css" aria-pressed="false">CSS</button>}
+                    </div>
                     <button type="button" data-copie>Copier</button>
                     <span aria-hidden="true">·</span>
                     <button type="button" data-reinitialise>Réinitialiser</button>
                   </div>
-                  <pre><code>{codeDe(cible(exemple).nom, cible(exemple).reglages, carte.instances)}</code></pre>
+                  <div class="source" data-langue="astro">
+                    <Code code={codeDe(exemple, carte.instances)} lang="astro" theme="css-variables" />
+                  </div>
+                  <div class="source" data-langue="html" hidden>
+                    <Code code={html.get(carte) ?? ''} lang="html" theme="css-variables" />
+                  </div>
+                  {css.get(exemple) && (
+                    <div class="source" data-langue="css" hidden>
+                      <Code code={css.get(exemple)!} lang="css" theme="css-variables" />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -195,26 +296,58 @@ for (const exemple of exemples) {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* Chaque instance garde la largeur de son contenu : dans une grille, un élément en ligne est
+     étiré à sa colonne, ce qui ne dit rien de ce qu'il fait ailleurs. Une rangée flexible le laisse
+     à sa taille, et passe à la ligne s'il n'y a plus de place. */
+  .demo[data-disposition='contenu'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
   /* L'anneau de focus, montré tel qu'on le voit au clavier : un exemple ne peut pas avoir le focus. */
   .canvas[data-etat='focus'] :global(input:not(:disabled)) {
     outline: var(--border-width-focus) solid var(--color-border-base-focus);
   }
 
+  /* Le bloc de code : une barre d'onglets, puis le code coloré sur fond clair, avec ses numéros de ligne. */
   .code {
     flex: 1;
-    padding: var(--base-12) var(--base-8);
-    background: var(--color-surface-raised);
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    background: var(--color-surface-default);
+    border-block-start: var(--border-width-default) solid var(--color-border-base-subtle);
+
+    /* La coloration lit les rôles du système, jamais une teinte : elle suit le thème. Les noms
+       `--astro-code-*` sont ceux du thème `css-variables` de Shiki. */
+    --astro-code-foreground: var(--color-text-base-default);
+    --astro-code-background: transparent;
+    --astro-code-token-keyword: var(--color-text-primary-default);
+    --astro-code-token-function: var(--color-text-primary-default);
+    --astro-code-token-link: var(--color-text-primary-default);
+    --astro-code-token-string: var(--color-text-success-default);
+    --astro-code-token-string-expression: var(--color-text-success-default);
+    --astro-code-token-constant: var(--color-text-info-default);
+    --astro-code-token-parameter: var(--color-text-info-default);
+    --astro-code-token-comment: var(--color-text-base-muted);
+    --astro-code-token-punctuation: var(--color-text-base-muted);
   }
+
   .actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
     gap: var(--base-8);
+    padding-inline: var(--base-8);
+    background: var(--color-surface-raised);
+    border-block-end: var(--border-width-default) solid var(--color-border-base-subtle);
     color: var(--color-text-base-muted);
     font-size: var(--text-caption-size);
   }
   .actions button {
-    padding: var(--base-4) var(--base-8);
+    padding: var(--base-8) var(--base-12);
     border: 0;
     background: none;
     color: inherit;
@@ -226,12 +359,51 @@ for (const exemple of exemples) {
   }
   .actions button:focus-visible {
     outline: var(--border-width-focus) solid var(--color-border-base-focus);
+    outline-offset: calc(var(--border-width-focus) * -1);
   }
-  pre {
+
+  /* Les onglets de langage, à gauche ; les gestes, à droite. L'onglet ouvert porte un trait sous lui
+     et passe en gras : la couleur n'est pas le seul indice (WCAG 1.4.1). */
+  .langues {
+    display: flex;
+    margin-inline-end: auto;
+  }
+  .langues button {
+    border-block-end: var(--border-width-focus) solid transparent;
+    margin-block-end: calc(var(--border-width-default) * -1);
+  }
+  .langues button[aria-pressed='true'] {
+    color: var(--color-text-base-default);
+    border-block-end-color: var(--color-border-primary-strong);
+    font-weight: var(--base-text-weight-bold);
+  }
+
+  .source[hidden] {
+    display: none;
+  }
+  .source :global(pre) {
     margin: 0;
-    padding: var(--base-8);
+    padding: var(--base-16);
     overflow-x: auto;
     font-size: var(--text-body-small-size);
+    line-height: var(--text-body-small-line-height);
+  }
+
+  /* Les numéros de ligne sont un décor : un compteur CSS, qui ne se copie pas et que les lecteurs
+     d'écran ne lisent pas. */
+  .source :global(code) {
+    display: block;
+    counter-reset: ligne;
+  }
+  .source :global(.line)::before {
+    counter-increment: ligne;
+    content: counter(ligne);
+    display: inline-block;
+    inline-size: var(--base-24);
+    margin-inline-end: var(--base-16);
+    color: var(--color-text-base-disabled);
+    text-align: end;
+    user-select: none;
   }
 </style>
 
@@ -241,9 +413,18 @@ for (const exemple of exemples) {
     const cible = event.target as HTMLElement;
     const copie = cible.closest<HTMLButtonElement>('[data-copie]');
     if (copie) {
-      await navigator.clipboard.writeText(copie.closest('.code')?.querySelector('pre')?.textContent ?? '');
+      // Le code qu'on copie est celui qu'on voit : Astro ou HTML.
+      await navigator.clipboard.writeText(copie.closest('.code')?.querySelector('.source:not([hidden]) pre')?.textContent ?? '');
       copie.textContent = 'Copié';
       setTimeout(() => (copie.textContent = 'Copier'), 1500);
+      return;
+    }
+    // Changer de langage : un seul des deux blocs de code est visible.
+    const langue = cible.closest<HTMLButtonElement>('[data-langue]');
+    if (langue && langue.tagName === 'BUTTON') {
+      const code = langue.closest('.code');
+      code?.querySelectorAll<HTMLButtonElement>('button[data-langue]').forEach((b) => b.setAttribute('aria-pressed', String(b === langue)));
+      code?.querySelectorAll<HTMLElement>('.source[data-langue]').forEach((bloc) => (bloc.hidden = bloc.dataset.langue !== langue.dataset.langue));
       return;
     }
     // Réinitialiser : l'exemple retrouve ses valeurs d'origine.

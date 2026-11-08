@@ -425,7 +425,8 @@ const configJson = JSON.stringify(config).replace(/</g, '\\u003c');
     }
     for (const f of config.fixes) lignes.push(`${f.nom}={${f.code}}`);
     const importation = `import ${config.nom} from '${config.chemin}';`;
-    return `${importation}\n\n<${config.nom}\n${lignes.map((l) => `  ${l.replace(/\n/g, '\n  ')}`).join('\n')}\n/>`;
+    // Un fichier Astro entier, comme les exemples : l'import va dans l'en-tête entre les `---`.
+    return `---\n${importation}\n---\n\n<${config.nom}\n${lignes.map((l) => `  ${l.replace(/\n/g, '\n  ')}`).join('\n')}\n/>`;
   }
 
   document.querySelectorAll<HTMLElement>('[data-playground]').forEach((racine) => {
