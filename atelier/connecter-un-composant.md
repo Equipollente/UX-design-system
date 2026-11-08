@@ -72,7 +72,7 @@ sont deux composants distincts dans le code pointent chacun vers leur `.astro`.
 **Le nom du fichier est le nom Figma**, avec sa casse et ses tirets : `<NomFigma>.figma.ts`.
 `id` est ce nom en minuscules avec des tirets, et il est unique dans le dossier.
 
-**L'en-tête est toujours le même, dans cet ordre :** la ligne de référence des types, `url`
+**L'en-tête est toujours le même, dans cet ordre :** `url`
 (le lien du jeu, avec le tiret : `node-id=1046-30984`), `source` (chemin du `.astro` depuis la racine
 du dépôt), `component` (nom du composant du code).
 
@@ -103,7 +103,7 @@ voit un site qui consomme le paquet.
 | « Cannot publish Astro; the active framework is Web Components » | l'étiquette de `figma.config.json` doit être celle du framework actif chez Figma (un seul sur le forfait Pro) |
 | Rien ne s'affiche sur un composant | le lien vise un ancien nœud, ou la bibliothèque n'est pas republiée |
 | Une valeur de variante donne un code vide | une valeur manque dans `getEnum` |
-| `check` : « Cannot find module 'figma' » | la première ligne `/// <reference types=… />` du gabarit manque |
+| `check` : « Cannot find module 'figma' » | `design-system/tsconfig.json` doit déclarer `"types": ["@figma/code-connect/figma-types"]` |
 
 ## Quand une prop change
 

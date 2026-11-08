@@ -1,4 +1,3 @@
-/// <reference types="@figma/code-connect/figma-types" />
 // url=https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=1046-30984
 // source=design-system/src/components/LabelPill.astro
 // component=LabelPill

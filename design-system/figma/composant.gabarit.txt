@@ -12,7 +12,6 @@ le `interface Props` du .astro. Si une propriété Figma n'a pas de prop dans le
 pas — ni on n'invente de prop.
 
 ------------------------------------------------------------------------------------------------
-/// <reference types="@figma/code-connect/figma-types" />
 // url={LIEN_FIGMA}
 // source=design-system/src/components/{Nom}.astro
 // component={Nom}
