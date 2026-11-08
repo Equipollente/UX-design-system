@@ -49,7 +49,7 @@ accessibilite:
   - "La couleur ne porte pas le sens à elle seule (WCAG 1.4.1)."
   - "Contraste de l'icône (WCAG 1.4.11, 3:1) : fond clair, les 24 paires dépassent 7,74:1 ; fond plein, toutes tiennent sauf `warning`."
 voirAussi:
-  - { nom: Label, texte: L'étiquette avec un mot. }
+  - { nom: LabelPill, texte: L'étiquette avec un mot. }
   - { nom: IconButton, texte: Un carré sur lequel on clique. }
 ---
 

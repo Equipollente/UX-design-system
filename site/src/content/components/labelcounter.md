@@ -38,7 +38,7 @@ accessibilite:
   - "Le texte et l'icône dépassent 8,44:1 sur blanc, dans les deux thèmes (WCAG 1.4.3). Le trait est plus faible, voir plus bas."
   - "Le mot ne se coupe jamais : un mot long déborde plutôt que de perdre sa forme."
 voirAussi:
-  - { nom: Label, texte: L'étiquette à fond. }
+  - { nom: LabelPill, texte: L'étiquette à fond. }
   - { nom: IconLabel, texte: L'icône seule dans un carré. }
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Label
+title: LabelPill
 description: "L'étiquette nomme ou classe ce qu'elle accompagne : un statut, une catégorie, un thème. Elle remplace Tag."
 figma: https://www.figma.com/design/uQ5j90wu2MJSvzsN3Oc0pT/UX-design-system?node-id=1046-30984
 exemples:

@@ -747,3 +747,16 @@ la propriété Figma, et non un emplacement : une étiquette est un mot court, e
 
 `IconLabel` et `Label-counter` (le trait seul, rayon petit) restent à écrire ; `alert` est devenu `danger` dans Figma
 pour suivre les rôles du code.
+
+## Code Connect : un fichier par jeu Figma, nommé comme lui (08/11)
+
+Le mode Dev de Figma affiche le code d'un composant grâce à des gabarits `design-system/figma/<NomFigma>.figma.ts`,
+publiés par `npx figma connect publish`. Trois choix : **un fichier par jeu de variantes Figma**, même quand le code
+les fusionne (`Label-subtle` et `Label-bold` sont deux fichiers pour un seul `LabelPill.astro`, la valeur de `emphasis`
+est écrite en dur) ; **le nom du fichier est le nom Figma** ; **les états et les icônes ne sont pas repris**, parce
+que Figma ne donne pas le nom d'une icône mais celui de son calque, et qu'un nom faux est pire qu'aucun.
+
+L'interface « Connect components to code » de Figma ne sert pas ici : elle refuse le `.astro`, et même acceptée elle
+n'afficherait que le chemin du fichier, jamais le code. Le forfait Pro n'admet qu'un framework actif, « Web
+Components » (Judith), d'où l'étiquette de `figma.config.json`. Le geste est dans
+[connecter-un-composant.md](connecter-un-composant.md).

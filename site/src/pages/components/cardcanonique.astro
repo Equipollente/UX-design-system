@@ -12,7 +12,7 @@ import PlaygroundImage from '../../layouts/blocks/PlaygroundImage.astro';
 import PlaygroundTags from '../../layouts/blocks/PlaygroundTags.astro';
 import PlaygroundText from '../../layouts/blocks/PlaygroundText.astro';
 import Input from 'ux-design-system/components/forms/Input.astro';
-import Label from 'ux-design-system/components/Label.astro';
+import LabelPill from 'ux-design-system/components/LabelPill.astro';
 import { iconNames } from 'ux-design-system/lib/icons';
 import { withBase } from 'ux-design-system/lib/url';
 import { componentPageGroups } from '../_component-pages';
@@ -29,7 +29,7 @@ import CardDefault from 'ux-design-system/components/cards/CardDefault.astro';
 import CardImage from 'ux-design-system/components/cards/CardImage.astro';
 import CardTags from 'ux-design-system/components/cards/CardTags.astro';
 import CardText from 'ux-design-system/components/cards/CardText.astro';
-import Label from 'ux-design-system/components/Label.astro';
+import LabelPill from 'ux-design-system/components/LabelPill.astro';
 import { withBase } from 'ux-design-system/lib/url';
 ---
 
@@ -47,11 +47,11 @@ import { withBase } from 'ux-design-system/lib/url';
     height={800}
   />
   <CardTags slot="tags-top">
-    <Label variant="primary" label="En cours" />
+    <LabelPill variant="primary" label="En cours" />
   </CardTags>
   <CardTags slot="tags-bottom">
-    <Label variant="neutral" label="Gouache" />
-    <Label variant="neutral" label="Encre" />
+    <LabelPill variant="neutral" label="Gouache" />
+    <LabelPill variant="neutral" label="Encre" />
   </CardTags>
   <CardActions slot="actions">
     <Button variant="secondary">Modifier</Button>
@@ -82,11 +82,11 @@ import { withBase } from 'ux-design-system/lib/url';
         height={800}
       />
       <CardTags slot="tags-top">
-        <Label variant="primary" label="En cours" />
+        <LabelPill variant="primary" label="En cours" />
       </CardTags>
       <CardTags slot="tags-bottom">
-        <Label variant="neutral" label="Gouache" />
-        <Label variant="neutral" label="Encre" />
+        <LabelPill variant="neutral" label="Gouache" />
+        <LabelPill variant="neutral" label="Encre" />
       </CardTags>
       <CardActions slot="actions">
         <Button variant="secondary">Modifier</Button>
@@ -137,11 +137,11 @@ import { withBase } from 'ux-design-system/lib/url';
         meta="Exemple"
       />
       <CardTags slot="tags-top" data-playground-preview="tags-top">
-        <Label variant="primary" label="En cours" />
+        <LabelPill variant="primary" label="En cours" />
       </CardTags>
       <CardTags slot="tags-bottom" data-playground-preview="tags-bottom">
-        <Label variant="neutral" label="Gouache" />
-        <Label variant="neutral" label="Encre" />
+        <LabelPill variant="neutral" label="Gouache" />
+        <LabelPill variant="neutral" label="Encre" />
       </CardTags>
       <CardActions slot="actions" data-playground-preview="actions">
         <Button variant="secondary">Modifier</Button>
@@ -236,7 +236,7 @@ import { withBase } from 'ux-design-system/lib/url';
           /\n  <CardTags slot="tags-top">[\s\S]*?<\/CardTags>/,
           tagsEnabled(topTagsControls, 'tags-top')
             ? `\n  <CardTags slot="tags-top">\n${tagValues(topTagsControls)
-                .map(({ label, variant }) => `    <Label variant="${variant}" label="${label}" />`)
+                .map(({ label, variant }) => `    <LabelPill variant="${variant}" label="${label}" />`)
                 .join('\n')}\n  </CardTags>`
             : '',
         )
@@ -244,7 +244,7 @@ import { withBase } from 'ux-design-system/lib/url';
           /\n  <CardTags slot="tags-bottom">[\s\S]*?<\/CardTags>/,
           tagsEnabled(bottomTagsControls, 'tags-bottom')
             ? `\n  <CardTags slot="tags-bottom">\n${tagValues(bottomTagsControls)
-                .map(({ label, variant }) => `    <Label variant="${variant}" label="${label}" />`)
+                .map(({ label, variant }) => `    <LabelPill variant="${variant}" label="${label}" />`)
                 .join('\n')}\n  </CardTags>`
             : '',
         )

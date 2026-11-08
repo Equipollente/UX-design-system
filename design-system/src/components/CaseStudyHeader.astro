@@ -12,7 +12,7 @@
 // URLs, ni la page courante ne vivent ici. Tout tombe des props.
 
 import Button from './Button.astro';
-import Label from './Label.astro';
+import LabelPill from './LabelPill.astro';
 
 interface Props {
   /** L'année et le client : « 2025 - Rubika ». Mis en capitales par le CSS. */
@@ -64,7 +64,7 @@ const classes = ['case-study-header', className].filter(Boolean).join(' ');
       <ul class="tags">
         {tags.map((t) => (
           <li>
-            <Label variant="neutral" label={t} />
+            <LabelPill variant="neutral" label={t} />
           </li>
         ))}
       </ul>

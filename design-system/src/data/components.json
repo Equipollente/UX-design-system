@@ -404,7 +404,7 @@
         "nom": "headingLevel",
         "type": "2 | 3 | 4 | 5",
         "requis": false,
-        "description": "Le niveau du titre : il se range sous ce que la page porte déjà. Le rang ne\nchange pas le dessin — la taille du titre vient du composant, pas du tag."
+        "description": "Le niveau du titre : il se range sous ce que la page porte déjà. Le rang ne\r\nchange pas le dessin — la taille du titre vient du composant, pas du tag."
       },
       {
         "nom": "class",
@@ -416,7 +416,7 @@
     "slots": [],
     "utilise": [
       "Button",
-      "Label"
+      "LabelPill"
     ]
   },
   "CaseStudyList": {
@@ -1118,8 +1118,75 @@
       "Button"
     ]
   },
-  "Label": {
-    "source": "design-system/src/components/Label.astro",
+  "LabelCounter": {
+    "source": "design-system/src/components/LabelCounter.astro",
+    "description": "Une étiquette à trait, sans fond : une icône facultative et un mot.",
+    "since": "0.3.0",
+    "natifs": {
+      "balise": null,
+      "ecartes": []
+    },
+    "props": [
+      {
+        "nom": "label",
+        "type": "string",
+        "requis": true,
+        "description": "Le mot porté par l'étiquette. Court : elle ne se coupe pas en deux lignes.",
+        "exemple": "Brouillon"
+      },
+      {
+        "nom": "icon",
+        "type": "IconName",
+        "requis": false,
+        "description": "L'icône qui précède le mot, par son nom dans le registre. Décorative : le mot dit déjà la chose.",
+        "exemple": "\"book-open\""
+      },
+      {
+        "nom": "variant",
+        "type": "'primary' | 'secondary' | 'danger' | 'rose' | 'sun' | 'clay' | 'teal' | 'highlight' | 'neutral' | 'info' | 'warning'",
+        "valeurs": [
+          "primary",
+          "secondary",
+          "danger",
+          "rose",
+          "sun",
+          "clay",
+          "teal",
+          "highlight",
+          "neutral",
+          "info",
+          "warning"
+        ],
+        "requis": false,
+        "description": "La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».",
+        "default": "primary"
+      },
+      {
+        "nom": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "valeurs": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "requis": false,
+        "description": "La taille : le rembourrage, l'écart et l'icône. Le texte ne change pas.",
+        "default": "md"
+      },
+      {
+        "nom": "class",
+        "type": "string",
+        "requis": false,
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "utilise": [
+      "Icon"
+    ]
+  },
+  "LabelPill": {
+    "source": "design-system/src/components/LabelPill.astro",
     "description": "Une étiquette courte qui nomme ou classe ce qu'elle accompagne. Elle remplace Tag.",
     "since": "0.3.0",
     "natifs": {
@@ -1187,73 +1254,6 @@
     ],
     "slots": [],
     "utilise": []
-  },
-  "LabelCounter": {
-    "source": "design-system/src/components/LabelCounter.astro",
-    "description": "Une étiquette à trait, sans fond : une icône facultative et un mot.",
-    "since": "0.3.0",
-    "natifs": {
-      "balise": null,
-      "ecartes": []
-    },
-    "props": [
-      {
-        "nom": "label",
-        "type": "string",
-        "requis": true,
-        "description": "Le mot porté par l'étiquette. Court : elle ne se coupe pas en deux lignes.",
-        "exemple": "Brouillon"
-      },
-      {
-        "nom": "icon",
-        "type": "IconName",
-        "requis": false,
-        "description": "L'icône qui précède le mot, par son nom dans le registre. Décorative : le mot dit déjà la chose.",
-        "exemple": "\"book-open\""
-      },
-      {
-        "nom": "variant",
-        "type": "'primary' | 'secondary' | 'danger' | 'rose' | 'sun' | 'clay' | 'teal' | 'highlight' | 'neutral' | 'info' | 'warning'",
-        "valeurs": [
-          "primary",
-          "secondary",
-          "danger",
-          "rose",
-          "sun",
-          "clay",
-          "teal",
-          "highlight",
-          "neutral",
-          "info",
-          "warning"
-        ],
-        "requis": false,
-        "description": "La couleur. `danger` est réservé à ce qui échoue ou détruit ; `warning` dit « à savoir ».",
-        "default": "primary"
-      },
-      {
-        "nom": "size",
-        "type": "'sm' | 'md' | 'lg'",
-        "valeurs": [
-          "sm",
-          "md",
-          "lg"
-        ],
-        "requis": false,
-        "description": "La taille : le rembourrage, l'écart et l'icône. Le texte ne change pas.",
-        "default": "md"
-      },
-      {
-        "nom": "class",
-        "type": "string",
-        "requis": false,
-        "description": ""
-      }
-    ],
-    "slots": [],
-    "utilise": [
-      "Icon"
-    ]
   },
   "Modal": {
     "source": "design-system/src/components/Modal.astro",
